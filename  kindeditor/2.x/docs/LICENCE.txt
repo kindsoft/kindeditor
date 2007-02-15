@@ -1,0 +1,4 @@
+KindEditor License
+
+The editor is distributed under the LGPL, so you have the freedom to use it however you want. 
+The full text of the license can be found http://www.opensource.org/licenses/lgpl-license.php

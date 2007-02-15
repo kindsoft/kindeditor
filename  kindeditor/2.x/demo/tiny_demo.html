@@ -1,0 +1,60 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>KindEditor 演示</title>
+</head>
+<body>
+<form name="test" action="demo.php" method="post" onsubmit="javascript:KindSubmit();">
+<table border="0">
+<tr>
+<td width="15%"></td>
+<td width="85%">
+<div style="font-size:12px;margin-bottom:5px;">
+<a href="./demo.html">完整模式</a>
+<a href="./simple_demo.html">简单模式</a>
+<a href="./tiny_demo.html">Tiny_MCE风格</a>
+<a href="./fck_demo.html">FCK风格</a>
+</div>
+<input type="hidden" name="content" value="&lt;h2&gt;&lt;font style=&quot;BACKGROUND-COLOR: #ff7f50&quot; color=#ffffff&gt;这是测试内容&lt;/font&gt;&lt;/h2&gt;
+&lt;h1&gt;欢迎使用&lt;font face=&quot;Arial Black&quot; color=#008000&gt;KindEditor &lt;img src=&quot;http://www.kindsoft.net/editor/icons/etc_33.gif&quot; alt=&quot;ICON&quot;&gt;&lt;/font&gt;&lt;/h1&gt;
+&lt;div&gt;&lt;img style=&quot;WIDTH: 150px; HEIGHT: 30px&quot; height=30 src=&quot;http://www.kindsoft.net/images/logo.gif&quot; width=150 border=1 alt=&quot;LOGO&quot;&gt;&lt;/div&gt;
+&lt;div&gt;&amp;nbsp;&lt;/div&gt;
+&lt;div&gt;&amp;nbsp;&lt;/div&gt;
+&lt;div&gt;&amp;nbsp;&lt;/div&gt;
+&lt;div&gt;&amp;nbsp;&lt;/div&gt;
+&lt;div&gt;&amp;nbsp;&lt;/div&gt;">
+
+<script type="text/javascript" src="./../KindEditor.js"></script>
+<script type="text/javascript">
+var editor = new KindEditor("editor");
+editor.hiddenName = "content";
+editor.skinPath = "./../skins/tiny/";
+editor.iconPath = "./../icons/";
+editor.imageAttachPath = "./../attached/";
+editor.imageUploadCgi = "./../upload_cgi/upload.php";
+editor.cssPath = "./common.css";
+editor.editorWidth = "700px";
+editor.editorHeight = "400px";
+editor.menuBorderColor = '#CCCCCC';
+editor.menuBgColor = '#F0F0EE';
+editor.menuTextColor = '#222222';
+editor.menuSelectedColor = '#CCCCCC';
+editor.toolbarBorderColor = '#CCCCCC';
+editor.toolbarBgColor = '#F0F0EE';
+editor.formBorderColor = '#CCCCCC';
+editor.buttonColor = '#DDDDDD';
+editor.show();
+function KindSubmit() {
+	editor.data();
+}
+</script>
+</td>
+</tr>
+</table>
+<div align="center">
+<input type="submit" value="Submit">
+</form>
+</div>
+</body>
+</html>
