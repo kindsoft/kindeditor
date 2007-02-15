@@ -1,0 +1,37 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>KindEditor 3.0 alpha</title>
+</head>
+<body>
+<form name="test" method="post" onsubmit="javascript:KindEditorUtil.getData('content'); alert(document.getElementsByName('content')[0].value);return false;">
+<div align="center">
+<textarea name="content" style="display:none;"></textarea>
+</div>
+<script type="text/javascript" src="./../KindEditor.js"></script>
+<script type="text/javascript">
+var editor = new KindEditor();
+editor.textareaName = "content";
+//editor.formName = "test";
+//editor.skinType = "tiny";
+editor.editorWidth = "700px";
+editor.editorHeight = "400px";
+editor.menuBorder = '1px solid #CCCCCC';
+editor.menuBgColor = '#F0F0EE';
+editor.menuTextColor = '#222222';
+editor.menuSelectedColor = '#CCCCCC';
+editor.editorBorder = '3px solid #CCCCCC';
+editor.toolbarBgColor = '#F0F0EE';
+editor.formBorder = '1px solid #CCCCCC';
+editor.textareaBgColor = '#000000';
+editor.textareaTextColor = '#FFFFFF';
+editor.buttonColor = '#DDDDDD';
+editor.print();
+</script>
+<br/>
+<div align="center">
+<input type="submit" value="Submit">
+</form>
+</div>
+</body>
+</html>
