@@ -100,6 +100,7 @@ var KindEditorUtil = {
 		div.style.top = KindEditorUtil.getTop(iconObj) + iconObj.offsetHeight + 'px';
 		div.style.left = KindEditorUtil.getLeft(iconObj) + 'px';
 		div.style.color = obj.menuTextColor;
+		div.style.textAlign = 'left';
 		div.style.border = obj.menuBorder;
 		div.style.background = obj.menuBgColor;
 		div.style.zIndex = 1;
@@ -123,21 +124,17 @@ var KindEditorUtil = {
 	'getColorTable' : function(textareaName, cmd)
 	{
 		var colorTable = [
-			["#FF0000", "#FFFF00", "#00FF00", "#00FFFF", "#0000FF", "#FF00FF", "#FFFFFF", "#F5F5F5", "#DCDCDC", "#FFFAFA"],
-			["#D3D3D3", "#C0C0C0", "#A9A9A9", "#808080", "#696969", "#000000", "#2F4F4F", "#708090", "#778899", "#4682B4"],
-			["#4169E1", "#6495ED", "#B0C4DE", "#7B68EE", "#6A5ACD", "#483D8B", "#191970", "#000080", "#00008B", "#0000CD"],
-			["#1E90FF", "#00BFFF", "#87CEFA", "#87CEEB", "#ADD8E6", "#B0E0E6", "#F0FFFF", "#E0FFFF", "#AFEEEE", "#00CED1"],
-			["#5F9EA0", "#48D1CC", "#00FFFF", "#40E0D0", "#20B2AA", "#008B8B", "#008080", "#7FFFD4", "#66CDAA", "#8FBC8F"],
-			["#3CB371", "#2E8B57", "#006400", "#008000", "#228B22", "#32CD32", "#00FF00", "#7FFF00", "#7CFC00", "#ADFF2F"],
-			["#98FB98", "#90EE90", "#00FF7F", "#00FA9A", "#556B2F", "#6B8E23", "#808000", "#BDB76B", "#B8860B", "#DAA520"],
-			["#FFD700", "#F0E68C", "#EEE8AA", "#FFEBCD", "#FFE4B5", "#F5DEB3", "#FFDEAD", "#DEB887", "#D2B48C", "#BC8F8F"],
-			["#A0522D", "#8B4513", "#D2691E", "#CD853F", "#F4A460", "#8B0000", "#800000", "#A52A2A", "#B22222", "#CD5C5C"],
-			["#F08080", "#FA8072", "#E9967A", "#FFA07A", "#FF7F50", "#FF6347", "#FF8C00", "#FFA500", "#FF4500", "#DC143C"],
-			["#FF0000", "#FF1493", "#FF00FF", "#FF69B4", "#FFB6C1", "#FFC0CB", "#DB7093", "#C71585", "#800080", "#8B008B"],
-			["#9370DB", "#8A2BE2", "#4B0082", "#9400D3", "#9932CC", "#BA55D3", "#DA70D6", "#EE82EE", "#DDA0DD", "#D8BFD8"],
-			["#E6E6FA", "#F8F8FF", "#F0F8FF", "#F5FFFA", "#F0FFF0", "#FAFAD2", "#FFFACD", "#FFF8DC", "#FFFFE0", "#FFFFF0"],
-			["#FFFAF0", "#FAF0E6", "#FDF5E6", "#FAEBD7", "#FFE4C4", "#FFDAB9", "#FFEFD5", "#FFF5EE", "#FFF0F5", "#FFE4E1"]
-		];
+				["#FFFFFF","#E5E4E4","#D9D8D8","#C0BDBD","#A7A4A4","#8E8A8B","#827E7F","#767173","#5C585A","#000000"],
+				["#FEFCDF","#FEF4C4","#FEED9B","#FEE573","#FFED43","#F6CC0B","#E0B800","#C9A601","#AD8E00","#8C7301"],
+				["#FFDED3","#FFC4B0","#FF9D7D","#FF7A4E","#FF6600","#E95D00","#D15502","#BA4B01","#A44201","#8D3901"],
+				["#FFD2D0","#FFBAB7","#FE9A95","#FF7A73","#FF483F","#FE2419","#F10B00","#D40A00","#940000","#6D201B"],
+				["#FFDAED","#FFB7DC","#FFA1D1","#FF84C3","#FF57AC","#FD1289","#EC0078","#D6006D","#BB005F","#9B014F"],
+				["#FCD6FE","#FBBCFF","#F9A1FE","#F784FE","#F564FE","#F546FF","#F328FF","#D801E5","#C001CB","#8F0197"],
+				["#E2F0FE","#C7E2FE","#ADD5FE","#92C7FE","#6EB5FF","#48A2FF","#2690FE","#0162F4","#013ADD","#0021B0"],
+				["#D3FDFF","#ACFAFD","#7CFAFF","#4AF7FE","#1DE6FE","#01DEFF","#00CDEC","#01B6DE","#00A0C2","#0084A0"],
+				["#EDFFCF","#DFFEAA","#D1FD88","#BEFA5A","#A8F32A","#8FD80A","#79C101","#3FA701","#307F00","#156200"],
+				["#D4C89F","#DAAD88","#C49578","#C2877E","#AC8295","#C0A5C4","#969AC2","#92B7D7","#80ADAF","#9CA53B"]
+			];
 		var iconObj = document.getElementById(textareaName + 'icon' + cmd);
 		var obj = KindEditorVar.editor[textareaName];
 		var table = document.createElement('table');
@@ -150,13 +147,10 @@ var KindEditorUtil = {
 				var cell = row.insertCell(j);
 				cell.style.width = '12px';
 				cell.style.height = '12px';
-				cell.style.border = '1px solid #AAAAAA';
 				cell.style.fontSize = '1px';
 				cell.style.cursor = 'pointer';
 				cell.style.background = colorTable[i][j];
 				cell.title = colorTable[i][j];
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
-				cell.onmouseout = function() {this.style.borderColor = '#AAAAAA'; }
 				cell.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + colorTable[i][j] + '")');
 				cell.innerHTML = '&nbsp;';
 			}
@@ -297,7 +291,7 @@ var KindEditorUtil = {
 			obj.style.border = '1px solid ' + editorObj.toolbarBgColor;
 			obj.style.margin = '0 1px 0 1px';
 			obj.style.cursor = 'pointer';
-			obj.onmouseover = function(){ this.style.border = editorObj.menuBorder; };
+			obj.onmouseover = function(){ this.style.borderColor = editorObj.menuSelectedColor; };
 			obj.onmouseout = function(){ this.style.borderColor = editorObj.menuBgColor; };
 			obj.onclick = new Function('KindEditorUtil.click("' + editorObj.textareaName + '", "' + cmd + '")');
 			editorObj.toolbarDiv.appendChild(obj);
@@ -319,10 +313,10 @@ function KindEditor()
 	this.skinType = 'default';
 	this.editorWidth = '700px';
 	this.editorHeight = '400px';
-	this.menuBorder = '1px solid #CCCCCC';
+	this.menuBorder = '2px solid #CCCCCC';
 	this.menuBgColor = '#F0F0EE';
 	this.menuTextColor = '#222222';
-	this.menuSelectedColor = '#CCCCCC';
+	this.menuSelectedColor = '#0021b0';
 	this.editorBorder = '3px solid #CCCCCC';
 	this.toolbarBgColor = '#F0F0EE';
 	this.formBorder = '1px solid #CCCCCC';
@@ -351,7 +345,7 @@ function KindEditor()
 		this.pluginsPath = KindEditorVar.scriptPath + 'plugins/';
 		KindEditorFunc.loadScript(this.langsPath + this.langType + '.js');
 		for (var i in this.toolbar) {
-			if (KindEditorVar.plugin[this.toolbar[i]]) continue;
+			if (KindEditorVar.plugin[this.toolbar[i]] || this.toolbar[i] == '') continue;
 			KindEditorFunc.loadScript(this.pluginsPath + this.toolbar[i] + '.js');
 		}
 		var widthArr = this.editorWidth.match(/(\d+)([px%]{1,2})/);
@@ -969,9 +963,66 @@ KindEditorVar.plugin['superscript'] = {
 KindEditorVar.plugin['table'] = {
 	'icon'	: 'table.gif',
 	'title'	: '插入表格',
+	'selected' : function(textareaName, i, j)
+	{
+		var obj = KindEditorVar.editor[textareaName];
+		var text = i.toString(10) + ' by ' + j.toString(10) + ' Table';
+		document.getElementById('tableLocation' + textareaName).innerHTML = text;
+		var num = 10;
+		for (var m = 1; m <= num; m++) {
+			for (var n = 1; n <= num; n++) {
+				var td = document.getElementById('tableTd' + textareaName + m.toString(10) + '_' + n.toString(10) + '');
+				if (m <= i && n <= j) {
+					td.style.backgroundColor = obj.menuSelectedColor;
+				} else {
+					td.style.backgroundColor = '#FFFFFF';
+				}
+			}
+		}
+	},
 	'click' : function(textareaName)
 	{
-		//KindEditorVar.editor[textareaName].iframeDoc.execCommand('bold', false, null);
+		var cmd = 'table';
+		KindEditorUtil.getSelection(textareaName);
+		var obj = KindEditorVar.editor[textareaName];
+		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var num = 10;
+		var html = '<table cellpadding="0" cellspacing="0" border="0">';
+		for (i = 1; i <= num; i++) {
+			html += '<tr>';
+			for (j = 1; j <= num; j++) {
+				var value = i.toString(10) + ',' + j.toString(10);
+				html += '<td id="tableTd' + textareaName + i.toString(10) + '_' + j.toString(10) + 
+				'" style="font-size:1px;width:12px;height:12px;background-color:#FFFFFF;border:1px solid #DDDDDD;cursor:pointer;" ' + 
+				'onclick="javascript:KindEditorVar.plugin[\'table\'].exec(\'' + textareaName + '\', \'' + value + '\');" ' +
+				'onmouseover="javascript:KindEditorVar.plugin[\'table\'].selected(\'' + textareaName + '\', \'' + i.toString(10) + '\', \'' + j.toString(10) + '\');"' + 
+				'onmouseout="javascript:;">&nbsp;</td>';
+			}
+			html += '</tr>';
+		}
+		html += '<tr><td colspan="10" id="tableLocation' + textareaName + '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
+		html += '</table>';
+		div.innerHTML = html;
+		KindEditorUtil.showWindow(textareaName, div);
+	},
+	'exec' : function(textareaName, value)
+	{
+		var obj = KindEditorVar.editor[textareaName];
+		if (KindEditorVar.browser == 'IE') {
+			obj.range.select();
+		}
+		var location = value.split(',');
+		var html = '<table border="1">';
+		for (var i = 0; i < location[0]; i++) {
+			html += '<tr>';
+			for (var j = 0; j < location[1]; j++) {
+				html += '<td>&nbsp;</td>';
+			}
+			html += '</tr>';
+		}
+		html += '</table>';
+		KindEditorUtil.insertHtml(textareaName, html);
+		KindEditorUtil.hideWindow(textareaName);
 	}
 };
 KindEditorVar.plugin['textcolor'] = {
