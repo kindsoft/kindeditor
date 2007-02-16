@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['layer'] = {
-	'icon'	: 'layer.gif',
+	//'icon'	: 'layer.gif',
 	'title'	: '插入层',
 	'click' : function(textareaName)
 	{

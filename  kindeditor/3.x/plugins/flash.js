@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['flash'] = {
-	'icon'	: 'flash.gif',
+	//'icon'	: 'flash.gif',
 	'title'	: '插入Flash',
 	'click' : function(textareaName)
 	{

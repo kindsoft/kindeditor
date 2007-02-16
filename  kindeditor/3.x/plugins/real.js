@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['real'] = {
-	'icon'	: 'real.gif',
+	//'icon'	: 'real.gif',
 	'title'	: '插入Real Player',
 	'click' : function(textareaName)
 	{

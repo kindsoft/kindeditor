@@ -420,7 +420,7 @@ function KindEditor()
 }
 //plugins begin
 KindEditorVar.plugin['about'] = {
-	'icon'	: 'about.gif',
+	//'icon'	: 'about.gif',
 	'title'	: '关于',
 	'click' : function(textareaName)
 	{
@@ -436,7 +436,7 @@ KindEditorVar.plugin['about'] = {
 	}
 };
 KindEditorVar.plugin['bold'] = {
-	'icon'	: 'bold.gif',
+	//'icon'	: 'bold.gif',
 	'title'	: '粗体',
 	'click' : function(textareaName)
 	{
@@ -444,7 +444,7 @@ KindEditorVar.plugin['bold'] = {
 	}
 };
 KindEditorVar.plugin['bgcolor'] = {
-	'icon'				: 'bgcolor.gif',
+	//'icon'				: 'bgcolor.gif',
 	'title'				: '文字背景',
 	'click' : function(textareaName)
 	{
@@ -485,7 +485,7 @@ KindEditorVar.plugin['bgcolor'] = {
 	}
 };
 KindEditorVar.plugin['copy'] = {
-	'icon'	: 'copy.gif',
+	//'icon'	: 'copy.gif',
 	'title'	: '复制',
 	'click' : function(textareaName)
 	{
@@ -493,7 +493,7 @@ KindEditorVar.plugin['copy'] = {
 	}
 };
 KindEditorVar.plugin['cut'] = {
-	'icon'	: 'cut.gif',
+	//'icon'	: 'cut.gif',
 	'title'	: '剪切',
 	'click' : function(textareaName)
 	{
@@ -501,7 +501,7 @@ KindEditorVar.plugin['cut'] = {
 	}
 };
 KindEditorVar.plugin['date'] = {
-	'icon'	: 'date.gif',
+	//'icon'	: 'date.gif',
 	'title'	: '日期',
 	'click' : function(textareaName)
 	{
@@ -533,7 +533,7 @@ KindEditorVar.plugin['fontname'] = {
 		'GulimChe'			: 'GulimChe', 
 		'MS Gothic'			: 'MS Gothic' 
 	},
-	'icon'				: 'font.gif',
+	//'icon'				: 'font.gif',
 	'title'				: '字体',
 	'click' : function(textareaName)
 	{
@@ -576,7 +576,7 @@ KindEditorVar.plugin['fontsize'] = {
 		'6' : '24pt', 
 		'7' : '36pt'
 	},
-	'icon'				: 'fontsize.gif',
+	//'icon'				: 'fontsize.gif',
 	'title'				: '文字大小',
 	'click' : function(textareaName)
 	{
@@ -611,7 +611,7 @@ KindEditorVar.plugin['fontsize'] = {
 	}
 };
 KindEditorVar.plugin['hr'] = {
-	'icon'	: 'hr.gif',
+	//'icon'	: 'hr.gif',
 	'title'	: '插入横线',
 	'click' : function(textareaName)
 	{
@@ -635,7 +635,7 @@ KindEditorVar.plugin['hr'] = {
 	}
 };
 KindEditorVar.plugin['indent'] = {
-	'icon'	: 'indent.gif',
+	//'icon'	: 'indent.gif',
 	'title'	: '减少缩进',
 	'click' : function(textareaName)
 	{
@@ -643,7 +643,7 @@ KindEditorVar.plugin['indent'] = {
 	}
 };
 KindEditorVar.plugin['italic'] = {
-	'icon'	: 'italic.gif',
+	//'icon'	: 'italic.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -651,7 +651,7 @@ KindEditorVar.plugin['italic'] = {
 	}
 };
 KindEditorVar.plugin['justifycenter'] = {
-	'icon'	: 'justifycenter.gif',
+	//'icon'	: 'justifycenter.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -659,7 +659,7 @@ KindEditorVar.plugin['justifycenter'] = {
 	}
 };
 KindEditorVar.plugin['justifyfull'] = {
-	'icon'	: 'justifyfull.gif',
+	//'icon'	: 'justifyfull.gif',
 	'title'	: '两端对齐',
 	'click' : function(textareaName)
 	{
@@ -667,7 +667,7 @@ KindEditorVar.plugin['justifyfull'] = {
 	}
 };
 KindEditorVar.plugin['justifyleft'] = {
-	'icon'	: 'justifyleft.gif',
+	//'icon'	: 'justifyleft.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -675,7 +675,7 @@ KindEditorVar.plugin['justifyleft'] = {
 	}
 };
 KindEditorVar.plugin['justifyright'] = {
-	'icon'	: 'justifyright.gif',
+	//'icon'	: 'justifyright.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -683,7 +683,7 @@ KindEditorVar.plugin['justifyright'] = {
 	}
 };
 KindEditorVar.plugin['numberedlist'] = {
-	'icon'	: 'numberedlist.gif',
+	//'icon'	: 'numberedlist.gif',
 	'title'	: '编号',
 	'click' : function(textareaName)
 	{
@@ -691,7 +691,7 @@ KindEditorVar.plugin['numberedlist'] = {
 	}
 };
 KindEditorVar.plugin['outdent'] = {
-	'icon'	: 'outdent.gif',
+	//'icon'	: 'outdent.gif',
 	'title'	: '增加缩进',
 	'click' : function(textareaName)
 	{
@@ -699,7 +699,7 @@ KindEditorVar.plugin['outdent'] = {
 	}
 };
 KindEditorVar.plugin['paste'] = {
-	'icon'	: 'paste.gif',
+	//'icon'	: 'paste.gif',
 	'title'	: '粘贴',
 	'click' : function(textareaName)
 	{
@@ -707,7 +707,7 @@ KindEditorVar.plugin['paste'] = {
 	}
 };
 KindEditorVar.plugin['preview'] = {
-	'icon'	: 'preview.gif',
+	//'icon'	: 'preview.gif',
 	'title'	: '预览',
 	'click' : function(textareaName)
 	{
@@ -719,7 +719,7 @@ KindEditorVar.plugin['preview'] = {
 	}
 };
 KindEditorVar.plugin['print'] = {
-	'icon'	: 'print.gif',
+	//'icon'	: 'print.gif',
 	'title'	: '打印',
 	'click' : function(textareaName)
 	{
@@ -727,7 +727,7 @@ KindEditorVar.plugin['print'] = {
 	}
 };
 KindEditorVar.plugin['redo'] = {
-	'icon'	: 'redo.gif',
+	//'icon'	: 'redo.gif',
 	'title'	: '前进',
 	'click' : function(textareaName)
 	{
@@ -735,7 +735,7 @@ KindEditorVar.plugin['redo'] = {
 	}
 };
 KindEditorVar.plugin['removeformat'] = {
-	'icon'	: 'removeformat.gif',
+	//'icon'	: 'removeformat.gif',
 	'title'	: '删除格式',
 	'click' : function(textareaName)
 	{
@@ -743,7 +743,7 @@ KindEditorVar.plugin['removeformat'] = {
 	}
 };
 KindEditorVar.plugin['selectall'] = {
-	'icon'	: 'selectall.gif',
+	//'icon'	: 'selectall.gif',
 	'title'	: '全选',
 	'click' : function(textareaName)
 	{
@@ -751,7 +751,7 @@ KindEditorVar.plugin['selectall'] = {
 	}
 };
 KindEditorVar.plugin['source'] = {
-	'icon'	: 'source.gif',
+	//'icon'	: 'source.gif',
 	'title'	: '源代码',
 	'click' : function(textareaName)
 	{
@@ -782,7 +782,7 @@ KindEditorVar.plugin['source'] = {
 	}
 };
 KindEditorVar.plugin['strikethrough'] = {
-	'icon'	: 'strikethrough.gif',
+	//'icon'	: 'strikethrough.gif',
 	'title'	: '删除线',
 	'click' : function(textareaName)
 	{
@@ -790,7 +790,7 @@ KindEditorVar.plugin['strikethrough'] = {
 	}
 };
 KindEditorVar.plugin['subscript'] = {
-	'icon'	: 'subscript.gif',
+	//'icon'	: 'subscript.gif',
 	'title'	: '下标',
 	'click' : function(textareaName)
 	{
@@ -798,7 +798,7 @@ KindEditorVar.plugin['subscript'] = {
 	}
 };
 KindEditorVar.plugin['superscript'] = {
-	'icon'	: 'superscript.gif',
+	//'icon'	: 'superscript.gif',
 	'title'	: '上标',
 	'click' : function(textareaName)
 	{
@@ -806,7 +806,7 @@ KindEditorVar.plugin['superscript'] = {
 	}
 };
 KindEditorVar.plugin['textcolor'] = {
-	'icon'				: 'textcolor.gif',
+	//'icon'				: 'textcolor.gif',
 	'title'				: '文字颜色',
 	'click' : function(textareaName)
 	{
@@ -829,7 +829,7 @@ KindEditorVar.plugin['textcolor'] = {
 	}
 };
 KindEditorVar.plugin['time'] = {
-	'icon'	: 'time.gif',
+	//'icon'	: 'time.gif',
 	'title'	: '时间',
 	'click' : function(textareaName)
 	{
@@ -855,7 +855,7 @@ KindEditorVar.plugin['title'] = {
 		'H5' : '标题 5', 
 		'H6' : '标题 6'
 	},
-	'icon' : 'title.gif',
+	//'icon' : 'title.gif',
 	'title' : '标题',
 	'click' : function(textareaName)
 	{
@@ -890,7 +890,7 @@ KindEditorVar.plugin['title'] = {
 	}
 };
 KindEditorVar.plugin['underline'] = {
-	'icon'	: 'underline.gif',
+	//'icon'	: 'underline.gif',
 	'title'	: '下划线',
 	'click' : function(textareaName)
 	{
@@ -898,7 +898,7 @@ KindEditorVar.plugin['underline'] = {
 	}
 };
 KindEditorVar.plugin['undo'] = {
-	'icon'	: 'undo.gif',
+	//'icon'	: 'undo.gif',
 	'title'	: '后退',
 	'click' : function(textareaName)
 	{
@@ -906,7 +906,7 @@ KindEditorVar.plugin['undo'] = {
 	}
 };
 KindEditorVar.plugin['unlink'] = {
-	'icon'	: 'unlink.gif',
+	//'icon'	: 'unlink.gif',
 	'title'	: '取消超级连接',
 	'click' : function(textareaName)
 	{
@@ -914,7 +914,7 @@ KindEditorVar.plugin['unlink'] = {
 	}
 };
 KindEditorVar.plugin['unorderedlist'] = {
-	'icon'	: 'unorderedlist.gif',
+	//'icon'	: 'unorderedlist.gif',
 	'title'	: '项目符号',
 	'click' : function(textareaName)
 	{
@@ -923,7 +923,7 @@ KindEditorVar.plugin['unorderedlist'] = {
 };
 KindEditorVar.plugin['zoom'] = {
 	'menu' : ['250%', '200%', '150%', '120%', '100%', '80%', '50%'],
-	'icon'				: 'zoom.gif',
+	//'icon'				: 'zoom.gif',
 	'title'				: '显示比例',
 	'click' : function(textareaName)
 	{

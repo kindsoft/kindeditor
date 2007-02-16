@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['image'] = {
-	'icon'	: 'image.gif',
+	//'icon'	: 'image.gif',
 	'title'	: '插入图片',
 	'click' : function(textareaName)
 	{

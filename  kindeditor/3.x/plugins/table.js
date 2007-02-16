@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['table'] = {
-	'icon'	: 'table.gif',
+	//'icon'	: 'table.gif',
 	'title'	: '插入表格',
 	'selected' : function(textareaName, i, j)
 	{

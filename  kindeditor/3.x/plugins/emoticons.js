@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['emoticons'] = {
-	'icon'	: 'emoticons.gif',
+	//'icon'	: 'emoticons.gif',
 	'title'	: '插入表情符号',
 	'click' : function(textareaName)
 	{

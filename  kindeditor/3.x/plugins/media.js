@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['media'] = {
-	'icon'	: 'media.gif',
+	//'icon'	: 'media.gif',
 	'title'	: '插入Window Media Player',
 	'click' : function(textareaName)
 	{
