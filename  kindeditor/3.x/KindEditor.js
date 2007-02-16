@@ -278,7 +278,7 @@ var KindEditorUtil = {
 					obj.alt = plugin[cmd].title;
 					obj.align = 'absmiddle';
 				} else {
-					obj = document.createElement('span');
+					obj = document.createElement('a');
 					obj.style.fontSize = '12px';
 					obj.style.padding = '2px';
 					obj.appendChild(document.createTextNode(plugin[cmd].title));
@@ -311,7 +311,7 @@ function KindEditor()
 	this.editorHeight = '400px';
 	this.langType = 'zh-cn';
 	this.toolbar = [
-		'source', 'preview', 'zoom', 'undo', 'redo', 'cut', 'copy', 'paste', 
+		'source', 'edit', 'preview', 'zoom', 'undo', 'redo', 'cut', 'copy', 'paste', 
 		'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
 		'numberedlist', 'unorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', 'date', 'time', '',
@@ -443,6 +443,39 @@ KindEditorVar.plugin['bold'] = {
 		KindEditorVar.editor[textareaName].iframeDoc.execCommand('bold', false, null);
 	}
 };
+KindEditorVar.plugin['edit'] = {
+	'title'				: '编辑',
+	'click' : function(textareaName)
+	{
+		var cmd = 'edit';
+		KindEditorUtil.getSelection(textareaName);
+		var obj = KindEditorVar.editor[textareaName];
+		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var menuTable = {
+			'bold'		: '粗体', 
+			'copy'		: '复制'
+		};
+		for (key in menuTable) {
+			var cDiv = document.createElement('div');
+			cDiv.style.padding = '2px';
+			cDiv.style.width = '160px';
+			cDiv.style.cursor = 'pointer';
+			cDiv.onmouseover = function() { this.className = 'editorSelectedMenu'; }
+			cDiv.onmouseout = function() { this.className = null; }
+			cDiv.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + key + '")');
+			cDiv.appendChild(document.createTextNode(menuTable[key]));
+			div.appendChild(cDiv);
+		}
+		KindEditorUtil.showWindow(textareaName, div);
+	},
+	'exec' : function(textareaName, value)
+	{
+		var obj = KindEditorVar.editor[textareaName];
+		obj.range.select();
+		obj.iframeDoc.execCommand(value, false, null);
+		KindEditorUtil.hideWindow(textareaName);
+	}
+};
 KindEditorVar.plugin['bgcolor'] = {
 	//'icon'				: 'bgcolor.gif',
 	'title'				: '文字背景',
@@ -533,7 +566,7 @@ KindEditorVar.plugin['fontname'] = {
 		'GulimChe'			: 'GulimChe', 
 		'MS Gothic'			: 'MS Gothic' 
 	},
-	//'icon'				: 'font.gif',
+	'icon'				: 'font.gif',
 	'title'				: '字体',
 	'click' : function(textareaName)
 	{
@@ -542,7 +575,6 @@ KindEditorVar.plugin['fontname'] = {
 		var obj = KindEditorVar.editor[textareaName];
 		var fontName = KindEditorVar.plugin[cmd].menu;
 		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
-		div.style.fontSize = '12px';
 		for (key in fontName) {
 			var cDiv = document.createElement('div');
 			cDiv.style.padding = '2px';
