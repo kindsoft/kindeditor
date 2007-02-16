@@ -57,6 +57,14 @@ var KindEditorFunc = {
 		script.setAttribute('src', path);
 		document.getElementsByTagName("head")[0].appendChild(script);
 	},
+	'loadStyle' : function(path)
+	{
+		var link = document.createElement('link');
+		link.setAttribute('type', 'text/css');
+		link.setAttribute('rel', 'stylesheet');
+		link.setAttribute('href', path);
+		document.getElementsByTagName("head")[0].appendChild(link);
+	},
 	'addEvent' : function(object, event ,listener)
 	{
 		if (object.addEventListener){
@@ -96,13 +104,10 @@ var KindEditorUtil = {
 		var iconObj = document.getElementById(textareaName + 'icon' + cmd);
 		var obj = KindEditorVar.editor[textareaName];
 		var div = document.createElement('div');
+		div.className = 'editorMenu';
 		div.style.position = 'absolute';
 		div.style.top = KindEditorUtil.getTop(iconObj) + iconObj.offsetHeight + 'px';
 		div.style.left = KindEditorUtil.getLeft(iconObj) + 'px';
-		div.style.color = obj.menuTextColor;
-		div.style.textAlign = 'left';
-		div.style.border = obj.menuBorder;
-		div.style.background = obj.menuBgColor;
 		div.style.zIndex = 1;
 		return div;
 	},
@@ -110,14 +115,12 @@ var KindEditorUtil = {
 	{
 		var obj = KindEditorVar.editor[textareaName];
 		var div = document.createElement('div');
+		div.className = 'editorWindow';
 		div.style.position = 'absolute';
 		div.style.width = width;
 		div.style.height = height;
 		div.style.top = (KindEditorUtil.getTop(obj.div) + Math.round(parseInt(obj.editorHeight) / 2) - Math.round(height / 2)) + 'px';
 		div.style.left = (KindEditorUtil.getLeft(obj.div) + Math.round(parseInt(obj.editorWidth) / 2) - Math.round(width / 2)) + 'px';
-		div.style.color = obj.menuTextColor;
-		div.style.border = obj.menuBorder;
-		div.style.background = obj.menuBgColor;
 		div.style.zIndex = 1;
 		return div;
 	},
@@ -175,18 +178,14 @@ var KindEditorUtil = {
 	{
 		var obj = KindEditorVar.editor[textareaName];
 		var html;
-		if (KindEditorVar.browser == '') {
-			html = obj.textarea.value;
-		} else {
-			if (obj.codeMode == 'no') {
-				if (obj.fullHtml == 'yes') {
-					html = '<html>' + obj.iframeDoc.documentElement.innerHTML + '</html>';
-				} else {
-					html = obj.iframeDoc.body.innerHTML;
-				}
+		if (obj.codeMode == 'no') {
+			if (obj.fullHtml == 'yes') {
+				html = '<html>' + obj.iframeDoc.documentElement.innerHTML + '</html>';
 			} else {
-				html = obj.newTextarea.value;
+				html = obj.iframeDoc.body.innerHTML;
 			}
+		} else {
+			html = obj.newTextarea.value;
 		}
 		obj.input.value = html;
 		return html;
@@ -264,7 +263,6 @@ var KindEditorUtil = {
 		var editorObj = KindEditorVar.editor[textareaName];
 		var lang = KindEditorVar.lang[editorObj.langType];
 		var plugin = KindEditorVar.plugin;
-
 		for (var i in editorObj.toolbar) {
 			var cmd = editorObj.toolbar[i];
 			var obj;
@@ -284,15 +282,13 @@ var KindEditorUtil = {
 					obj.style.fontSize = '12px';
 					obj.style.padding = '2px';
 					obj.appendChild(document.createTextNode(plugin[cmd].title));
-					obj.title = plugin[cmd].title;
 				}
 			}
+			obj.className = 'editorIcon';
 			obj.id = textareaName + 'icon' + cmd;
-			obj.style.border = '1px solid ' + editorObj.toolbarBgColor;
-			obj.style.margin = '0 1px 0 1px';
-			obj.style.cursor = 'pointer';
-			obj.onmouseover = function(){ this.style.borderColor = editorObj.menuSelectedColor; };
-			obj.onmouseout = function(){ this.style.borderColor = editorObj.menuBgColor; };
+			obj.title = plugin[cmd].title;
+			obj.onmouseover = function(){ this.className = 'editorSelectedIcon'; };
+			obj.onmouseout = function(){ this.className = 'editorIcon'; };
 			obj.onclick = new Function('KindEditorUtil.click("' + editorObj.textareaName + '", "' + cmd + '")');
 			editorObj.toolbarDiv.appendChild(obj);
 		}
@@ -313,17 +309,6 @@ function KindEditor()
 	this.skinType = 'default';
 	this.editorWidth = '700px';
 	this.editorHeight = '400px';
-	this.menuBorder = '2px solid #CCCCCC';
-	this.menuBgColor = '#F0F0EE';
-	this.menuTextColor = '#222222';
-	this.menuSelectedColor = '#0021b0';
-	this.editorBorder = '3px solid #CCCCCC';
-	this.toolbarBgColor = '#F0F0EE';
-	this.formBorder = '1px solid #CCCCCC';
-	this.iframeBgColor = '#FFFFFF';
-	this.textareaTextColor = '#000000';
-	this.textareaBgColor = '#FFFFFF';
-	this.buttonColor = '#DDDDDD';
 	this.langType = 'zh-cn';
 	this.toolbar = [
 		'source', 'preview', 'zoom', 'undo', 'redo', 'cut', 'copy', 'paste', 
@@ -336,13 +321,13 @@ function KindEditor()
 		'emoticons', 'link', 'unlink', 'about'
 	];
 	this.iframeCssPath = KindEditorVar.scriptPath + 'demo/demo.css';
-	this.fontFamily = 'Courier New';
 	
 	this.print = function()
 	{
 		this.langsPath = KindEditorVar.scriptPath + 'langs/';
 		this.skinsPath = KindEditorVar.scriptPath + 'skins/' + this.skinType + '/';
 		this.pluginsPath = KindEditorVar.scriptPath + 'plugins/';
+		KindEditorFunc.loadStyle(this.skinsPath + 'style.css');
 		KindEditorFunc.loadScript(this.langsPath + this.langType + '.js');
 		for (var i in this.toolbar) {
 			if (KindEditorVar.plugin[this.toolbar[i]] || this.toolbar[i] == '') continue;
@@ -357,31 +342,23 @@ function KindEditor()
 		else formHeight = (parseInt(heightArr[1]) - 4).toString(10) + heightArr[2];
 
 		var div = document.createElement('div');
+		div.className = 'editorDiv';
 		div.style.width = this.editorWidth;
 		div.style.padding = '1px';
-		div.style.border = this.editorBorder;
-		div.style.backgroundColor = this.toolbarBgColor;
 		div.style.visibility = 'hidden';
 		var textarea = document.getElementsByName(this.textareaName)[0];
 		textarea.removeAttribute('name');
 		textarea.parentNode.insertBefore(div, textarea);
 		textarea.style.display = 'none';
 		var newTextarea = document.createElement('textarea');
+		newTextarea.className = 'editorTextarea';
 		newTextarea.value = textarea.value;
 		newTextarea.style.width = formWidth;
 		newTextarea.style.height = formHeight;
-		newTextarea.style.margin = 0;
-		newTextarea.style.padding = 0;
-		newTextarea.style.border = 0;
-		newTextarea.style.background = this.textareaBgColor;
-		newTextarea.style.color = this.textareaTextColor;
-		newTextarea.style.fontSize = '12px';
-		newTextarea.style.fontFamily = this.fontFamily;
-		newTextarea.style.lineHeight = '16px';
 		newTextarea.style.display = 'none';
 		var input;
 		if (KindEditorVar.browser == 'IE') {
-			input = document.createElement('<input type="hidden" name="'+this.textareaName+'">');
+			input = document.createElement('<input type="hidden" name="' + this.textareaName + '">');
 		} else {
 			input = document.createElement('input');
 			input.setAttribute('type', 'hidden');
@@ -391,8 +368,7 @@ function KindEditor()
 		toolbarDiv.style.padding = '2px';
 		toolbarDiv.style.textAlign = 'left';
 		var formDiv = document.createElement('div');
-		formDiv.style.border = this.formBorder;
-		formDiv.style.background = this.iframeBgColor;
+		formDiv.className = 'editorFormDiv';
 		formDiv.style.height = this.editorHeight;
 		
 		var iframe = document.createElement('iframe');
@@ -411,7 +387,7 @@ function KindEditor()
 		div.appendChild(formDiv);
 		div.appendChild(input);
 		div.appendChild(hideDiv);
-
+		//alert(document.documentElement.innerHTML);
 		var iframeWin = iframe.contentWindow;
 		var iframeDoc = iframeWin.document;
 		iframeDoc.designMode = "on";
@@ -489,26 +465,20 @@ KindEditorVar.plugin['bgcolor'] = {
 		} else {
 			var startRangeNode = obj.range.startContainer;
 			if (startRangeNode.nodeType == 3) {
-				var parent = startRangeNode.parentNode;
-				var element = document.createElement("font");
-				element.style.backgroundColor = value;
-				element.appendChild(obj.range.extractContents());
-				var startRangeOffset = obj.range.startOffset;
-				var textNode = startRangeNode;
-				startRangeNode = textNode.parentNode;
-				var text = textNode.nodeValue;
-				var textBefore = text.substr(0, startRangeOffset);
-				var textAfter = text.substr(startRangeOffset);
-				var beforeNode = document.createTextNode(textBefore);
-				var afterNode = document.createTextNode(textAfter);
-				startRangeNode.insertBefore(afterNode, textNode);
-				startRangeNode.insertBefore(element, afterNode);
-				startRangeNode.insertBefore(beforeNode, element);
-				startRangeNode.removeChild(textNode);
-				var newRange = document.createRange();
-				newRange.setStart(afterNode, 0);
-				newRange.setEnd(afterNode, 0);
-				obj.selection.addRange(newRange);
+				var font = document.createElement("font");
+				font.style.backgroundColor = value;
+				font.appendChild(obj.range.extractContents());
+				var startOffset = obj.range.startOffset;
+				var text = startRangeNode.nodeValue;
+				var beforeText = text.substr(0, startOffset);
+				var afterText = text.substr(startOffset);
+				var beforeNode = document.createTextNode(beforeText);
+				var afterNode = document.createTextNode(afterText);
+				var parentRangeNode = startRangeNode.parentNode;
+				parentRangeNode.insertBefore(afterNode, startRangeNode);
+				parentRangeNode.insertBefore(font, afterNode);
+				parentRangeNode.insertBefore(beforeNode, font);
+				parentRangeNode.removeChild(startRangeNode);
 			}
 		}
 		KindEditorUtil.hideWindow(textareaName);
@@ -547,54 +517,6 @@ KindEditorVar.plugin['date'] = {
 		KindEditorUtil.insertHtml(textareaName, value);
 	}
 };
-KindEditorVar.plugin['emoticons'] = {
-	'icon'	: 'emoticons.gif',
-	'title'	: '插入表情符号',
-	'click' : function(textareaName)
-	{
-		var emoticonTable = [
-				['etc_01.gif','etc_02.gif','etc_03.gif','etc_04.gif','etc_05.gif','etc_06.gif'],
-				['etc_07.gif','etc_08.gif','etc_09.gif','etc_10.gif','etc_11.gif','etc_12.gif'],
-				['etc_13.gif','etc_14.gif','etc_15.gif','etc_16.gif','etc_17.gif','etc_18.gif'],
-				['etc_19.gif','etc_20.gif','etc_21.gif','etc_22.gif','etc_23.gif','etc_24.gif'],
-				['etc_25.gif','etc_26.gif','etc_27.gif','etc_28.gif','etc_29.gif','etc_30.gif'],
-				['etc_31.gif','etc_32.gif','etc_33.gif','etc_34.gif','etc_35.gif','etc_36.gif']
-			];
-		var cmd = 'emoticons';
-		KindEditorUtil.getSelection(textareaName);
-		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
-		var table = document.createElement('table');
-		table.cellPadding = 0;
-		table.cellSpacing = 2;
-		table.border = 0;
-		for (var i = 0; i < emoticonTable.length; i++) {
-			var row = table.insertRow(i);
-			for (var j = 0; j < emoticonTable[i].length; j++) {
-				var cell = row.insertCell(j);
-				cell.style.padding = '2px';
-				cell.style.border = 0;
-				cell.style.cursor = 'pointer';
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
-				cell.onmouseout = function() {this.style.borderColor = '#AAAAAA'; }
-				cell.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + emoticonTable[i][j] + '")');
-				cell.innerHTML = '<img src="' + KindEditorVar.scriptPath + 'emoticons/' + emoticonTable[i][j] + '">';
-			}
-		}
-		div.appendChild(table);
-		KindEditorUtil.showWindow(textareaName, div);
-	},
-	'exec' : function(textareaName, value)
-	{
-		var obj = KindEditorVar.editor[textareaName];
-		if (KindEditorVar.browser == 'IE') {
-			obj.range.select();
-		}
-		var html = '<img src="' + KindEditorVar.scriptPath + 'emoticons/' + value + '" border="0">';
-		KindEditorUtil.insertHtml(textareaName, html);
-		KindEditorUtil.hideWindow(textareaName);
-	}
-};
 KindEditorVar.plugin['fontname'] = {
 	'menu' : {
 		'SimSun'			: '宋体', 
@@ -623,12 +545,11 @@ KindEditorVar.plugin['fontname'] = {
 		div.style.fontSize = '12px';
 		for (key in fontName) {
 			var cDiv = document.createElement('div');
-			cDiv.style.fontFamily = key;
 			cDiv.style.padding = '2px';
 			cDiv.style.width = '160px';
 			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.style.background = obj.menuSelectedColor; }
-			cDiv.onmouseout = function() { this.style.background = obj.menuBgColor; }
+			cDiv.onmouseover = function() { this.className = 'editorSelectedMenu'; }
+			cDiv.onmouseout = function() { this.className = null; }
 			cDiv.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + key + '")');
 			cDiv.appendChild(document.createTextNode(fontName[key]));
 			div.appendChild(cDiv);
@@ -666,12 +587,12 @@ KindEditorVar.plugin['fontsize'] = {
 		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
 		for (key in fontSize) {
 			var cDiv = document.createElement('div');
-			cDiv.style.fontSize = fontSize[key];
+			cDiv.style.fontSize = '12px';
 			cDiv.style.padding = '2px';
-			cDiv.style.width = '160px';
+			cDiv.style.width = '100px';
 			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.style.background = obj.menuSelectedColor; }
-			cDiv.onmouseout = function() { this.style.background = obj.menuBgColor; }
+			cDiv.onmouseover = function() { this.className = 'editorSelectedMenu'; }
+			cDiv.onmouseout = function() { this.className = null; }
 			cDiv.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + key + '")');
 			cDiv.appendChild(document.createTextNode(fontSize[key]));
 			div.appendChild(cDiv);
@@ -759,30 +680,6 @@ KindEditorVar.plugin['justifyright'] = {
 	'click' : function(textareaName)
 	{
 		KindEditorVar.editor[textareaName].iframeDoc.execCommand('justifyright', false, null);
-	}
-};
-KindEditorVar.plugin['layer'] = {
-	'icon'	: 'layer.gif',
-	'title'	: '插入层',
-	'click' : function(textareaName)
-	{
-		var cmd = 'layer';
-		KindEditorUtil.getSelection(textareaName);
-		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
-		var table = KindEditorUtil.getColorTable(textareaName, cmd);
-		div.appendChild(table);
-		KindEditorUtil.showWindow(textareaName, div);
-	},
-	'exec' : function(textareaName, value)
-	{
-		var obj = KindEditorVar.editor[textareaName];
-		if (KindEditorVar.browser == 'IE') {
-			obj.range.select();
-		}
-		var html = '<div style="padding:5px;border:1px solid #AAAAAA;background-color:' + value + '">请输入内容</div>';
-		KindEditorUtil.insertHtml(textareaName, html);
-		KindEditorUtil.hideWindow(textareaName);
 	}
 };
 KindEditorVar.plugin['numberedlist'] = {
@@ -884,58 +781,6 @@ KindEditorVar.plugin['source'] = {
 		}
 	}
 };
-KindEditorVar.plugin['specialchar'] = {
-	'icon'	: 'specialchar.gif',
-	'title'	: '插入特殊符号',
-	'click' : function(textareaName)
-	{
-		var charTable = [
-			['§','№','☆','★','○','●','◎','◇','◆','□'],
-			['℃','‰','■','△','▲','※','→','←','↑','↓'],
-			['〓','¤','°','＃','＆','＠','＼','︿','＿','￣'],
-			['―','α','β','γ','δ','ε','ζ','η','θ','ι'],
-			['κ','λ','μ','ν','ξ','ο','π','ρ','σ','τ'],
-			['υ','φ','χ','ψ','ω','≈','≡','≠','＝','≤'],
-			['≥','＜','＞','≮','≯','∷','±','＋','－','×'],
-			['÷','／','∫','∮','∝','∞','∧','∨','∑','∏'],
-			['∪','∩','∈','∵','∴','⊥','∥','∠','⌒','⊙'],
-			['≌','∽','〖','〗','【','】','（','）','［','］']
-		];
-		var cmd = 'specialchar';
-		KindEditorUtil.getSelection(textareaName);
-		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
-		var table = document.createElement('table');
-		table.cellPadding = 0;
-		table.cellSpacing = 2;
-		table.border = 0;
-		for (var i = 0; i < charTable.length; i++) {
-			var row = table.insertRow(i);
-			for (var j = 0; j < charTable[i].length; j++) {
-				var cell = row.insertCell(j);
-				cell.style.padding = '2px';
-				cell.style.border = '1px solid #AAAAAA';
-				cell.style.fontSize = '12px';
-				cell.style.cursor = 'pointer';
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
-				cell.onmouseout = function() {this.style.borderColor = '#AAAAAA'; }
-				cell.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + charTable[i][j] + '")');
-				cell.innerHTML = charTable[i][j];
-			}
-		}
-		div.appendChild(table);
-		KindEditorUtil.showWindow(textareaName, div);
-	},
-	'exec' : function(textareaName, value)
-	{
-		var obj = KindEditorVar.editor[textareaName];
-		if (KindEditorVar.browser == 'IE') {
-			obj.range.select();
-		}
-		KindEditorUtil.insertHtml(textareaName, value);
-		KindEditorUtil.hideWindow(textareaName);
-	}
-};
 KindEditorVar.plugin['strikethrough'] = {
 	'icon'	: 'strikethrough.gif',
 	'title'	: '删除线',
@@ -958,71 +803,6 @@ KindEditorVar.plugin['superscript'] = {
 	'click' : function(textareaName)
 	{
 		KindEditorVar.editor[textareaName].iframeDoc.execCommand('superscript', false, null);
-	}
-};
-KindEditorVar.plugin['table'] = {
-	'icon'	: 'table.gif',
-	'title'	: '插入表格',
-	'selected' : function(textareaName, i, j)
-	{
-		var obj = KindEditorVar.editor[textareaName];
-		var text = i.toString(10) + ' by ' + j.toString(10) + ' Table';
-		document.getElementById('tableLocation' + textareaName).innerHTML = text;
-		var num = 10;
-		for (var m = 1; m <= num; m++) {
-			for (var n = 1; n <= num; n++) {
-				var td = document.getElementById('tableTd' + textareaName + m.toString(10) + '_' + n.toString(10) + '');
-				if (m <= i && n <= j) {
-					td.style.backgroundColor = obj.menuSelectedColor;
-				} else {
-					td.style.backgroundColor = '#FFFFFF';
-				}
-			}
-		}
-	},
-	'click' : function(textareaName)
-	{
-		var cmd = 'table';
-		KindEditorUtil.getSelection(textareaName);
-		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
-		var num = 10;
-		var html = '<table cellpadding="0" cellspacing="0" border="0">';
-		for (i = 1; i <= num; i++) {
-			html += '<tr>';
-			for (j = 1; j <= num; j++) {
-				var value = i.toString(10) + ',' + j.toString(10);
-				html += '<td id="tableTd' + textareaName + i.toString(10) + '_' + j.toString(10) + 
-				'" style="font-size:1px;width:12px;height:12px;background-color:#FFFFFF;border:1px solid #DDDDDD;cursor:pointer;" ' + 
-				'onclick="javascript:KindEditorVar.plugin[\'table\'].exec(\'' + textareaName + '\', \'' + value + '\');" ' +
-				'onmouseover="javascript:KindEditorVar.plugin[\'table\'].selected(\'' + textareaName + '\', \'' + i.toString(10) + '\', \'' + j.toString(10) + '\');"' + 
-				'onmouseout="javascript:;">&nbsp;</td>';
-			}
-			html += '</tr>';
-		}
-		html += '<tr><td colspan="10" id="tableLocation' + textareaName + '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
-		html += '</table>';
-		div.innerHTML = html;
-		KindEditorUtil.showWindow(textareaName, div);
-	},
-	'exec' : function(textareaName, value)
-	{
-		var obj = KindEditorVar.editor[textareaName];
-		if (KindEditorVar.browser == 'IE') {
-			obj.range.select();
-		}
-		var location = value.split(',');
-		var html = '<table border="1">';
-		for (var i = 0; i < location[0]; i++) {
-			html += '<tr>';
-			for (var j = 0; j < location[1]; j++) {
-				html += '<td>&nbsp;</td>';
-			}
-			html += '</tr>';
-		}
-		html += '</table>';
-		KindEditorUtil.insertHtml(textareaName, html);
-		KindEditorUtil.hideWindow(textareaName);
 	}
 };
 KindEditorVar.plugin['textcolor'] = {
@@ -1087,16 +867,14 @@ KindEditorVar.plugin['title'] = {
 		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
 		for (key in title) {
 			var cDiv = document.createElement('div');
+			cDiv.style.fontSize = '12px';
 			cDiv.style.padding = '2px';
-			cDiv.style.width = '160px';
+			cDiv.style.width = '100px';
 			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.style.background = obj.menuSelectedColor; }
-			cDiv.onmouseout = function() { this.style.background = obj.menuBgColor; }
+			cDiv.onmouseover = function() { this.className = 'editorSelectedMenu'; }
+			cDiv.onmouseout = function() { this.className = null; }
 			cDiv.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "<' + key + '>")');
-			var h = document.createElement(key);
-			h.style.margin = '2px';
-			h.appendChild(document.createTextNode(title[key]));
-			cDiv.appendChild(h);
+			cDiv.appendChild(document.createTextNode(title[key]));
 			div.appendChild(cDiv);
 		}
 		KindEditorUtil.showWindow(textareaName, div);
@@ -1159,8 +937,8 @@ KindEditorVar.plugin['zoom'] = {
 			cDiv.style.padding = '2px';
 			cDiv.style.width = '120px';
 			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.style.background = obj.menuSelectedColor; }
-			cDiv.onmouseout = function() { this.style.background = obj.menuBgColor; }
+			cDiv.onmouseover = function() { this.className = 'editorSelectedMenu'; }
+			cDiv.onmouseout = function() { this.className = null; }
 			cDiv.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + zoom[i] + '")');
 			cDiv.appendChild(document.createTextNode(zoom[i]));
 			div.appendChild(cDiv);
