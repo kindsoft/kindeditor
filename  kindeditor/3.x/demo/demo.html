@@ -3,17 +3,16 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <title>KindEditor 3.0 alpha</title>
 </head>
-<body>
-<form name="test" method="post" onsubmit="javascript:KindEditorUtil.getData('content'); alert(document.getElementsByName('content')[0].value);return false;">
-<div align="center">
-<textarea name="content" style="display:none;"><br></textarea>
-</div>
 <script type="text/javascript" src="./../KindEditor.js"></script>
 <script type="text/javascript">
-var editor = new KindEditor();
-editor.textareaName = "content";
-editor.print();
+var editor = new KindEditor("content");
+editor.show();
 </script>
+<body>
+<form name="test" method="post">
+<div align="center">
+<textarea name="content" style="width:600px;height:400px;"><br></textarea>
+</div>
 <br/>
 <div align="center">
 <input type="submit" value="Submit">

@@ -1,7 +1,8 @@
 
 KindEditorVar.plugin['emoticons'] = {
-	//'icon'	: 'emoticons.gif',
+	'icon'	: 'emoticons.gif',
 	'title'	: '插入表情符号',
+	'emoticonPath' : KindEditorVar.scriptPath + 'emoticons/',
 	'click' : function(textareaName)
 	{
 		var emoticonTable = [
@@ -30,7 +31,7 @@ KindEditorVar.plugin['emoticons'] = {
 				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
 				cell.onmouseout = function() {this.style.borderColor = '#AAAAAA'; }
 				cell.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + emoticonTable[i][j] + '")');
-				cell.innerHTML = '<img src="' + KindEditorVar.scriptPath + 'emoticons/' + emoticonTable[i][j] + '">';
+				cell.innerHTML = '<img src="' + KindEditorVar.plugin[cmd].emoticonPath + emoticonTable[i][j] + '">';
 			}
 		}
 		div.appendChild(table);
@@ -42,7 +43,7 @@ KindEditorVar.plugin['emoticons'] = {
 		if (KindEditorVar.browser == 'IE') {
 			obj.range.select();
 		}
-		var html = '<img src="' + KindEditorVar.scriptPath + 'emoticons/' + value + '" border="0">';
+		var html = '<img src="' + KindEditorVar.plugin['emoticons'].emoticonPath + value + '" border="0">';
 		KindEditorUtil.insertHtml(textareaName, html);
 		KindEditorUtil.hideWindow(textareaName);
 	}

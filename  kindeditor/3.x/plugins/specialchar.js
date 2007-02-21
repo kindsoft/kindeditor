@@ -1,6 +1,6 @@
 
 KindEditorVar.plugin['specialchar'] = {
-	//'icon'	: 'specialchar.gif',
+	'icon'	: 'specialchar.gif',
 	'title'	: '插入特殊符号',
 	'click' : function(textareaName)
 	{

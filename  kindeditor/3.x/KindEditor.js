@@ -101,8 +101,8 @@ var KindEditorUtil = {
 	},
 	'getMenuDiv' : function(textareaName, cmd)
 	{
-		var iconObj = document.getElementById(textareaName + 'icon' + cmd);
 		var obj = KindEditorVar.editor[textareaName];
+		var iconObj = obj.toolbarIcon[cmd];
 		var div = document.createElement('div');
 		div.className = 'editorMenu';
 		div.style.position = 'absolute';
@@ -119,8 +119,8 @@ var KindEditorUtil = {
 		div.style.position = 'absolute';
 		div.style.width = width;
 		div.style.height = height;
-		div.style.top = (KindEditorUtil.getTop(obj.div) + Math.round(parseInt(obj.editorHeight) / 2) - Math.round(height / 2)) + 'px';
-		div.style.left = (KindEditorUtil.getLeft(obj.div) + Math.round(parseInt(obj.editorWidth) / 2) - Math.round(width / 2)) + 'px';
+		div.style.top = (KindEditorUtil.getTop(obj.baseDiv) + Math.round(parseInt(obj.editorHeight) / 2) - Math.round(height / 2)) + 'px';
+		div.style.left = (KindEditorUtil.getLeft(obj.baseDiv) + Math.round(parseInt(obj.editorWidth) / 2) - Math.round(width / 2)) + 'px';
 		div.style.zIndex = 1;
 		return div;
 	},
@@ -187,7 +187,7 @@ var KindEditorUtil = {
 		} else {
 			html = obj.newTextarea.value;
 		}
-		obj.input.value = html;
+		obj.hideInput.value = html;
 		return html;
 	},
 	'focus' : function(textareaName)
@@ -218,12 +218,7 @@ var KindEditorUtil = {
 	'click' : function(textareaName, cmd)
 	{
 		var obj = KindEditorVar.editor[textareaName];
-		if (obj.codeMode == 'yes') {
-			if (cmd != 'source' && cmd != 'preview' && cmd != 'about') {
-				alert(KindEditorVar.lang[obj.langType].cmdNoSupport);
-				return false;
-			}
-		}
+		KindEditorUtil.hideWindow(textareaName);
 		KindEditorUtil.focus(textareaName);
 		KindEditorVar.plugin[cmd].click(textareaName);
 	},
@@ -263,55 +258,134 @@ var KindEditorUtil = {
 		var editorObj = KindEditorVar.editor[textareaName];
 		var lang = KindEditorVar.lang[editorObj.langType];
 		var plugin = KindEditorVar.plugin;
+
+		var oldTextarea = document.getElementsByName(textareaName)[0];
+		if (oldTextarea.style.width) {
+			editorObj.editorWidth = oldTextarea.style.width;
+		}
+		if (oldTextarea.style.width) {
+			editorObj.editorHeight = oldTextarea.style.height;
+		}
+		var widthArr = editorObj.editorWidth.match(/(\d+)([px%]{1,2})/);
+		var formWidth, formHeight;
+		if (widthArr[2] == '%') formWidth = editorObj.editorWidth;
+		else formWidth = (parseInt(widthArr[1]) - 2).toString(10) + widthArr[2];
+		var heightArr = editorObj.editorHeight.match(/(\d+)([px%]{1,2})/);
+		if (heightArr[2] == '%') formHeight = editorObj.editorHeight;
+		else formHeight = (parseInt(heightArr[1]) - 4).toString(10) + heightArr[2];
+		
+		var baseDiv = document.createElement('div');
+		baseDiv.className = 'editorDiv';
+		baseDiv.style.width = editorObj.editorWidth;
+		baseDiv.style.padding = '1px';
+		baseDiv.style.visibility = 'hidden';
+		oldTextarea.parentNode.insertBefore(baseDiv, oldTextarea);
+		
+		var toolbarDiv = document.createElement('div');
+		toolbarDiv.style.padding = '2px';
+		toolbarDiv.style.textAlign = 'left';
+		var toolbarIcon = Array();
 		for (var i in editorObj.toolbar) {
 			var cmd = editorObj.toolbar[i];
 			var obj;
 			if (cmd == '') {
 				obj = document.createElement('br');
-				editorObj.toolbarDiv.appendChild(obj);
-				continue;
 			} else {
 				if (typeof(plugin[cmd]) == "undefined") continue;
-				if (plugin[cmd].icon) {
-					obj = document.createElement('img');
-					obj.src = editorObj.skinsPath + plugin[cmd].icon;
-					obj.alt = plugin[cmd].title;
-					obj.align = 'absmiddle';
-				} else {
-					obj = document.createElement('a');
-					obj.style.fontSize = '12px';
-					obj.style.padding = '2px';
-					obj.appendChild(document.createTextNode(plugin[cmd].title));
-				}
+				obj = document.createElement('img');
+				obj.src = editorObj.skinsPath + plugin[cmd].icon;
+				obj.alt = plugin[cmd].title;
+				obj.align = 'absmiddle';
+				obj.className = 'editorIcon';
+				obj.title = plugin[cmd].title;
+				obj.onmouseover = function(){ this.className = 'editorSelectedIcon'; };
+				obj.onmouseout = function(){ this.className = 'editorIcon'; };
+				obj.onclick = new Function('KindEditorUtil.click("' + textareaName + '", "' + cmd + '")');
+				toolbarIcon[cmd] = obj;
 			}
-			obj.className = 'editorIcon';
-			obj.id = textareaName + 'icon' + cmd;
-			obj.title = plugin[cmd].title;
-			obj.onmouseover = function(){ this.className = 'editorSelectedIcon'; };
-			obj.onmouseout = function(){ this.className = 'editorIcon'; };
-			obj.onclick = new Function('KindEditorUtil.click("' + editorObj.textareaName + '", "' + cmd + '")');
-			editorObj.toolbarDiv.appendChild(obj);
+			toolbarDiv.appendChild(obj);
 		}
-		editorObj.div.style.visibility = 'visible';
+
+		var formDiv = document.createElement('div');
+		formDiv.className = 'editorFormDiv';
+		formDiv.style.height = editorObj.editorHeight;
+
+		var iframe = document.createElement('iframe');
+		iframe.id = editorObj.textareaName + 'Iframe';
+		iframe.name = editorObj.textareaName + 'Iframe';
+		iframe.style.width = formWidth;
+		iframe.style.height = formHeight;
+		iframe.setAttribute("frameBorder", "0");
+
+		var newTextarea = document.createElement('textarea');
+		newTextarea.className = 'editorTextarea';
+		newTextarea.style.width = formWidth;
+		newTextarea.style.height = formHeight;
+		newTextarea.style.display = 'none';
+		var hideInput;
+		if (KindEditorVar.browser == 'IE') {
+			hideInput = document.createElement('<input type="hidden" name="' + textareaName + '">');
+		} else {
+			hideInput = document.createElement('input');
+			hideInput.setAttribute('type', 'hidden');
+			hideInput.setAttribute('name', textareaName);
+		}
+		var hideDiv = document.createElement('div');
+		hideDiv.style.display = 'none';
+		formDiv.appendChild(iframe);
+		formDiv.appendChild(newTextarea);
+		baseDiv.appendChild(toolbarDiv);
+		baseDiv.appendChild(formDiv);
+		baseDiv.appendChild(hideInput);
+		baseDiv.appendChild(hideDiv);
+		var iframeWin = iframe.contentWindow;
+		var iframeDoc = iframeWin.document;
+		iframeDoc.designMode = "on";
+		var html = KindEditorUtil.getFullHtml(editorObj.iframeCssPath, oldTextarea.value);
+		iframeDoc.open();
+		iframeDoc.write(html);
+		iframeDoc.close();
 		if (editorObj.codeMode == 'yes') {
-			editorObj.textarea.style.display = 'block';
-			editorObj.iframe.style.display = 'none';
+			newTextarea.value = oldTextarea.value;
+			newTextarea.style.display = 'block';
+			iframe.style.display = 'none';
 		}
+		oldTextarea.parentNode.removeChild(oldTextarea);
+		var form;
+		if (editorObj.formName == '') {
+			form = document.getElementsByTagName('form')[0];
+		} else {
+			form = document.getElementsByName(editorObj.formName)[0];
+		}
+		KindEditorFunc.addEvent(form, 'submit', new Function('KindEditorUtil.getData("' + textareaName + '")'));
+		KindEditorFunc.addEvent(iframeDoc, 'mousedown', new Function('KindEditorUtil.hideWindow("' + textareaName + '")'));
+		KindEditorFunc.addEvent(newTextarea, 'mousedown', new Function('KindEditorUtil.hideWindow("' + textareaName + '")'));
+		baseDiv.style.visibility = 'visible';
+		
+		editorObj.baseDiv = baseDiv;
+		editorObj.iframe = iframe;
+		editorObj.newTextarea = newTextarea;
+		editorObj.hideInput = hideInput;
+		editorObj.hideDiv = hideDiv;
+		editorObj.iframeWin = iframeWin;
+		editorObj.iframeDoc = iframeDoc;
+		editorObj.toolbarIcon = toolbarIcon;
+		KindEditorVar.editor[editorObj.textareaName] = editorObj;
 		KindEditorUtil.focus(textareaName);
 	}
 };
-function KindEditor() 
+function KindEditor(textareaName) 
 {
-	this.textareaName = '';
+	this.textareaName = textareaName;
 	this.formName = '';
 	this.codeMode = 'no'; //yes or no
 	this.fullHtml = 'no'; //yes or no
-	this.skinType = 'default';
+	this.skinType = 'fck';
 	this.editorWidth = '700px';
 	this.editorHeight = '400px';
 	this.langType = 'zh-cn';
 	this.toolbar = [
-		'source', 'edit', 'preview', 'zoom', 'undo', 'redo', 'cut', 'copy', 'paste', 
+		'source', 'preview', 'zoom', 'undo', 'redo', 'cut', 'copy', 'paste', 
 		'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
 		'numberedlist', 'unorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', 'date', 'time', '',
@@ -321,106 +395,24 @@ function KindEditor()
 		'emoticons', 'link', 'unlink', 'about'
 	];
 	this.iframeCssPath = KindEditorVar.scriptPath + 'demo/demo.css';
-	
-	this.print = function()
+	this.show = function()
 	{
 		this.langsPath = KindEditorVar.scriptPath + 'langs/';
 		this.skinsPath = KindEditorVar.scriptPath + 'skins/' + this.skinType + '/';
 		this.pluginsPath = KindEditorVar.scriptPath + 'plugins/';
+		KindEditorVar.editor[this.textareaName] = this;
 		KindEditorFunc.loadStyle(this.skinsPath + 'style.css');
 		KindEditorFunc.loadScript(this.langsPath + this.langType + '.js');
 		for (var i in this.toolbar) {
 			if (KindEditorVar.plugin[this.toolbar[i]] || this.toolbar[i] == '') continue;
 			KindEditorFunc.loadScript(this.pluginsPath + this.toolbar[i] + '.js');
 		}
-		var widthArr = this.editorWidth.match(/(\d+)([px%]{1,2})/);
-		var formWidth, formHeight;
-		if (widthArr[2] == '%') formWidth = this.editorWidth;
-		else formWidth = (parseInt(widthArr[1]) - 2).toString(10) + widthArr[2];
-		var heightArr = this.editorHeight.match(/(\d+)([px%]{1,2})/);
-		if (heightArr[2] == '%') formHeight = this.editorHeight;
-		else formHeight = (parseInt(heightArr[1]) - 4).toString(10) + heightArr[2];
-
-		var div = document.createElement('div');
-		div.className = 'editorDiv';
-		div.style.width = this.editorWidth;
-		div.style.padding = '1px';
-		div.style.visibility = 'hidden';
-		var textarea = document.getElementsByName(this.textareaName)[0];
-		textarea.removeAttribute('name');
-		textarea.parentNode.insertBefore(div, textarea);
-		textarea.style.display = 'none';
-		var newTextarea = document.createElement('textarea');
-		newTextarea.className = 'editorTextarea';
-		newTextarea.value = textarea.value;
-		newTextarea.style.width = formWidth;
-		newTextarea.style.height = formHeight;
-		newTextarea.style.display = 'none';
-		var input;
-		if (KindEditorVar.browser == 'IE') {
-			input = document.createElement('<input type="hidden" name="' + this.textareaName + '">');
-		} else {
-			input = document.createElement('input');
-			input.setAttribute('type', 'hidden');
-			input.setAttribute('name', this.textareaName);
-		}
-		var toolbarDiv = document.createElement('div');
-		toolbarDiv.style.padding = '2px';
-		toolbarDiv.style.textAlign = 'left';
-		var formDiv = document.createElement('div');
-		formDiv.className = 'editorFormDiv';
-		formDiv.style.height = this.editorHeight;
-		
-		var iframe = document.createElement('iframe');
-		iframe.id = this.textareaName + 'Iframe';
-		iframe.name = this.textareaName + 'Iframe';
-		iframe.style.width = formWidth;
-		iframe.style.height = formHeight;
-		iframe.setAttribute("frameBorder", "0");
-		formDiv.appendChild(iframe);
-		formDiv.appendChild(newTextarea);
-		
-		var hideDiv = document.createElement('div');
-		hideDiv.style.display = 'none';
-
-		div.appendChild(toolbarDiv);
-		div.appendChild(formDiv);
-		div.appendChild(input);
-		div.appendChild(hideDiv);
-		//alert(document.documentElement.innerHTML);
-		var iframeWin = iframe.contentWindow;
-		var iframeDoc = iframeWin.document;
-		iframeDoc.designMode = "on";
-		var html = KindEditorUtil.getFullHtml(this.iframeCssPath, textarea.value);
-		iframeDoc.open();
-		iframeDoc.write(html);
-		iframeDoc.close();
-		KindEditorFunc.addEvent(iframeDoc, 'mousedown', new Function('KindEditorUtil.hideWindow("' + this.textareaName + '")'));
-		KindEditorFunc.addEvent(newTextarea, 'mousedown', new Function('KindEditorUtil.hideWindow("' + this.textareaName + '")'));
-		this.div = div;
-		this.toolbarDiv = toolbarDiv;
-		this.formDiv = formDiv;
-		this.iframe = iframe;
-		this.textarea = textarea;
-		this.newTextarea = newTextarea;
-		this.input = input;
-		this.hideDiv = hideDiv;
-		this.iframeWin = iframeWin;
-		this.iframeDoc = iframeDoc;
-		KindEditorVar.editor[this.textareaName] = this;
 		KindEditorFunc.addEvent(window, 'load', new Function('KindEditorUtil.init("' + this.textareaName + '")'));
-		var form;
-		if (this.formName == '') {
-			form = document.getElementsByTagName('form')[0];
-		} else {
-			form = document.getElementsByName(this.formName)[0];
-		}
-		KindEditorFunc.addEvent(form, 'submit', new Function('KindEditorUtil.getData("' + this.textareaName + '")'));
 	}
 }
 //plugins begin
 KindEditorVar.plugin['about'] = {
-	//'icon'	: 'about.gif',
+	'icon'	: 'about.gif',
 	'title'	: '关于',
 	'click' : function(textareaName)
 	{
@@ -436,48 +428,15 @@ KindEditorVar.plugin['about'] = {
 	}
 };
 KindEditorVar.plugin['bold'] = {
-	//'icon'	: 'bold.gif',
+	'icon'	: 'bold.gif',
 	'title'	: '粗体',
 	'click' : function(textareaName)
 	{
 		KindEditorVar.editor[textareaName].iframeDoc.execCommand('bold', false, null);
 	}
 };
-KindEditorVar.plugin['edit'] = {
-	'title'				: '编辑',
-	'click' : function(textareaName)
-	{
-		var cmd = 'edit';
-		KindEditorUtil.getSelection(textareaName);
-		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
-		var menuTable = {
-			'bold'		: '粗体', 
-			'copy'		: '复制'
-		};
-		for (key in menuTable) {
-			var cDiv = document.createElement('div');
-			cDiv.style.padding = '2px';
-			cDiv.style.width = '160px';
-			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.className = 'editorSelectedMenu'; }
-			cDiv.onmouseout = function() { this.className = null; }
-			cDiv.onclick = new Function('KindEditorVar.plugin["' + cmd + '"].exec("' + textareaName + '", "' + key + '")');
-			cDiv.appendChild(document.createTextNode(menuTable[key]));
-			div.appendChild(cDiv);
-		}
-		KindEditorUtil.showWindow(textareaName, div);
-	},
-	'exec' : function(textareaName, value)
-	{
-		var obj = KindEditorVar.editor[textareaName];
-		obj.range.select();
-		obj.iframeDoc.execCommand(value, false, null);
-		KindEditorUtil.hideWindow(textareaName);
-	}
-};
 KindEditorVar.plugin['bgcolor'] = {
-	//'icon'				: 'bgcolor.gif',
+	'icon'				: 'bgcolor.gif',
 	'title'				: '文字背景',
 	'click' : function(textareaName)
 	{
@@ -518,7 +477,7 @@ KindEditorVar.plugin['bgcolor'] = {
 	}
 };
 KindEditorVar.plugin['copy'] = {
-	//'icon'	: 'copy.gif',
+	'icon'	: 'copy.gif',
 	'title'	: '复制',
 	'click' : function(textareaName)
 	{
@@ -526,7 +485,7 @@ KindEditorVar.plugin['copy'] = {
 	}
 };
 KindEditorVar.plugin['cut'] = {
-	//'icon'	: 'cut.gif',
+	'icon'	: 'cut.gif',
 	'title'	: '剪切',
 	'click' : function(textareaName)
 	{
@@ -534,7 +493,7 @@ KindEditorVar.plugin['cut'] = {
 	}
 };
 KindEditorVar.plugin['date'] = {
-	//'icon'	: 'date.gif',
+	'icon'	: 'date.gif',
 	'title'	: '日期',
 	'click' : function(textareaName)
 	{
@@ -608,7 +567,7 @@ KindEditorVar.plugin['fontsize'] = {
 		'6' : '24pt', 
 		'7' : '36pt'
 	},
-	//'icon'				: 'fontsize.gif',
+	'icon'				: 'fontsize.gif',
 	'title'				: '文字大小',
 	'click' : function(textareaName)
 	{
@@ -643,7 +602,7 @@ KindEditorVar.plugin['fontsize'] = {
 	}
 };
 KindEditorVar.plugin['hr'] = {
-	//'icon'	: 'hr.gif',
+	'icon'	: 'hr.gif',
 	'title'	: '插入横线',
 	'click' : function(textareaName)
 	{
@@ -667,7 +626,7 @@ KindEditorVar.plugin['hr'] = {
 	}
 };
 KindEditorVar.plugin['indent'] = {
-	//'icon'	: 'indent.gif',
+	'icon'	: 'indent.gif',
 	'title'	: '减少缩进',
 	'click' : function(textareaName)
 	{
@@ -675,7 +634,7 @@ KindEditorVar.plugin['indent'] = {
 	}
 };
 KindEditorVar.plugin['italic'] = {
-	//'icon'	: 'italic.gif',
+	'icon'	: 'italic.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -683,7 +642,7 @@ KindEditorVar.plugin['italic'] = {
 	}
 };
 KindEditorVar.plugin['justifycenter'] = {
-	//'icon'	: 'justifycenter.gif',
+	'icon'	: 'justifycenter.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -691,7 +650,7 @@ KindEditorVar.plugin['justifycenter'] = {
 	}
 };
 KindEditorVar.plugin['justifyfull'] = {
-	//'icon'	: 'justifyfull.gif',
+	'icon'	: 'justifyfull.gif',
 	'title'	: '两端对齐',
 	'click' : function(textareaName)
 	{
@@ -699,7 +658,7 @@ KindEditorVar.plugin['justifyfull'] = {
 	}
 };
 KindEditorVar.plugin['justifyleft'] = {
-	//'icon'	: 'justifyleft.gif',
+	'icon'	: 'justifyleft.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -707,7 +666,7 @@ KindEditorVar.plugin['justifyleft'] = {
 	}
 };
 KindEditorVar.plugin['justifyright'] = {
-	//'icon'	: 'justifyright.gif',
+	'icon'	: 'justifyright.gif',
 	'title'	: '斜体',
 	'click' : function(textareaName)
 	{
@@ -715,7 +674,7 @@ KindEditorVar.plugin['justifyright'] = {
 	}
 };
 KindEditorVar.plugin['numberedlist'] = {
-	//'icon'	: 'numberedlist.gif',
+	'icon'	: 'numberedlist.gif',
 	'title'	: '编号',
 	'click' : function(textareaName)
 	{
@@ -723,7 +682,7 @@ KindEditorVar.plugin['numberedlist'] = {
 	}
 };
 KindEditorVar.plugin['outdent'] = {
-	//'icon'	: 'outdent.gif',
+	'icon'	: 'outdent.gif',
 	'title'	: '增加缩进',
 	'click' : function(textareaName)
 	{
@@ -731,7 +690,7 @@ KindEditorVar.plugin['outdent'] = {
 	}
 };
 KindEditorVar.plugin['paste'] = {
-	//'icon'	: 'paste.gif',
+	'icon'	: 'paste.gif',
 	'title'	: '粘贴',
 	'click' : function(textareaName)
 	{
@@ -739,7 +698,7 @@ KindEditorVar.plugin['paste'] = {
 	}
 };
 KindEditorVar.plugin['preview'] = {
-	//'icon'	: 'preview.gif',
+	'icon'	: 'preview.gif',
 	'title'	: '预览',
 	'click' : function(textareaName)
 	{
@@ -751,7 +710,7 @@ KindEditorVar.plugin['preview'] = {
 	}
 };
 KindEditorVar.plugin['print'] = {
-	//'icon'	: 'print.gif',
+	'icon'	: 'print.gif',
 	'title'	: '打印',
 	'click' : function(textareaName)
 	{
@@ -759,7 +718,7 @@ KindEditorVar.plugin['print'] = {
 	}
 };
 KindEditorVar.plugin['redo'] = {
-	//'icon'	: 'redo.gif',
+	'icon'	: 'redo.gif',
 	'title'	: '前进',
 	'click' : function(textareaName)
 	{
@@ -767,7 +726,7 @@ KindEditorVar.plugin['redo'] = {
 	}
 };
 KindEditorVar.plugin['removeformat'] = {
-	//'icon'	: 'removeformat.gif',
+	'icon'	: 'removeformat.gif',
 	'title'	: '删除格式',
 	'click' : function(textareaName)
 	{
@@ -775,7 +734,7 @@ KindEditorVar.plugin['removeformat'] = {
 	}
 };
 KindEditorVar.plugin['selectall'] = {
-	//'icon'	: 'selectall.gif',
+	'icon'	: 'selectall.gif',
 	'title'	: '全选',
 	'click' : function(textareaName)
 	{
@@ -783,7 +742,7 @@ KindEditorVar.plugin['selectall'] = {
 	}
 };
 KindEditorVar.plugin['source'] = {
-	//'icon'	: 'source.gif',
+	'icon'	: 'source.gif',
 	'title'	: '源代码',
 	'click' : function(textareaName)
 	{
@@ -798,6 +757,14 @@ KindEditorVar.plugin['source'] = {
 			}
 			obj.iframe.style.display = 'none';
 			obj.newTextarea.style.display = 'block';
+			for (var cmd in obj.toolbarIcon) {
+				if (cmd != 'source' && cmd != 'preview' && cmd != 'about') {
+					obj.toolbarIcon[cmd].className = 'editorIconDisabled';
+					obj.toolbarIcon[cmd].onmouseover = function(){ };
+					obj.toolbarIcon[cmd].onmouseout = function(){ };
+					obj.toolbarIcon[cmd].onclick = function(){ };
+				}
+			}
 			obj.codeMode = 'yes';
 		} else {
 			if (obj.fullHtml == 'yes') {
@@ -809,12 +776,20 @@ KindEditorVar.plugin['source'] = {
 			}
 			obj.iframe.style.display = 'block';
 			obj.newTextarea.style.display = 'none';
+			for (var cmd in obj.toolbarIcon) {
+				if (cmd != 'source' && cmd != 'preview' && cmd != 'about') {
+					obj.toolbarIcon[cmd].className = 'editorIcon';
+					obj.toolbarIcon[cmd].onmouseover = function(){ this.className = 'editorSelectedIcon'; };
+					obj.toolbarIcon[cmd].onmouseout = function(){ this.className = 'editorIcon'; };
+					obj.toolbarIcon[cmd].onclick = new Function('KindEditorUtil.click("' + textareaName + '", "' + cmd + '")');
+				}
+			}
 			obj.codeMode = 'no';
 		}
 	}
 };
 KindEditorVar.plugin['strikethrough'] = {
-	//'icon'	: 'strikethrough.gif',
+	'icon'	: 'strikethrough.gif',
 	'title'	: '删除线',
 	'click' : function(textareaName)
 	{
@@ -822,7 +797,7 @@ KindEditorVar.plugin['strikethrough'] = {
 	}
 };
 KindEditorVar.plugin['subscript'] = {
-	//'icon'	: 'subscript.gif',
+	'icon'	: 'subscript.gif',
 	'title'	: '下标',
 	'click' : function(textareaName)
 	{
@@ -830,7 +805,7 @@ KindEditorVar.plugin['subscript'] = {
 	}
 };
 KindEditorVar.plugin['superscript'] = {
-	//'icon'	: 'superscript.gif',
+	'icon'	: 'superscript.gif',
 	'title'	: '上标',
 	'click' : function(textareaName)
 	{
@@ -838,7 +813,7 @@ KindEditorVar.plugin['superscript'] = {
 	}
 };
 KindEditorVar.plugin['textcolor'] = {
-	//'icon'				: 'textcolor.gif',
+	'icon'				: 'textcolor.gif',
 	'title'				: '文字颜色',
 	'click' : function(textareaName)
 	{
@@ -861,7 +836,7 @@ KindEditorVar.plugin['textcolor'] = {
 	}
 };
 KindEditorVar.plugin['time'] = {
-	//'icon'	: 'time.gif',
+	'icon'	: 'time.gif',
 	'title'	: '时间',
 	'click' : function(textareaName)
 	{
@@ -887,7 +862,7 @@ KindEditorVar.plugin['title'] = {
 		'H5' : '标题 5', 
 		'H6' : '标题 6'
 	},
-	//'icon' : 'title.gif',
+	'icon' : 'title.gif',
 	'title' : '标题',
 	'click' : function(textareaName)
 	{
@@ -922,7 +897,7 @@ KindEditorVar.plugin['title'] = {
 	}
 };
 KindEditorVar.plugin['underline'] = {
-	//'icon'	: 'underline.gif',
+	'icon'	: 'underline.gif',
 	'title'	: '下划线',
 	'click' : function(textareaName)
 	{
@@ -930,7 +905,7 @@ KindEditorVar.plugin['underline'] = {
 	}
 };
 KindEditorVar.plugin['undo'] = {
-	//'icon'	: 'undo.gif',
+	'icon'	: 'undo.gif',
 	'title'	: '后退',
 	'click' : function(textareaName)
 	{
@@ -938,7 +913,7 @@ KindEditorVar.plugin['undo'] = {
 	}
 };
 KindEditorVar.plugin['unlink'] = {
-	//'icon'	: 'unlink.gif',
+	'icon'	: 'unlink.gif',
 	'title'	: '取消超级连接',
 	'click' : function(textareaName)
 	{
@@ -946,7 +921,7 @@ KindEditorVar.plugin['unlink'] = {
 	}
 };
 KindEditorVar.plugin['unorderedlist'] = {
-	//'icon'	: 'unorderedlist.gif',
+	'icon'	: 'unorderedlist.gif',
 	'title'	: '项目符号',
 	'click' : function(textareaName)
 	{
@@ -955,7 +930,7 @@ KindEditorVar.plugin['unorderedlist'] = {
 };
 KindEditorVar.plugin['zoom'] = {
 	'menu' : ['250%', '200%', '150%', '120%', '100%', '80%', '50%'],
-	//'icon'				: 'zoom.gif',
+	'icon'				: 'zoom.gif',
 	'title'				: '显示比例',
 	'click' : function(textareaName)
 	{
