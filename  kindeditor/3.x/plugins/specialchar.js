@@ -19,7 +19,7 @@ KindEditorVar.plugin['specialchar'] = {
 		var cmd = 'specialchar';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var table = document.createElement('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
@@ -28,7 +28,7 @@ KindEditorVar.plugin['specialchar'] = {
 			var row = table.insertRow(i);
 			for (var j = 0; j < charTable[i].length; j++) {
 				var cell = row.insertCell(j);
-				cell.style.padding = '2px';
+				cell.style.padding = '1px';
 				cell.style.border = '1px solid #AAAAAA';
 				cell.style.fontSize = '12px';
 				cell.style.cursor = 'pointer';

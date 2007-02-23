@@ -24,9 +24,9 @@ KindEditorVar.plugin['table'] = {
 		var cmd = 'table';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var num = 10;
-		var html = '<table cellpadding="0" cellspacing="0" border="0">';
+		var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;">';
 		for (i = 1; i <= num; i++) {
 			html += '<tr>';
 			for (j = 1; j <= num; j++) {

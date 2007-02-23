@@ -7,7 +7,7 @@ KindEditorVar.plugin['layer'] = {
 		var cmd = 'layer';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var table = KindEditorUtil.getColorTable(textareaName, cmd);
 		div.appendChild(table);
 		KindEditorUtil.showWindow(textareaName, div);

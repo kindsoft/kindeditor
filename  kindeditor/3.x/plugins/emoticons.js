@@ -16,7 +16,7 @@ KindEditorVar.plugin['emoticons'] = {
 		var cmd = 'emoticons';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var table = document.createElement('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;

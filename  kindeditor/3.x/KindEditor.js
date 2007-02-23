@@ -99,7 +99,7 @@ var KindEditorUtil = {
 		html += '</html>';
 		return html;
 	},
-	'getMenuDiv' : function(textareaName, cmd)
+	'getPopupMenu' : function(textareaName, cmd)
 	{
 		var obj = KindEditorVar.editor[textareaName];
 		var iconObj = obj.toolbarIcon[cmd];
@@ -111,14 +111,14 @@ var KindEditorUtil = {
 		div.style.zIndex = 1;
 		return div;
 	},
-	'getAlertWindow' : function(textareaName, width, height)
+	'getPopupWindow' : function(textareaName, width, height)
 	{
 		var obj = KindEditorVar.editor[textareaName];
 		var div = document.createElement('div');
 		div.className = 'editorWindow';
 		div.style.position = 'absolute';
-		div.style.width = width;
-		div.style.height = height;
+		div.style.width = width + 'px';
+		div.style.height = height + 'px';
 		div.style.top = (KindEditorUtil.getTop(obj.baseDiv) + Math.round(parseInt(obj.editorHeight) / 2) - Math.round(height / 2)) + 'px';
 		div.style.left = (KindEditorUtil.getLeft(obj.baseDiv) + Math.round(parseInt(obj.editorWidth) / 2) - Math.round(width / 2)) + 'px';
 		div.style.zIndex = 1;
@@ -144,6 +144,7 @@ var KindEditorUtil = {
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
 		table.border = 0;
+		table.style.width = '130px';
 		for (var i = 0; i < colorTable.length; i++) {
 			var row = table.insertRow(i);
 			for (var j = 0; j < colorTable[i].length; j++) {
@@ -418,13 +419,32 @@ KindEditorVar.plugin['about'] = {
 	{
 		var cmd = 'about';
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getAlertWindow(textareaName, 250, 50);
+		var div = KindEditorUtil.getPopupWindow(textareaName, 250, 50);
 		div.style.fontSize = '12px';
 		div.style.paddingTop = '15px';
 		div.style.textAlign = 'center';
 		div.onclick = new Function('KindEditorUtil.hideWindow("' + textareaName + '")');
 		div.innerHTML = '<a href="http://www.kindsoft.net/" target="_blank" style="color:#4169e1;">KindEditor</a> ' + KindEditorVar.version;
 		KindEditorUtil.showWindow(textareaName, div);
+		var titleDiv = document.createElement('div');
+		//titleDiv.style.width = width + 'px';
+		titleDiv.style.height = '25px';
+		titleDiv.style.padding = '3px';
+		titleDiv.style.background = '#DDDDDD';
+		titleDiv.style.textAlign = 'left';
+		var bodyDiv = document.createElement('div');
+		//bodyDiv.style.width = width + 'px';
+		//bodyDiv.style.height = height + 'px';
+		bodyDiv.style.padding = '3px';
+		var footDiv = document.createElement('div');
+		//footDiv.style.width = width + 'px';
+		footDiv.style.height = '30px';
+		footDiv.style.padding = '3px';
+		footDiv.style.background = '#DDDDDD';
+		footDiv.style.textAlign = 'center';
+		div.appendChild(titleDiv);
+		div.appendChild(bodyDiv);
+		div.appendChild(footDiv);
 	}
 };
 KindEditorVar.plugin['bold'] = {
@@ -443,7 +463,7 @@ KindEditorVar.plugin['bgcolor'] = {
 		var cmd = 'bgcolor';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var table = KindEditorUtil.getColorTable(textareaName, cmd);
 		div.appendChild(table);
 		KindEditorUtil.showWindow(textareaName, div);
@@ -533,7 +553,7 @@ KindEditorVar.plugin['fontname'] = {
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
 		var fontName = KindEditorVar.plugin[cmd].menu;
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		for (key in fontName) {
 			var cDiv = document.createElement('div');
 			cDiv.style.padding = '2px';
@@ -575,7 +595,7 @@ KindEditorVar.plugin['fontsize'] = {
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
 		var fontSize = KindEditorVar.plugin[cmd].menu;
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		for (key in fontSize) {
 			var cDiv = document.createElement('div');
 			cDiv.style.fontSize = '12px';
@@ -609,7 +629,7 @@ KindEditorVar.plugin['hr'] = {
 		var cmd = 'hr';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var table = KindEditorUtil.getColorTable(textareaName, cmd);
 		div.appendChild(table);
 		KindEditorUtil.showWindow(textareaName, div);
@@ -820,7 +840,7 @@ KindEditorVar.plugin['textcolor'] = {
 		var cmd = 'textcolor';
 		KindEditorUtil.getSelection(textareaName);
 		var obj = KindEditorVar.editor[textareaName];
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		var table = KindEditorUtil.getColorTable(textareaName, cmd);
 		div.appendChild(table);
 		KindEditorUtil.showWindow(textareaName, div);
@@ -871,7 +891,7 @@ KindEditorVar.plugin['title'] = {
 		var obj = KindEditorVar.editor[textareaName];
 		var title = KindEditorVar.plugin[cmd].menu;
 		
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		for (key in title) {
 			var cDiv = document.createElement('div');
 			cDiv.style.fontSize = '12px';
@@ -937,7 +957,7 @@ KindEditorVar.plugin['zoom'] = {
 		var cmd = 'zoom';
 		var obj = KindEditorVar.editor[textareaName];
 		var zoom = KindEditorVar.plugin[cmd].menu;
-		var div = KindEditorUtil.getMenuDiv(textareaName, cmd);
+		var div = KindEditorUtil.getPopupMenu(textareaName, cmd);
 		div.style.fontSize = '12px';
 		for (var i in zoom) {
 			var cDiv = document.createElement('div');
