@@ -3,10 +3,16 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <title>KindEditor 3.0 alpha</title>
 </head>
-<script type="text/javascript" src="./../KindEditor.js"></script>
+<script type="text/javascript" charset="utf-8" src="./../ke.js"></script>
 <script type="text/javascript">
-var editor = new KindEditor("content");
-editor.show();
+KE.show({
+	textareaName : 'content',
+	codeMode : 'no',
+	skinType : 'fck',
+	langType : 'zh-cn',
+	pluginType : 'all',
+	cssPath : './demo.css'
+});
 </script>
 <body>
 <form name="test" method="post">
