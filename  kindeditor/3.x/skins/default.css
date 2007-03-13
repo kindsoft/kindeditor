@@ -1,0 +1,76 @@
+.ke-toolbar {
+	padding: 2px;
+	text-align: left;
+}
+
+.ke-container {
+	border: 3px solid #CCCCCC;
+	background-color: #F0F0EE;
+	padding: 1px;
+}
+
+.ke-textarea {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background-color: #FFFFFF;
+	color: #000000;
+	font-size: 12px;
+	font-family: Courier New;
+	line-height: 16px;
+}
+
+.ke-form {
+	border: 1px solid #CCCCCC;
+	background-color: #FFFFFF;
+}
+
+.ke-icon {
+	border: 1px solid #F0F0EE;
+	margin: 0 1px 0 1px;
+	cursor: pointer;
+}
+
+.ke-icon-selected {
+	border: 1px solid #0021b0;
+	margin: 0 1px 0 1px;
+	cursor: pointer;
+}
+
+.ke-icon-disabled {
+	border: 1px solid #F0F0EE;
+	margin: 0 1px 0 1px;
+	filter: gray() alpha(opacity=40);
+	opacity: 0.40;
+}
+
+.ke-menu {
+	border-top: 2px solid #DDDDDD;
+	border-left: 2px solid #DDDDDD;
+	border-right: 2px solid #AAAAAA;
+	border-bottom: 2px solid #AAAAAA;
+	background-color: #F0F0EE;
+	color: #222222;
+	font-size: 12px;
+	text-align: left;
+}
+
+.ke-menu-selected {
+	background-color: #0021b0;
+	color: #FFFFFF;
+}
+
+.ke-box {
+	border-top: 2px solid #DDDDDD;
+	border-left: 2px solid #DDDDDD;
+	border-right: 2px solid #AAAAAA;
+	border-bottom: 2px solid #AAAAAA;
+	background-color: #F0F0EE;
+	color: #222222;
+	text-align: left;
+}
+
+.ke-button {
+	background-color: #DDDDDD;
+	border: #000000;
+}
