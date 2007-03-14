@@ -7,8 +7,11 @@
 * @version 3.0 alpha
 */
 var KE = {};
-KE.$ = function(el){
-	return (typeof el == "string") ? document.getElementById(el) : el;
+KE.get = function(str){
+	return document.getElementById(str);
+};
+KE.el = function(str){
+	return document.createElement(str);
 };
 KE.event = {
 	add : function(el, event, listener)
@@ -61,7 +64,7 @@ KE.util = {
 	},
 	loadScript : function(path)
 	{
-		var script = document.createElement('script');
+		var script = KE.el('script');
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('charset', 'utf-8');
 		script.setAttribute('src', path);
@@ -69,11 +72,16 @@ KE.util = {
 	},
 	loadStyle : function(path)
 	{
-		var link = document.createElement('link');
+		var link = KE.el('link');
 		link.setAttribute('type', 'text/css');
 		link.setAttribute('rel', 'stylesheet');
 		link.setAttribute('href', path);
 		document.getElementsByTagName("head")[0].appendChild(link);
+	},
+	inArray : function(str, arr)
+	{
+		for (var i in arr) {if (str == arr[i]) return true;}
+		return false;
 	},
 	getTop : function(el)
 	{
@@ -88,15 +96,31 @@ KE.util = {
 		var parent = el.offsetParent;
 		while (parent) { left += parent.offsetLeft; parent = parent.offsetParent; }
 		return left;
+	}
+}
+KE.editor = {
+	setDefaultPlugin : function(id)
+	{
+		var items = [
+			'undo', 'redo', 'cut', 'copy', 'paste', 'selectall', 'justifyleft', 'justifycenter', 'justifyright', 
+			'justifyfull', 'numberedlist', 'unorderedlist', 'indent', 'outdent', 'subscript','superscript', 
+			'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'unlink'
+		];
+		for (var i in items) {
+			KE.plugin[items[i]] = {
+				icon	: items[i] + '.gif',
+				click : new Function('KE.cache["' + id + '"].iframeDoc.execCommand("' + items[i] + '", false, null)')
+			};
+		}
 	},
-	getFullHtml : function(cssPath, body)
+	getFullHtml : function(id, body)
 	{
 		var html = '<html>';
 		html += '<head>';
 		html += '<base href="' + KE.htmlPath + '" />';
 		html += '<title>blank_page</title>';
 		html += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-		html += '<link href="' + cssPath + '" rel="stylesheet" type="text/css" />';
+		html += '<link href="' + KE.cache[id].cssPath + '" rel="stylesheet" type="text/css" />';
 		html += '</head>';
 		html += '<body>';
 		html += body;
@@ -104,32 +128,63 @@ KE.util = {
 		html += '</html>';
 		return html;
 	},
-	'getPopupMenu' : function(textareaName, cmd)
+	getData : function(id)
 	{
-		var obj = KE.global[textareaName];
-		var iconObj = obj.toolbarIcon[cmd];
-		var div = document.createElement('div');
-		div.className = 'ke-menu';
-		div.style.position = 'absolute';
-		div.style.top = KE.util.getTop(iconObj) + iconObj.offsetHeight + 'px';
-		div.style.left = KE.util.getLeft(iconObj) + 'px';
-		div.style.zIndex = 1;
-		return div;
+		var html;
+		if (KE.cache[id].wyswygMode == true) {
+			html = KE.cache[id].iframeDoc.body.innerHTML;
+		} else {
+			html = KE.cache[id].newTextarea.value;
+		}
+		KE.cache[id].hideInput.value = html;
+		return html;
 	},
-	'getPopupWindow' : function(textareaName, width, height)
+	focus : function(id)
 	{
-		var obj = KE.global[textareaName];
-		var div = document.createElement('div');
-		div.className = 'ke-box';
-		div.style.position = 'absolute';
-		div.style.width = width + 'px';
-		div.style.height = height + 'px';
-		div.style.top = (KE.util.getTop(obj.containerDiv) + Math.round(parseInt(obj.editorHeight) / 2) - Math.round(height / 2)) + 'px';
-		div.style.left = (KE.util.getLeft(obj.containerDiv) + Math.round(parseInt(obj.editorWidth) / 2) - Math.round(width / 2)) + 'px';
-		div.style.zIndex = 1;
-		return div;
+		if (KE.cache[id].wyswygMode == true) {
+			KE.cache[id].iframeWin.focus();
+		} else {
+			KE.cache[id].newTextarea.focus();
+		}
 	},
-	'getColorTable' : function(textareaName, cmd)
+	click : function(id, cmd)
+	{
+		KE.menu.hide(id);
+		KE.editor.focus(id);
+		KE.plugin[cmd].click(id);
+	},
+	getSelection : function(id)
+	{
+		var selection, range, rangeText;
+		if (KE.cache[id].iframeDoc.selection) {
+			selection = KE.cache[id].iframeDoc.selection;
+			range = selection.createRange();
+			rangeText = range.text;
+		} else {
+			selection = KE.cache[id].iframeWin.getSelection();
+			range = selection.getRangeAt(0);
+			rangeText = range.toString();
+		}
+		KE.cache[id].selection = selection;
+		KE.cache[id].range = range;
+		KE.cache[id].rangeText = rangeText;
+	},
+	insertHtml : function(id, html)
+	{
+		if (KE.browser == 'IE') {
+			KE.cache[id].range.select();
+			if (KE.cache[id].selection.type.toLowerCase() == 'control') {
+				KE.cache[id].range.item(0).outerHTML = html;
+			} else {
+				KE.cache[id].range.pasteHTML(html);
+			}
+		} else {
+			KE.cache[id].iframeDoc.execCommand('inserthtml', false, html);
+		}
+	}
+};
+KE.picker = {
+	create : function(id, cmd)
 	{
 		var colorTable = [
 				["#FFFFFF","#E5E4E4","#D9D8D8","#C0BDBD","#A7A4A4","#8E8A8B","#827E7F","#767173","#5C585A","#000000"],
@@ -143,9 +198,7 @@ KE.util = {
 				["#EDFFCF","#DFFEAA","#D1FD88","#BEFA5A","#A8F32A","#8FD80A","#79C101","#3FA701","#307F00","#156200"],
 				["#D4C89F","#DAAD88","#C49578","#C2877E","#AC8295","#C0A5C4","#969AC2","#92B7D7","#80ADAF","#9CA53B"]
 			];
-		var iconObj = document.getElementById(textareaName + 'icon' + cmd);
-		var obj = KE.global[textareaName];
-		var table = document.createElement('table');
+		var table = KE.el('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
 		table.border = 0;
@@ -160,204 +213,189 @@ KE.util = {
 				cell.style.cursor = 'pointer';
 				cell.style.background = colorTable[i][j];
 				cell.title = colorTable[i][j];
-				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + textareaName + '", "' + colorTable[i][j] + '")');
+				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + colorTable[i][j] + '")');
 				cell.innerHTML = '&nbsp;';
 			}
 		}
 		return table;
-	},
-	'getData' : function(textareaName)
-	{
-		var obj = KE.global[textareaName];
-		var html;
-		if (obj.wyswygMode == true) {
-			html = obj.iframeDoc.body.innerHTML;
-		} else {
-			html = obj.newTextarea.value;
-		}
-		obj.hideInput.value = html;
-		return html;
-	},
-	'focus' : function(textareaName)
-	{
-		var obj = KE.global[textareaName];
-		if (obj.wyswygMode == true) {
-			obj.iframeWin.focus();
-		} else {
-			obj.newTextarea.focus();
-		}
-	},
-	'showWindow' : function(textareaName, div)
-	{
-		KE.util.hideWindow(textareaName);
-		var obj = KE.global[textareaName];
-		obj.hideDiv.appendChild(div);
-		obj.hideDiv.style.display = 'block';
-		KE.global[textareaName].windowDiv = div;
-	},
-	'hideWindow' : function(textareaName)
-	{
-		var obj = KE.global[textareaName];
-		try {
-			obj.hideDiv.removeChild(KE.global[textareaName].windowDiv);
-		} catch (e) {}
-		obj.hideDiv.style.display = 'none';
-	},
-	'click' : function(textareaName, cmd)
-	{
-		var obj = KE.global[textareaName];
-		KE.util.hideWindow(textareaName);
-		KE.util.focus(textareaName);
-		KE.plugin[cmd].click(textareaName);
-	},
-	'getSelection' : function(textareaName)
-	{
-		var obj = KE.global[textareaName];
-		var selection, range, rangeText;
-		if (obj.iframeDoc.selection) {
-			selection = obj.iframeDoc.selection;
-			range = selection.createRange();
-			rangeText = range.text;
-		} else {
-			selection = obj.iframeWin.getSelection();
-			range = selection.getRangeAt(0);
-			rangeText = range.toString();
-		}
-		KE.global[textareaName].selection = selection;
-		KE.global[textareaName].range = range;
-		KE.global[textareaName].rangeText = rangeText;
-	},
-	'insertHtml' : function(textareaName, html)
-	{
-		var obj = KE.global[textareaName];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-			if (obj.selection.type.toLowerCase() == 'control') {
-				obj.range.item(0).outerHTML = html;
-			} else {
-				obj.range.pasteHTML(html);
-			}
-		} else {
-			obj.iframeDoc.execCommand('inserthtml', false, html);
-		}
 	}
 };
-KE.create = function(textareaName)
+KE.box = {
+	alert : function(id, width, height)
+	{
+		var obj = KE.cache[id];
+		var div = KE.el('div');
+		div.className = 'ke-box';
+		div.style.position = 'absolute';
+		div.style.width = width + 'px';
+		div.style.height = height + 'px';
+		div.style.top = (KE.util.getTop(obj.containerDiv) + Math.round(parseInt(obj.height) / 2) - Math.round(height / 2)) + 'px';
+		div.style.left = (KE.util.getLeft(obj.containerDiv) + Math.round(parseInt(obj.width) / 2) - Math.round(width / 2)) + 'px';
+		div.style.zIndex = 1;
+		return div;
+	}
+};
+KE.menu = {
+	show : function(id, div)
+	{
+		KE.menu.hide(id);
+		KE.cache[id].hideDiv.appendChild(div);
+		KE.cache[id].hideDiv.style.display = 'block';
+		KE.cache[id].windowDiv = div;
+	},
+	hide : function(id)
+	{
+		try {
+			KE.cache[id].hideDiv.removeChild(KE.cache[id].windowDiv);
+		} catch (e) {}
+		KE.cache[id].hideDiv.style.display = 'none';
+	},
+	create : function(id, cmd)
+	{
+		var obj = KE.cache[id].toolbarIcon[cmd];
+		var div = KE.el('div');
+		div.className = 'ke-menu';
+		div.style.position = 'absolute';
+		div.style.top = KE.util.getTop(obj) + obj.offsetHeight + 'px';
+		div.style.left = KE.util.getLeft(obj) + 'px';
+		div.style.zIndex = 1;
+		return div;
+	}
+};
+KE.toolbar = {
+	items : [],
+	able : function(id, arr)
+	{
+		for (var cmd in KE.cache[id].toolbarIcon) {
+			if (KE.util.inArray(cmd, arr)) continue;
+			KE.cache[id].toolbarIcon[cmd].className = 'ke-icon';
+			KE.cache[id].toolbarIcon[cmd].onmouseover = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon-selected"');
+			KE.cache[id].toolbarIcon[cmd].onmouseout = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon"');
+			KE.cache[id].toolbarIcon[cmd].onclick = new Function('KE.editor.click("' + id + '", "' + cmd + '")');
+		}
+	},
+	disable : function(id, arr)
+	{
+		for (var cmd in KE.cache[id].toolbarIcon) {
+			if (KE.util.inArray(cmd, arr)) continue;
+			KE.cache[id].toolbarIcon[cmd].className = 'ke-icon-disabled';
+			KE.cache[id].toolbarIcon[cmd].onmouseover = function(){ };
+			KE.cache[id].toolbarIcon[cmd].onmouseout = function(){ };
+			KE.cache[id].toolbarIcon[cmd].onclick = function(){ };
+		}
+	},
+	create : function(id)
+	{
+		KE.cache[id].toolbarIcon = [];
+		var el = KE.el('div');
+		el.className = 'ke-toolbar';
+		for (var i in KE.toolbar.items) {
+			var cmd = KE.toolbar.items[i];
+			var obj;
+			if (cmd == '-') {
+				obj = KE.el('br');
+			} else {
+				obj = KE.el('img');
+				obj.id = 'toolbarIcon' + cmd;
+				obj.src = KE.cache[id].skinsPath + KE.plugin[cmd].icon;
+				obj.align = 'absmiddle';
+				obj.className = 'ke-icon';
+				obj.alt = KE.lang[KE.cache[id].langType][cmd];
+				obj.title = KE.lang[KE.cache[id].langType][cmd];
+				obj.onmouseover = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon-selected"');
+				obj.onmouseout = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon"');
+				obj.onclick = new Function('KE.editor.click("' + id + '", "' + cmd + '")');
+				KE.cache[id].toolbarIcon[cmd] = obj;
+			}
+			el.appendChild(obj);
+		}
+		return el;
+	}
+};
+KE.create = function(id)
 {
-	var editorObj = KE.global[textareaName];
-	var plugin = KE.plugin;
+	var oldTextarea = KE.get(id);
+	var width = oldTextarea.style.width;
+	var height = oldTextarea.style.height;
 
-	var oldTextarea = document.getElementsByName(textareaName)[0];
-	editorObj.editorWidth = oldTextarea.style.width;
-	editorObj.editorHeight = oldTextarea.style.height;
-
-	var widthArr = editorObj.editorWidth.match(/(\d+)([px%]{1,2})/);
+	var widthArr = width.match(/(\d+)([px%]{1,2})/);
 	var formWidth, formHeight;
-	if (widthArr[2] == '%') formWidth = editorObj.editorWidth;
+	if (widthArr[2] == '%') formWidth = width;
 	else formWidth = (parseInt(widthArr[1]) - 2).toString(10) + widthArr[2];
-	var heightArr = editorObj.editorHeight.match(/(\d+)([px%]{1,2})/);
-	if (heightArr[2] == '%') formHeight = editorObj.editorHeight;
+	var heightArr = height.match(/(\d+)([px%]{1,2})/);
+	if (heightArr[2] == '%') formHeight = height;
 	else formHeight = (parseInt(heightArr[1]) - 4).toString(10) + heightArr[2];
 	
-	var containerDiv = document.createElement('div');
+	var containerDiv = KE.el('div');
 	containerDiv.className = 'ke-container';
-	containerDiv.style.width = editorObj.editorWidth;
-	containerDiv.style.visibility = 'hidden';
+	containerDiv.style.width = width;
+	//containerDiv.style.visibility = 'hidden';
 	oldTextarea.parentNode.insertBefore(containerDiv, oldTextarea);
 	
-	var formDiv = document.createElement('div');
+	var formDiv = KE.el('div');
 	formDiv.className = 'ke-form';
-	formDiv.style.height = editorObj.editorHeight;
+	formDiv.style.height = height;
 
-	var iframe = document.createElement('iframe');
-	iframe.id = editorObj.textareaName + 'Iframe';
-	iframe.name = editorObj.textareaName + 'Iframe';
+	var iframe = KE.el('iframe');
+	iframe.id = id + 'Iframe';
+	iframe.name = id + 'Iframe';
 	iframe.style.width = formWidth;
 	iframe.style.height = formHeight;
 	iframe.setAttribute("frameBorder", "0");
 
-	var newTextarea = document.createElement('textarea');
+	var newTextarea = KE.el('textarea');
 	newTextarea.className = 'ke-textarea';
 	newTextarea.style.width = formWidth;
 	newTextarea.style.height = formHeight;
 	newTextarea.style.display = 'none';
 	var hideInput;
 	if (KE.browser == 'IE') {
-		hideInput = document.createElement('<input type="hidden" name="' + textareaName + '">');
+		hideInput = KE.el('<input type="hidden" name="' + oldTextarea.name + '">');
 	} else {
-		hideInput = document.createElement('input');
+		hideInput = KE.el('input');
 		hideInput.setAttribute('type', 'hidden');
-		hideInput.setAttribute('name', textareaName);
+		hideInput.setAttribute('name', oldTextarea.name);
 	}
-	var hideDiv = document.createElement('div');
+	var hideDiv = KE.el('div');
 	hideDiv.style.display = 'none';
 	formDiv.appendChild(iframe);
 	formDiv.appendChild(newTextarea);
-	containerDiv.appendChild(KE.toolbar.get(textareaName));
+
+	KE.editor.setDefaultPlugin(id);
+	containerDiv.appendChild(KE.toolbar.create(id));
 	containerDiv.appendChild(formDiv);
 	containerDiv.appendChild(hideInput);
 	containerDiv.appendChild(hideDiv);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = iframeWin.document;
 	iframeDoc.designMode = "on";
-	var html = KE.util.getFullHtml(editorObj.cssPath, oldTextarea.value);
+	var html = KE.editor.getFullHtml(id, oldTextarea.value);
 	iframeDoc.open();
 	iframeDoc.write(html);
 	iframeDoc.close();
-	if (editorObj.wyswygMode == false) {
+	if (KE.cache[id].wyswygMode == false) {
 		newTextarea.value = oldTextarea.value;
 		newTextarea.style.display = 'block';
 		iframe.style.display = 'none';
 	}
 	oldTextarea.parentNode.removeChild(oldTextarea);
 
-	var parent = hideDiv.parentNode;
-	while (parent.tagName != 'FORM') { parent = parent.parentNode; }
-	var form = parent;
-	KE.event.add(form, 'submit', new Function('KE.util.getData("' + textareaName + '")'));
-	KE.event.add(iframeDoc, 'mousedown', new Function('KE.util.hideWindow("' + textareaName + '")'));
-	KE.event.add(newTextarea, 'mousedown', new Function('KE.util.hideWindow("' + textareaName + '")'));
-	containerDiv.style.visibility = 'visible';
-	editorObj.containerDiv = containerDiv;
-	editorObj.iframe = iframe;
-	editorObj.newTextarea = newTextarea;
-	editorObj.hideInput = hideInput;
-	editorObj.hideDiv = hideDiv;
-	editorObj.iframeWin = iframeWin;
-	editorObj.iframeDoc = iframeDoc;
-	KE.global[editorObj.textareaName] = editorObj;
-	KE.util.focus(textareaName);
-};
-KE.toolbar = {
-	items : [],
-	get : function(textareaName)
-	{
-		var toolbarIcon = [];
-		var el = document.createElement('div');
-		el.className = 'ke-toolbar';
-		for (var i in KE.toolbar.items) {
-			var cmd = KE.toolbar.items[i];
-			var obj;
-			if (cmd == '') {
-				obj = document.createElement('br');
-			} else {
-				obj = document.createElement('img');
-				obj.id = 'toolbarIcon' + cmd;
-				obj.src = KE.global[textareaName].skinsPath + KE.plugin[cmd].icon;
-				obj.alt = KE.plugin[cmd].title;
-				obj.align = 'absmiddle';
-				obj.className = 'ke-icon';
-				obj.title = KE.plugin[cmd].title;
-				obj.onmouseover = new Function('KE.$("toolbarIcon' + cmd + '").className = "ke-icon-selected"');
-				obj.onmouseout = new Function('KE.$("toolbarIcon' + cmd + '").className = "ke-icon"');
-				obj.onclick = new Function('KE.util.click("' + textareaName + '", "' + cmd + '")');
-				toolbarIcon[cmd] = obj;
-			}
-			el.appendChild(obj);
-		}
-		KE.global[textareaName].toolbarIcon = toolbarIcon;
-		return el;
-	}
+	var form = hideDiv.parentNode;
+	while (form.tagName != 'FORM') { form = form.parentNode; }
+	KE.event.add(form, 'submit', new Function('KE.editor.getData("' + id + '")'));
+	KE.event.add(iframeDoc, 'mousedown', new Function('KE.menu.hide("' + id + '")'));
+	KE.event.add(newTextarea, 'mousedown', new Function('KE.menu.hide("' + id + '")'));
+	//containerDiv.style.visibility = 'visible';
+	KE.cache[id].containerDiv = containerDiv;
+	KE.cache[id].iframe = iframe;
+	KE.cache[id].newTextarea = newTextarea;
+	KE.cache[id].hideInput = hideInput;
+	KE.cache[id].hideDiv = hideDiv;
+	KE.cache[id].iframeWin = iframeWin;
+	KE.cache[id].iframeDoc = iframeDoc;
+	KE.cache[id].width = width;
+	KE.cache[id].height = height;
+	KE.editor.focus(id);
 };
 KE.version = '3.0 alpha';
 KE.scriptPath = KE.util.getScriptPath();
@@ -365,13 +403,13 @@ KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowserType();
 KE.lang = {};
 KE.plugin = {};
-KE.global = {};
+KE.cache = {};
 KE.show = function(config) 
 {
+	KE.cache[config.id] = config;
 	config.skinsPath = KE.scriptPath + 'skins/' + config.skinType + '/';
-	KE.global[config.textareaName] = config;
 	KE.util.loadStyle(KE.scriptPath + 'skins/' + config.skinType + '.css');
 	KE.util.loadScript(KE.scriptPath + 'langs/' + config.langType + '.js');
 	KE.util.loadScript(KE.scriptPath + 'plugin_' + config.pluginType + '.js');
-	KE.event.add(window, 'load', new Function('KE.create("' + config.textareaName + '")'));
+	KE.event.add(window, 'load', new Function('KE.create("' + config.id + '")'));
 };
