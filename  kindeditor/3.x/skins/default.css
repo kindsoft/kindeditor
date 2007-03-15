@@ -40,8 +40,8 @@
 .ke-icon-disabled {
 	border: 1px solid #F0F0EE;
 	margin: 0 1px 0 1px;
-	filter: gray() alpha(opacity=40);
-	opacity: 0.40;
+	filter: gray() alpha(opacity=50);
+	opacity: 0.50;
 }
 
 .ke-menu {
@@ -61,6 +61,20 @@
 }
 
 .ke-box {
+	position: absolute;
+	z-index: 10000;
+	border-top: 2px solid #DDDDDD;
+	border-left: 2px solid #DDDDDD;
+	border-right: 2px solid #AAAAAA;
+	border-bottom: 2px solid #AAAAAA;
+	background-color: #F0F0EE;
+	color: #222222;
+	text-align: left;
+}
+
+.ke-dialog {
+	position: absolute;
+	z-index: 10000;
 	border-top: 2px solid #DDDDDD;
 	border-left: 2px solid #DDDDDD;
 	border-right: 2px solid #AAAAAA;
@@ -73,4 +87,11 @@
 .ke-button {
 	background-color: #DDDDDD;
 	border: #000000;
+}
+
+.ke-picker-cell {
+	width: 12px;
+	height: 12px;
+	font-size: 1px;
+	cursor: pointer;
 }

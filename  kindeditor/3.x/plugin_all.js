@@ -7,7 +7,7 @@
 * @version 3.0 alpha
 */
 KE.toolbar.items = [
-	'source', 'preview', 'zoom', 'undo', 'redo', 'cut', 'copy', 'paste', 
+	'source', 'preview', 'zoom', 'print', 'undo', 'redo', 'cut', 'copy', 'paste', 
 	'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
 	'numberedlist', 'unorderedlist', 'indent', 'outdent', 'subscript',
 	'superscript', 'date', 'time', '-',
@@ -36,7 +36,7 @@ KE.plugin['bgcolor'] = {
 	click : function(id)
 	{
 		var cmd = 'bgcolor';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var table = KE.picker.create(id, cmd);
@@ -83,7 +83,7 @@ KE.plugin['date'] = {
 		var day = date.getDate().toString(10);
 		day = day.length < 2 ? '0' + day : day;
 		var value = year + '-' + month + '-' + day;
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		KE.editor.insertHtml(id, value);
 	}
 };
@@ -92,7 +92,7 @@ KE.plugin['fontname'] = {
 	click : function(id)
 	{
 		var cmd = 'fontname';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var fontName = KE.lang[KE.cache[id].langType].fontTable;
 		var div = KE.menu.create(id, cmd);
@@ -133,7 +133,7 @@ KE.plugin['fontsize'] = {
 			'7' : '36pt'
 		};
 		var cmd = 'fontsize';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		for (key in fontSize) {
@@ -166,7 +166,7 @@ KE.plugin['hr'] = {
 	click : function(id)
 	{
 		var cmd = 'hr';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var table = KE.picker.create(id, cmd);
@@ -221,7 +221,7 @@ KE.plugin['textcolor'] = {
 	click : function(id)
 	{
 		var cmd = 'textcolor';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var table = KE.picker.create(id, cmd);
@@ -251,7 +251,7 @@ KE.plugin['time'] = {
 		var second = date.getSeconds().toString(10);
 		second = second.length < 2 ? '0' + second : second;
 		var value = hour + ':' + minute + ':' + second;
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		KE.editor.insertHtml(id, value);
 	}
 };
@@ -259,16 +259,9 @@ KE.plugin['title'] = {
 	icon : 'title.gif',
 	click : function(id)
 	{
-		var title = {
-			'H1' : '标题 1', 
-			'H2' : '标题 2', 
-			'H3' : '标题 3', 
-			'H4' : '标题 4', 
-			'H5' : '标题 5', 
-			'H6' : '标题 6'
-		};
+		var title = KE.lang[KE.cache[id].langType].titleTable;
 		var cmd = 'title';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		for (key in title) {
@@ -337,7 +330,7 @@ KE.plugin['emoticons'] = {
 				['etc_31.gif','etc_32.gif','etc_33.gif','etc_34.gif','etc_35.gif','etc_36.gif']
 			];
 		var cmd = 'emoticons';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var table = KE.el('table');
@@ -390,7 +383,7 @@ KE.plugin['layer'] = {
 	click : function(id)
 	{
 		var cmd = 'layer';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var table = KE.picker.create(id, cmd);
@@ -413,9 +406,9 @@ KE.plugin['link'] = {
 	click : function(id)
 	{
 		var cmd = 'link';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
-		var div = KE.util.getPopupWindow(id, 400, 100);
+		var div = KE.box.dialog(id, 400, 100);
 		var table = KE.el('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
@@ -478,7 +471,7 @@ KE.plugin['specialchar'] = {
 			['≌','∽','〖','〗','【','】','（','）','［','］']
 		];
 		var cmd = 'specialchar';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var table = KE.el('table');
@@ -534,7 +527,7 @@ KE.plugin['table'] = {
 	click : function(id)
 	{
 		var cmd = 'table';
-		KE.editor.getSelection(id);
+		KE.editor.selection(id);
 		var obj = KE.cache[id];
 		var div = KE.menu.create(id, cmd);
 		var num = 10;

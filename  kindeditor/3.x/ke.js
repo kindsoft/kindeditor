@@ -37,28 +37,20 @@ KE.util = {
 	{
 		return location.href.substring(0, location.href.lastIndexOf('/') + 1);
 	},
-	getBrowserType : function()
+	getBrowser : function()
 	{
 		var browser = '';
 		var ua = navigator.userAgent.toLowerCase();
 		if (ua.indexOf("msie 7") > -1) {
 			browser = 'IE7';
 		} else if (ua.indexOf("msie") > -1) {
-			var re = new RegExp("msie\\s?([\\d\\.]+)","ig");
-			var arr = re.exec(ua);
-			if (parseInt(RegExp.$1) >= 5.5) {
-				browser = 'IE';
-			}
+			browser = 'IE';
 		} else if (ua.indexOf("gecko") > -1) {
 			browser = 'GECKO';
 		} else if (ua.indexOf("webkit") > -1) {
 			browser = 'SAFARI';
 		} else if (ua.indexOf("opera") > -1) {
-			var temp1 = ua.split(' ');
-			var temp2 = temp1[0].split('/');
-			if (parseInt(temp2[1]) >= 9) {
-				browser = 'OPERA';
-			}
+			browser = 'OPERA';
 		}
 		return browser;
 	},
@@ -104,7 +96,7 @@ KE.editor = {
 		var items = [
 			'undo', 'redo', 'cut', 'copy', 'paste', 'selectall', 'justifyleft', 'justifycenter', 'justifyright', 
 			'justifyfull', 'numberedlist', 'unorderedlist', 'indent', 'outdent', 'subscript','superscript', 
-			'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'unlink'
+			'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'unlink', 'print'
 		];
 		for (var i in items) {
 			KE.plugin[items[i]] = {
@@ -153,7 +145,7 @@ KE.editor = {
 		KE.editor.focus(id);
 		KE.plugin[cmd].click(id);
 	},
-	getSelection : function(id)
+	selection : function(id)
 	{
 		var selection, range, rangeText;
 		if (KE.cache[id].iframeDoc.selection) {
@@ -207,10 +199,7 @@ KE.picker = {
 			var row = table.insertRow(i);
 			for (var j = 0; j < colorTable[i].length; j++) {
 				var cell = row.insertCell(j);
-				cell.style.width = '12px';
-				cell.style.height = '12px';
-				cell.style.fontSize = '1px';
-				cell.style.cursor = 'pointer';
+				cell.className = 'ke-picker-cell';
 				cell.style.background = colorTable[i][j];
 				cell.title = colorTable[i][j];
 				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + colorTable[i][j] + '")');
@@ -221,17 +210,33 @@ KE.picker = {
 	}
 };
 KE.box = {
+	getTop : function(id, width, height)
+	{
+		return (KE.util.getTop(KE.cache[id].containerDiv) + Math.round(parseInt(KE.cache[id].height) / 2) - Math.round(height / 2)) + 'px';
+	},
+	getLeft : function(id, width, height)
+	{
+		return (KE.util.getLeft(KE.cache[id].containerDiv) + Math.round(parseInt(KE.cache[id].width) / 2) - Math.round(width / 2)) + 'px';
+	},
 	alert : function(id, width, height)
+	{
+		var div = KE.el('div');
+		div.className = 'ke-box';
+		div.style.width = width + 'px';
+		div.style.height = height + 'px';
+		div.style.top = this.getTop(id, width, height);
+		div.style.left = this.getLeft(id, width, height);
+		return div;
+	},
+	dialog : function(id, width, height)
 	{
 		var obj = KE.cache[id];
 		var div = KE.el('div');
-		div.className = 'ke-box';
-		div.style.position = 'absolute';
+		div.className = 'ke-dialog';
 		div.style.width = width + 'px';
 		div.style.height = height + 'px';
 		div.style.top = (KE.util.getTop(obj.containerDiv) + Math.round(parseInt(obj.height) / 2) - Math.round(height / 2)) + 'px';
 		div.style.left = (KE.util.getLeft(obj.containerDiv) + Math.round(parseInt(obj.width) / 2) - Math.round(width / 2)) + 'px';
-		div.style.zIndex = 1;
 		return div;
 	}
 };
@@ -400,7 +405,7 @@ KE.create = function(id)
 KE.version = '3.0 alpha';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
-KE.browser = KE.util.getBrowserType();
+KE.browser = KE.util.getBrowser();
 KE.lang = {};
 KE.plugin = {};
 KE.cache = {};

@@ -65,5 +65,13 @@ KE.lang['zh-cn'] = {
 		'Verdana'			: 'Verdana', 
 		'GulimChe'			: 'GulimChe', 
 		'MS Gothic'			: 'MS Gothic' 
+	},
+	titleTable : {
+		'H1' : '标题 1', 
+		'H2' : '标题 2', 
+		'H3' : '标题 3', 
+		'H4' : '标题 4', 
+		'H5' : '标题 5', 
+		'H6' : '标题 6'
 	}
 };
