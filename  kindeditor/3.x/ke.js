@@ -305,20 +305,22 @@ KE.toolbar = {
 	{
 		for (var cmd in KE.g[id].toolbarIcon) {
 			if (KE.util.inArray(cmd, arr)) continue;
-			KE.g[id].toolbarIcon[cmd].className = 'ke-icon';
-			KE.g[id].toolbarIcon[cmd].onmouseover = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon-selected"');
-			KE.g[id].toolbarIcon[cmd].onmouseout = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon"');
-			KE.g[id].toolbarIcon[cmd].onclick = new Function('KE.editor.click("' + id + '", "' + cmd + '")');
+			var obj = KE.g[id].toolbarIcon[cmd];
+			obj.className = 'ke-icon';
+			obj.onmouseover = function(){ this.className = "ke-icon-selected"; };
+			obj.onmouseout = function(){ this.className = "ke-icon"; };
+			obj.onclick = new Function('KE.editor.click("' + id + '", "' + cmd + '")');
 		}
 	},
 	disable : function(id, arr)
 	{
 		for (var cmd in KE.g[id].toolbarIcon) {
 			if (KE.util.inArray(cmd, arr)) continue;
-			KE.g[id].toolbarIcon[cmd].className = 'ke-icon-disabled';
-			KE.g[id].toolbarIcon[cmd].onmouseover = function(){ };
-			KE.g[id].toolbarIcon[cmd].onmouseout = function(){ };
-			KE.g[id].toolbarIcon[cmd].onclick = function(){ };
+			var obj = KE.g[id].toolbarIcon[cmd];
+			obj.className = 'ke-icon-disabled';
+			obj.onmouseover = function(){ };
+			obj.onmouseout = function(){ };
+			obj.onclick = function(){ };
 		}
 	},
 	create : function(id)
@@ -333,14 +335,13 @@ KE.toolbar = {
 				obj = KE.el('br');
 			} else {
 				obj = KE.el('img');
-				obj.id = 'toolbarIcon' + cmd;
 				obj.src = KE.g[id].skinsPath + KE.plugin[cmd].icon;
 				obj.align = 'absmiddle';
 				obj.className = 'ke-icon';
 				obj.alt = KE.lang[KE.g[id].langType][cmd];
 				obj.title = KE.lang[KE.g[id].langType][cmd];
-				obj.onmouseover = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon-selected"');
-				obj.onmouseout = new Function('KE.get("toolbarIcon' + cmd + '").className = "ke-icon"');
+				obj.onmouseover = function(){ this.className = "ke-icon-selected"; };
+				obj.onmouseout = function(){ this.className = "ke-icon"; };
 				obj.onclick = new Function('KE.editor.click("' + id + '", "' + cmd + '")');
 				KE.g[id].toolbarIcon[cmd] = obj;
 			}
