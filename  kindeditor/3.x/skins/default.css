@@ -55,9 +55,20 @@
 	text-align: left;
 }
 
+.ke-menu-noselected {
+	background-color: #F0F0EE;
+	color: #222222;
+	font-size: 12px;
+	padding: 2px;
+	cursor: pointer;
+}
+
 .ke-menu-selected {
 	background-color: #0021b0;
 	color: #FFFFFF;
+	font-size: 12px;
+	padding: 2px;
+	cursor: pointer;
 }
 
 .ke-box {

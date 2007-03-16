@@ -9,7 +9,7 @@
 KE.toolbar.items = [
 	'source', 'preview', 'zoom', 'print', 'undo', 'redo', 'cut', 'copy', 'paste', 
 	'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-	'numberedlist', 'unorderedlist', 'indent', 'outdent', 'subscript',
+	'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 	'superscript', 'date', 'time', '-',
 	'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 
 	'italic', 'underline', 'strikethrough', 'removeformat', 'image',
@@ -20,42 +20,40 @@ KE.plugin['about'] = {
 	icon : 'about.gif',
 	click : function(id)
 	{
-		var cmd = 'about';
-		var obj = KE.cache[id];
-		var div = KE.box.alert(id, 250, 50);
-		div.style.fontSize = '12px';
-		div.style.paddingTop = '15px';
-		div.style.textAlign = 'center';
-		div.onclick = new Function('KE.menu.hide("' + id + '")');
-		div.innerHTML = '<a href="http://www.kindsoft.net/" target="_blank" style="color:#4169e1;">KindEditor</a> ' + KE.version;
-		KE.menu.show(id, div);
+		var box = new KE.box({
+				id : id,
+				width : 250,
+				height : 50
+			});
+		var tpl = '<div style="font-size:12px;padding-top:15px;text-align:center;">';
+		tpl += '<a href="http://www.kindsoft.net/" target="_blank" style="color:#4169e1;">KindEditor</a> ' + KE.version;
+		tpl += '</div>';
+		box.alert(tpl);
 	}
 };
 KE.plugin['bgcolor'] = {
 	icon : 'bgcolor.gif',
 	click : function(id)
 	{
-		var cmd = 'bgcolor';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
-		var table = KE.picker.create(id, cmd);
-		div.appendChild(table);
-		KE.menu.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : 'bgcolor'
+			});
+		menu.picker();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
+		KE.editor.select(id);
 		if (KE.browser == 'IE') {
-			obj.range.select();
-			obj.iframeDoc.execCommand('backcolor', false, value);
+			KE.g[id].iframeDoc.execCommand('backcolor', false, value);
 		} else {
-			var startRangeNode = obj.range.startContainer;
+			var startRangeNode = KE.g[id].range.startContainer;
 			if (startRangeNode.nodeType == 3) {
 				var font = KE.el("font");
 				font.style.backgroundColor = value;
-				font.appendChild(obj.range.extractContents());
-				var startOffset = obj.range.startOffset;
+				font.appendChild(KE.g[id].range.extractContents());
+				var startOffset = KE.g[id].range.startOffset;
 				var text = startRangeNode.nodeValue;
 				var beforeText = text.substr(0, startOffset);
 				var afterText = text.substr(startOffset);
@@ -68,14 +66,13 @@ KE.plugin['bgcolor'] = {
 				parentRangeNode.removeChild(startRangeNode);
 			}
 		}
-		KE.menu.hide(id);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['date'] = {
 	icon : 'date.gif',
 	click : function(id)
 	{
-		var obj = KE.cache[id];
 		var date = new Date();
 		var year = date.getFullYear().toString(10);
 		var month = (date.getMonth() + 1).toString(10);
@@ -93,30 +90,22 @@ KE.plugin['fontname'] = {
 	{
 		var cmd = 'fontname';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var fontName = KE.lang[KE.cache[id].langType].fontTable;
-		var div = KE.menu.create(id, cmd);
-		for (key in fontName) {
-			var cDiv = KE.el('div');
-			cDiv.style.padding = '2px';
-			cDiv.style.width = '160px';
-			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.className = 'ke-menu-selected'; }
-			cDiv.onmouseout = function() { this.className = null; }
-			cDiv.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + key + '")');
-			cDiv.appendChild(document.createTextNode(fontName[key]));
-			div.appendChild(cDiv);
+		var fontName = KE.lang[KE.g[id].langType].fontTable;
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd,
+				width : '160px'
+			});
+		for (var i in fontName) {
+			menu.add(fontName[i], new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + i + '")'));
 		}
-		KE.menu.show(id, div);
+		menu.show();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
-		obj.iframeDoc.execCommand('fontname', false, value);
-		KE.menu.hide(id);
+		KE.editor.select(id);
+		KE.g[id].iframeDoc.execCommand('fontname', false, value);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['fontsize'] = {
@@ -134,54 +123,40 @@ KE.plugin['fontsize'] = {
 		};
 		var cmd = 'fontsize';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
-		for (key in fontSize) {
-			var cDiv = KE.el('div');
-			cDiv.style.fontSize = '12px';
-			cDiv.style.padding = '2px';
-			cDiv.style.width = '100px';
-			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.className = 'ke-menu-selected'; }
-			cDiv.onmouseout = function() { this.className = null; }
-			cDiv.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + key + '")');
-			cDiv.appendChild(document.createTextNode(fontSize[key]));
-			div.appendChild(cDiv);
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd,
+				width : '100px'
+			});
+		for (var i in fontSize) {
+			menu.add(fontSize[i], new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + i + '")'));
 		}
-		KE.menu.show(id, div);
+		menu.show();
 	},
 	'exec' : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
-		value = value.substr(0, 1);
-		obj.iframeDoc.execCommand('fontsize', false, value);
-		KE.menu.hide(id);
+		KE.editor.select(id);
+		KE.g[id].iframeDoc.execCommand('fontsize', false, value.substr(0, 1));
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['hr'] = {
 	icon : 'hr.gif',
 	click : function(id)
 	{
-		var cmd = 'hr';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
-		var table = KE.picker.create(id, cmd);
-		div.appendChild(table);
-		KE.menu.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : 'hr'
+			});
+		menu.picker();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
+		KE.editor.select(id);
 		var html = '<hr color="' + value + '"; size="1">';
 		KE.editor.insertHtml(id, html);
-		KE.menu0.hide(id);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['preview'] = {
@@ -199,9 +174,9 @@ KE.plugin['source'] = {
 	icon : 'source.gif',
 	click : function(id)
 	{
-		var obj = KE.cache[id];
+		var obj = KE.g[id];
 		if (obj.wyswygMode == true) {
-			KE.menu.hide(id);
+			KE.layout.hide(id);
 			obj.newTextarea.value = obj.iframeDoc.body.innerHTML;
 			obj.iframe.style.display = 'none';
 			obj.newTextarea.style.display = 'block';
@@ -220,29 +195,24 @@ KE.plugin['textcolor'] = {
 	icon : 'textcolor.gif',
 	click : function(id)
 	{
-		var cmd = 'textcolor';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
-		var table = KE.picker.create(id, cmd);
-		div.appendChild(table);
-		KE.menu.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : 'textcolor'
+			});
+		menu.picker();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
-		obj.iframeDoc.execCommand('forecolor', false, value);
-		KE.menu.hide(id);
+		KE.editor.select(id);
+		KE.g[id].iframeDoc.execCommand('forecolor', false, value);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['time'] = {
 	icon : 'time.gif',
 	click : function(id)
 	{
-		var obj = KE.cache[id];
 		var date = new Date();
 		var hour = date.getHours().toString(10);
 		hour = hour.length < 2 ? '0' + hour : hour;
@@ -259,33 +229,24 @@ KE.plugin['title'] = {
 	icon : 'title.gif',
 	click : function(id)
 	{
-		var title = KE.lang[KE.cache[id].langType].titleTable;
+		var title = KE.lang[KE.g[id].langType].titleTable;
 		var cmd = 'title';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
-		for (key in title) {
-			var cDiv = KE.el('div');
-			cDiv.style.fontSize = '12px';
-			cDiv.style.padding = '2px';
-			cDiv.style.width = '100px';
-			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.className = 'ke-menu-selected'; }
-			cDiv.onmouseout = function() { this.className = null; }
-			cDiv.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "<' + key + '>")');
-			cDiv.appendChild(document.createTextNode(title[key]));
-			div.appendChild(cDiv);
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd,
+				width : '100px'
+			});
+		for (var i in title) {
+			menu.add(title[i], new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "<' + i + '>")'));
 		}
-		KE.menu.show(id, div);
+		menu.show();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
-		obj.iframeDoc.execCommand('formatblock', false, value);
-		KE.menu.hide(id);
+		KE.editor.select(id);
+		KE.g[id].iframeDoc.execCommand('formatblock', false, value);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['zoom'] = {
@@ -293,28 +254,21 @@ KE.plugin['zoom'] = {
 	click : function(id)
 	{
 		var cmd = 'zoom';
-		var obj = KE.cache[id];
 		var zoom = ['250%', '200%', '150%', '120%', '100%', '80%', '50%'];
-		var div = KE.menu.create(id, cmd);
-		div.style.fontSize = '12px';
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd,
+				width : '120px'
+			});
 		for (var i in zoom) {
-			var cDiv = KE.el('div');
-			cDiv.style.padding = '2px';
-			cDiv.style.width = '120px';
-			cDiv.style.cursor = 'pointer';
-			cDiv.onmouseover = function() { this.className = 'ke-menu-selected'; }
-			cDiv.onmouseout = function() { this.className = null; }
-			cDiv.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + zoom[i] + '")');
-			cDiv.appendChild(document.createTextNode(zoom[i]));
-			div.appendChild(cDiv);
+			menu.add(zoom[i], new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + zoom[i] + '")'));
 		}
-		KE.menu.show(id, div);
+		menu.show();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		obj.iframeDoc.body.style.zoom = value;
-		KE.menu.hide(id);
+		KE.g[id].iframeDoc.body.style.zoom = value;
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['emoticons'] = {
@@ -331,8 +285,7 @@ KE.plugin['emoticons'] = {
 			];
 		var cmd = 'emoticons';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
+		var div = KE.layout.get(id, cmd);
 		var table = KE.el('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
@@ -351,54 +304,47 @@ KE.plugin['emoticons'] = {
 			}
 		}
 		div.appendChild(table);
-		KE.menu.show(id, div);
+		KE.layout.show(id, div);
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
-		var html = '<img src="' + KE.plugin['emoticons'].emoticonPath + value + '" border="0">';
+		KE.editor.select(id);
+		var html = '<img src="' + KE.scriptPath + 'emoticons/' + value + '" border="0">';
 		KE.editor.insertHtml(id, html);
-		KE.menu.hide(id);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['flash'] = {
 	icon : 'flash.gif',
 	click : function(id)
 	{
-		//KE.cache[id].iframeDoc.execCommand('bold', false, null);
+		//KE.g[id].iframeDoc.execCommand('bold', false, null);
 	}
 };
 KE.plugin['image'] = {
 	icon : 'image.gif',
 	click : function(id)
 	{
-		//KE.cache[id].iframeDoc.execCommand('bold', false, null);
+		//KE.g[id].iframeDoc.execCommand('bold', false, null);
 	}
 };
 KE.plugin['layer'] = {
 	icon : 'layer.gif',
 	click : function(id)
 	{
-		var cmd = 'layer';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
-		var table = KE.picker.create(id, cmd);
-		div.appendChild(table);
-		KE.menu.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : 'layer'
+			});
+		menu.picker();
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
+		KE.editor.select(id);
 		var html = '<div style="padding:5px;border:1px solid #AAAAAA;background-color:' + value + '">请输入内容</div>';
 		KE.editor.insertHtml(id, html);
-		KE.menu.hide(id);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['link'] = {
@@ -407,7 +353,6 @@ KE.plugin['link'] = {
 	{
 		var cmd = 'link';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
 		var div = KE.box.dialog(id, 400, 100);
 		var table = KE.el('table');
 		table.cellPadding = 0;
@@ -428,30 +373,27 @@ KE.plugin['link'] = {
 			}
 		}
 		div.appendChild(table);
-		KE.menu.show(id, div);
+		KE.layout.show(id, div);
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
+		KE.editor.select(id);
 		KE.editor.insertHtml(id, value);
-		KE.menu.hide(id);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['media'] = {
 	icon : 'media.gif',
 	click : function(id)
 	{
-		//KE.cache[id].iframeDoc.execCommand('bold', false, null);
+		//KE.g[id].iframeDoc.execCommand('bold', false, null);
 	}
 };
 KE.plugin['real'] = {
 	icon : 'real.gif',
 	click : function(id)
 	{
-		//KE.cache[id].iframeDoc.execCommand('bold', false, null);
+		//KE.g[id].iframeDoc.execCommand('bold', false, null);
 	}
 };
 KE.plugin['specialchar'] = {
@@ -472,8 +414,7 @@ KE.plugin['specialchar'] = {
 		];
 		var cmd = 'specialchar';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
+		var div = KE.layout.get(id, cmd);
 		var table = KE.el('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
@@ -493,23 +434,19 @@ KE.plugin['specialchar'] = {
 			}
 		}
 		div.appendChild(table);
-		KE.menu.show(id, div);
+		KE.layout.show(id, div);
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
+		KE.editor.select(id);
 		KE.editor.insertHtml(id, value);
-		KE.menu.hide(id);
+		KE.layout.hide(id);
 	}
 };
 KE.plugin['table'] = {
 	icon	: 'table.gif',
 	selected : function(id, i, j)
 	{
-		var obj = KE.cache[id];
 		var text = i.toString(10) + ' by ' + j.toString(10) + ' Table';
 		KE.get('tableLocation' + id).innerHTML = text;
 		var num = 10;
@@ -528,8 +465,7 @@ KE.plugin['table'] = {
 	{
 		var cmd = 'table';
 		KE.editor.selection(id);
-		var obj = KE.cache[id];
-		var div = KE.menu.create(id, cmd);
+		var div = KE.layout.get(id, cmd);
 		var num = 10;
 		var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;">';
 		for (i = 1; i <= num; i++) {
@@ -547,14 +483,11 @@ KE.plugin['table'] = {
 		html += '<tr><td colspan="10" id="tableLocation' + id + '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
 		html += '</table>';
 		div.innerHTML = html;
-		KE.menu.show(id, div);
+		KE.layout.show(id, div);
 	},
 	exec : function(id, value)
 	{
-		var obj = KE.cache[id];
-		if (KE.browser == 'IE') {
-			obj.range.select();
-		}
+		KE.editor.select(id);
 		var location = value.split(',');
 		var html = '<table border="1">';
 		for (var i = 0; i < location[0]; i++) {
@@ -566,6 +499,6 @@ KE.plugin['table'] = {
 		}
 		html += '</table>';
 		KE.editor.insertHtml(id, html);
-		KE.menu.hide(id);
+		KE.layout.hide(id);
 	}
 };
