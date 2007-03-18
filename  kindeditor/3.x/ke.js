@@ -1,4 +1,4 @@
-﻿/**
+/**
 * WYSIWYG HTML Editor for Internet
 * 
 * @author Roddy <luolonghao@gmail.com>
@@ -23,7 +23,36 @@ KE.event = {
 		}
 	}
 };
+KE.alert = function(id, msg){
+	alert(msg);
+	KE.g[id].dialogWin.focus();
+	KE.g[id].dialogDoc.getElementById(id + 'YesButton').focus();
+};
 KE.util = {
+    getDocumentHeight: function() {
+        var scrollHeight = (document.compatMode != "CSS1Compat") ? document.body.scrollHeight : document.documentElement.scrollHeight;
+        return Math.max(scrollHeight, this.getViewportHeight());
+    },
+    getDocumentWidth: function() {
+        var scrollWidth = (document.compatMode != "CSS1Compat") ? document.body.scrollWidth : document.documentElement.scrollWidth;
+        return Math.max(scrollWidth, this.getViewportWidth());
+    },
+    getViewportHeight: function() {
+        var height = self.innerHeight;
+        var mode = document.compatMode;
+        if ((mode || KE.browser == 'IE') && KE.browser != 'OPERA') {
+            height = (mode == "CSS1Compat") ? document.documentElement.clientHeight : document.body.clientHeight;
+        }
+        return height;
+    },
+    getViewportWidth: function() {
+        var width = self.innerWidth;
+        var mode = document.compatMode;
+        if (mode || KE.browser == 'IE') {
+            width = (mode == "CSS1Compat") ? document.documentElement.clientWidth : document.body.clientWidth;
+        }
+        return width;
+    },
 	getScriptPath : function()
 	{
 		var elements = document.getElementsByTagName('script');
@@ -195,29 +224,88 @@ KE.editor = {
 };
 KE.box = function(cf){
 	this.cf = cf;
-	this.top = (KE.util.getTop(KE.g[cf.id].containerDiv) + Math.round(parseInt(KE.g[cf.id].height) / 2) - Math.round(cf.height / 2)) + 'px';
-	this.left = (KE.util.getLeft(KE.g[cf.id].containerDiv) + Math.round(parseInt(KE.g[cf.id].width) / 2) - Math.round(cf.width / 2)) + 'px';
-	this.alert = function(tpl)
+	var div = KE.el('div');
+	div.style.width = cf.width + 'px';
+	div.style.height = cf.height + 'px';
+	div.style.top = (KE.util.getTop(KE.g[cf.id].containerDiv) + Math.round(parseInt(KE.g[cf.id].height) / 2) - Math.round(cf.height / 2)) + 'px';
+	div.style.left = (KE.util.getLeft(KE.g[cf.id].containerDiv) + Math.round(parseInt(KE.g[cf.id].width) / 2) - Math.round(cf.width / 2)) + 'px';
+	this.div = div;
+	this.alert = function(msg)
 	{
-		var div = KE.el('div');
-		div.className = 'ke-box';
-		div.style.width = this.cf.width + 'px';
-		div.style.height = this.cf.height + 'px';
-		div.style.top = this.top;
-		div.style.left = this.left;
-		div.innerHTML = tpl;
-		KE.layout.show(this.cf.id, div);
+		this.div.className = 'ke-box';
+		var tpl = '<div class="ke-box-title">' + this.cf.title + '</div>';
+		tpl += '<div class="ke-box-close"><img src="' + KE.g[cf.id].skinsPath + 'close.gif" alt="关闭" title="关闭" onclick="javascript:KE.layout.hide(\'' + this.cf.id + '\');"></div>';
+		tpl += '<table border="0" class="ke-box-body">';
+		tpl += '<tr>';
+		tpl += '<td align="center" valign="middle" style="word-break:break-all;width:' + (this.cf.width - 10) + 'px;height:' + (this.cf.height - 65) + 'px;">' + msg + '</td>';
+		tpl += '</tr>';
+		tpl += '<tr>';
+		tpl += '<td align="center"><input type="button" class="ke-button" id="' + this.cf.id + 'YesButton" value="确定" onclick="javascript:KE.layout.hide(\'' + this.cf.id + '\');"></td>';
+		tpl += '</tr>';
+		tpl += '</table>';
+		this.div.innerHTML = tpl;
+		this.show();
+		window.focus();
+		KE.get(this.cf.id + 'YesButton').focus();
+		KE.g[cf.id].maskDiv.style.display = 'block';
 	};
-	this.dialog = function()
+	this.getBodyStyle = function()
 	{
-		var obj = KE.g[id];
-		var div = KE.el('div');
-		div.className = 'ke-dialog';
-		div.style.width = width + 'px';
-		div.style.height = height + 'px';
-		div.style.top = (KE.util.getTop(obj.containerDiv) + Math.round(parseInt(obj.height) / 2) - Math.round(height / 2)) + 'px';
-		div.style.left = (KE.util.getLeft(obj.containerDiv) + Math.round(parseInt(obj.width) / 2) - Math.round(width / 2)) + 'px';
-		return div;
+		return 'style="word-break:break-all;width:' + (this.cf.width - 10) + 'px;height:' + (this.cf.height - 25) + 'px;"';
+	};
+	this.getDialogHtml = function(id, body)
+	{
+		var html = '<html>';
+		html += '<head>';
+		html += '<title>dialog</title>';
+		html += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
+		html += '<link href="' + KE.scriptPath + 'skins/' + KE.g[id].skinType + '.css" rel="stylesheet" type="text/css">';
+		html += '</head>';
+		html += '<body style="margin:0;">';
+		html += body;
+		html += '</body>';
+		html += '</html>';
+		return html;
+	},
+	this.dialog = function(html)
+	{
+		var iframe = KE.el('iframe');
+		iframe.id = this.cf.id + 'Dialog';
+		iframe.name = this.cf.id + 'Dialog';
+		iframe.style.width = (this.cf.width + 4) + 'px';
+		iframe.style.height = (this.cf.height + 6) + 'px';
+		iframe.setAttribute("frameBorder", "0");
+		this.div.className = "ke-dialog";
+		this.div.appendChild(iframe);
+		this.show();
+		var tpl = '<div class="ke-box" style="width:' + this.cf.width + 'px;height:' + this.cf.height + 'px;">';
+		tpl += '<div class="ke-box-title">' + this.cf.title + '</div>';
+		tpl += '<div class="ke-box-close"><img src="' + KE.g[cf.id].skinsPath + 'close.gif" alt="关闭" title="关闭" onclick="javascript:parent.KE.layout.hide(\'' + this.cf.id + '\');"></div>';
+		tpl += '<table border="0" class="ke-box-body">';
+		tpl += '<tr>';
+		tpl += '<td align="center" valign="middle" style="word-break:break-all;width:' + (this.cf.width - 10) + 'px;height:' + (this.cf.height - 65) + 'px;">' + html + '</td>';
+		tpl += '</tr>';
+		tpl += '<tr>';
+		tpl += '<td align="center">';
+		tpl += '<input type="button" class="ke-button" id="' + this.cf.id + 'YesButton" value="确定" onclick="javascript:parent.KE.plugin[\'' + this.cf.cmd + '\'].exec(\'' + this.cf.id + '\');"> &nbsp; ';
+		tpl += '<input type="button" class="ke-button" id="' + this.cf.id + 'NoButton" value="取消" onclick="javascript:parent.KE.layout.hide(\'' + this.cf.id + '\');">';
+		tpl += '</td></tr>';
+		tpl += '</table>';
+		tpl += '</div>';
+		var dialogWin = iframe.contentWindow;
+		var dialogDoc = dialogWin.document;
+		dialogDoc.open();
+		dialogDoc.write(this.getDialogHtml(this.cf.id, tpl));
+		dialogDoc.close();
+		KE.g[cf.id].maskDiv.style.display = 'block';
+		dialogWin.focus();
+		//dialogDoc.getElementById(this.cf.id + 'YesButton').focus();
+		KE.g[cf.id].dialogWin = dialogWin;
+		KE.g[cf.id].dialogDoc = dialogDoc;
+	};
+	this.show = function()
+	{
+		KE.layout.show(this.cf.id, this.div);
 	};
 };
 KE.layout = {
@@ -234,6 +322,8 @@ KE.layout = {
 			KE.g[id].hideDiv.removeChild(KE.g[id].layoutDiv);
 		} catch (e) {}
 		KE.g[id].hideDiv.style.display = 'none';
+		KE.g[id].maskDiv.style.display = 'none';
+		KE.editor.focus(id);
 	},
 	get : function(id)
 	{
@@ -245,11 +335,12 @@ KE.layout = {
 };
 KE.menu = function(cf){
 	this.cf = cf;
-	this.div = KE.layout.get(cf.id);
-	this.div.className = 'ke-menu';
+	var div = KE.layout.get(cf.id);
+	div.className = 'ke-menu';
 	var obj = KE.g[cf.id].toolbarIcon[cf.cmd];
-	this.div.style.top = KE.util.getTop(obj) + obj.offsetHeight + 'px';
-	this.div.style.left = KE.util.getLeft(obj) + 'px';
+	div.style.top = KE.util.getTop(obj) + obj.offsetHeight + 'px';
+	div.style.left = KE.util.getLeft(obj) + 'px';
+	this.div = div;
 	this.add = function(text, event)
 	{
 		var cDiv = KE.el('div');
@@ -259,7 +350,15 @@ KE.menu = function(cf){
 		cDiv.onmouseout = function() { this.className = 'ke-menu-noselected'; }
 		cDiv.onclick = event;
 		cDiv.innerHTML = text;
-		this.div.appendChild(cDiv);
+		this.append(cDiv);
+	};
+	this.append = function(el)
+	{
+		this.div.appendChild(el);
+	};
+	this.insert = function(html)
+	{
+		this.div.innerHTML = html;
 	};
 	this.show = function()
 	{
@@ -295,9 +394,9 @@ KE.menu = function(cf){
 				cell.innerHTML = '&nbsp;';
 			}
 		}
-		this.div.appendChild(table);
+		this.append(table);
 		this.show();
-	}
+	};
 };
 KE.toolbar = {
 	items : [],
@@ -393,12 +492,18 @@ KE.create = function(id)
 	hideDiv.style.display = 'none';
 	formDiv.appendChild(iframe);
 	formDiv.appendChild(newTextarea);
+	
+	var maskDiv = KE.el('div');
+	maskDiv.className = 'ke-mask';
+	maskDiv.style.width = KE.util.getDocumentWidth(true);
+	maskDiv.style.height = KE.util.getDocumentHeight(true);
 
 	KE.editor.setDefaultPlugin(id);
 	containerDiv.appendChild(KE.toolbar.create(id));
 	containerDiv.appendChild(formDiv);
 	containerDiv.appendChild(hideInput);
 	containerDiv.appendChild(hideDiv);
+	containerDiv.appendChild(maskDiv);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = iframeWin.document;
 	iframeDoc.designMode = "on";
@@ -425,6 +530,7 @@ KE.create = function(id)
 	KE.g[id].newTextarea = newTextarea;
 	KE.g[id].hideInput = hideInput;
 	KE.g[id].hideDiv = hideDiv;
+	KE.g[id].maskDiv = maskDiv;
 	KE.g[id].iframeWin = iframeWin;
 	KE.g[id].iframeDoc = iframeDoc;
 	KE.g[id].width = width;
@@ -447,8 +553,8 @@ KE.show = function(config)
 	config.langType = config.langType || 'zh-cn';
 	config.pluginType = config.pluginType || 'all';
 	config.cssPath = config.cssPath || '';
-	KE.g[config.id] = config;
 	config.skinsPath = KE.scriptPath + 'skins/' + config.skinType + '/';
+	KE.g[config.id] = config;
 	KE.util.loadStyle(KE.scriptPath + 'skins/' + config.skinType + '.css');
 	KE.util.loadScript(KE.scriptPath + 'langs/' + config.langType + '.js');
 	KE.util.loadScript(KE.scriptPath + 'plugin_' + config.pluginType + '.js');

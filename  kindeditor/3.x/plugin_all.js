@@ -20,15 +20,14 @@ KE.plugin['about'] = {
 	icon : 'about.gif',
 	click : function(id)
 	{
+		var msg ='<a href="http://www.kindsoft.net/" target="_blank" style="color:#4169e1;">KindEditor</a>' + KE.version;
 		var box = new KE.box({
 				id : id,
 				width : 250,
-				height : 50
+				height : 100,
+				title : '关于'
 			});
-		var tpl = '<div style="font-size:12px;padding-top:15px;text-align:center;">';
-		tpl += '<a href="http://www.kindsoft.net/" target="_blank" style="color:#4169e1;">KindEditor</a> ' + KE.version;
-		tpl += '</div>';
-		box.alert(tpl);
+		box.alert(msg);
 	}
 };
 KE.plugin['bgcolor'] = {
@@ -154,7 +153,7 @@ KE.plugin['hr'] = {
 	exec : function(id, value)
 	{
 		KE.editor.select(id);
-		var html = '<hr color="' + value + '"; size="1">';
+		var html = '<hr color="' + value + '" size="1">';
 		KE.editor.insertHtml(id, html);
 		KE.layout.hide(id);
 	}
@@ -285,7 +284,6 @@ KE.plugin['emoticons'] = {
 			];
 		var cmd = 'emoticons';
 		KE.editor.selection(id);
-		var div = KE.layout.get(id, cmd);
 		var table = KE.el('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
@@ -303,8 +301,12 @@ KE.plugin['emoticons'] = {
 				cell.innerHTML = '<img src="' + KE.scriptPath + 'emoticons/' + emoticonTable[i][j] + '">';
 			}
 		}
-		div.appendChild(table);
-		KE.layout.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd
+			});
+		menu.append(table);
+		menu.show();
 	},
 	exec : function(id, value)
 	{
@@ -353,32 +355,51 @@ KE.plugin['link'] = {
 	{
 		var cmd = 'link';
 		KE.editor.selection(id);
-		var div = KE.box.dialog(id, 400, 100);
-		var table = KE.el('table');
-		table.cellPadding = 0;
-		table.cellSpacing = 2;
-		table.border = 0;
-		for (var i = 0; i < charTable.length; i++) {
-			var row = table.insertRow(i);
-			for (var j = 0; j < charTable[i].length; j++) {
-				var cell = row.insertCell(j);
-				cell.style.padding = '1px';
-				cell.style.border = '1px solid #AAAAAA';
-				cell.style.fontSize = '12px';
-				cell.style.cursor = 'pointer';
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
-				cell.onmouseout = function() {this.style.borderColor = '#AAAAAA'; }
-				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + charTable[i][j] + '")');
-				cell.innerHTML = charTable[i][j];
+		var html = '<table border="0">';
+		html += '<tr><td style="width:50px;padding:5px;">URL</td>';
+		html += '<td style="width:200px;padding-top:5px;padding-bottom:5px;"><input type="text" id="' + id + 'hyperLink" value="http://" style="width:190px;border:1px solid #555555;background-color:#FFFFFF;"></td>'; 
+		html += '<tr><td style="padding:5px;">打开方式</td>';
+		html += '<td style="padding-bottom:5px;"><select id="' + id + 'hyperLinkTarget"><option value="_blank" selected="selected">新窗口</option><option value="">当前窗口</option></select></td></tr>'; 
+		html += '</table>';
+		var box = new KE.box({
+				id : id,
+				cmd : cmd,
+				width : 300,
+				height : 140,
+				title : '超级连接'
+			});
+		box.dialog(html);
+	},
+	exec : function(id)
+	{
+		KE.editor.focus(id);
+		KE.editor.select(id);
+		var url = KE.g[id].dialogDoc.getElementById(id + 'hyperLink').value;
+		var target = KE.g[id].dialogDoc.getElementById(id + 'hyperLinkTarget').value;
+		if (url.match(/http:\/\/.{3,}/) == null) {
+			KE.alert(id, 'URL不正确。');
+			return false;
+		}
+		if (KE.g[id].rangeText != '') {
+			var element;
+			if (KE.browser == 'IE') {
+				if (KE.g[id].selection.type.toLowerCase() == 'control') {
+					var el = KE.el("a");
+					el.href = url;
+					if (target) el.target = target;
+					KE.g[id].range.item(0).applyElement(el);
+				} else if (KE.g[id].selection.type.toLowerCase() == 'text') {
+					KE.g[id].iframeDoc.execCommand("createlink", false, url);
+					element = KE.g[id].range.parentElement();
+					if (target) element.target = target;
+				}
+			} else {
+				KE.g[id].iframeDoc.execCommand("createlink", false, url);
+				element = KE.g[id].range.startContainer.previousSibling;
+				element.target = target;
+				if (target) element.target = target;
 			}
 		}
-		div.appendChild(table);
-		KE.layout.show(id, div);
-	},
-	exec : function(id, value)
-	{
-		KE.editor.select(id);
-		KE.editor.insertHtml(id, value);
 		KE.layout.hide(id);
 	}
 };
@@ -414,7 +435,6 @@ KE.plugin['specialchar'] = {
 		];
 		var cmd = 'specialchar';
 		KE.editor.selection(id);
-		var div = KE.layout.get(id, cmd);
 		var table = KE.el('table');
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
@@ -433,8 +453,12 @@ KE.plugin['specialchar'] = {
 				cell.innerHTML = charTable[i][j];
 			}
 		}
-		div.appendChild(table);
-		KE.layout.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd
+			});
+		menu.append(table);
+		menu.show();
 	},
 	exec : function(id, value)
 	{
@@ -465,7 +489,6 @@ KE.plugin['table'] = {
 	{
 		var cmd = 'table';
 		KE.editor.selection(id);
-		var div = KE.layout.get(id, cmd);
 		var num = 10;
 		var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;">';
 		for (i = 1; i <= num; i++) {
@@ -482,8 +505,12 @@ KE.plugin['table'] = {
 		}
 		html += '<tr><td colspan="10" id="tableLocation' + id + '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
 		html += '</table>';
-		div.innerHTML = html;
-		KE.layout.show(id, div);
+		var menu = new KE.menu({
+				id : id,
+				cmd : cmd
+			});
+		menu.insert(html);
+		menu.show();
 	},
 	exec : function(id, value)
 	{
