@@ -1,3 +1,7 @@
+.ke-text {
+	font-size: 12px;
+	font-family: "sans serif",tahoma,verdana,helvetica;
+}
 .ke-toolbar {
 	padding: 2px;
 	text-align: left;
@@ -115,6 +119,12 @@
 	border-bottom: 2px solid #AAAAAA;
 	cursor: pointer;
 	font-size: 12px;
+	font-family: "sans serif",tahoma,verdana,helvetica;
+}
+.ke-text-input {
+	background-color:#FFFFFF;
+	font-size: 12px;
+	font-family: "sans serif",tahoma,verdana,helvetica;
 }
 .ke-picker-cell {
 	width: 12px;

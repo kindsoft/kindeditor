@@ -327,7 +327,59 @@ KE.plugin['image'] = {
 	icon : 'image.gif',
 	click : function(id)
 	{
-		//KE.g[id].iframeDoc.execCommand('bold', false, null);
+		var cmd = 'link';
+		KE.editor.selection(id);
+		/*
+		var str = '';
+		str += '<div align="center">' +
+			'<form name="uploadForm" style="margin:0;padding:0;" method="post" enctype="multipart/form-data" ' +
+			'action="' + KE_IMAGE_UPLOAD_CGI + '" onsubmit="javascript:if(parent.KindDrawImageEnd()==false){return false;};">' +
+			'<input type="hidden" name="fileName" id="fileName" value="" />' + 
+			'<table cellpadding="0" cellspacing="0" style="width:100%;font-size:12px;">' + 
+			'<tr><td colspan="2"><table border="0" style="margin-bottom:3px;"><tr><td id="imgPreview" style="width:240px;height:240px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>' +  	
+			'<tr><td style="width:50px;padding-left:5px;">';
+		if (KE_UPLOAD_MODE == true) {
+			str += '<select id="imageType" onchange="javascript:parent.KindImageType(this.value);document.getElementById(\''+cmd+'submitButton\').focus();"><option value="1" selected="selected">'+KE_LANG['LOCAL']+'</option><option value="2">'+KE_LANG['REMOTE']+'</option></select>';
+		} else {
+			str += KE_LANG['REMOTE'];
+		}
+		str += '</td><td style="width:200px;padding-bottom:3px;">';
+		if (KE_UPLOAD_MODE == true) {
+			str += '<input type="text" id="imgLink" value="http://" maxlength="255" style="width:95%;border:1px solid #555555;display:none;" />' +
+			'<input type="file" name="fileData" id="imgFile" size="14" style="border:1px solid #555555;" onclick="javascript:document.getElementById(\'imgLink\').value=\'http://\';" />';
+		} else {
+			str += '<input type="text" id="imgLink" value="http://" maxlength="255" style="width:95%;border:1px solid #555555;" />' +
+			'<input type="hidden" name="imageType" id="imageType" value="2"><input type="hidden" name="fileData" id="imgFile" value="" />';
+		}
+		str += '</td></tr><tr><td colspan="2" style="padding-bottom:3px;">' +
+			'<table border="0" style="width:100%;font-size:12px;"><tr>' +
+			'<td width="18%" style="padding:2px 2px 2px 5px;">'+KE_LANG['TITLE']+'</td><td width="82%"><input type="text" name="imgTitle" id="imgTitle" value="" maxlength="100" style="width:95%;border:1px solid #555555;" /></td></tr></table>' +	
+			'<table border="0" style="width:100%;font-size:12px;"><tr>' +
+			'<td width="10%" style="padding:2px 2px 2px 5px;">'+KE_LANG['WIDTH']+'</td><td width="23%"><input type="text" name="imgWidth" id="imgWidth" value="0" maxlength="4" style="width:40px;border:1px solid #555555;" /></td>' +
+			'<td width="10%" style="padding:2px;">'+KE_LANG['HEIGHT']+'</td><td width="23%"><input type="text" name="imgHeight" id="imgHeight" value="0" maxlength="4" style="width:40px;border:1px solid #555555;" /></td>' +
+			'<td width="10%" style="padding:2px;">'+KE_LANG['BORDER']+'</td><td width="23%"><input type="text" name="imgBorder" id="imgBorder" value="0" maxlength="1" style="width:20px;border:1px solid #555555;" /></td></tr></table>' +
+			'<table border="0" style="width:100%;font-size:12px;"><tr>' +
+			'<td width="39%" style="padding:2px 2px 2px 5px;"><select id="imgAlign" name="imgAlign"><option value="">'+KE_LANG['ALIGN']+'</option>';
+		for (var i = 0; i < KE_IMAGE_ALIGN_TABLE.length; i++) {
+			str += '<option value="' + KE_IMAGE_ALIGN_TABLE[i] + '">' + KE_IMAGE_ALIGN_TABLE[i] + '</option>';
+		}
+		str += '</select></td>' +
+			'<td width="15%" style="padding:2px;">'+KE_LANG['HSPACE']+'</td><td width="15%"><input type="text" name="imgHspace" id="imgHspace" value="0" maxlength="1" style="width:20px;border:1px solid #555555;" /></td>' +
+			'<td width="15%" style="padding:2px;">'+KE_LANG['VSPACE']+'</td><td width="15%"><input type="text" name="imgVspace" id="imgVspace" value="0" maxlength="1" style="width:20px;border:1px solid #555555;" /></td></tr></table>' +
+			'</td></tr><tr><td colspan="2" style="margin:5px;padding-bottom:5px;" align="center">' +
+			'<input type="button" name="button" value="'+KE_LANG['PREVIEW']+'" onclick="javascript:parent.KindImagePreview();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
+			'<input type="submit" name="button" id="'+cmd+'submitButton" value="'+KE_LANG['CONFIRM']+'" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
+			'<input type="button" name="button" value="'+KE_LANG['CANCEL']+'" onclick="javascript:parent.KindDisableMenu();parent.KindReloadIframe();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /></td></tr>' + 
+			'</table></form></div>';
+		*/
+		var box = new KE.box({
+				id : id,
+				cmd : cmd,
+				width : 580,
+				height : 330,
+				title : '插入图片'
+			});
+		box.dialog(html);
 	}
 };
 KE.plugin['layer'] = {
@@ -355,17 +407,17 @@ KE.plugin['link'] = {
 	{
 		var cmd = 'link';
 		KE.editor.selection(id);
-		var html = '<table border="0">';
+		var html = '<table border="0" class="ke-text">';
 		html += '<tr><td style="width:50px;padding:5px;">URL</td>';
-		html += '<td style="width:200px;padding-top:5px;padding-bottom:5px;"><input type="text" id="' + id + 'hyperLink" value="http://" style="width:190px;border:1px solid #555555;background-color:#FFFFFF;"></td>'; 
+		html += '<td><input type="text" id="' + id + 'hyperLink" value="http://" style="width:190px;" class="ke-text-input"></td>'; 
 		html += '<tr><td style="padding:5px;">打开方式</td>';
-		html += '<td style="padding-bottom:5px;"><select id="' + id + 'hyperLinkTarget"><option value="_blank" selected="selected">新窗口</option><option value="">当前窗口</option></select></td></tr>'; 
+		html += '<td><select id="' + id + 'hyperLinkTarget"><option value="_blank" selected="selected">新窗口</option><option value="">当前窗口</option></select></td></tr>'; 
 		html += '</table>';
 		var box = new KE.box({
 				id : id,
 				cmd : cmd,
-				width : 300,
-				height : 140,
+				width : 280,
+				height : 130,
 				title : '超级连接'
 			});
 		box.dialog(html);
@@ -374,8 +426,8 @@ KE.plugin['link'] = {
 	{
 		KE.editor.focus(id);
 		KE.editor.select(id);
-		var url = KE.g[id].dialogDoc.getElementById(id + 'hyperLink').value;
-		var target = KE.g[id].dialogDoc.getElementById(id + 'hyperLinkTarget').value;
+		var url = KE.get(id + 'hyperLink').value;
+		var target = KE.get(id + 'hyperLinkTarget').value;
 		if (url.match(/http:\/\/.{3,}/) == null) {
 			KE.alert(id, 'URL不正确。');
 			return false;
@@ -407,7 +459,47 @@ KE.plugin['media'] = {
 	icon : 'media.gif',
 	click : function(id)
 	{
-		//KE.g[id].iframeDoc.execCommand('bold', false, null);
+		var cmd = 'media';
+		var html = '<table class="ke-text">' + 
+		'<tr><td colspan="2"><table border="0"><tr><td id="'+cmd+'preview" style="width:240px;height:200px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>' +  	
+		'<tr><td style="width:40px;padding:5px;">远程</td>' +
+		'<td style="width:210px;padding-bottom:5px;"><input type="text" id="'+cmd+'link" value="http://" style="width:190px;border:1px solid #555555;" /></td></tr>' +
+		'</table>';
+		var box = new KE.box({
+				id : id,
+				cmd : cmd,
+				width : 300,
+				height : 300,
+				title : '插入WMP文件'
+			});
+		box.div.className = 'ke-box';
+		box.div.appendChild(box.getTitle());
+		box.div.appendChild(box.getCloseIcon(
+			new Function('KE.layout.hide("' + box.cf.id + '")')
+		));
+		var lb = KE.button({
+			text : '试听',
+			click : new Function('KE.plugin["' + box.cf.cmd + '"].exec("' + box.cf.id + '")')
+		});
+		var cb = KE.button({
+			text : '确定',
+			click : new Function('KE.plugin["' + box.cf.cmd + '"].exec("' + box.cf.id + '")')
+		});
+		var rb = KE.button({
+			text : '取消',
+			click : new Function('KE.layout.hide("' + box.cf.id + '")')
+		});
+		box.div.appendChild(box.getBody({
+				text : html,
+				lb : lb,
+				cb : cb,
+				rb : rb
+			}));
+		box.show();
+		window.focus();
+		lb.focus();
+		KE.g[box.cf.id].leftButton = lb;
+		KE.g[box.cf.id].maskDiv.style.display = 'block';
 	}
 };
 KE.plugin['real'] = {
