@@ -7,14 +7,17 @@
 * @version 3.0 alpha
 */
 var KE = {};
-KE.get = function(str){
-	return document.getElementById(str);
+KE.get = function(str, doc){
+	var doc = doc || document;
+	return doc.getElementById(str);
 };
-KE.el = function(str){
-	return document.createElement(str);
+KE.el = function(str, doc){
+	var doc = doc || document;
+	return doc.createElement(str);
 };
-KE.text = function(str){
-	return document.createTextNode(str);
+KE.text = function(str, doc){
+	var doc = doc || document;
+	return doc.createTextNode(str);
 };
 KE.event = {
 	add : function(el, event, listener)
@@ -226,7 +229,8 @@ KE.editor = {
 	}
 };
 KE.button = function(cf){
-	var input = KE.el('input');
+	var doc = cf.doc || document;
+	var input = KE.el('input', doc);
 	input.type = cf.type || 'button';
 	input.className = 'ke-button';
 	input.value = cf.text;
@@ -243,16 +247,16 @@ KE.box = function(cf){
 	this.div = div;
 	this.getTitle = function()
 	{
-		var div = KE.el('div');
+		var div = KE.el('div', this.cf.doc);
 		div.className = 'ke-box-title';
 		div.innerHTML = this.cf.title;
 		return div;
 	};
 	this.getCloseIcon = function(click)
 	{
-		var div = KE.el('div');
+		var div = KE.el('div', this.cf.doc);
 		div.className = 'ke-box-close';
-		var img = KE.el('img');
+		var img = KE.el('img', this.cf.doc);
 		img.src = KE.g[cf.id].skinsPath + 'close.gif';
 		img.alt = '关闭';
 		img.title = '关闭';
@@ -262,7 +266,7 @@ KE.box = function(cf){
 	};
 	this.getBody = function(config)
 	{
-		var table = KE.el('table');
+		var table = KE.el('table', this.cf.doc);
 		table.className = 'ke-box-body';
 		table.border = 0;
 		var row = table.insertRow(0);
@@ -278,15 +282,15 @@ KE.box = function(cf){
 		cell.align = 'center';
 		if (config.lb) {
 			cell.appendChild(config.lb);
-			cell.appendChild(KE.text('  '));
+			cell.appendChild(KE.text('  ', this.cf.doc));
 		}
 		if (config.cb) {
 			cell.appendChild(config.cb);
-			cell.appendChild(KE.text('  '));
+			cell.appendChild(KE.text('  ', this.cf.doc));
 		}
 		if (config.rb) {
 			cell.appendChild(config.rb);
-			cell.appendChild(KE.text('  '));
+			cell.appendChild(KE.text('  ', this.cf.doc));
 		}
 		return table;
 	};
@@ -349,7 +353,7 @@ KE.box = function(cf){
 		KE.g[this.cf.id].leftButton = lb;
 		KE.g[this.cf.id].maskDiv.style.display = 'block';
 	};
-	this.formDialog = function(html)
+	this.frameDialog = function(html)
 	{
 		var iframe = KE.el('iframe');
 		iframe.id = this.cf.id + 'Dialog';
@@ -360,33 +364,45 @@ KE.box = function(cf){
 		this.div.className = "ke-dialog";
 		this.div.appendChild(iframe);
 		this.show();
-		var tpl = '<div class="ke-box" style="width:' + this.cf.width + 'px;height:' + this.cf.height + 'px;">';
-		tpl += '<div class="ke-box-title">' + this.cf.title + '</div>';
-		tpl += '<div class="ke-box-close"><img src="' + KE.g[cf.id].skinsPath + 'close.gif" alt="关闭" title="关闭" onclick="javascript:parent.KE.layout.hide(\'' + this.cf.id + '\');"></div>';
-		tpl += '<table border="0" class="ke-box-body">';
-		tpl += '<tr>';
-		tpl += '<td align="center" valign="middle" style="word-break:break-all;width:' + (this.cf.width - 10) + 'px;height:' + (this.cf.height - 65) + 'px;">' + html + '</td>';
-		tpl += '</tr>';
-		tpl += '<tr>';
-		tpl += '<td align="center">';
-		tpl += '<input type="button" class="ke-button" id="' + this.cf.id + 'YesButton" value="确定" onclick="javascript:parent.KE.plugin[\'' + this.cf.cmd + '\'].exec(\'' + this.cf.id + '\');"> &nbsp; ';
-		tpl += '<input type="button" class="ke-button" id="' + this.cf.id + 'NoButton" value="取消" onclick="javascript:parent.KE.layout.hide(\'' + this.cf.id + '\');">';
-		tpl += '</td></tr>';
-		tpl += '</table>';
-		tpl += '</div>';
 		var dialogWin = iframe.contentWindow;
 		var dialogDoc = dialogWin.document;
 		dialogDoc.open();
-		dialogDoc.write(this.getDialogHtml(this.cf.id, tpl));
+		dialogDoc.write(this.getDoc());
 		dialogDoc.close();
+		
+		this.cf.doc = dialogDoc;
+		var dialogDiv = KE.el('div', this.cf.doc);
+		dialogDiv.className = 'ke-box';
+		dialogDiv.style.width = cf.width + 'px';
+		dialogDiv.style.height = cf.height + 'px';
+		dialogDiv.appendChild(this.getTitle());
+		dialogDiv.appendChild(this.getCloseIcon(
+			new Function('parent.KE.layout.hide("' + this.cf.id + '")')
+		));
+		var lb = KE.button({
+			doc : this.cf.doc,
+			text : '确定',
+			click : new Function('parent.KE.plugin["' + this.cf.cmd + '"].exec("' + this.cf.id + '")')
+		});
+		var rb = KE.button({
+			doc : this.cf.doc,
+			text : '取消',
+			click : new Function('parent.KE.layout.hide("' + this.cf.id + '")')
+		});
+		dialogDiv.appendChild(this.getBody({
+				text : html,
+				lb : lb,
+				rb : rb
+			}));
+		KE.g[this.cf.id].dialogDiv = dialogDiv;
 		KE.g[this.cf.id].maskDiv.style.display = 'block';
 		KE.g[this.cf.id].dialogWin = dialogWin;
 		KE.g[this.cf.id].dialogDoc = dialogDoc;
-		KE.g[this.cf.id].buttonFocus = function(id) {
+		KE.g[this.cf.id].dialogAction = function(id) {
+			KE.g[id].dialogDoc.body.appendChild(KE.g[id].dialogDiv);
 			KE.g[id].dialogWin.focus();
-			KE.g[id].dialogDoc.getElementById(id + 'YesButton').focus();
 		}
-		setTimeout('KE.g["' + this.cf.id + '"].buttonFocus("' + this.cf.id + '")', 10);
+		setTimeout('KE.g["' + this.cf.id + '"].dialogAction("' + this.cf.id + '")', 10);
 	};
 	this.show = function()
 	{

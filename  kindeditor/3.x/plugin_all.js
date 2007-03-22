@@ -329,11 +329,10 @@ KE.plugin['image'] = {
 	{
 		var cmd = 'link';
 		KE.editor.selection(id);
+		var html = '';
 		/*
-		var str = '';
-		str += '<div align="center">' +
-			'<form name="uploadForm" style="margin:0;padding:0;" method="post" enctype="multipart/form-data" ' +
-			'action="' + KE_IMAGE_UPLOAD_CGI + '" onsubmit="javascript:if(parent.KindDrawImageEnd()==false){return false;};">' +
+		html += '<form name="uploadForm" style="margin:0;padding:0;" method="post" enctype="multipart/form-data" ';
+		html += 'action="' + KE.g[id].upload + '" onsubmit="javascript:if(parent.KindDrawImageEnd()==false){return false;};">' +
 			'<input type="hidden" name="fileName" id="fileName" value="" />' + 
 			'<table cellpadding="0" cellspacing="0" style="width:100%;font-size:12px;">' + 
 			'<tr><td colspan="2"><table border="0" style="margin-bottom:3px;"><tr><td id="imgPreview" style="width:240px;height:240px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>' +  	
@@ -379,7 +378,8 @@ KE.plugin['image'] = {
 				height : 330,
 				title : '插入图片'
 			});
-		box.dialog(html);
+
+		box.frameDialog(html);
 	}
 };
 KE.plugin['layer'] = {
@@ -460,16 +460,16 @@ KE.plugin['media'] = {
 	click : function(id)
 	{
 		var cmd = 'media';
-		var html = '<table class="ke-text">' + 
-		'<tr><td colspan="2"><table border="0"><tr><td id="'+cmd+'preview" style="width:240px;height:200px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>' +  	
-		'<tr><td style="width:40px;padding:5px;">远程</td>' +
-		'<td style="width:210px;padding-bottom:5px;"><input type="text" id="'+cmd+'link" value="http://" style="width:190px;border:1px solid #555555;" /></td></tr>' +
-		'</table>';
+		var html = '<table class="ke-text">';
+		html += '<tr><td colspan="2"><div border="0"><tr><td id="'+cmd+'preview" style="width:240px;height:200px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>';
+		html += '<tr><td style="width:40px;padding:5px;">远程</td>';
+		html += '<td style="width:210px;padding-bottom:5px;"><input type="text" id="'+cmd+'link" value="http://" style="width:190px;border:1px solid #555555;" /></td></tr>';
+		html += '</table>';
 		var box = new KE.box({
 				id : id,
 				cmd : cmd,
 				width : 300,
-				height : 300,
+				height : 310,
 				title : '插入WMP文件'
 			});
 		box.div.className = 'ke-box';
