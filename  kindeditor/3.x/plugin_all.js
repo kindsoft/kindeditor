@@ -162,11 +162,23 @@ KE.plugin['preview'] = {
 	icon : 'preview.gif',
 	click : function(id)
 	{
+		var iframe = KE.el('iframe');
+		iframe.style.width = '490px';
+		iframe.style.height = '340px';
+		iframe.setAttribute("frameBorder", "0");
+		var box = new KE.box({
+				id : id,
+				width : 500,
+				height : 400,
+				title : '预览'
+			});
+		box.alert(iframe);
 		var html = KE.editor.getData(id);
-		var newWin = window.open('', 'kindPreview','width=800,height=600,left=30,top=30,resizable=yes,scrollbars=yes');
-		newWin.document.open();
-		newWin.document.write(html);
-		newWin.document.close();
+		var dialogWin = iframe.contentWindow;
+		var dialogDoc = dialogWin.document;
+		dialogDoc.open();
+		dialogDoc.write(KE.editor.getFullHtml(id, html));
+		dialogDoc.close();
 	}
 };
 KE.plugin['source'] = {

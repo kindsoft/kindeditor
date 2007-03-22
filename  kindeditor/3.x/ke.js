@@ -276,7 +276,11 @@ KE.box = function(cf){
 		cell.style.wordBreak = 'break-all';
 		cell.style.width = (this.cf.width - 10) + 'px';
 		cell.style.height = (this.cf.height - 65) + 'px';
-		cell.innerHTML = config.text;
+		if (typeof(config.content) == 'string') {
+			cell.innerHTML = config.content;
+		} else {
+			cell.appendChild(config.content);
+		}
 		row = table.insertRow(1);
 		cell = row.insertCell(0);
 		cell.align = 'center';
@@ -306,7 +310,7 @@ KE.box = function(cf){
 			click : new Function('KE.layout.hide("' + this.cf.id + '")')
 		});
 		this.div.appendChild(this.getBody({
-				text : msg,
+				content : msg,
 				lb : button
 			}));
 		this.show();
@@ -343,7 +347,7 @@ KE.box = function(cf){
 			click : new Function('KE.layout.hide("' + this.cf.id + '")')
 		});
 		this.div.appendChild(this.getBody({
-				text : html,
+				content : html,
 				lb : lb,
 				rb : rb
 			}));
@@ -352,6 +356,45 @@ KE.box = function(cf){
 		lb.focus();
 		KE.g[this.cf.id].leftButton = lb;
 		KE.g[this.cf.id].maskDiv.style.display = 'block';
+	};
+	this.baseFrameDialog = function(html)
+	{
+		var iframe = KE.el('iframe');
+		iframe.id = this.cf.id + 'Dialog';
+		iframe.name = this.cf.id + 'Dialog';
+		iframe.style.width = (this.cf.width + 4) + 'px';
+		iframe.style.height = (this.cf.height + 6) + 'px';
+		iframe.setAttribute("frameBorder", "0");
+		this.div.className = "ke-dialog";
+		this.div.appendChild(iframe);
+		this.show();
+		var dialogWin = iframe.contentWindow;
+		var dialogDoc = dialogWin.document;
+		dialogDoc.open();
+		dialogDoc.write(this.getDoc());
+		dialogDoc.close();
+		
+		this.cf.doc = dialogDoc;
+		var dialogDiv = KE.el('div', this.cf.doc);
+		dialogDiv.className = 'ke-box';
+		dialogDiv.style.width = cf.width + 'px';
+		dialogDiv.style.height = cf.height + 'px';
+		dialogDiv.appendChild(this.getTitle());
+		dialogDiv.appendChild(this.getCloseIcon(
+			new Function('parent.KE.layout.hide("' + this.cf.id + '")')
+		));
+		var d = KE.el('div', this.cf.doc);
+		d.innerHTML = html;
+		dialogDiv.appendChild(d);
+		KE.g[this.cf.id].dialogDiv = dialogDiv;
+		KE.g[this.cf.id].maskDiv.style.display = 'block';
+		KE.g[this.cf.id].dialogWin = dialogWin;
+		KE.g[this.cf.id].dialogDoc = dialogDoc;
+		KE.g[this.cf.id].dialogAction = function(id) {
+			KE.g[id].dialogDoc.body.appendChild(KE.g[id].dialogDiv);
+			KE.g[id].dialogWin.focus();
+		}
+		setTimeout('KE.g["' + this.cf.id + '"].dialogAction("' + this.cf.id + '")', 10);
 	};
 	this.frameDialog = function(html)
 	{
@@ -390,7 +433,7 @@ KE.box = function(cf){
 			click : new Function('parent.KE.layout.hide("' + this.cf.id + '")')
 		});
 		dialogDiv.appendChild(this.getBody({
-				text : html,
+				content : html,
 				lb : lb,
 				rb : rb
 			}));
