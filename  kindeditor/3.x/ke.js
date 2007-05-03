@@ -217,7 +217,7 @@ KE.editor = {
 	insertHtml : function(id, html)
 	{
 		KE.editor.select(id);
-		if (KE.browser == 'IE') {
+		if (KE.browser == 'IE' && KE.browser != 'IE7') {
 			if (KE.g[id].selection.type.toLowerCase() == 'control') {
 				KE.g[id].range.item(0).outerHTML = html;
 			} else {
