@@ -82,9 +82,8 @@
 }
 .ke-box-title {
 	background-color: #1F3D74;
-	padding: 4px;
+	padding: 3px;
 	color: #FFFFFF;
-	font-weight: bold;
 	text-align: left;
 	font-size: 12px;
 	font-family: "sans serif",tahoma,verdana,helvetica;
@@ -97,8 +96,8 @@
 }
 .ke-box-close {
 	position: absolute;
-	top: 4px;
-	right: 4px;
+	top: 3px;
+	right: 3px;
 	cursor: pointer;
 }
 .ke-mask {
