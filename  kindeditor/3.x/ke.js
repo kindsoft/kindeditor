@@ -7,16 +7,6 @@
 * @version 3.0 alpha
 */
 var KE = {};
-KE.items = [
-	'source', 'preview', 'zoom', 'print', 'undo', 'redo', 'cut', 'copy', 'paste', 
-	'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-	'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-	'superscript', 'date', 'time', '-',
-	'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 
-	'italic', 'underline', 'strikethrough', 'removeformat', 'image',
-	'flash', 'media', 'real', 'layer', 'table', 'specialchar', 'hr', 
-	'emoticons', 'link', 'unlink'
-];
 KE.lang = {
 	source : '模式',
 	preview : '预览',
@@ -640,8 +630,8 @@ KE.toolbar = {
 		KE.g[id].toolbarIcon = [];
 		var el = KE.el('div');
 		el.className = 'ke-toolbar';
-		for (var i in KE.items) {
-			var cmd = KE.items[i];
+		for (var i in KE.g[id].items) {
+			var cmd = KE.g[id].items[i];
 			var obj;
 			if (cmd == '-') {
 				obj = KE.el('br');
@@ -764,6 +754,16 @@ KE.show = function(config)
 	config.skinType = config.skinType || 'default';
 	config.cssPath = config.cssPath || '';
 	config.skinsPath = KE.scriptPath + 'skins/' + config.skinType + '/';
+	config.items = config.items || [
+		'source', 'preview', 'zoom', 'print', 'undo', 'redo', 'cut', 'copy', 'paste', 
+		'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
+		'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+		'superscript', 'date', 'time', '-',
+		'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 
+		'italic', 'underline', 'strikethrough', 'removeformat', 'image',
+		'flash', 'media', 'real', 'layer', 'table', 'specialchar', 'hr', 
+		'emoticons', 'link', 'unlink'
+	];
 	KE.g[config.id] = config;
 	KE.util.loadStyle(KE.scriptPath + 'skins/' + config.skinType + '.css');
 	KE.event.add(window, 'load', new Function('KE.create("' + config.id + '")'));
