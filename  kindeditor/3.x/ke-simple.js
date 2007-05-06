@@ -10,7 +10,7 @@ var KE = {};
 KE.items = [
 	'source', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 'italic', 'underline', 
 	'removeformat', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 
-	'insertunorderedlist', 'indent', 'outdent', 'link', 'unlink'];
+	'insertunorderedlist', 'link', 'unlink'];
 KE.lang = {
 	source : '模式',
 	justifyleft : '左对齐',
