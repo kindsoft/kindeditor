@@ -2,9 +2,11 @@
 * WYSIWYG HTML Editor for Internet
 * 
 * @author Roddy <luolonghao@gmail.com>
-* @version 2.5.3
+* @site http://www.kindsoft.net/
+* @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
+* @version 2.5.5
 */
-var KE_VERSION = "2.5.4";
+var KE_VERSION = "2.5.5";
 var KE_EDITOR_TYPE = "full"; //full or simple
 var KE_SAFE_MODE = false; // true or false
 var KE_UPLOAD_MODE = true; // true or false
@@ -202,6 +204,15 @@ var KE_REAL_DOCUMENT;
 var KE_LINK_DOCUMENT;
 var KE_BROWSER;
 var KE_TOOLBAR_ICON;
+function KindString(){
+	this.arr = new Array();
+	this.append = function(){
+	   this.arr.push.apply(this.arr, arguments);
+	}
+	this.toString = function(){
+	   return this.arr.join('');
+	}
+}
 function KindGetBrowser()
 {
 	var browser = '';
@@ -379,83 +390,85 @@ function KindDisplayMenu(cmd)
 	} else if (cmd == 'KE_LINK') {
 		left -= 220;
 	}
+	var str = KindPopupMenu(cmd);
+	document.getElementById('menuDiv').style.display = 'none';
+	document.getElementById('menuDiv').innerHTML = str;
 	document.getElementById('POPUP_'+cmd).style.top =  top.toString(10) + 'px';
 	document.getElementById('POPUP_'+cmd).style.left = left.toString(10) + 'px';
 	document.getElementById('POPUP_'+cmd).style.display = 'block';
+	document.getElementById('menuDiv').style.display = 'block';
 }
 function KindDisableMenu()
 {
-	for (i = 0; i < KE_POPUP_MENU_TABLE.length; i++) {
-		document.getElementById('POPUP_'+KE_POPUP_MENU_TABLE[i]).style.display = 'none';
-	}
-}
-function KindReloadIframe()
-{
-	var str = '';
-	str += KindPopupMenu('KE_IMAGE');
-	str += KindPopupMenu('KE_FLASH');
-	str += KindPopupMenu('KE_MEDIA');
-	str += KindPopupMenu('KE_REAL');
-	document.getElementById('InsertIframe').innerHTML = str;
-	KindDrawIframe('KE_IMAGE');
-	KindDrawIframe('KE_FLASH');
-	KindDrawIframe('KE_MEDIA');
-	KindDrawIframe('KE_REAL');
+	document.getElementById('menuDiv').innerHTML = '';
+	document.getElementById('menuDiv').style.display = 'none';
 }
 function KindGetMenuCommonStyle()
 {
-	var str = 'position:absolute;top:1px;left:1px;font-size:12px;color:'+KE_MENU_TEXT_COLOR+
-			';background-color:'+KE_MENU_BG_COLOR+';border:solid 1px '+KE_MENU_BORDER_COLOR+';z-index:1;display:none;';
-	return str;
+	var ks = new KindString();
+	ks.append('position:absolute;top:1px;left:1px;font-size:12px;color:');
+	ks.append(KE_MENU_TEXT_COLOR, ';background-color:', KE_MENU_BG_COLOR);
+	ks.append(';border:solid 1px ', KE_MENU_BORDER_COLOR, ';z-index:1;display:none;');
+	return ks.toString();
 }
 function KindGetCommonMenu(cmd, content)
 {
-	var str = '';
-	str += '<div id="POPUP_'+cmd+'" style="'+KindGetMenuCommonStyle()+'">';
-	str += content;
-	str += '</div>';
-	return str;
+	var ks = new KindString();
+	ks.append('<div id="POPUP_', cmd, '" style="', KindGetMenuCommonStyle(), '">');
+	ks.append(content, '</div>');
+	return ks.toString();
 }
 function KindCreateColorTable(cmd, eventStr)
 {
-	var str = '';
-	str += '<table cellpadding="0" cellspacing="2" border="0">';
+	var ks = new KindString();
+	ks.append('<table cellpadding="0" cellspacing="2" border="0">');
 	for (i = 0; i < KE_COLOR_TABLE.length; i++) {
 		if (i == 0 || (i >= 10 && i%10 == 0)) {
-			str += '<tr>';
+			ks.append('<tr>');
 		}
-		str += '<td style="width:12px;height:12px;border:1px solid #AAAAAA;font-size:1px;cursor:pointer;background-color:' +
-		KE_COLOR_TABLE[i] + ';" onmouseover="javascript:this.style.borderColor=\'#000000\';' + ((eventStr) ? eventStr : '') + '" ' +
-		'onmouseout="javascript:this.style.borderColor=\'#AAAAAA\';" ' + 
-		'onclick="javascript:KindExecute(\''+cmd+'_END\', \'' + KE_COLOR_TABLE[i] + '\');">&nbsp;</td>';
+		ks.append('<td style="width:12px;height:12px;border:1px solid #AAAAAA;font-size:1px;cursor:pointer;background-color:');
+		ks.append(KE_COLOR_TABLE[i], ';" onmouseover="javascript:this.style.borderColor=\'#000000\';');
+		ks.append(((eventStr) ? eventStr : ''), '" ');
+		ks.append('onmouseout="javascript:this.style.borderColor=\'#AAAAAA\';" '); 
+		ks.append('onclick="javascript:KindExecute(\'', cmd, '_END\', \'');
+		ks.append(KE_COLOR_TABLE[i], '\');">&nbsp;</td>');
 		if (i >= 9 && i%(i-1) == 0) {
-			str += '</tr>';
+			ks.append('</tr>');
 		}
 	}
-	str += '</table>';
-	return str;
+	ks.append('</table>');
+	return ks.toString();
 }
 function KindDrawColorTable(cmd)
 {
-	var str = '';
-	str += '<div id="POPUP_'+cmd+'" style="width:160px;padding:2px;'+KindGetMenuCommonStyle()+'">';
-	str += KindCreateColorTable(cmd);
-	str += '</div>';
-	return str;
+	var ks = new KindString();
+	ks.append('<div id="POPUP_', cmd, '" style="width:160px;padding:2px;');
+	ks.append(KindGetMenuCommonStyle(), '">');
+	ks.append(KindCreateColorTable(cmd));
+	ks.append('</div>');
+	return ks.toString();
 }
 function KindDrawMedia(cmd)
 {
-	var str = '';
-	str += '<table cellpadding="0" cellspacing="0" style="width:100%;font-size:12px;">' + 
-		'<tr><td colspan="2"><table border="0"><tr><td id="'+cmd+'preview" style="width:240px;height:240px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>' +  	
-		'<tr><td style="width:40px;padding:5px;">'+KE_LANG['REMOTE']+'</td>' +
-		'<td style="width:210px;padding-bottom:5px;"><input type="text" id="'+cmd+'link" value="http://" style="width:190px;border:1px solid #555555;" /></td></tr>' +
-		'<tr><td colspan="2" style="margin:5px;padding-bottom:5px;" align="center">' +
-		'<input type="button" name="button" value="'+KE_LANG['LISTENING']+'" onclick="javascript:parent.KindMediaPreview(\''+cmd+'\');" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
-		'<input type="submit" name="button" id="'+cmd+'submitButton" value="'+KE_LANG['CONFIRM']+'" onclick="javascript:parent.KindDrawMediaEnd(\''+cmd+'\');" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
-		'<input type="button" name="button" value="'+KE_LANG['CANCEL']+'" onclick="javascript:parent.KindDisableMenu();parent.KindReloadIframe();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /></td></tr>' + 
-		'</table>';
-	return str;
+	var ks = new KindString();
+	ks.append('<table cellpadding="0" cellspacing="0" style="width:100%;font-size:12px;">');
+	ks.append('<tr><td colspan="2"><table border="0"><tr><td id="', cmd);
+	ks.append('preview" style="width:240px;height:240px;border:1px solid #AAAAAA;');
+	ks.append('background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>');	
+	ks.append('<tr><td style="width:40px;padding:5px;">', KE_LANG['REMOTE'], '</td>');
+	ks.append('<td style="width:210px;padding-bottom:5px;"><input type="text" id="');
+	ks.append(cmd, 'link" value="http://" style="width:190px;border:1px solid #555555;" /></td></tr>');
+	ks.append('<tr><td colspan="2" style="margin:5px;padding-bottom:5px;" align="center">');
+	ks.append('<input type="button" name="button" value="', KE_LANG['LISTENING']);
+	ks.append('" onclick="javascript:parent.KindMediaPreview(\'', cmd);
+	ks.append('\');" style="border:1px solid #555555;background-color:', KE_BUTTON_COLOR, ';" /> ');
+	ks.append('<input type="submit" name="button" id="', cmd, 'submitButton" value="');
+	ks.append(KE_LANG['CONFIRM'], '" onclick="javascript:parent.KindDrawMediaEnd(\'');
+	ks.append(cmd, '\');" style="border:1px solid #555555;background-color:');
+	ks.append(KE_BUTTON_COLOR, ';" /> ', '<input type="button" name="button" value="');
+	ks.append(KE_LANG['CANCEL'], '" onclick="javascript:parent.KindDisableMenu();"');
+	ks.append('style="border:1px solid #555555;background-color:', KE_BUTTON_COLOR, ';" /></td></tr></table>');
+	return ks.toString();
 }
 function KindPopupMenu(cmd)
 {
@@ -650,22 +663,14 @@ function KindPopupMenu(cmd)
 }
 function KindDrawIframe(cmd)
 {
-	if (KE_BROWSER == 'IE') {
-		KE_IMAGE_DOCUMENT = document.frames("KindImageIframe").document;
-		KE_FLASH_DOCUMENT = document.frames("KindFlashIframe").document;
-		KE_MEDIA_DOCUMENT = document.frames("KindMediaIframe").document;
-		KE_REAL_DOCUMENT = document.frames("KindRealIframe").document;
-		KE_LINK_DOCUMENT = document.frames("KindLinkIframe").document;
-	} else {
-		KE_IMAGE_DOCUMENT = document.getElementById('KindImageIframe').contentDocument;
-		KE_FLASH_DOCUMENT = document.getElementById('KindFlashIframe').contentDocument;
-		KE_MEDIA_DOCUMENT = document.getElementById('KindMediaIframe').contentDocument;
-		KE_REAL_DOCUMENT = document.getElementById('KindRealIframe').contentDocument;
-		KE_LINK_DOCUMENT = document.getElementById('KindLinkIframe').contentDocument;
-	}
 	switch (cmd)
 	{
 		case 'KE_IMAGE':
+			if (KE_BROWSER == 'IE') {
+				KE_IMAGE_DOCUMENT = document.frames("KindImageIframe").document;
+			} else {
+				KE_IMAGE_DOCUMENT = document.getElementById('KindImageIframe').contentDocument;
+			}
 			var str = '';
 			str += '<div align="center">' +
 				'<form name="uploadForm" style="margin:0;padding:0;" method="post" enctype="multipart/form-data" ' +
@@ -705,11 +710,16 @@ function KindDrawIframe(cmd)
 				'</td></tr><tr><td colspan="2" style="margin:5px;padding-bottom:5px;" align="center">' +
 				'<input type="button" name="button" value="'+KE_LANG['PREVIEW']+'" onclick="javascript:parent.KindImagePreview();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
 				'<input type="submit" name="button" id="'+cmd+'submitButton" value="'+KE_LANG['CONFIRM']+'" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
-				'<input type="button" name="button" value="'+KE_LANG['CANCEL']+'" onclick="javascript:parent.KindDisableMenu();parent.KindReloadIframe();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /></td></tr>' + 
+				'<input type="button" name="button" value="'+KE_LANG['CANCEL']+'" onclick="javascript:parent.KindDisableMenu();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /></td></tr>' + 
 				'</table></form></div>';
 			KindDrawMenuIframe(KE_IMAGE_DOCUMENT, str);
 			break;
 		case 'KE_FLASH':
+			if (KE_BROWSER == 'IE') {
+				KE_FLASH_DOCUMENT = document.frames("KindFlashIframe").document;
+			} else {
+				KE_FLASH_DOCUMENT = document.getElementById('KindFlashIframe').contentDocument;
+			}
 			var str = '<table cellpadding="0" cellspacing="0" style="width:100%;font-size:12px;">' + 
 			'<tr><td colspan="2"><table border="0"><tr><td id="flashPreview" style="width:240px;height:240px;border:1px solid #AAAAAA;background-color:#FFFFFF;" align="center" valign="middle">&nbsp;</td></tr></table></td></tr>' +  	
 			'<tr><td style="width:40px;padding:5px;">'+KE_LANG['REMOTE']+'</td>' +
@@ -717,19 +727,34 @@ function KindDrawIframe(cmd)
 			'<tr><td colspan="2" style="margin:5px;padding-bottom:5px;" align="center">' +
 			'<input type="button" name="button" value="'+KE_LANG['PREVIEW']+'" onclick="javascript:parent.KindFlashPreview();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
 			'<input type="submit" name="button" id="'+cmd+'submitButton" value="'+KE_LANG['CONFIRM']+'" onclick="javascript:parent.KindDrawFlashEnd();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /> ' +
-			'<input type="button" name="button" value="'+KE_LANG['CANCEL']+'" onclick="javascript:parent.KindDisableMenu();parent.KindReloadIframe();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /></td></tr>' + 
+			'<input type="button" name="button" value="'+KE_LANG['CANCEL']+'" onclick="javascript:parent.KindDisableMenu();" style="border:1px solid #555555;background-color:'+KE_BUTTON_COLOR+';" /></td></tr>' + 
 			'</table>';
 			KindDrawMenuIframe(KE_FLASH_DOCUMENT, str);
 			break;
 		case 'KE_MEDIA':
+			if (KE_BROWSER == 'IE') {
+				KE_MEDIA_DOCUMENT = document.frames("KindMediaIframe").document;
+			} else {
+				KE_MEDIA_DOCUMENT = document.getElementById('KindMediaIframe').contentDocument;
+			}
 			var str = KindDrawMedia(cmd);
 			KindDrawMenuIframe(KE_MEDIA_DOCUMENT, str);
 			break;
 		case 'KE_REAL':
+			if (KE_BROWSER == 'IE') {
+				KE_REAL_DOCUMENT = document.frames("KindRealIframe").document;
+			} else {
+				KE_REAL_DOCUMENT = document.getElementById('KindRealIframe').contentDocument;
+			}
 			var str = KindDrawMedia(cmd);
 			KindDrawMenuIframe(KE_REAL_DOCUMENT, str);
 			break;
 		case 'KE_LINK':
+			if (KE_BROWSER == 'IE') {
+				KE_LINK_DOCUMENT = document.frames("KindLinkIframe").document;
+			} else {
+				KE_LINK_DOCUMENT = document.getElementById('KindLinkIframe').contentDocument;
+			}
 			var str = '';
 			str += '<table cellpadding="0" cellspacing="0" style="width:100%;font-size:12px;">' + 
 				'<tr><td style="width:50px;padding:5px;">URL</td>' +
@@ -904,29 +929,28 @@ function KindDrawImageEnd()
 }
 function KindInsertImage(url, width, height, border, title, align, hspace, vspace)
 {
-	var element = document.createElement("img");
-	element.src = url;
+	var ks = new KindString();
+	ks.append('<img src="', url);
 	if (width > 0) {
-		element.style.width = width;
+		ks.append('" width="', width);
 	}
 	if (height > 0) {
-		element.style.height = height;
+		ks.append('" height="', height);
 	}
 	if (align != "") {
-		element.align = align;
+		ks.append('" align="', align);
 	}
 	if (hspace > 0) {
-		element.hspace = hspace;
+		ks.append('" hspace="', hspace);
 	}
 	if (vspace > 0) {
-		element.vspace = vspace;
+		ks.append('" vspace="', vspace);
 	}
-	element.border = border;
-	element.alt = KindHtmlentities(title);
+	ks.append('" border="', border);
+	ks.append('" alt="', KindHtmlentities(title), '" />');
 	KindSelect();
-	KindInsertItem(element);
+	KindInsertHtml(ks.toString());
 	KindDisableMenu();
-	KindReloadIframe();
 }
 function KindGetFlashHtmlTag(url)
 {
@@ -950,23 +974,29 @@ function KindDrawFlashEnd()
 	}
 	KindEditorForm.focus();
 	KindSelect();
-	var obj = document.createElement("EMBED");
-	obj.src = url;
-	obj.type = "application/x-shockwave-flash";
-	obj.quality = "high";
-	KindInsertItem(obj);
+	var ks = new KindString();
+	ks.append('<embed src="', url);
+	ks.append('" type="', "application/x-shockwave-flash");
+	ks.append('" quality="', "high", '" />');
+	KindInsertHtml(ks.toString());
 	KindDisableMenu();
 }
 function KindGetMediaHtmlTag(cmd, url)
 {
-	var str = '<embed src="'+url+'" type="';
+	var ks = new KindString();
+	ks.append('<embed src="', url);
+	ks.append('" type="');
 	if (cmd == "KE_REAL") {
-		str += 'audio/x-pn-realaudio-plugin';
+		ks.append("audio/x-pn-realaudio-plugin");
 	} else {
-		str += 'video/x-ms-asf-plugin';
+		ks.append("video/x-ms-asf-plugin");
 	}
-	str += '" width="230" height="230" loop="true" autostart="true">';
-	return str;
+	ks.append('" width="', '230');
+	ks.append('" height="', '230');
+	ks.append('" loop="', 'true');
+	ks.append('" autostart="', "true", '" />');
+	KindInsertHtml(ks.toString());
+	return ks.toString();
 }
 function KindMediaPreview(cmd)
 {
@@ -997,16 +1027,7 @@ function KindDrawMediaEnd(cmd)
 	}
 	KindEditorForm.focus();
 	KindSelect();
-	var obj = document.createElement("EMBED");
-	obj.src = url;
-	if (cmd == 'KE_REAL') {
-		obj.type = 'audio/x-pn-realaudio-plugin';
-	} else {
-		obj.type = 'video/x-ms-asf-plugin';
-	}
-	obj.loop = 'true';
-	obj.autostart = 'true';
-	KindInsertItem(obj);
+	KindInsertHtml(KindGetMediaHtmlTag(cmd));
 	KindDisableMenu(cmd);
 }
 function KindDrawLinkEnd()
@@ -1064,51 +1085,16 @@ function KindSelect()
 		KE_RANGE.select();
 	}
 }
-function KindInsertItem(insertNode)
+function KindInsertHtml(html)
 {
 	if (KE_BROWSER == 'IE') {
 		if (KE_SELECTION.type.toLowerCase() == 'control') {
-			KE_RANGE.item(0).outerHTML = insertNode.outerHTML;
+			KE_RANGE.item(0).outerHTML = html;
 		} else {
-			KE_RANGE.pasteHTML(insertNode.outerHTML);
+			KE_RANGE.pasteHTML(html);
 		}
 	} else {
-        KE_SELECTION.removeAllRanges();
-		KE_RANGE.deleteContents();
-        var startRangeNode = KE_RANGE.startContainer;
-        var startRangeOffset = KE_RANGE.startOffset;
-        var newRange = document.createRange();
-		if (startRangeNode.nodeType == 3 && insertNode.nodeType == 3) {
-            startRangeNode.insertData(startRangeOffset, insertNode.nodeValue);
-            newRange.setEnd(startRangeNode, startRangeOffset + insertNode.length);
-            newRange.setStart(startRangeNode, startRangeOffset + insertNode.length);
-        } else {
-            var afterNode;
-            if (startRangeNode.nodeType == 3) {
-                var textNode = startRangeNode;
-                startRangeNode = textNode.parentNode;
-                var text = textNode.nodeValue;
-                var textBefore = text.substr(0, startRangeOffset);
-                var textAfter = text.substr(startRangeOffset);
-                var beforeNode = document.createTextNode(textBefore);
-                var afterNode = document.createTextNode(textAfter);
-                startRangeNode.insertBefore(afterNode, textNode);
-                startRangeNode.insertBefore(insertNode, afterNode);
-                startRangeNode.insertBefore(beforeNode, insertNode);
-                startRangeNode.removeChild(textNode);
-            } else {
-				if (startRangeNode.tagName.toLowerCase() == 'html') {
-					startRangeNode = startRangeNode.childNodes[0].nextSibling;
-					afterNode = startRangeNode.childNodes[0];
-				} else {
-					afterNode = startRangeNode.childNodes[startRangeOffset];
-				}
-				startRangeNode.insertBefore(insertNode, afterNode);
-            }
-            newRange.setEnd(afterNode, 0);
-            newRange.setStart(afterNode, 0);
-        }
-        KE_SELECTION.addRange(newRange);
+		KE_EDITFORM_DOCUMENT.execCommand('inserthtml', false, html);
 	}
 }
 function KindExecuteValue(cmd, value)
@@ -1294,36 +1280,41 @@ function KindExecute(cmd, value)
 			break;
 		case 'KE_ICON_END':
 			KindEditorForm.focus();
-			var element = document.createElement("img");
-			element.src = value;
-			element.border = 0;
-			element.alt = "";
+			var ks = new KindString();
+			ks.append('<img src="', value);
+			ks.append('" border="', '0');
+			ks.append('" alt="', '" />');
 			KindSelect();
-			KindInsertItem(element);
+			KindInsertHtml(ks.toString());
 			KindDisableMenu();
 			break;
 		case 'KE_IMAGE':
 			KindDisplayMenu(cmd);
+			KindDrawIframe(cmd);
 			KindImageIframe.focus();
 			KE_IMAGE_DOCUMENT.getElementById(cmd+'submitButton').focus();
 			break;
 		case 'KE_FLASH':
 			KindDisplayMenu(cmd);
+			KindDrawIframe(cmd);
 			KindFlashIframe.focus();
 			KE_FLASH_DOCUMENT.getElementById(cmd+'submitButton').focus();
 			break;
 		case 'KE_MEDIA':
 			KindDisplayMenu(cmd);
+			KindDrawIframe(cmd);
 			KindMediaIframe.focus();
 			KE_MEDIA_DOCUMENT.getElementById(cmd+'submitButton').focus();
 			break;
 		case 'KE_REAL':
 			KindDisplayMenu(cmd);
+			KindDrawIframe(cmd);
 			KindRealIframe.focus();
 			KE_REAL_DOCUMENT.getElementById(cmd+'submitButton').focus();
 			break;
 		case 'KE_LINK':
 			KindDisplayMenu(cmd);
+			KindDrawIframe(cmd);
 			KindLinkIframe.focus();
 			KE_LINK_DOCUMENT.getElementById(cmd+'submitButton').focus();
 			break;
@@ -1336,9 +1327,7 @@ function KindExecute(cmd, value)
 		case 'KE_SPECIALCHAR_END':
 			KindEditorForm.focus();
 			KindSelect();
-			var element = document.createElement("span");
-			element.appendChild(document.createTextNode(value));
-			KindInsertItem(element);
+			KindInsertHtml(value);
 			KindDisableMenu();
 			break;
 		case 'KE_LAYER':
@@ -1346,15 +1335,11 @@ function KindExecute(cmd, value)
 			break;
 		case 'KE_LAYER_END':
 			KindEditorForm.focus();
-			var element = document.createElement("div");
-			element.style.padding = "5px";
-			element.style.border = "1px solid #AAAAAA";
-			element.style.backgroundColor = value;
-			var childElement = document.createElement("div");
-			childElement.innerHTML = KE_LANG['INPUT_CONTENT'];
-			element.appendChild(childElement);
+			var ks = new KindString();
+			ks.append('<div style="padding:5px;border:1px solid #AAAAAA;background-color:');
+			ks.append(value, '">', KE_LANG['INPUT_CONTENT'], '</div>');
 			KindSelect();
-			KindInsertItem(element);
+			KindInsertHtml(ks.toString());
 			KindDisableMenu();
 			break;
 		case 'KE_TABLE':
@@ -1363,21 +1348,19 @@ function KindExecute(cmd, value)
 		case 'KE_TABLE_END':
 			KindEditorForm.focus();
 			var location = value.split(',');
-			var element = document.createElement("table");
-			element.cellPadding = 0;
-			element.cellSpacing = 0;
-			element.border = 1;
-			element.style.width = "100px";
-			element.style.height = "100px";
+			var ks = new KindString();
+			ks.append('<table style="width:100px;height:100px;" ');
+			ks.append('cellpadding="0" cellspacing="0" border="1">');
 			for (var i = 0; i < location[0]; i++) {
-				var rowElement = element.insertRow(i);
+				ks.append('<tr>');
 				for (var j = 0; j < location[1]; j++) {
-					var cellElement = rowElement.insertCell(j);
-					cellElement.innerHTML = "&nbsp;";
+					ks.append('<td>&nbsp;</td>');
 				}
+				ks.append('</tr>');
 			}
+			ks.append('</table>');
 			KindSelect();
-			KindInsertItem(element);
+			KindInsertHtml(ks.toString());
 			KindDisableMenu();
 			break;
 		case 'KE_HR':
@@ -1385,12 +1368,10 @@ function KindExecute(cmd, value)
 			break;
 		case 'KE_HR_END':
 			KindEditorForm.focus();
-			var element = document.createElement("hr");
-			element.width = "100%";
-			element.color = value;
-			element.size = 1;
+			var ks = new KindString();
+			ks.append('<hr width="100%" color="', value, '" size="1" />');
 			KindSelect();
-			KindInsertItem(element);
+			KindInsertHtml(ks.toString());
 			KindDisableMenu();
 			break;
 		case 'KE_DATE':
@@ -1403,9 +1384,7 @@ function KindExecute(cmd, value)
 			var day = date.getDate().toString(10);
 			day = day.length < 2 ? '0' + day : day;
 			var value = year + '-' + month + '-' + day;
-			var element = document.createElement("span");
-			element.appendChild(document.createTextNode(value));
-			KindInsertItem(element);
+			KindInsertHtml(value);
 			KindDisableMenu();
 			break;
 		case 'KE_TIME':
@@ -1419,9 +1398,7 @@ function KindExecute(cmd, value)
 			var second = date.getSeconds().toString(10);
 			second = second.length < 2 ? '0' + second : second;
 			var value = hour + ':' + minute + ':' + second;
-			var element = document.createElement("span");
-			element.appendChild(document.createTextNode(value));
-			KindInsertItem(element);
+			KindInsertHtml(value);
 			KindDisableMenu();
 			break;
 		case 'KE_PREVIEW':
@@ -1573,44 +1550,38 @@ function KindEditor(objName)
 			document.close();
 			return;
 		}
-		var htmlData = '<div style="font-family:'+KE_FONT_FAMILY+';">';
-		htmlData += '<div style="'+widthStyle+';border:1px solid ' + KE_TOOLBAR_BORDER_COLOR + ';background-color:'+ KE_TOOLBAR_BG_COLOR +'">';
-		htmlData += KindCreateToolbar();
-		htmlData += '</div><div id="KindEditorIframe" style="' + widthStyle + heightStyle + 
-			'border:1px solid '+ KE_FORM_BORDER_COLOR +';border-top:0;">' +
-			'<iframe name="KindEditorForm" id="KindEditorForm" frameborder="0" style="' + iframeWidthStyle + iframeHeightStyle + 
-			'padding:0;margin:0;border:0;"></iframe></div>';
+		var ks = new KindString();
+		ks.append('<div style="font-family:', KE_FONT_FAMILY, ';">');
+		ks.append('<div style="', widthStyle, ';border:1px solid ');
+		ks.append(KE_TOOLBAR_BORDER_COLOR, ';background-color:');
+		ks.append(KE_TOOLBAR_BG_COLOR, '">');
+		ks.append(KindCreateToolbar());
+		ks.append('</div><div id="KindEditorIframe" style="', widthStyle, heightStyle); 
+		ks.append('border:1px solid ', KE_FORM_BORDER_COLOR, ';border-top:0;">');
+		ks.append('<iframe name="KindEditorForm" id="KindEditorForm" frameborder="0" style="');
+		ks.append(iframeWidthStyle, iframeHeightStyle);
+		ks.append('padding:0;margin:0;border:0;"></iframe></div>');
 		if (KE_EDITOR_TYPE == 'full') {
-			htmlData += '<div id="KindEditTextarea" style="' + widthStyle + heightStyle + 
-				'border:1px solid '+ KE_FORM_BORDER_COLOR +';background-color:'+ 
-				KE_FORM_BG_COLOR +';border-top:0;display:none;">' +
-				'<textarea name="KindCodeForm" id="KindCodeForm" style="' + iframeWidthStyle + iframeHeightStyle + 
-				'padding:0;margin:0;border:0;font-size:12px;line-height:16px;font-family:'+KE_FONT_FAMILY+';background-color:'+ 
-				KE_FORM_BG_COLOR +';" onclick="javascirit:parent.KindDisableMenu();"></textarea></div>';
+			ks.append('<div id="KindEditTextarea" style="', widthStyle, heightStyle); 
+			ks.append('border:1px solid ', KE_FORM_BORDER_COLOR, ';background-color:');
+			ks.append(KE_FORM_BG_COLOR, ';border-top:0;display:none;">');
+			ks.append('<textarea name="KindCodeForm" id="KindCodeForm" style="');
+			ks.append(iframeWidthStyle, iframeHeightStyle); 
+			ks.append('padding:0;margin:0;border:0;font-size:12px;line-height:16px;font-family:');
+			ks.append(KE_FONT_FAMILY, ';background-color:', KE_FORM_BG_COLOR);
+			ks.append(';" onclick="javascirit:parent.KindDisableMenu();"></textarea></div>');
 		}
-		htmlData += '</div>';
-		for (var i = 0; i < KE_POPUP_MENU_TABLE.length; i++) {
-			if (KE_POPUP_MENU_TABLE[i] == 'KE_IMAGE') {
-				htmlData += '<span id="InsertIframe">';
-			}
-			htmlData += KindPopupMenu(KE_POPUP_MENU_TABLE[i]);
-			if (KE_POPUP_MENU_TABLE[i] == 'KE_REAL') {
-				htmlData += '</span>';
-			}
-		}
+		ks.append('<div id="menuDiv">');
+		ks.append('</div>');
+		ks.append('</div>');
 		document.open();
-		document.write(htmlData);
+		document.write(ks.toString());
 		document.close();
 		if (KE_BROWSER == 'IE') {
 			KE_EDITFORM_DOCUMENT = document.frames("KindEditorForm").document;
 		} else {
 			KE_EDITFORM_DOCUMENT = document.getElementById('KindEditorForm').contentDocument;
 		}
-		KindDrawIframe('KE_IMAGE');
-		KindDrawIframe('KE_FLASH');
-		KindDrawIframe('KE_MEDIA');
-		KindDrawIframe('KE_REAL');
-		KindDrawIframe('KE_LINK');
 		KE_EDITFORM_DOCUMENT.designMode = 'On';
 		KindWriteFullHtml(KE_EDITFORM_DOCUMENT, document.getElementsByName(eval(KE_OBJ_NAME).hiddenName)[0].value);
 		var el = KE_EDITFORM_DOCUMENT.body;
