@@ -41,88 +41,83 @@ function KindSubmit() {
 
 二 属性介绍
 -----------------------------------------------------------------------
-1. siteDomain
-网站域名，这个域名下的图片改成相对路径。
-默认值：无
-例：wwww.kindsoft.net
-
-2. editorType
+1. editorType
 simple或full，简单模式或完全模式
 默认值：full
 
-3. safeMode
+2. safeMode
 true或false，安全模式。true时过滤Script脚本。
 默认值：false
 
-4. uploadMode
+3. uploadMode
 true或false，上传模式。true时使用上传功能。
 默认值：true
 
-5. hiddenName
+4. hiddenName
 提交时编辑内容的POST参数名
 默认值：无
 
-6. editorWidth
+5. editorWidth
 编辑器宽度
 默认值：700px
 
-7. editorHeight
+6. editorHeight
 编辑器高度
 默认值：400px
 
-8. skinPath
+7. skinPath
 编辑器图片路径
 默认值：./skins/default/
 
-9. iconPath
+8. iconPath
 编辑器笑脸图片路径
 默认值：./icons/
 
-10. imageAttachPath
+9. imageAttachPath
 保存上传图片的路径
 默认值：./attached/
 
-11. imageUploadCgi
+10. imageUploadCgi
 上传图片的CGI文件路径
 默认值：./upload_cgi/upload.php
 
-12. menuBorderColor
+11. menuBorderColor
 下拉菜单边框颜色
 默认值：#AAAAAA
 
-13. menuBgColor
+12. menuBgColor
 下拉菜单背景颜色
 默认值：#EFEFEF
 
-14. menuTextColor
+13. menuTextColor
 下拉菜单文本颜色
 默认值：#222222
 
-15. menuSelectedColor
+14. menuSelectedColor
 下拉菜单选中颜色
 默认值：#DDDDDD
 
-16. toolbarBorderColor
+15. toolbarBorderColor
 工具栏背景颜色
 默认值：#DDDDDD
 
-17. toolbarBgColor
+16. toolbarBgColor
 工具栏背景颜色
 默认值：#EFEFEF
 
-18. formBorderColor
+17. formBorderColor
 编辑框边框颜色
 默认值：#DDDDDD
 
-19. formBgColor
+18. formBgColor
 编辑框背景颜色
 默认值：#FFFFFF
 
-20. buttonColor
+19. buttonColor
 按钮背景颜色
 默认值：#AAAAAA
 
-21. cssPath
+20. cssPath
 指定CSS文件路径
 默认值：./common.css
 -----------------------------------------------------------------------
@@ -133,7 +128,6 @@ true或false，上传模式。true时使用上传功能。
 <script type="text/javascript" src="./KindEditor.js"></script>
 <script type="text/javascript">
 var editor = new KindEditor("editor");
-editor.siteDomain = "www.kindsoft.net";
 editor.safeMode = true; // true 或 false
 editor.uploadMode = true; // true 或 false
 editor.hiddenName = "content"; //上面hidden的名字

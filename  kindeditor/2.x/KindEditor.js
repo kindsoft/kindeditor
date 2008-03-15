@@ -4,9 +4,9 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 2.5.5
+* @version 2.5.6
 */
-var KE_VERSION = "2.5.5";
+var KE_VERSION = "2.5.6";
 var KE_EDITOR_TYPE = "full"; //full or simple
 var KE_SAFE_MODE = false; // true or false
 var KE_UPLOAD_MODE = true; // true or false
@@ -995,7 +995,6 @@ function KindGetMediaHtmlTag(cmd, url)
 	ks.append('" height="', '230');
 	ks.append('" loop="', 'true');
 	ks.append('" autostart="', "true", '" />');
-	KindInsertHtml(ks.toString());
 	return ks.toString();
 }
 function KindMediaPreview(cmd)
@@ -1027,7 +1026,7 @@ function KindDrawMediaEnd(cmd)
 	}
 	KindEditorForm.focus();
 	KindSelect();
-	KindInsertHtml(KindGetMediaHtmlTag(cmd));
+	KindInsertHtml(KindGetMediaHtmlTag(cmd, url));
 	KindDisableMenu(cmd);
 }
 function KindDrawLinkEnd()
@@ -1478,7 +1477,6 @@ function KindEditor(objName)
 {
 	this.objName = objName;
 	this.hiddenName = objName;
-	this.siteDomain;
 	this.editorType;
 	this.safeMode;
 	this.uploadMode;
@@ -1500,7 +1498,6 @@ function KindEditor(objName)
 	this.buttonColor;
 	this.init = function()
 	{
-		if (this.siteDomain) KE_SITE_DOMAIN = this.siteDomain;
 		if (this.editorType) KE_EDITOR_TYPE = this.editorType.toLowerCase();
 		if (this.safeMode) KE_SAFE_MODE = this.safeMode;
 		if (this.uploadMode) KE_UPLOAD_MODE = this.uploadMode;
