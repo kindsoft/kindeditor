@@ -40,12 +40,19 @@ editor.show();
 function KindSubmit() {
 	editor.data();
 }
+function KindClear() {
+	KE_EDITFORM_DOCUMENT.body.innerHTML = "";
+	document.getElementById("KindCodeForm").value = "";
+}
+
+KE_EDITFORM_DOCUMENT.body.innerHTML = "";
 </script>
 </td>
 </tr>
 </table>
 <div align="center">
 <input type="submit" value="Submit">
+<input type="button" value="Clear" onclick="javascript:KindClear();">
 </form>
 </div>
 </body>
