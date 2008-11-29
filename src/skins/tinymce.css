@@ -1,0 +1,401 @@
+.ke-text {
+    font-size: 12px;
+    font-family: "sans serif",tahoma,verdana,helvetica;
+}
+.ke-icon-source {
+    background-position: -260px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-preview {
+    background-position: -420px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-print {
+    background-position: -440px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-undo {
+    background-position: -160px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-redo {
+    background-position: -100px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-cut {
+    background-position: -680px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-copy {
+    background-position: -700px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-paste {
+    background-position: -560px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-selectall {
+    background-position: -400px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-justifyleft {
+    background-position: -460px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-justifycenter {
+    background-position: -420px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-justifyright {
+    background-position: -480px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-justifyfull {
+    background-position: -440px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-insertorderedlist {
+    background-position: -80px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-insertunorderedlist {
+    background-position: -20px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-indent {
+    background-position: -400px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-outdent {
+    background-position: -540px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-subscript {
+    background-position: -600px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-superscript {
+    background-position: -620px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-date {
+    background-position: -140px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-time {
+    background-position: -1600px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-title {
+    background-position: -20px -40px;
+    width: 86px;
+    height: 20px;
+}
+.ke-icon-fontname {
+    background-position: -120px -40px;
+    width: 86px;
+    height: 20px;
+}
+.ke-icon-fontsize {
+    background-position: -220px -40px;
+    width: 86px;
+    height: 20px;
+}
+.ke-icon-textcolor {
+    background-position: -720px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-bgcolor {
+    background-position: -760px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-bold {
+    background-position: 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-italic {
+    background-position: -60px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-underline {
+    background-position: -140px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-strikethrough {
+    background-position: -120px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-removeformat {
+    background-position: -580px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-image {
+    background-position: -380px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-flash {
+    background-position: -880px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-media {
+    background-position: -320px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-layer {
+    background-position: -240px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-table {
+    background-position: -580px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-specialchar {
+    background-position: -240px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-hr {
+    background-position: -360px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-emoticons {
+    background-position: -60px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-link {
+    background-position: -500px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-unlink {
+    background-position: -640px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-fullscreen {
+    background-position: -100px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-about {
+    background-position: -340px 0px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-plainpaste {
+    background-position: -360px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-icon-wordpaste {
+    background-position: -380px -20px;
+    width: 20px;
+    height: 20px;
+}
+.ke-container {
+    border: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
+    table-layout: fixed;
+    overflow: hidden;
+}
+.ke-toolbar {
+    border-bottom: 1px solid #CCCCCC;
+    background-color: #F0F0EE;
+    width: 100%;
+    padding: 2px;
+}
+.ke-toolbar-table {
+    float: left;
+    clear: both;
+}
+.ke-toolbar-close {
+    background-position: -902px -2px;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    margin-top: 2px;
+    margin-right: 3px;
+    right: 0px;
+    top: 0px;
+    cursor: pointer;
+}
+.ke-form {
+    width: 100%;
+    background-color: #FFFFFF;
+}
+.ke-bottom {
+    width: 100%;
+    height: 5px;
+}
+.ke-bottom-left {
+    width: 100%;
+    cursor: s-resize;
+}
+.ke-bottom-right {
+    cursor: se-resize;
+}
+.ke-bottom-right-img {
+    width: 20px;
+    height: 5px;
+}
+.ke-textarea {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-size: 12px;
+    font-family: "sans serif",tahoma,verdana,helvetica;
+    line-height: 16px;
+    overflow: auto;
+}
+.ke-iframe {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+}
+.ke-icon {
+    border: 1px solid #F0F0EE;
+    padding: 0px;
+    margin: 1px;
+    cursor: pointer;
+}
+.ke-icon-selected {
+    border: 1px solid #1F3D74;
+    background-color: #B2BBD0;
+    padding: 0px;
+    margin: 1px;
+    cursor: pointer;
+}
+.ke-icon-disabled {
+    border: 1px solid #F0F0EE;
+    padding: 0;
+    margin: 1px;
+}
+.ke-menu {
+    border-top: 2px solid #DDDDDD;
+    border-left: 2px solid #DDDDDD;
+    border-right: 2px solid #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    background-color: #F0F0EE;
+    color: #222222;
+    font-size: 12px;
+    text-align: left;
+}
+.ke-menu-noselected {
+    background-color: #F0F0EE;
+    color: #222222;
+    font-size: 12px;
+    padding: 2px;
+    cursor: pointer;
+}
+.ke-menu-selected {
+    background-color: #1F3D74;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 2px;
+    cursor: pointer;
+}
+.ke-dialog {
+    position: absolute;
+    border-top: 2px solid #DDDDDD;
+    border-left: 2px solid #DDDDDD;
+    border-right: 2px solid #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    background-color: #F0F0EE;
+    color: #222222;
+    text-align: left;
+}
+.ke-dialog-title {
+    background-color: #E0E0E0;
+    padding: 3px;
+    color: #000000;
+    text-align: left;
+    font-size: 12px;
+    cursor: move;
+}
+.ke-dialog-body {
+    margin: 10px;
+}
+.ke-dialog-iframe {
+    border: 1px solid #AAAAAA;
+}
+.ke-dialog-bottom {
+    font-size: 12px;
+}
+.ke-dialog-preview {
+    margin: 5px;
+    float: right;
+}
+.ke-dialog-yes {
+    margin: 5px;
+    float: right;
+}
+.ke-dialog-no {
+    margin: 5px 10px 5px 5px;
+    float: right;
+}
+.ke-mask {
+    position: absolute;
+    z-index: 19811212;
+    top: 0;
+    left: 0;
+    display: none;
+    background-color: #FFFFFF;
+}
+.ke-button {
+    background-color: #DDDDDD;
+    border-top: 2px solid #DDDDDD;
+    border-left: 2px solid #DDDDDD;
+    border-right: 2px solid #AAAAAA;
+    border-bottom: 2px solid #AAAAAA;
+    cursor: pointer;
+    font-size: 12px;
+}
+.ke-text-input {
+    background-color:#FFFFFF;
+    font-size: 12px;
+}
+.ke-picker-cell {
+    width: 12px;
+    height: 12px;
+    font-size: 1px;
+    border: 1px solid #F0F0EE;
+    cursor: pointer;
+}

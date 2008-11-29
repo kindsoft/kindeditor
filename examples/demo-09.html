@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>KindEditor 3.0</title>
+  <style type="text/css" rel="stylesheet">
+    .source {
+    width: 700px;
+    font-size: 12px;
+    font-family:Courier New;
+    border: 1px solid #AAAAAA;
+    background-color: #F0F0EE;
+    padding: 5px;
+    }
+    .source pre {
+    margin: 0;
+    }
+    form {
+    margin: 0;
+    }
+    .editor {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    }
+  </style>
+  <script type="text/javascript" charset="utf-8" src="./../src/lang/zh_CN.js"></script>
+  <script type="text/javascript" charset="utf-8" src="./../src/kindeditor-core.js"></script>
+  <script type="text/javascript" charset="utf-8" src="./../src/plugin-all.js"></script>
+  <script type="text/javascript">
+    KE.show({
+        id : 'content1',
+        skinType: 'tinymce',
+        cssPath : './index.css',
+        items : [
+            'source', 'preview', 'fullscreen', 'print', 'undo', 'redo', 'cut', 'copy', 'paste',
+            'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
+            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+            'superscript', 'date', 'time', 'specialchar', 'emoticons', 'link', 'unlink', '-',
+            'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold',
+            'italic', 'underline', 'strikethrough', 'removeformat', 'selectall', 'image',
+            'flash', 'media', 'layer', 'table', 'hr', 'about'
+        ]
+    });
+  </script>
+</head>
+<body>
+  <h3>TinyMCE风格</h3>
+  <div class="source"><pre>
+KE.show({
+    id : 'content1',
+    skinType: 'tinymce',
+    cssPath : './index.css',
+    items : [
+        'source', 'preview', 'fullscreen', 'print', 'undo', 'redo', 'cut', 'copy', 'paste',
+        'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
+        'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+        'superscript', 'date', 'time', 'specialchar', 'emoticons', 'link', 'unlink', '-',
+        'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold',
+        'italic', 'underline', 'strikethrough', 'removeformat', 'selectall', 'image',
+        'flash', 'media', 'layer', 'table', 'hr', 'about'
+    ]
+});</pre></div>
+  <div class="editor">
+    <textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
+  </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>PlainPaste</title>
+  <style type="text/css" rel="stylesheet">
+    body {
+    margin: 0px;
+    font-size:12px;
+    background-color:#F0F0EE;
+    }
+    #textArea {
+    width:320px;
+    height:250px;
+    border:1px solid #000000;
+    overflow: auto;
+    }
+  </style>
+</head>
+<body>
+<div style="margin-bottom:10px;">请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。</div>
+<textarea id="textArea" style="width:320px;height:250px;border:1px solid #000000;"></textarea>
+</body>
+</html>
