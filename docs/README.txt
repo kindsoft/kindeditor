@@ -8,9 +8,7 @@
 
 1. 把所有文件上传到程序所在目录下，例如：http://你的域名/kindeditor/。
 
-2. 在此目录下创建attached文件夹，并把权限改成777。
-
-3. 要添加编辑器的页面头部添加以下代码。
+2. 要添加编辑器的页面头部添加以下代码。
    注意：如果不想用压缩后的JS文件，可以直接包含src/lang/zh_CN.js、src/kindeditor-core.js、src/plugin-all.js文件。
 -----------------------------------------------------------------------
 <script type="text/javascript" charset="utf-8" src="/kindeditor/build/kindeditor.js"></script>
