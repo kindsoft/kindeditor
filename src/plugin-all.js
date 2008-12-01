@@ -673,8 +673,6 @@ KE.plugin['media'] = {
         return true;
     },
     preview : function(id) {
-        var divWidth = 280;
-        var divHeight = 180;
         var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
@@ -688,7 +686,7 @@ KE.plugin['media'] = {
         }
         embed.loop = "true";
         embed.autostart = "true";
-        embed.width = 240;
+        embed.width = 260;
         embed.height = 190;
         KE.$('previewDiv', dialogDoc).innerHTML = "";
         KE.$('previewDiv', dialogDoc).appendChild(embed);

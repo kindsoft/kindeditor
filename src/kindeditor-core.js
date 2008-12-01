@@ -146,12 +146,12 @@ KE.util = {
                 return false;
             };
             var upListener = function(event) {
-                KE.event.remove(document, 'mousemove', moveListener);
-                KE.event.remove(document, 'mouseup', upListener);
                 if (obj.wyswygMode == true) {
                     obj.iframe.style.display = 'block';
                 }
                 dragFlag = false;
+                KE.event.remove(document, 'mousemove', moveListener);
+                KE.event.remove(document, 'mouseup', upListener);
             };
             KE.event.add(document, 'mousemove', moveListener);
             KE.event.add(document, 'mouseup', upListener);
