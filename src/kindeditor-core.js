@@ -147,7 +147,7 @@ KE.util = {
             };
             var upListener = function(event) {
                 if (obj.wyswygMode == true) {
-                    obj.iframe.style.display = 'block';
+                    obj.iframe.style.display = '';
                 }
                 dragFlag = false;
                 KE.event.remove(document, 'mousemove', moveListener);
@@ -192,7 +192,7 @@ KE.util = {
         if (parent.KE.browser == 'IE') {
             html += (body) ? body : '';
         } else {
-            html += (body) ? body : '<br />';
+            html += (body) ? body : '<p><br /></p>';
         }
         html += '</body>';
         html += '</html>';
