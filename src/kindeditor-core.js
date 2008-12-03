@@ -189,7 +189,7 @@ KE.util = {
         }
         html += '</head>';
         html += '<body>';
-        if (parent.KE.browser == 'IE') {
+        if (KE.browser == 'IE') {
             html += (body) ? body : '';
         } else {
             html += (body) ? body : '<p><br /></p>';
