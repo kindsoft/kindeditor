@@ -122,7 +122,7 @@ KE.util = {
     drag : function(id, mousedownObj, moveObj, func) {
         var obj = KE.g[id];
         mousedownObj.onmousedown = function(event) {
-            if (obj.wyswygMode == true) {
+            if (obj.wyswygMode) {
                 obj.iframe.style.display = 'none';
             }
             if (KE.browser != 'IE') event.preventDefault();
@@ -146,7 +146,7 @@ KE.util = {
                 return false;
             };
             var upListener = function(event) {
-                if (obj.wyswygMode == true) {
+                if (obj.wyswygMode) {
                     obj.iframe.style.display = '';
                 }
                 dragFlag = false;
@@ -220,7 +220,7 @@ KE.util = {
     },
     getData : function(id) {
         var data;
-        if (KE.g[id].wyswygMode == true) {
+        if (KE.g[id].wyswygMode) {
             data = KE.g[id].iframeDoc.body.innerHTML;
         } else {
             data = KE.g[id].newTextarea.value;
@@ -242,7 +242,7 @@ KE.util = {
         KE.g[id].srcTextarea.value = data;
     },
     focus : function(id) {
-        if (KE.g[id].wyswygMode == true) {
+        if (KE.g[id].wyswygMode) {
             KE.g[id].iframeWin.focus();
         } else {
             KE.g[id].newTextarea.focus();
@@ -634,7 +634,7 @@ KE.create = function(id)
     iframeDoc.open();
     iframeDoc.write(html);
     iframeDoc.close();
-    if (KE.g[id].wyswygMode == false) {
+    if (!KE.g[id].wyswygMode) {
         newTextarea.value = srcTextarea.value;
         newTextarea.style.display = 'block';
         iframe.style.display = 'none';
@@ -672,7 +672,6 @@ KE.create = function(id)
             KE.util.resize(id, objWidth, objHeight + top);
         });
     if (KE.g[id].hideBottomMode) KE.util.hideBottom(id);
-    KE.util.pToBr(id);
     KE.util.focus(id);
 };
 KE.version = '3.0 alpha';
@@ -682,9 +681,9 @@ KE.browser = KE.util.getBrowser();
 KE.plugin = {};
 KE.g = {};
 KE.init = function(config) {
-    config.wyswygMode = (config.wyswygMode == false) ? false : true;
-    config.autoOnsubmitMode = (config.autoOnsubmitMode == false) ? false : true;
-    config.hideBottomMode = (config.hideBottomMode == true) ? true : false;
+    config.wyswygMode = (config.wyswygMode == null) ? true : config.wyswygMode;
+    config.autoOnsubmitMode = (config.autoOnsubmitMode == null) ? true : config.autoOnsubmitMode;
+    config.hideBottomMode = (config.hideBottomMode == null) ? false : config.autoOnsubmitMode;
     config.skinType = config.skinType || 'default';
     config.cssPath = config.cssPath || '';
     config.skinsPath = KE.scriptPath + 'skins/';

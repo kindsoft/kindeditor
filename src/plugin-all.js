@@ -71,7 +71,7 @@ KE.plugin['wordpaste'] = {
                 var node = nodes[i];
                 switch (node.nodeType) {
                 case 1:
-                    if (KE.util.inArray(node.tagName, this.allowTagTable) == false) {
+                    if (!KE.util.inArray(node.tagName, this.allowTagTable)) {
                         node.parentNode.removeChild(node);
                     } else {
                         if (KE.browser == 'IE') {
@@ -148,11 +148,11 @@ KE.plugin['fullscreen'] = {
     click : function(id) {
         var obj = KE.g[id];
         var resizeListener = function(event) {
-            if (obj.fullscreenMode == true) {
+            if (obj.fullscreenMode) {
                 KE.plugin["fullscreen"].resetFull(id);
             }
         }
-        if (obj.fullscreenMode == true) {
+        if (obj.fullscreenMode) {
             obj.fullscreenMode = false;
             KE.util.showBottom(id);
             document.body.parentNode.style.overflow = 'auto';
@@ -315,7 +315,7 @@ KE.plugin['print'] = {
 KE.plugin['source'] = {
     click : function(id) {
         var obj = KE.g[id];
-        if (obj.wyswygMode == true) {
+        if (obj.wyswygMode) {
             KE.layout.hide(id);
             obj.newTextarea.value = obj.iframeDoc.body.innerHTML;
             obj.iframe.style.display = 'none';
@@ -462,7 +462,7 @@ KE.plugin['flash'] = {
         var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
-        if (this.check(id, url) == false) return false;
+        if (!this.check(id, url)) return false;
         var embed = KE.$$('embed', dialogDoc);
         embed.src = url;
         embed.type = "application/x-shockwave-flash";
@@ -477,7 +477,7 @@ KE.plugin['flash'] = {
         var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
-        if (this.check(id, url) == false) return false;
+        if (!this.check(id, url)) return false;
         var html = '<embed src="' + url + '" type="application/x-shockwave-flash" quality="high"></embed>';
         KE.util.insertHtml(id, html);
         KE.layout.hide(id);
@@ -542,7 +542,7 @@ KE.plugin['image'] = {
         var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var type = KE.$('type', dialogDoc).value;
-        if (this.check(id) == false) return false;
+        if (!this.check(id)) return false;
         if (type == 1) {
             KE.$('editorId', dialogDoc).value = id;
             dialogDoc.uploadForm.submit();
@@ -676,7 +676,7 @@ KE.plugin['media'] = {
         var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
-        if (this.check(id, url) == false) return false;
+        if (!this.check(id, url)) return false;
         var embed = KE.$$('embed', dialogDoc);
         embed.src = url;
         if (url.match(/\.(rm|rmvb)$/i) == null) {
@@ -696,7 +696,7 @@ KE.plugin['media'] = {
         var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
-        if (this.check(id, url) == false) return false;
+        if (!this.check(id, url)) return false;
         var html;
         if (url.match(/\.(rm|rmvb)$/i) == null) {
             html = '<embed src="' + url + '" type="video/x-ms-asf-plugin" loop="true" autostart="true"></embed>';
