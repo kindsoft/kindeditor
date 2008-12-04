@@ -46,7 +46,7 @@ KE.util = {
     getScriptPath : function() {
         var elements = document.getElementsByTagName('script');
         for (var i = 0; i < elements.length; i++) {
-            if (elements[i].src && elements[i].src.indexOf('kindeditor') != -1) {
+            if (elements[i].src && elements[i].src.match(/kindeditor[\w\-\.]*\.js/) != null) {
                 return elements[i].src.substring(0, elements[i].src.lastIndexOf('/') + 1);
             }
         }

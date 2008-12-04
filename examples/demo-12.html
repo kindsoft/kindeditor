@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>KindEditor 3.0</title>
+    <script type="text/javascript" charset="utf-8" src="./../src/lang/zh_CN.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./../src/kindeditor-core.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./../src/plugin-all.js"></script>
+    <script type="text/javascript">
+      KE.show({
+      id : 'content1',
+      cssPath : './index.css'
+      });
+    </script>
+  </head>
+    <h3>编辑器在没有指定DOCTYPE的页面内)默认模式</h3>
+    <form name="example" method="post" action="./../php/demo.php">
+      <div class="editor">
+        <textarea id="content1" name="content" style="width:700px;height:300px;visibility:hidden;"></textarea>
+      </div>
+      <input type="button" name="button" value="取得内容" onclick="javascript:alert(KE.util.getData('content1'));" />
+      <input type="button" name="button" value="取得纯文本" onclick="javascript:alert(KE.util.getPureData('content1'));" />
+      <input type="submit" name="button" value="提交内容" />
+    </form>
+  </body>
+</html>
