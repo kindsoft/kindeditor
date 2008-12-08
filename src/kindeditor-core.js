@@ -206,14 +206,22 @@ KE.util = {
         obj.formDiv.style.height = height + 'px';
         var diff = obj.toolbarDiv.offsetHeight + obj.bottom.offsetHeight;
         var formBorder = obj.formDiv.offsetHeight - obj.formDiv.clientHeight;
-        height = height - diff - formBorder;
-        obj.formDiv.style.height = height + 'px';
-        obj.iframe.style.height = height + 'px';
+        height -= diff + formBorder;
         if (KE.browser == 'IE') {
             var border = obj.container.offsetWidth - obj.container.clientWidth;
+            if (document.compatMode != "CSS1Compat") {
+                height -= border;
+                width -= border;
+                obj.formDiv.style.height = (height + formBorder) + 'px';
+            } else {
+                obj.formDiv.style.height = height + 'px';
+            }
+            obj.iframe.style.height = height + 'px';
             obj.newTextarea.style.width = (width - border) + 'px';
             obj.newTextarea.style.height = (height - formBorder) + 'px';
         } else {
+            obj.formDiv.style.height = height + 'px';
+            obj.iframe.style.height = height + 'px';
             obj.newTextarea.style.width = '100%';
             obj.newTextarea.style.height = height + 'px';
         }
@@ -254,19 +262,22 @@ KE.util = {
         KE.plugin[cmd].click(id);
     },
     selection : function(id) {
-        var selection, range, rangeText;
-        if (KE.g[id].iframeDoc.selection) {
-            selection = KE.g[id].iframeDoc.selection;
-            range = selection.createRange();
-            rangeText = range.text;
-        } else {
-            selection = KE.g[id].iframeWin.getSelection();
-            range = selection.getRangeAt(0);
-            rangeText = range.toString();
+        var win = KE.g[id].iframeWin;
+        var doc = KE.g[id].iframeDoc;
+        var sel = win.getSelection ? win.getSelection() : doc.selection;
+        var range;
+        try {
+            if (sel.rangeCount > 0) {
+                range = sel.getRangeAt(0);
+            } else {
+                range = sel.createRange ? sel.createRange() : doc.createRange();
+            }
+        } catch(e) {}
+        if (!range) {
+            range = (KE.browser = 'IE') ? doc.body.createTextRange() : doc.createRange();
         }
-        KE.g[id].selection = selection;
+        KE.g[id].selection = sel;
         KE.g[id].range = range;
-        KE.g[id].rangeText = rangeText;
     },
     select : function(id) {
         if (KE.browser == 'IE') KE.g[id].range.select();

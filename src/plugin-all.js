@@ -625,24 +625,22 @@ KE.plugin['link'] = {
             KE.g[id].yesButton.focus();
             return false;
         }
-        if (KE.g[id].rangeText != '') {
-            var element;
-            if (KE.browser == 'IE') {
-                if (KE.g[id].selection.type.toLowerCase() == 'control') {
-                    var el = KE.$$("a", iframeDoc);
-                    el.href = url;
-                    if (target) el.target = target;
-                    KE.g[id].range.item(0).applyElement(el);
-                } else if (KE.g[id].selection.type.toLowerCase() == 'text') {
-                    iframeDoc.execCommand("createlink", false, url);
-                    var el = KE.g[id].range.parentElement();
-                    if (target) el.target = target;
-                }
-            } else {
-                iframeDoc.execCommand("createlink", false, url);
-                var el = KE.g[id].range.startContainer.previousSibling;
+        var element;
+        if (KE.browser == 'IE') {
+            if (KE.g[id].selection.type.toLowerCase() == 'control') {
+                var el = KE.$$("a", iframeDoc);
+                el.href = url;
                 if (target) el.target = target;
+                KE.g[id].range.item(0).applyElement(el);
+            } else if (KE.g[id].selection.type.toLowerCase() == 'text') {
+                iframeDoc.execCommand("createlink", false, url);
+                var el = KE.g[id].range.parentElement();
+                if (el && target) el.target = target;
             }
+        } else {
+            iframeDoc.execCommand("createlink", false, url);
+            var el = KE.g[id].range.startContainer.previousSibling;
+            if (el && target) el.target = target;
         }
         KE.layout.hide(id);
         KE.util.focus(id);
