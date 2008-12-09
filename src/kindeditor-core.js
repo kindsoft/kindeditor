@@ -670,7 +670,7 @@ KE.create = function(id) {
     if (KE.g[id].hideBottomMode) KE.util.hideBottom(id);
     KE.util.focus(id);
 };
-KE.version = '3.0 alpha';
+KE.version = '3.0 beta';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowser();
