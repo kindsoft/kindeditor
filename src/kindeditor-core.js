@@ -285,14 +285,14 @@ KE.util = {
     pToBr : function(id) {
         if(KE.browser == 'IE') {
             KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
-                    if (e.keyCode == 13) {
-                        KE.util.selection(id);
-                        if(KE.g[id].range.parentElement().tagName != 'LI') {
-                            KE.util.insertHtml(id, '<br />');
-                            return false;
-                        }
+                if (e.keyCode == 13) {
+                    KE.util.selection(id);
+                    if(KE.g[id].range.parentElement().tagName != 'LI') {
+                        KE.util.insertHtml(id, '<br />');
+                        return false;
                     }
-                });
+                }
+            });
         }
     },
     insertHtml : function(id, html) {
@@ -368,18 +368,7 @@ KE.menu = function(arg){
     };
     this.picker = function()
     {
-        var colorTable = [
-                ["#FFFFFF","#E5E4E4","#D9D8D8","#C0BDBD","#A7A4A4","#8E8A8B","#827E7F","#767173","#5C585A","#000000"],
-                ["#FEFCDF","#FEF4C4","#FEED9B","#FEE573","#FFED43","#F6CC0B","#E0B800","#C9A601","#AD8E00","#8C7301"],
-                ["#FFDED3","#FFC4B0","#FF9D7D","#FF7A4E","#FF6600","#E95D00","#D15502","#BA4B01","#A44201","#8D3901"],
-                ["#FFD2D0","#FFBAB7","#FE9A95","#FF7A73","#FF483F","#FE2419","#F10B00","#D40A00","#940000","#6D201B"],
-                ["#FFDAED","#FFB7DC","#FFA1D1","#FF84C3","#FF57AC","#FD1289","#EC0078","#D6006D","#BB005F","#9B014F"],
-                ["#FCD6FE","#FBBCFF","#F9A1FE","#F784FE","#F564FE","#F546FF","#F328FF","#D801E5","#C001CB","#8F0197"],
-                ["#E2F0FE","#C7E2FE","#ADD5FE","#92C7FE","#6EB5FF","#48A2FF","#2690FE","#0162F4","#013ADD","#0021B0"],
-                ["#D3FDFF","#ACFAFD","#7CFAFF","#4AF7FE","#1DE6FE","#01DEFF","#00CDEC","#01B6DE","#00A0C2","#0084A0"],
-                ["#EDFFCF","#DFFEAA","#D1FD88","#BEFA5A","#A8F32A","#8FD80A","#79C101","#3FA701","#307F00","#156200"],
-                ["#D4C89F","#DAAD88","#C49578","#C2877E","#AC8295","#C0A5C4","#969AC2","#92B7D7","#80ADAF","#9CA53B"]
-            ];
+        var colorTable = KE.lang['colorTable'];
         var table = KE.$$('table');
         table.cellPadding = 0;
         table.cellSpacing = 1;
@@ -450,9 +439,9 @@ KE.dialog = function(arg){
         img.onclick = new Function("KE.layout.hide('" + id + "')");
         titleDiv.appendChild(img);
         KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
-                div.style.top = (objTop + top) + 'px';
-                div.style.left = (objLeft + left) + 'px';
-            });
+            div.style.top = (objTop + top) + 'px';
+            div.style.left = (objLeft + left) + 'px';
+        });
         div.appendChild(titleDiv);
         var bodyDiv = KE.$$('div');
         bodyDiv.className = 'ke-dialog-body';
@@ -522,8 +511,7 @@ KE.dialog = function(arg){
     };
 };
 KE.toolbar = {
-    able : function(id, arr)
-    {
+    able : function(id, arr) {
         for (var cmd in KE.g[id].toolbarIcon) {
             if (KE.util.inArray(cmd, arr)) continue;
             var obj = KE.g[id].toolbarIcon[cmd];
@@ -534,8 +522,7 @@ KE.toolbar = {
             obj.onclick = new Function('KE.util.click("' + id + '", "' + cmd + '")');
         }
     },
-    disable : function(id, arr)
-    {
+    disable : function(id, arr) {
         for (var cmd in KE.g[id].toolbarIcon) {
             if (KE.util.inArray(cmd, arr)) continue;
             var obj = KE.g[id].toolbarIcon[cmd];
@@ -546,8 +533,7 @@ KE.toolbar = {
             obj.onclick = null;
         }
     },
-    create : function(id)
-    {
+    create : function(id) {
         KE.g[id].toolbarIcon = [];
         var toolbar = KE.$$('table');
         toolbar.className = 'ke-toolbar';
@@ -591,8 +577,7 @@ KE.toolbar = {
         return toolbar;
     }
 };
-KE.create = function(id)
-{
+KE.create = function(id) {
     var srcTextarea = KE.$(id);
     var width = srcTextarea.style.width;
     var height = srcTextarea.style.height;
@@ -677,11 +662,11 @@ KE.create = function(id)
     KE.g[id].height = height + 'px';
     KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-            KE.util.resize(id, objWidth + left, objHeight + top);
-        });
+        KE.util.resize(id, objWidth + left, objHeight + top);
+    });
     KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-            KE.util.resize(id, objWidth, objHeight + top);
-        });
+        KE.util.resize(id, objWidth, objHeight + top);
+    });
     if (KE.g[id].hideBottomMode) KE.util.hideBottom(id);
     KE.util.focus(id);
 };
@@ -714,8 +699,7 @@ KE.init = function(config) {
     KE.g[config.id] = config;
     KE.util.loadStyle(config.skinsPath + config.skinType + '.css');
 }
-KE.show = function(config)
-{
+KE.show = function(config) {
     KE.init(config);
     KE.event.add(window, 'load', new Function('KE.create("' + config.id + '")'));
 };

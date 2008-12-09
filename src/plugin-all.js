@@ -9,13 +9,13 @@
 KE.plugin['about'] = {
     click : function(id) {
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'about',
-                width : 300,
-                height : 80,
-                title : KE.lang['about'],
-                noButton : KE.lang['close']
-            });
+            id : id,
+            cmd : 'about',
+            width : 300,
+            height : 80,
+            title : KE.lang['about'],
+            noButton : KE.lang['close']
+        });
         dialog.show();
     }
 };
@@ -23,14 +23,14 @@ KE.plugin['plainpaste'] = {
     click : function(id) {
         KE.util.selection(id);
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'plainpaste',
-                width : 330,
-                height : 300,
-                title : KE.lang['plainpaste'],
-                yesButton : KE.lang['yes'],
-                noButton : KE.lang['no']
-            });
+            id : id,
+            cmd : 'plainpaste',
+            width : 330,
+            height : 300,
+            title : KE.lang['plainpaste'],
+            yesButton : KE.lang['yes'],
+            noButton : KE.lang['no']
+        });
         dialog.show();
     },
     exec : function(id) {
@@ -48,22 +48,22 @@ KE.plugin['wordpaste'] = {
     click : function(id) {
         KE.util.selection(id);
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'wordpaste',
-                width : 330,
-                height : 300,
-                title : KE.lang['wordpaste'],
-                yesButton : KE.lang['yes'],
-                noButton : KE.lang['no']
-            });
+            id : id,
+            cmd : 'wordpaste',
+            width : 330,
+            height : 300,
+            title : KE.lang['wordpaste'],
+            yesButton : KE.lang['yes'],
+            noButton : KE.lang['no']
+        });
         dialog.show();
     },
     allowTagTable : [
-                     'A', 'FONT', 'SPAN', 'P', 'BR', 'DIV', 'LI', 'U', 'STRIKE',
-                     'STRONG', 'TABLE', 'TR', 'TD', 'TBODY', 'HR', 'BLOCKQUOTE',
-                     'SUB', 'SUP', 'UL', 'OL', 'IMG', 'B', 'EM', 'H1', 'H2', 'H3',
-                     'H4', 'H5', 'H6'
-                     ],
+        'A', 'FONT', 'SPAN', 'P', 'BR', 'DIV', 'LI', 'U', 'STRIKE',
+        'STRONG', 'TABLE', 'TR', 'TD', 'TBODY', 'HR', 'BLOCKQUOTE',
+        'SUB', 'SUP', 'UL', 'OL', 'IMG', 'B', 'EM', 'H1', 'H2', 'H3',
+        'H4', 'H5', 'H6'
+    ],
     scanNode : function(el) {
         if (el.hasChildNodes()) {
             var nodes = el.childNodes;
@@ -178,9 +178,9 @@ KE.plugin['bgcolor'] = {
     click : function(id) {
         KE.util.selection(id);
         var menu = new KE.menu({
-                id : id,
-                cmd : 'bgcolor'
-            });
+            id : id,
+            cmd : 'bgcolor'
+        });
         menu.picker();
     },
     exec : function(id, value) {
@@ -211,12 +211,12 @@ KE.plugin['fontname'] = {
     click : function(id) {
         var cmd = 'fontname';
         KE.util.selection(id);
-        var fontName = KE.lang.fontTable;
+        var fontName = KE.lang['fontTable'];
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd,
-                width : '160px'
-            });
+            id : id,
+            cmd : cmd,
+            width : '160px'
+        });
         for (var i in fontName) {
             var html = '<span style="font-family: ' + i + ';">' + fontName[i] + '</span>';
             menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + i + '")'));
@@ -243,10 +243,10 @@ KE.plugin['fontsize'] = {
         var cmd = 'fontsize';
         KE.util.selection(id);
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd,
-                width : '100px'
-            });
+            id : id,
+            cmd : cmd,
+            width : '100px'
+        });
         for (var i in fontSize) {
             var html = '<span style="font-size: ' + fontSize[i] + ';">' + fontSize[i] + '</span>';
             menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + i + '")'));
@@ -263,22 +263,22 @@ KE.plugin['fontsize'] = {
 KE.plugin['hr'] = {
     click : function(id) {
         var items = [
-                     '<hr />',
-                     '<hr size="1">',
-                     '<hr size="1" color="#000000" />',
-                     '<hr size="2" color="#000000" />',
-                     '<hr size="3" color="#000000" />',
-                     '<hr size="4" color="#000000" />',
-                     '<hr size="5" color="#000000" />',
-                     '<hr size="6" color="#000000" />'
-                     ];
+            '<hr />',
+            '<hr size="1">',
+            '<hr size="1" color="#000000" />',
+            '<hr size="2" color="#000000" />',
+            '<hr size="3" color="#000000" />',
+            '<hr size="4" color="#000000" />',
+            '<hr size="5" color="#000000" />',
+            '<hr size="6" color="#000000" />'
+        ];
         var cmd = 'hr';
         KE.util.selection(id);
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd,
-                width : '150px'
-            });
+            id : id,
+            cmd : cmd,
+            width : '150px'
+        });
         for (var i in items) {
             menu.add(items[i], new Function('KE.plugin["' + cmd + '"].exec("' + id + '", \'' + items[i] + '\')'));
         }
@@ -294,15 +294,15 @@ KE.plugin['hr'] = {
 KE.plugin['preview'] = {
     click : function(id) {
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'preview',
-                html : KE.util.getData(id),
-                width : 600,
-                height : 400,
-                useFrameCSS : true,
-                title : KE.lang['preview'],
-                noButton : KE.lang['close']
-            });
+            id : id,
+            cmd : 'preview',
+            html : KE.util.getData(id),
+            width : 600,
+            height : 400,
+            useFrameCSS : true,
+            title : KE.lang['preview'],
+            noButton : KE.lang['close']
+        });
         dialog.show();
     }
 };
@@ -336,9 +336,9 @@ KE.plugin['textcolor'] = {
     click : function(id) {
         KE.util.selection(id);
         var menu = new KE.menu({
-                id : id,
-                cmd : 'textcolor'
-            });
+            id : id,
+            cmd : 'textcolor'
+        });
         menu.picker();
     },
     exec : function(id, value) {
@@ -364,14 +364,14 @@ KE.plugin['time'] = {
 };
 KE.plugin['title'] = {
     click : function(id) {
-        var title = KE.lang.titleTable;
+        var title = KE.lang['titleTable'];
         var cmd = 'title';
         KE.util.selection(id);
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd,
-                width : '120px'
-            });
+            id : id,
+            cmd : cmd,
+            width : '120px'
+        });
         for (var i in title) {
             var html = '<' + i + ' style="margin:0px;">' + title[i] + '</' + i + '>';
             menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "<' + i + '>")'));
@@ -389,13 +389,13 @@ KE.plugin['emoticons'] = {
     icon : 'emoticons.gif',
     click : function(id) {
         var emoticonTable = [
-                ['etc_01.gif','etc_02.gif','etc_03.gif','etc_04.gif','etc_05.gif','etc_06.gif'],
-                ['etc_07.gif','etc_08.gif','etc_09.gif','etc_10.gif','etc_11.gif','etc_12.gif'],
-                ['etc_13.gif','etc_14.gif','etc_15.gif','etc_16.gif','etc_17.gif','etc_18.gif'],
-                ['etc_19.gif','etc_20.gif','etc_21.gif','etc_22.gif','etc_23.gif','etc_24.gif'],
-                ['etc_25.gif','etc_26.gif','etc_27.gif','etc_28.gif','etc_29.gif','etc_30.gif'],
-                ['etc_31.gif','etc_32.gif','etc_33.gif','etc_34.gif','etc_35.gif','etc_36.gif']
-            ];
+            ['etc_01.gif','etc_02.gif','etc_03.gif','etc_04.gif','etc_05.gif','etc_06.gif'],
+            ['etc_07.gif','etc_08.gif','etc_09.gif','etc_10.gif','etc_11.gif','etc_12.gif'],
+            ['etc_13.gif','etc_14.gif','etc_15.gif','etc_16.gif','etc_17.gif','etc_18.gif'],
+            ['etc_19.gif','etc_20.gif','etc_21.gif','etc_22.gif','etc_23.gif','etc_24.gif'],
+            ['etc_25.gif','etc_26.gif','etc_27.gif','etc_28.gif','etc_29.gif','etc_30.gif'],
+            ['etc_31.gif','etc_32.gif','etc_33.gif','etc_34.gif','etc_35.gif','etc_36.gif']
+        ];
         var cmd = 'emoticons';
         KE.util.selection(id);
         var table = KE.$$('table');
@@ -418,9 +418,9 @@ KE.plugin['emoticons'] = {
             }
         }
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd
-            });
+            id : id,
+            cmd : cmd
+        });
         menu.append(table);
         menu.show();
     },
@@ -436,20 +436,20 @@ KE.plugin['flash'] = {
     click : function(id) {
         KE.util.selection(id);
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'flash',
-                width : 280,
-                height : 250,
-                title : "Flash",
-                previewButton : KE.lang['preview'],
-                yesButton : KE.lang['yes'],
-                noButton : KE.lang['no']
-            });
+            id : id,
+            cmd : 'flash',
+            width : 280,
+            height : 250,
+            title : "Flash",
+            previewButton : KE.lang['preview'],
+            yesButton : KE.lang['yes'],
+            noButton : KE.lang['no']
+        });
         dialog.show();
     },
     check : function(id, url) {
         if (url.match(/^\w+:\/\/.{3,}(swf)$/i) == null) {
-            alert('请输入有效的URL地址。\n只允许swf格式。');
+            alert(KE.lang['invalidSwf']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;
@@ -488,14 +488,14 @@ KE.plugin['image'] = {
     click : function(id) {
         KE.util.selection(id);
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'image',
-                width : 310,
-                height : 90,
-                title : KE.lang['image'],
-                yesButton : KE.lang['yes'],
-                noButton : KE.lang['no']
-            });
+            id : id,
+            cmd : 'image',
+            width : 310,
+            height : 90,
+            title : KE.lang['image'],
+            yesButton : KE.lang['yes'],
+            noButton : KE.lang['no']
+        });
         dialog.show();
     },
     check : function(id) {
@@ -512,25 +512,25 @@ KE.plugin['image'] = {
         var height = KE.$('imgHeight', dialogDoc).value;
         var border = KE.$('imgBorder', dialogDoc).value;
         if (url.match(/\.(jpg|jpeg|gif|bmp|png)$/i) == null) {
-            alert('请输入有效的URL地址。\n只允许jpg,gif,bmp,png格式。');
+            alert(KE.lang['invalidImg']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;
         }
         if (width.match(/^\d+$/) == null) {
-            alert('宽度必须为数字。');
+            alert(KE.lang['invalidWidth']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;
         }
         if (height.match(/^\d+$/) == null) {
-            alert('高度必须为数字。');
+            alert(KE.lang['invalidHeight']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;
         }
         if (border.match(/^\d+$/) == null) {
-            alert('边框必须为数字。');
+            alert(KE.lang['invalidBorder']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;
@@ -572,19 +572,19 @@ KE.plugin['layer'] = {
     click : function(id) {
         var cmd = 'layer';
         var styles = [
-                    'margin:5px;border:1px solid #000000;',
-                    'margin:5px;border:2px solid #000000;',
-                    'margin:5px;border:1px dashed #000000;',
-                    'margin:5px;border:2px dashed #000000;',
-                    'margin:5px;border:1px dotted #000000;',
-                    'margin:5px;border:2px dotted #000000;'
-                    ];
+            'margin:5px;border:1px solid #000000;',
+            'margin:5px;border:2px solid #000000;',
+            'margin:5px;border:1px dashed #000000;',
+            'margin:5px;border:2px dashed #000000;',
+            'margin:5px;border:1px dotted #000000;',
+            'margin:5px;border:2px dotted #000000;'
+        ];
         KE.util.selection(id);
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd,
-                width : '150px'
-            });
+            id : id,
+            cmd : cmd,
+            width : '150px'
+        });
         for (var i in styles) {
             var html = '<div style="height:15px;' + styles[i] + '"></div>';
             menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "padding:5px;' + styles[i] + '")'));
@@ -593,7 +593,7 @@ KE.plugin['layer'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        var html = '<div style="' + value + '">请输入内容</div>';
+        var html = '<div style="' + value + '">' + KE.lang['pleaseInput'] + '</div>';
         KE.util.insertHtml(id, html);
         KE.layout.hide(id);
         KE.util.focus(id);
@@ -603,14 +603,14 @@ KE.plugin['link'] = {
     click : function(id) {
         KE.util.selection(id);
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'link',
-                width : 310,
-                height : 70,
-                title : KE.lang['link'],
-                yesButton : KE.lang['yes'],
-                noButton : KE.lang['no']
-            });
+            id : id,
+            cmd : 'link',
+            width : 310,
+            height : 70,
+            title : KE.lang['link'],
+            yesButton : KE.lang['yes'],
+            noButton : KE.lang['no']
+        });
         dialog.show();
     },
     exec : function(id) {
@@ -650,20 +650,20 @@ KE.plugin['media'] = {
     click : function(id) {
         KE.util.selection(id);
         var dialog = new KE.dialog({
-                id : id,
-                cmd : 'media',
-                width : 280,
-                height : 250,
-                title : KE.lang['media'],
-                previewButton : KE.lang['preview'],
-                yesButton : KE.lang['yes'],
-                noButton : KE.lang['no']
-            });
+            id : id,
+            cmd : 'media',
+            width : 280,
+            height : 250,
+            title : KE.lang['media'],
+            previewButton : KE.lang['preview'],
+            yesButton : KE.lang['yes'],
+            noButton : KE.lang['no']
+        });
         dialog.show();
     },
     check : function(id, url) {
         if (url.match(/^\w+:\/\/.{3,}\.(mp3|wav|wma|wmv|mid|avi|mpg|mpeg|asf|rm|rmvb)$/i) == null) {
-            alert('请输入有效的URL地址。\n只允许mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。');
+            alert(KE.lang['invalidMedia']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;
@@ -708,18 +708,7 @@ KE.plugin['media'] = {
 };
 KE.plugin['specialchar'] = {
     click : function(id) {
-        var charTable = [
-            ['§','№','☆','★','○','●','◎','◇','◆','□'],
-            ['℃','‰','■','△','▲','※','→','←','↑','↓'],
-            ['〓','¤','°','＃','＆','＠','＼','︿','＿','￣'],
-            ['―','α','β','γ','δ','ε','ζ','η','θ','ι'],
-            ['κ','λ','μ','ν','ξ','ο','π','ρ','σ','τ'],
-            ['υ','φ','χ','ψ','ω','≈','≡','≠','＝','≤'],
-            ['≥','＜','＞','≮','≯','∷','±','＋','－','×'],
-            ['÷','／','∫','∮','∝','∞','∧','∨','∑','∏'],
-            ['∪','∩','∈','∵','∴','⊥','∥','∠','⌒','⊙'],
-            ['≌','∽','〖','〗','【','】','（','）','［','］']
-        ];
+        var charTable = KE.lang['charTable'];
         var cmd = 'specialchar';
         KE.util.selection(id);
         var table = KE.$$('table');
@@ -741,9 +730,9 @@ KE.plugin['specialchar'] = {
             }
         }
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd
-            });
+            id : id,
+            cmd : cmd
+        });
         menu.append(table);
         menu.show();
     },
@@ -789,12 +778,12 @@ KE.plugin['table'] = {
             html += '</tr>';
         }
         html += '<tr><td colspan="10" id="tableLocation' + id +
-        '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
+            '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
         html += '</table>';
         var menu = new KE.menu({
-                id : id,
-                cmd : cmd
-            });
+            id : id,
+            cmd : cmd
+        });
         menu.insert(html);
         menu.show();
     },
