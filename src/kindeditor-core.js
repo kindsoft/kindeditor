@@ -667,7 +667,7 @@ KE.create = function(id) {
     KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         KE.util.resize(id, objWidth, objHeight + top);
     });
-    if (KE.g[id].hideBottomMode) KE.util.hideBottom(id);
+    if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
     KE.util.focus(id);
 };
 KE.version = '3.0 beta';
@@ -679,7 +679,7 @@ KE.g = {};
 KE.init = function(config) {
     config.wyswygMode = (config.wyswygMode == null) ? true : config.wyswygMode;
     config.autoOnsubmitMode = (config.autoOnsubmitMode == null) ? true : config.autoOnsubmitMode;
-    config.hideBottomMode = (config.hideBottomMode == null) ? false : config.autoOnsubmitMode;
+    config.resizeMode = (config.resizeMode == null) ? true : config.resizeMode;
     config.skinType = config.skinType || 'default';
     config.cssPath = config.cssPath || '';
     config.skinsPath = KE.scriptPath + 'skins/';

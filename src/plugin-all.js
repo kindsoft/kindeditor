@@ -159,7 +159,7 @@ KE.plugin['fullscreen'] = {
             var div = KE.g[id].container;
             div.style.position = 'static';
             KE.util.resize(id, parseInt(this.width), parseInt(this.height));
-            if (KE.g[id].hideBottomMode) KE.util.hideBottom(id);
+            if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
             KE.event.remove(window, 'resize', resizeListener);
         } else {
             obj.fullscreenMode = true;
