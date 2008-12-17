@@ -404,16 +404,8 @@ KE.dialog = function(arg){
         var height = arg.height + this.topHeight + this.bottomHeight;
         var xDiff = Math.round(parseInt(KE.g[id].container.style.width) / 2) - Math.round(arg.width / 2);
         var yDiff = Math.round(parseInt(KE.g[id].container.style.height) / 2) - Math.round(height / 2);
-        if (xDiff < 0) {
-            x = pos.x;
-        } else {
-            x = pos.x + xDiff;
-        }
-        if (yDiff < 0) {
-            y = pos.y;
-        } else {
-            y = pos.y + yDiff;
-        }
+        x = xDiff < 0 ? pos.x : pos.x + xDiff;
+        y = yDiff < 0 ? pos.y : pos.y + yDiff;
         return {'x' : x, 'y' : y};
     };
     this.show = function() {
