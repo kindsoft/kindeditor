@@ -179,7 +179,7 @@ KE.util = {
         }
         return doc;
     },
-    getFullHtml : function(id, body) {
+    getFullHtml : function(id) {
         var html = '<html>';
         html += '<head>';
         html += '<base href="' + KE.htmlPath + '" />';
@@ -189,11 +189,6 @@ KE.util = {
         }
         html += '</head>';
         html += '<body>';
-        if (KE.browser == 'IE') {
-            html += (body) ? body : '';
-        } else {
-            html += (body) ? body : '<p><br /></p>';
-        }
         html += '</body>';
         html += '</html>';
         return html;
@@ -487,10 +482,11 @@ KE.dialog = function(arg){
         else if (noButton) noButton.focus();
         if (typeof arg.html != "undefined") {
             var dialogDoc = KE.util.getIframeDoc(dialog);
-            var html = KE.util.getFullHtml(id, arg.html);
+            var html = KE.util.getFullHtml(id);
             dialogDoc.open();
             dialogDoc.write(html);
             dialogDoc.close();
+            dialogDoc.body.innerHTML = arg.html;
         } else {
             dialog.src = KE.g[id].pluginsPath + arg.cmd + '.html';
         }
@@ -622,10 +618,11 @@ KE.create = function(id) {
     var iframeWin = iframe.contentWindow;
     var iframeDoc = KE.util.getIframeDoc(iframe);
     iframeDoc.designMode = "On";
-    var html = KE.util.getFullHtml(id, srcTextarea.value);
+    var html = KE.util.getFullHtml(id);
     iframeDoc.open();
     iframeDoc.write(html);
     iframeDoc.close();
+    iframeDoc.body.innerHTML = srcTextarea.value ? srcTextarea.value : '<p><br /></p>';
     if (!KE.g[id].wyswygMode) {
         newTextarea.value = srcTextarea.value;
         newTextarea.style.display = 'block';
