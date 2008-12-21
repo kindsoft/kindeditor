@@ -237,11 +237,16 @@
     border-bottom: 1px solid #CCCCCC;
     background-color: #F0F0EE;
     width: 100%;
-    padding: 2px;
+    padding:0;
+    margin:0;
+    border-collapse:separate;
 }
 .ke-toolbar-table {
     float: left;
     clear: both;
+    padding:0;
+    margin:0;
+    border-collapse:separate;
 }
 .ke-toolbar-close {
     background-position: -902px -2px;
@@ -261,13 +266,22 @@
 .ke-bottom {
     width: 100%;
     height: 5px;
+    padding:0;
+    margin:0;
+    border-collapse:separate;
 }
 .ke-bottom-left {
     width: 100%;
     cursor: s-resize;
+    border:0;
+    margin:0;
+    padding:0;
 }
 .ke-bottom-right {
     cursor: se-resize;
+    border:0;
+    margin:0;
+    padding:0;
 }
 .ke-bottom-right-img {
     width: 20px;
@@ -398,4 +412,6 @@
     font-size: 1px;
     border: 1px solid #F0F0EE;
     cursor: pointer;
+    margin:0;
+    padding:0;
 }

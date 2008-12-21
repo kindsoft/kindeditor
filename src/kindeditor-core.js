@@ -371,14 +371,17 @@ KE.menu = function(arg){
         var colorTable = KE.lang['colorTable'];
         var table = KE.$$('table');
         table.cellPadding = 0;
-        table.cellSpacing = 1;
+        table.cellSpacing = 0;
         table.border = 0;
+        table.style.margin = 0;
+        table.style.padding = 0;
+        table.style.borderCollapse = 'separate';
         for (var i = 0; i < colorTable.length; i++) {
             var row = table.insertRow(i);
             for (var j = 0; j < colorTable[i].length; j++) {
                 var cell = row.insertCell(j);
                 cell.className = 'ke-picker-cell';
-                cell.style.background = colorTable[i][j];
+                cell.style.backgroundColor = colorTable[i][j];
                 cell.title = colorTable[i][j];
                 cell.onmouseover = function() {this.style.borderColor = '#000000'; }
                 cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; }
@@ -398,14 +401,12 @@ KE.dialog = function(arg){
     this.getPos = function() {
         var arg = this.arg;
         var id = this.arg.id;
-        var x = 0;
-        var y = 0;
         var pos = KE.util.getElementPos(KE.g[id].container);
         var height = arg.height + this.topHeight + this.bottomHeight;
         var xDiff = Math.round(parseInt(KE.g[id].container.style.width) / 2) - Math.round(arg.width / 2);
         var yDiff = Math.round(parseInt(KE.g[id].container.style.height) / 2) - Math.round(height / 2);
-        x = xDiff < 0 ? pos.x : pos.x + xDiff;
-        y = yDiff < 0 ? pos.y : pos.y + yDiff;
+        var x = xDiff < 0 ? pos.x : pos.x + xDiff;
+        var y = yDiff < 0 ? pos.y : pos.y + yDiff;
         return {'x' : x, 'y' : y};
     };
     this.show = function() {
@@ -534,6 +535,9 @@ KE.toolbar = {
         toolbar.border = 0;
         var row = toolbar.insertRow(0);
         var toolbarCell = row.insertCell(0);
+        toolbarCell.style.padding = 0;
+        toolbarCell.style.margin = 0;
+        toolbarCell.style.border = 0;
         var length = KE.g[id].items.length;
         var cellNum = 0;
         var row;

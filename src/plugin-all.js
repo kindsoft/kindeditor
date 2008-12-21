@@ -402,10 +402,14 @@ KE.plugin['emoticons'] = {
         table.cellPadding = 0;
         table.cellSpacing = 2;
         table.border = 0;
+        table.style.margin = 0;
+        table.style.padding = 0;
+        table.style.borderCollapse = 'separate';
         for (var i = 0; i < emoticonTable.length; i++) {
             var row = table.insertRow(i);
             for (var j = 0; j < emoticonTable[i].length; j++) {
                 var cell = row.insertCell(j);
+                cell.style.margin = 0;
                 cell.style.padding = '1px';
                 cell.style.border = '1px solid #F0F0EE';
                 cell.style.cursor = 'pointer';
@@ -715,11 +719,15 @@ KE.plugin['specialchar'] = {
         table.cellPadding = 0;
         table.cellSpacing = 2;
         table.border = 0;
+        table.style.margin = 0;
+        table.style.padding = 0;
+        table.style.borderCollapse = 'separate';
         for (var i = 0; i < charTable.length; i++) {
             var row = table.insertRow(i);
             for (var j = 0; j < charTable[i].length; j++) {
                 var cell = row.insertCell(j);
                 cell.style.padding = '1px';
+                cell.style.margin = 0;
                 cell.style.border = '1px solid #AAAAAA';
                 cell.style.fontSize = '12px';
                 cell.style.cursor = 'pointer';
@@ -763,14 +771,14 @@ KE.plugin['table'] = {
         var cmd = 'table';
         KE.util.selection(id);
         var num = 10;
-        var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;">';
+        var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;border-collapse:separate;padding:0;margin:0;">';
         for (i = 1; i <= num; i++) {
             html += '<tr>';
             for (j = 1; j <= num; j++) {
                 var value = i.toString(10) + ',' + j.toString(10);
                 html += '<td id="tableTd' + id + i.toString(10) + '_' + j.toString(10) +
                     '" style="font-size:1px;width:12px;height:12px;background-color:#FFFFFF;' +
-                    'border:1px solid #DDDDDD;cursor:pointer;" ' +
+                    'border:1px solid #DDDDDD;cursor:pointer;margin:0;padding:0;" ' +
                     'onclick="javascript:KE.plugin[\'table\'].exec(\'' + id + '\', \'' + value + '\');" ' +
                     'onmouseover="javascript:KE.plugin[\'table\'].selected(\'' + id + '\', \'' + i.toString(10) +
                     '\', \'' + j.toString(10) + '\');">&nbsp;</td>';
@@ -778,7 +786,7 @@ KE.plugin['table'] = {
             html += '</tr>';
         }
         html += '<tr><td colspan="10" id="tableLocation' + id +
-            '" style="font-size:12px;text-align:center;height:20px;"></td></tr>';
+            '" style="font-size:12px;text-align:center;height:20px;margin:0;padding:0;border:0;"></td></tr>';
         html += '</table>';
         var menu = new KE.menu({
             id : id,
