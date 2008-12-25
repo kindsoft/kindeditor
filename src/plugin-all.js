@@ -620,6 +620,8 @@ KE.plugin['link'] = {
     exec : function(id) {
         KE.util.select(id);
         var iframeDoc = KE.g[id].iframeDoc;
+        var sel = KE.g[id].selection;
+        var range = KE.g[id].range;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('hyperLink', dialogDoc).value;
         var target = KE.$('linkType', dialogDoc).value;
@@ -631,20 +633,25 @@ KE.plugin['link'] = {
         }
         var element;
         if (KE.browser == 'IE') {
-            if (KE.g[id].selection.type.toLowerCase() == 'control') {
+            if (sel.type.toLowerCase() == 'control') {
                 var el = KE.$$("a", iframeDoc);
                 el.href = url;
                 if (target) el.target = target;
-                KE.g[id].range.item(0).applyElement(el);
-            } else if (KE.g[id].selection.type.toLowerCase() == 'text') {
+                range.item(0).applyElement(el);
+            } else if (sel.type.toLowerCase() == 'text') {
                 iframeDoc.execCommand("createlink", false, url);
-                var el = KE.g[id].range.parentElement();
+                var el = range.parentElement();
                 if (el && target) el.target = target;
             }
         } else {
-            iframeDoc.execCommand("createlink", false, url);
-            var el = KE.g[id].range.startContainer.previousSibling;
-            if (el && target) el.target = target;
+            var node = range.cloneContents();
+            var a = KE.$$('a', iframeDoc);
+            a.href = url;
+            if (target) a.target = target;
+            a.appendChild(node);
+            range.deleteContents();
+            range.insertNode(a);
+            range.selectNode(a);
         }
         KE.layout.hide(id);
         KE.util.focus(id);
