@@ -645,13 +645,12 @@ KE.plugin['link'] = {
             }
         } else {
             var node = range.cloneContents();
-            var a = KE.$$('a', iframeDoc);
-            a.href = url;
-            if (target) a.target = target;
-            a.appendChild(node);
-            range.deleteContents();
-            range.insertNode(a);
-            range.selectNode(a);
+            var div = KE.$$('div', iframeDoc);
+            div.appendChild(node);
+            var html = '<a href="' + url + '"';
+            if (target) html += ' target="' + target + '"';
+            html += '>' + div.innerHTML + '</a>';
+            KE.util.insertHtml(id, html);
         }
         KE.layout.hide(id);
         KE.util.focus(id);
