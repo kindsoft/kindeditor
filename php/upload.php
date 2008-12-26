@@ -61,7 +61,7 @@ if (empty($_FILES) === false) {
     echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
     echo '</head>';
     echo '<body>';
-    echo '<script type="text/javascript">parent.KE.plugin["image"].insert("' . $_POST['id'] . '", "' . $file_url . '","' . $_POST['imgWidth'] . '","' . $_POST['imgHeight'] . '","' . $_POST['imgBorder'] . '","' . $_POST['imgTitle'] . '");</script>';
+    echo '<script type="text/javascript">parent.KE.plugin["image"].insert("' . $_POST['id'] . '", "' . $file_url . '","' . $_POST['imgTitle'] . '","' . $_POST['imgWidth'] . '","' . $_POST['imgHeight'] . '","' . $_POST['imgBorder'] . '");</script>';
     echo '</body>';
     echo '</html>';
 }
