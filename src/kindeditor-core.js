@@ -655,7 +655,8 @@ KE.create = function(id) {
     KE.g[id].height = height + 'px';
     KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-        KE.util.resize(id, objWidth + left, objHeight + top);
+        if (KE.g[id].resizeMode == 2) KE.util.resize(id, objWidth + left, objHeight + top);
+        else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth, objHeight + top);
     });
     KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         KE.util.resize(id, objWidth, objHeight + top);
@@ -672,7 +673,7 @@ KE.g = {};
 KE.init = function(config) {
     config.wyswygMode = (config.wyswygMode == null) ? true : config.wyswygMode;
     config.autoOnsubmitMode = (config.autoOnsubmitMode == null) ? true : config.autoOnsubmitMode;
-    config.resizeMode = (config.resizeMode == null) ? true : config.resizeMode;
+    config.resizeMode = (config.resizeMode == null) ? 2 : config.resizeMode;
     config.skinType = config.skinType || 'default';
     config.cssPath = config.cssPath || '';
     config.skinsPath = KE.scriptPath + 'skins/';

@@ -27,25 +27,38 @@
   <script type="text/javascript">
     KE.show({
         id : 'content6',
-        resizeMode : false,
+        resizeMode : 1,
+        cssPath : './index.css'
+    });
+    KE.show({
+        id : 'content7',
+        resizeMode : 0,
         cssPath : './index.css'
     });
   </script>
 </head>
 <body>
-  <h3>固定编辑器、禁止拖动调整大小</h3>
+  <h3>只能调整高度</h3>
   <div class="source"><pre>
 KE.show({
     id : 'content6',
-    resizeMode : false,
+    resizeMode : 1,
     cssPath : './index.css'
 });
 </pre></div>
-  <form name="example" method="post" action="./../php/demo.php">
-    <div class="editor">
-      <textarea id="content6" name="content" style="width:700px;height:300px;"></textarea>
-    </div>
-    <input type="submit" name="button" value="提交内容" />
-  </form>
+  <div class="editor">
+    <textarea id="content6" name="content" style="width:700px;height:300px;"></textarea>
+  </div>
+  <h3>禁止拖动调整大小</h3>
+  <div class="source"><pre>
+KE.show({
+    id : 'content7',
+    resizeMode : 0,
+    cssPath : './index.css'
+});
+</pre></div>
+  <div class="editor">
+    <textarea id="content7" name="content" style="width:700px;height:300px;"></textarea>
+  </div>
 </body>
 </html>
