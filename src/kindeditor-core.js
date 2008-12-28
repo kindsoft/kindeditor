@@ -624,7 +624,7 @@ KE.create = function(id) {
     iframeDoc.open();
     iframeDoc.write(html);
     iframeDoc.close();
-    iframeDoc.body.innerHTML = srcTextarea.value ? srcTextarea.value : '<p><br /></p>';
+    if (srcTextarea.value) iframeDoc.body.innerHTML = srcTextarea.value;
     if (!KE.g[id].wyswygMode) {
         newTextarea.value = srcTextarea.value;
         newTextarea.style.display = 'block';
