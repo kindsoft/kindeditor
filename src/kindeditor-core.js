@@ -554,8 +554,10 @@ KE.toolbar = {
             cellNum++;
             var obj = KE.$$('img');
             obj.src = KE.g[id].skinsPath + 'spacer.gif';
-            var url = KE.g[id].skinsPath + KE.g[id].skinType + '.gif';
-            obj.style.backgroundImage = "url(" + url + ")";
+            if (KE.util.inArray(cmd, KE.g[id].defaultItems)) {
+                var url = KE.g[id].skinsPath + KE.g[id].skinType + '.gif';
+                obj.style.backgroundImage = "url(" + url + ")";
+            }
             obj.className = "ke-icon-" + cmd;
             obj.alt = KE.lang[cmd];
             cell.className = 'ke-icon';
@@ -680,7 +682,7 @@ KE.init = function(config) {
     config.pluginsPath = KE.scriptPath + 'plugins/';
     config.minWidth = config.minWidth || 200;
     config.minHeight = config.minHeight || 100;
-    config.items = config.items || [
+    var defaultItems = [
         'source', 'preview', 'fullscreen', 'print', 'undo', 'redo', 'cut', 'copy', 'paste',
         'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
         'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
@@ -690,6 +692,8 @@ KE.init = function(config) {
         'flash', 'media', 'layer', 'table', 'specialchar', 'hr',
         'emoticons', 'link', 'unlink', 'about'
     ];
+    config.defaultItems = defaultItems;
+    config.items = config.items || defaultItems;
     KE.g[config.id] = config;
     KE.util.loadStyle(config.skinsPath + config.skinType + '.css');
 }
