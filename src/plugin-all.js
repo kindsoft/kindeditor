@@ -37,6 +37,9 @@ KE.plugin['plainpaste'] = {
         KE.util.select(id);
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var html = KE.$('textArea', dialogDoc).value;
+        html = html.replace(/&/g, "&amp;");
+        html = html.replace(/</g, "&lt;");
+        html = html.replace(/>/g, "&gt;");
         var re = new RegExp("\r\n|\n|\r", "g");
         html = html.replace(re, "<br />$&");
         KE.util.insertHtml(id, html);
