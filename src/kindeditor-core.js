@@ -224,7 +224,7 @@ KE.util = {
     getData : function(id) {
         var data;
         if (KE.g[id].wyswygMode) {
-            data = KE.g[id].iframeDoc.body.innerHTML;
+            data = KE.util.outputHtml(KE.g[id].iframeDoc.body);
         } else {
             data = KE.g[id].newTextarea.value;
         }
@@ -302,6 +302,146 @@ KE.util = {
         } else {
             KE.g[id].iframeDoc.execCommand('inserthtml', false, html);
         }
+    },
+    outputHtml : function(element) {
+        var htmlList = [];
+        var startTags = [];
+        var setStartTag = function(tagName, attr, style, endFlag) {
+            var html = '';
+            html += '<' + tagName.toLowerCase();
+            if (attr) html += attr;
+            if (style) html += ' style="' + style + '"';
+            html += endFlag ? ' />' : '>';
+            htmlList.push(html);
+            if (!endFlag) startTags.push(tagName.toLowerCase());
+        }
+        var scanNodes = function(el) {
+            var nodes = el.childNodes;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                switch (node.nodeType) {
+                case 1:
+                    var tagName = node.tagName;
+                    var attr = '';
+                    var style = '';
+                    switch (node.tagName) {
+                    case 'FONT':
+                        if (node.color) attr += ' color="' + node.color + '"';
+                        if (node.size) attr += ' size="' + node.size + '"';
+                        if (node.face) attr += ' face="' + node.face + '"';
+                        if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
+                        setStartTag(tagName, attr, style, false);
+                        break;
+                    case 'SPAN':
+                        if (node.style.color) style += 'color:' + node.style.color + ';';
+                        if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
+                        if (node.style.fontSize) style += 'font-size:' + node.style.fontSize + ';';
+                        if (node.style.fontFamily) style += 'font-family:' + node.style.fontFamily + ';';
+                        if (node.style.fontWeight) style += 'font-weight:' + node.style.fontWeight + ';';
+                        if (node.style.fontStyle) style += 'font-style:' + node.style.fontStyle + ';';
+                        if (node.style.textDecoration) style += 'text-decoration:' + node.style.textDecoration + ';';
+                        if (node.style.verticalAlign) style += 'vertical-align:' + node.style.verticalAlign + ';';
+                        setStartTag(tagName, attr, style, false);
+                        break;
+                     case 'DIV':
+                        if (node.style.border) {
+                            style += 'border:' + node.style.border + ';';
+                        } else {
+                            if (node.style.borderLeft) style += 'border-left:' + node.style.borderLeft + ';';
+                            if (node.style.borderRight) style += 'border-right:' + node.style.borderRight + ';';
+                            if (node.style.borderTop) style += 'border-top:' + node.style.borderTop + ';';
+                            if (node.style.borderBottom) style += 'border-bottom:' + node.style.borderBottom + ';';
+                        }
+                        if (node.style.margin) {
+                            style += 'margin:' + node.style.margin + ';';
+                        } else {
+                            if (node.style.marginLeft) style += 'margin-left:' + node.style.marginLeft + ';';
+                            if (node.style.marginRight) style += 'margin-right:' + node.style.marginRight + ';';
+                            if (node.style.marginTop) style += 'margin-top:' + node.style.marginTop + ';';
+                            if (node.style.marginBottom) style += 'margin-bottom:' + node.style.marginBottom + ';';
+                        }
+                        if (node.style.padding) {
+                            style += 'padding:' + node.style.padding + ';';
+                        } else {
+                            if (node.style.paddingLeft) style += 'padding-left:' + node.style.paddingLeft + ';';
+                            if (node.style.paddingRight) style += 'padding-right:' + node.style.paddingRight + ';';
+                            if (node.style.paddingTop) style += 'padding-top:' + node.style.paddingTop + ';';
+                            if (node.style.paddingBottom) style += 'padding-bottom:' + node.style.paddingBottom + ';';
+                        }
+                        if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
+                        setStartTag(tagName, attr, style, false);
+                        break;
+                     case 'A':
+                        if (node.href) attr += ' href="' + node.href + '"';
+                        if (node.target) attr += ' target="' + node.target + '"';
+                        setStartTag(tagName, attr, style);
+                        break;
+                    case 'TABLE':
+                        if (typeof node.border != 'undefined') attr += ' border="' + node.border + '"';
+                        setStartTag(tagName, attr, style, false);
+                        break;
+                    case 'EMBED':
+                        if (node.src) attr += ' src="' + node.src + '"';
+                        if (node.getAttribute('type')) attr += ' type="' + node.getAttribute('type') + '"';
+                        if (node.getAttribute('loop')) attr += ' loop="' + node.getAttribute('loop') + '"';
+                        if (node.getAttribute('autostart')) attr += ' autostart="' + node.getAttribute('autostart') + '"';
+                        if (node.getAttribute('quality')) attr += ' quality="' + node.getAttribute('quality') + '"';
+                        setStartTag(tagName, attr, style, false);
+                        break;
+                    case 'IMG':
+                        if (node.src) attr += ' src="' + node.src + '"';
+                        if (node.width) attr += ' width="' + node.width + '"';
+                        if (node.height) attr += ' height="' + node.height + '"';
+                        if (node.border) attr += ' border="' + node.border + '"';
+                        if (node.alt) attr += ' alt="' + node.alt + '"';
+                        if (node.title) attr += ' title="' + node.title + '"';
+                        setStartTag(tagName, attr, style, true);
+                        break;
+                    case 'HR':
+                    case 'BR':
+                        setStartTag(tagName, attr, style, true);
+                        break;
+                    case 'P':
+                    case 'TBODY':
+                    case 'TR':
+                    case 'TD':
+                    case 'STRONG':
+                    case 'B':
+                    case 'OL':
+                    case 'UL':
+                    case 'LI':
+                    case 'SUB':
+                    case 'SUP':
+                    case 'BLOCKQUOTE':
+                    case 'H1':
+                    case 'H2':
+                    case 'H3':
+                    case 'H4':
+                    case 'H5':
+                    case 'H6':
+                    case 'EM':
+                    case 'U':
+                    case 'STRIKE':
+                        setStartTag(tagName, attr, style, false);
+                        break;
+                    default:
+                        break;
+                    }
+                    if (node.hasChildNodes()) {
+                        scanNodes(node);
+                    }
+                    break;
+                case 3:
+                    htmlList.push(node.nodeValue);
+                    break;
+                default:
+                    break;
+                }
+            }
+            if (startTags.length > 0) htmlList.push('</' + startTags.pop() + '>');
+        };
+        scanNodes(element);
+        return htmlList.join('');
     }
 };
 KE.layout = {

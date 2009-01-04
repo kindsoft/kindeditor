@@ -61,70 +61,12 @@ KE.plugin['wordpaste'] = {
         });
         dialog.show();
     },
-    allowTagTable : [
-        'A', 'FONT', 'SPAN', 'P', 'BR', 'DIV', 'LI', 'U', 'STRIKE',
-        'STRONG', 'TABLE', 'TR', 'TD', 'TBODY', 'HR', 'BLOCKQUOTE',
-        'SUB', 'SUP', 'UL', 'OL', 'IMG', 'B', 'EM', 'H1', 'H2', 'H3',
-        'H4', 'H5', 'H6'
-    ],
-    scanNode : function(el) {
-        if (el.hasChildNodes()) {
-            var nodes = el.childNodes;
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-                switch (node.nodeType) {
-                case 1:
-                    if (!KE.util.inArray(node.tagName, this.allowTagTable)) {
-                        node.parentNode.removeChild(node);
-                    } else {
-                        if (KE.browser == 'IE') {
-                            node.removeAttribute("className");
-                        } else {
-                            node.removeAttribute("class");
-                        }
-                        if (node.tagName == 'TABLE') {
-                            node.setAttribute("border", 1);
-                        }
-                        node.removeAttribute("lang");
-                        node.removeAttribute("type");
-                        var fontSize = node.style.fontSize;
-                        var fontFamily = node.style.fontFamily;
-                        var color = node.style.color;
-                        node.removeAttribute("style");
-                        if (fontSize) node.style.fontSize = fontSize;
-                        if (fontFamily) node.style.fontFamily = fontFamily;
-                        if (color) node.style.color = color;
-                        break;
-                    }
-                case 3:
-                    break;
-                default:
-                    node.innerHTML = '';
-                    break;
-                }
-                this.scanNode(node);
-            }
-        }
-    },
-    clearWordTag : function(doc) {
-        this.scanNode(doc.body);
-        var str = doc.body.innerHTML;
-        str = str.replace(new RegExp("<meta(\n|.)*?>", "ig"), "");
-        str = str.replace(new RegExp("<!(\n|.)*?>", "ig"), "");
-        str = str.replace(new RegExp("<style[^>]*>(\n|.)*?</style>", "ig"), "");
-        str = str.replace(new RegExp("<script[^>]*>(\n|.)*?</script>", "ig"), "");
-        str = str.replace(new RegExp("<w:[^>]+>(\n|.)*?</w:[^>]+>", "ig"), "");
-        str = str.replace(new RegExp("<w:[^>]*/>", "ig"), "");
-        str = str.replace(new RegExp("<xml>(\n|.)*?</xml>", "ig"), "");
-        str = str.replace(new RegExp("^\n+", "ig"), "");
-        return str;
-    },
     exec : function(id) {
         KE.util.select(id);
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var wordIframe = KE.$('wordIframe', dialogDoc);
         var wordDoc = KE.util.getIframeDoc(wordIframe);
-        KE.util.insertHtml(id, this.clearWordTag(wordDoc));
+        KE.util.insertHtml(id, KE.util.outputHtml(wordDoc.body));
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -265,32 +207,9 @@ KE.plugin['fontsize'] = {
 };
 KE.plugin['hr'] = {
     click : function(id) {
-        var items = [
-            '<hr />',
-            '<hr size="1">',
-            '<hr size="1" color="#000000" />',
-            '<hr size="2" color="#000000" />',
-            '<hr size="3" color="#000000" />',
-            '<hr size="4" color="#000000" />',
-            '<hr size="5" color="#000000" />',
-            '<hr size="6" color="#000000" />'
-        ];
-        var cmd = 'hr';
         KE.util.selection(id);
-        var menu = new KE.menu({
-            id : id,
-            cmd : cmd,
-            width : '150px'
-        });
-        for (var i in items) {
-            menu.add(items[i], new Function('KE.plugin["' + cmd + '"].exec("' + id + '", \'' + items[i] + '\')'));
-        }
-        menu.show();
-    },
-    exec : function(id, value) {
         KE.util.select(id);
-        KE.util.insertHtml(id, value);
-        KE.layout.hide(id);
+        KE.util.insertHtml(id, '<hr />');
         KE.util.focus(id);
     }
 };
@@ -320,7 +239,8 @@ KE.plugin['source'] = {
         var obj = KE.g[id];
         if (obj.wyswygMode) {
             KE.layout.hide(id);
-            obj.newTextarea.value = obj.iframeDoc.body.innerHTML;
+            //obj.newTextarea.value = obj.iframeDoc.body.innerHTML;
+            obj.newTextarea.value = KE.util.outputHtml(obj.iframeDoc.body);
             obj.iframe.style.display = 'none';
             obj.newTextarea.style.display = 'block';
             KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
