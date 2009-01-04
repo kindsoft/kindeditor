@@ -239,7 +239,6 @@ KE.plugin['source'] = {
         var obj = KE.g[id];
         if (obj.wyswygMode) {
             KE.layout.hide(id);
-            //obj.newTextarea.value = obj.iframeDoc.body.innerHTML;
             obj.newTextarea.value = KE.util.outputHtml(obj.iframeDoc.body);
             obj.iframe.style.display = 'none';
             obj.newTextarea.style.display = 'block';
