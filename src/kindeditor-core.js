@@ -77,6 +77,12 @@ KE.util = {
         for (var i in arr) {if (str == arr[i]) return true;}
         return false;
     },
+    escape : function(html) {
+        html = html.replace(/&/g, "&amp;");
+        html = html.replace(/</g, "&lt;");
+        html = html.replace(/>/g, "&gt;");
+        return html;
+    },
     getElementPos : function(el) {
         var x = 0;
         var y = 0;
@@ -224,7 +230,11 @@ KE.util = {
     getData : function(id) {
         var data;
         if (KE.g[id].wyswygMode) {
-            data = KE.util.outputHtml(KE.g[id].iframeDoc.body);
+            if (KE.g[id].filterMode) {
+                data = KE.util.outputHtml(KE.g[id].iframeDoc.body);
+            } else {
+                data = KE.g[id].iframeDoc.body.innerHTML;
+            }
         } else {
             data = KE.g[id].newTextarea.value;
         }
@@ -347,10 +357,9 @@ KE.util = {
                         if (node.style.border) {
                             style += 'border:' + node.style.border + ';';
                         } else {
-                            if (node.style.borderLeft) style += 'border-left:' + node.style.borderLeft + ';';
-                            if (node.style.borderRight) style += 'border-right:' + node.style.borderRight + ';';
-                            if (node.style.borderTop) style += 'border-top:' + node.style.borderTop + ';';
-                            if (node.style.borderBottom) style += 'border-bottom:' + node.style.borderBottom + ';';
+                            if (node.style.borderWidth && node.style.borderStyle && node.style.borderColor) {
+                                style += 'border:' + node.style.borderWidth + ' ' + node.style.borderStyle + ' ' + node.style.borderColor + ';';
+                            }
                         }
                         if (node.style.margin) {
                             style += 'margin:' + node.style.margin + ';';
@@ -432,7 +441,7 @@ KE.util = {
                     }
                     break;
                 case 3:
-                    htmlList.push(node.nodeValue);
+                    htmlList.push(KE.util.escape(node.nodeValue));
                     break;
                 default:
                     break;
@@ -806,7 +815,7 @@ KE.create = function(id) {
     if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
     KE.util.focus(id);
 };
-KE.version = '3.0 beta 2';
+KE.version = '3.0 beta 3';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowser();
@@ -816,10 +825,11 @@ KE.init = function(config) {
     config.wyswygMode = (config.wyswygMode == null) ? true : config.wyswygMode;
     config.autoOnsubmitMode = (config.autoOnsubmitMode == null) ? true : config.autoOnsubmitMode;
     config.resizeMode = (config.resizeMode == null) ? 2 : config.resizeMode;
+    config.filterMode = (config.filterMode == null) ? true : config.filterMode;
     config.skinType = config.skinType || 'default';
     config.cssPath = config.cssPath || '';
-    config.skinsPath = KE.scriptPath + 'skins/';
-    config.pluginsPath = KE.scriptPath + 'plugins/';
+    config.skinsPath = config.skinsPath || KE.scriptPath + 'skins/';
+    config.pluginsPath = config.pluginsPath || KE.scriptPath + 'plugins/';
     config.minWidth = config.minWidth || 200;
     config.minHeight = config.minHeight || 100;
     var defaultItems = [
