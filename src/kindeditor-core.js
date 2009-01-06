@@ -395,7 +395,7 @@ KE.util = {
                         if (node.getAttribute('loop')) attr += ' loop="' + node.getAttribute('loop') + '"';
                         if (node.getAttribute('autostart')) attr += ' autostart="' + node.getAttribute('autostart') + '"';
                         if (node.getAttribute('quality')) attr += ' quality="' + node.getAttribute('quality') + '"';
-                        setStartTag(tagName, attr, style, false);
+                        setStartTag(tagName, attr, style, true);
                         break;
                     case 'IMG':
                         if (node.src) attr += ' src="' + node.src + '"';

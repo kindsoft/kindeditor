@@ -406,7 +406,7 @@ KE.plugin['flash'] = {
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
         if (!this.check(id, url)) return false;
-        var html = '<embed src="' + url + '" type="application/x-shockwave-flash" quality="high"></embed>';
+        var html = '<embed src="' + url + '" type="application/x-shockwave-flash" quality="high" />';
         KE.util.insertHtml(id, html);
         KE.layout.hide(id);
         KE.util.focus(id);
@@ -631,9 +631,9 @@ KE.plugin['media'] = {
         if (!this.check(id, url)) return false;
         var html;
         if (url.match(/\.(rm|rmvb)$/i) == null) {
-            html = '<embed src="' + url + '" type="video/x-ms-asf-plugin" loop="true" autostart="true"></embed>';
+            html = '<embed src="' + url + '" type="video/x-ms-asf-plugin" loop="true" autostart="true" />';
         } else {
-            html = '<embed src="' + url + '" type="audio/x-pn-realaudio-plugin" loop="true" autostart="true"></embed>';
+            html = '<embed src="' + url + '" type="audio/x-pn-realaudio-plugin" loop="true" autostart="true" />';
         }
         KE.util.insertHtml(id, html);
         KE.layout.hide(id);
