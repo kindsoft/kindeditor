@@ -165,13 +165,13 @@ KE.util = {
     },
     setDefaultPlugin : function(id) {
         var items = [
-            'undo', 'redo', 'cut', 'copy', 'paste', 'selectall', 'justifyleft', 'justifycenter', 'justifyright',
+            'cut', 'copy', 'paste', 'selectall', 'justifyleft', 'justifycenter', 'justifyright',
             'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript',
             'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'unlink'
         ];
         for (var i in items) {
             KE.plugin[items[i]] = {
-                click : new Function('id', 'KE.g[id].iframeDoc.execCommand("' + items[i] + '", false, null);')
+                click : new Function('id', 'KE.util.execCommand(id, "' + items[i] + '", null);')
             };
         }
     },
@@ -300,6 +300,12 @@ KE.util = {
             });
         }
     },
+    execCommand : function(id, cmd, value) {
+        try {
+            KE.g[id].iframeDoc.execCommand(cmd, false, value);
+        } catch(e) {}
+        KE.history.add(id, false);
+    },
     insertHtml : function(id, html) {
         if (html == '') return;
         KE.util.select(id);
@@ -309,8 +315,9 @@ KE.util = {
             } else {
                 KE.g[id].range.pasteHTML(html);
             }
+            KE.history.add(id, false);
         } else {
-            KE.g[id].iframeDoc.execCommand('inserthtml', false, html);
+            this.execCommand(id, 'inserthtml', html);
         }
     },
     outputHtml : function(element) {
@@ -720,6 +727,40 @@ KE.toolbar = {
         return toolbar;
     }
 };
+KE.history = {
+    add : function(id, minChangeFlag) {
+        var obj = KE.g[id];
+        var html = KE.util.getData(id);
+        if (obj.undoQueue.length > 0) {
+            var prevHtml = obj.undoQueue[obj.undoQueue.length - 1];
+            if (html == prevHtml) return;
+            if (minChangeFlag && Math.abs(html.length - prevHtml.length) < obj.minChangeSize) return;
+        }
+        obj.undoQueue.push(html);
+        obj.redoQueue = [];
+    },
+    undo : function(id) {
+        var obj = KE.g[id];
+        if (obj.undoQueue.length == 0) return;
+        var html = KE.util.getData(id);
+        obj.redoQueue.push(html);
+        var prevHtml = obj.undoQueue.pop();
+        if (html == prevHtml && obj.undoQueue.length > 0) {
+            prevHtml = obj.undoQueue.pop();
+        }
+        obj.iframeDoc.body.innerHTML = prevHtml;
+        obj.newTextarea.value = prevHtml;
+    },
+    redo : function(id) {
+        var obj = KE.g[id];
+        if (obj.redoQueue.length == 0) return;
+        var html = KE.util.getData(id);
+        obj.undoQueue.push(html);
+        var nextHtml = obj.redoQueue.pop();
+        obj.iframeDoc.body.innerHTML = nextHtml;
+        obj.newTextarea.value = nextHtml;
+    }
+};
 KE.create = function(id) {
     var srcTextarea = KE.$(id);
     var width = srcTextarea.style.width;
@@ -778,7 +819,7 @@ KE.create = function(id) {
         newTextarea.value = srcTextarea.value;
         newTextarea.style.display = 'block';
         iframe.style.display = 'none';
-        KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
+        KE.toolbar.disable(id, ['source', 'preview', 'fullscreen', 'undo', 'redo']);
     }
     if (KE.g[id].autoOnsubmitMode) {
         var form = srcTextarea.parentNode;
@@ -789,6 +830,8 @@ KE.create = function(id) {
     }
     KE.event.add(iframeDoc, 'click', new Function('KE.layout.hide("' + id + '")'));
     KE.event.add(newTextarea, 'click', new Function('KE.layout.hide("' + id + '")'));
+    KE.event.add(iframeDoc, 'keyup', new Function('KE.history.add("' + id + '", true)'));
+    KE.event.add(newTextarea, 'keyup', new Function('KE.history.add("' + id + '", true)'));
     KE.g[id].container = container;
     KE.g[id].toolbarDiv = toolbarDiv;
     KE.g[id].formDiv = formDiv;
@@ -813,6 +856,9 @@ KE.create = function(id) {
         KE.util.resize(id, objWidth, objHeight + top);
     });
     if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
+    KE.g[id].undoQueue = [];
+    KE.g[id].redoQueue = [];
+    KE.history.add(id, false);
     KE.util.focus(id);
 };
 KE.version = '3.0 beta 3';
@@ -832,8 +878,9 @@ KE.init = function(config) {
     config.pluginsPath = config.pluginsPath || KE.scriptPath + 'plugins/';
     config.minWidth = config.minWidth || 200;
     config.minHeight = config.minHeight || 100;
+    config.minChangeSize = config.minChangeSize || 5;
     var defaultItems = [
-        'source', 'preview', 'fullscreen', 'print', 'undo', 'redo', 'cut', 'copy', 'paste',
+        'source', 'preview', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
         'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
         'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
         'superscript', 'date', 'time', '-',

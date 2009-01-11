@@ -19,6 +19,16 @@ KE.plugin['about'] = {
         dialog.show();
     }
 };
+KE.plugin['undo'] = {
+    click : function(id) {
+        KE.history.undo(id);
+    }
+};
+KE.plugin['redo'] = {
+    click : function(id) {
+        KE.history.redo(id);
+    }
+};
 KE.plugin['plainpaste'] = {
     click : function(id) {
         KE.util.selection(id);
@@ -129,9 +139,9 @@ KE.plugin['bgcolor'] = {
     exec : function(id, value) {
         KE.util.select(id);
         if (KE.browser == 'IE') {
-            KE.g[id].iframeDoc.execCommand('backcolor', false, value);
+            KE.util.execCommand(id, 'backcolor', value);
         } else  {
-            KE.g[id].iframeDoc.execCommand('hiliteColor', false, value);
+            KE.util.execCommand(id, 'hiliteColor', value);
         }
         KE.layout.hide(id);
         KE.util.focus(id);
@@ -168,7 +178,7 @@ KE.plugin['fontname'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('fontname', false, value);
+        KE.util.execCommand(id, 'fontname', value);
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -198,7 +208,7 @@ KE.plugin['fontsize'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('fontsize', false, value.substr(0, 1));
+        KE.util.execCommand(id, 'fontsize', value.substr(0, 1));
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -244,13 +254,13 @@ KE.plugin['source'] = {
             }
             obj.iframe.style.display = 'none';
             obj.newTextarea.style.display = 'block';
-            KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
+            KE.toolbar.disable(id, ['source', 'preview', 'fullscreen', 'undo', 'redo']);
             obj.wyswygMode = false;
         } else {
             obj.iframeDoc.body.innerHTML = obj.newTextarea.value;
             obj.iframe.style.display = 'block';
             obj.newTextarea.style.display = 'none';
-            KE.toolbar.able(id, ['source', 'preview', 'fullscreen']);
+            KE.toolbar.able(id, ['source', 'preview', 'fullscreen', 'undo', 'redo']);
             obj.wyswygMode = true;
         }
         KE.util.focus(id);
@@ -267,7 +277,7 @@ KE.plugin['textcolor'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('forecolor', false, value);
+        KE.util.execCommand(id, 'forecolor', value);
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -304,7 +314,7 @@ KE.plugin['title'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('formatblock', false, value);
+        KE.util.execCommand(id, 'formatblock', value);
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -566,6 +576,7 @@ KE.plugin['link'] = {
                 iframeDoc.execCommand("createlink", false, url);
                 var el = range.parentElement();
                 if (el && target) el.target = target;
+                KE.history.add(id);
             }
         } else {
             var node = range.cloneContents();

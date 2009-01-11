@@ -6,6 +6,16 @@
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
 * @version 3.0
 *******************************************************************************/
+KE.plugin['undo'] = {
+    click : function(id) {
+        KE.history.undo(id);
+    }
+};
+KE.plugin['redo'] = {
+    click : function(id) {
+        KE.history.redo(id);
+    }
+};
 KE.plugin['bgcolor'] = {
     icon : 'bgcolor.gif',
     click : function(id) {
@@ -19,9 +29,9 @@ KE.plugin['bgcolor'] = {
     exec : function(id, value) {
         KE.util.select(id);
         if (KE.browser == 'IE') {
-            KE.g[id].iframeDoc.execCommand('backcolor', false, value);
+            KE.util.execCommand(id, 'backcolor', value);
         } else  {
-            KE.g[id].iframeDoc.execCommand('hiliteColor', false, value);
+            KE.util.execCommand(id, 'hiliteColor', value);
         }
         KE.layout.hide(id);
         KE.util.focus(id);
@@ -45,7 +55,7 @@ KE.plugin['fontname'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('fontname', false, value);
+        KE.util.execCommand(id, 'fontname', value);
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -75,7 +85,7 @@ KE.plugin['fontsize'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('fontsize', false, value.substr(0, 1));
+        KE.util.execCommand(id, 'fontsize', value.substr(0, 1));
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -92,7 +102,7 @@ KE.plugin['textcolor'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        KE.g[id].iframeDoc.execCommand('forecolor', false, value);
+        KE.util.execCommand(id, 'forecolor', value);
         KE.layout.hide(id);
     }
 };
