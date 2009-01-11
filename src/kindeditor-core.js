@@ -231,7 +231,7 @@ KE.util = {
         var data;
         if (KE.g[id].wyswygMode) {
             if (KE.g[id].filterMode) {
-                data = KE.util.outputHtml(KE.g[id].iframeDoc.body);
+                data = KE.util.outputHtml(id, KE.g[id].iframeDoc.body);
             } else {
                 data = KE.g[id].iframeDoc.body.innerHTML;
             }
@@ -320,7 +320,16 @@ KE.util = {
             this.execCommand(id, 'inserthtml', html);
         }
     },
-    outputHtml : function(element) {
+    removeDomain : function(id, url) {
+        for (var i = 0; i < KE.g[id].siteDomains.length; i++) {
+            var domain = "http://" + KE.g[id].siteDomains;
+            if (url.indexOf(domain) == 0) {
+                url = url.substr(domain.length);
+            }
+        }
+        return url;
+    },
+    outputHtml : function(id, element) {
         var htmlList = [];
         var startTags = [];
         var setStartTag = function(tagName, attr, style, endFlag) {
@@ -388,7 +397,7 @@ KE.util = {
                         setStartTag(tagName, attr, style, false);
                         break;
                      case 'A':
-                        if (node.href) attr += ' href="' + node.href + '"';
+                        if (node.href) attr += ' href="' + KE.util.removeDomain(id, node.href) + '"';
                         if (node.target) attr += ' target="' + node.target + '"';
                         setStartTag(tagName, attr, style);
                         break;
@@ -397,7 +406,7 @@ KE.util = {
                         setStartTag(tagName, attr, style, false);
                         break;
                     case 'EMBED':
-                        if (node.src) attr += ' src="' + node.src + '"';
+                        if (node.src) attr += ' src="' + KE.util.removeDomain(id, node.src) + '"';
                         if (node.getAttribute('type')) attr += ' type="' + node.getAttribute('type') + '"';
                         if (node.getAttribute('loop')) attr += ' loop="' + node.getAttribute('loop') + '"';
                         if (node.getAttribute('autostart')) attr += ' autostart="' + node.getAttribute('autostart') + '"';
@@ -405,7 +414,7 @@ KE.util = {
                         setStartTag(tagName, attr, style, true);
                         break;
                     case 'IMG':
-                        if (node.src) attr += ' src="' + node.src + '"';
+                        if (node.src) attr += ' src="' + KE.util.removeDomain(id, node.src) + '"';
                         if (node.width) attr += ' width="' + node.width + '"';
                         if (node.height) attr += ' height="' + node.height + '"';
                         if (node.border) attr += ' border="' + node.border + '"';
@@ -879,6 +888,7 @@ KE.init = function(config) {
     config.minWidth = config.minWidth || 200;
     config.minHeight = config.minHeight || 100;
     config.minChangeSize = config.minChangeSize || 5;
+    config.siteDomains = config.siteDomains || [];
     var defaultItems = [
         'source', 'preview', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
         'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',

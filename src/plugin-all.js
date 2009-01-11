@@ -74,7 +74,7 @@ KE.plugin['wordpaste'] = {
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var wordIframe = KE.$('wordIframe', dialogDoc);
         var wordDoc = KE.util.getIframeDoc(wordIframe);
-        KE.util.insertHtml(id, KE.util.outputHtml(wordDoc.body));
+        KE.util.insertHtml(id, KE.util.outputHtml(id, wordDoc.body));
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -248,7 +248,7 @@ KE.plugin['source'] = {
         if (obj.wyswygMode) {
             KE.layout.hide(id);
             if (KE.g[id].filterMode) {
-                obj.newTextarea.value = KE.util.outputHtml(obj.iframeDoc.body);
+                obj.newTextarea.value = KE.util.outputHtml(id, obj.iframeDoc.body);
             } else {
                 obj.newTextarea.value = obj.iframeDoc.body.innerHTML;
             }
