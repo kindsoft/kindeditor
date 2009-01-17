@@ -294,8 +294,8 @@
     background-color: #FFFFFF;
     color: #000000;
     font-size: 12px;
-    font-family: "sans serif",tahoma,verdana,helvetica;
-    line-height: 16px;
+    font-family: "Courier New";
+    line-height: 18px;
     overflow: auto;
 }
 .ke-iframe {
