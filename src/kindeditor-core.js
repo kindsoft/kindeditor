@@ -227,10 +227,11 @@ KE.util = {
             obj.newTextarea.style.height = height + 'px';
         }
     },
-    getData : function(id) {
+    getData : function(id, filterMode) {
         var data;
+        filterMode = (typeof filterMode == "undefined") ? true : filterMode;
         if (KE.g[id].wyswygMode) {
-            if (KE.g[id].filterMode) {
+            if (filterMode) {
                 data = KE.util.outputHtml(id, KE.g[id].iframeDoc.body);
             } else {
                 data = KE.g[id].iframeDoc.body.innerHTML;
@@ -241,11 +242,11 @@ KE.util = {
         return data;
     },
     setData : function(id) {
-        var data = this.getData(id);
+        var data = this.getData(id, KE.g[id].filterMode);
         KE.g[id].srcTextarea.value = data;
     },
     getPureData : function(id) {
-        var data = this.getData(id);
+        var data = this.getData(id, false);
         data = data.replace(/<br[\s\/]{0,2}>/ig, "\r\n");
         data = data.replace(/<.*?>/ig, "");
         return data;
@@ -739,7 +740,7 @@ KE.toolbar = {
 KE.history = {
     add : function(id, minChangeFlag) {
         var obj = KE.g[id];
-        var html = KE.util.getData(id);
+        var html = KE.util.getData(id, false);
         if (obj.undoQueue.length > 0) {
             var prevHtml = obj.undoQueue[obj.undoQueue.length - 1];
             if (html == prevHtml) return;
@@ -751,7 +752,7 @@ KE.history = {
     undo : function(id) {
         var obj = KE.g[id];
         if (obj.undoQueue.length == 0) return;
-        var html = KE.util.getData(id);
+        var html = KE.util.getData(id, false);
         obj.redoQueue.push(html);
         var prevHtml = obj.undoQueue.pop();
         if (html == prevHtml && obj.undoQueue.length > 0) {
@@ -763,7 +764,7 @@ KE.history = {
     redo : function(id) {
         var obj = KE.g[id];
         if (obj.redoQueue.length == 0) return;
-        var html = KE.util.getData(id);
+        var html = KE.util.getData(id, false);
         obj.undoQueue.push(html);
         var nextHtml = obj.redoQueue.pop();
         obj.iframeDoc.body.innerHTML = nextHtml;
