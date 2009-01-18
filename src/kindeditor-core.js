@@ -335,13 +335,13 @@ KE.util = {
         var startTags = [];
         var setStartTag = function(tagName, attr, style, endFlag) {
             var html = '';
-            html += '<' + tagName.toLowerCase();
+            html += '<' + tagName;
             if (attr) html += attr;
             if (style) html += ' style="' + style + '"';
             html += endFlag ? ' />' : '>';
-            if (endFlag && KE.browser == 'IE') html += "\n";
+            if (KE.browser == 'IE' && endFlag && KE.util.inArray(tagName, ['br', 'hr'])) html += "\n";
             htmlList.push(html);
-            if (!endFlag) startTags.push(tagName.toLowerCase());
+            if (!endFlag) startTags.push(tagName);
         }
         var scanNodes = function(el) {
             var nodes = el.childNodes;
@@ -349,18 +349,18 @@ KE.util = {
                 var node = nodes[i];
                 switch (node.nodeType) {
                 case 1:
-                    var tagName = node.tagName;
+                    var tagName = node.tagName.toLowerCase();
                     var attr = '';
                     var style = '';
-                    switch (node.tagName) {
-                    case 'FONT':
+                    switch (tagName) {
+                    case 'font':
                         if (node.color) attr += ' color="' + node.color + '"';
                         if (node.size) attr += ' size="' + node.size + '"';
                         if (node.face) attr += ' face="' + node.face + '"';
                         if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
                         setStartTag(tagName, attr, style, false);
                         break;
-                    case 'SPAN':
+                    case 'span':
                         if (node.style.color) style += 'color:' + node.style.color + ';';
                         if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
                         if (node.style.fontSize) style += 'font-size:' + node.style.fontSize + ';';
@@ -371,7 +371,7 @@ KE.util = {
                         if (node.style.verticalAlign) style += 'vertical-align:' + node.style.verticalAlign + ';';
                         setStartTag(tagName, attr, style, false);
                         break;
-                     case 'DIV':
+                     case 'div':
                         if (node.align) attr += ' align="' + node.align + '"';
                         if (node.style.border) {
                             style += 'border:' + node.style.border + ';';
@@ -399,16 +399,16 @@ KE.util = {
                         if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
                         setStartTag(tagName, attr, style, false);
                         break;
-                     case 'A':
+                     case 'a':
                         if (node.href) attr += ' href="' + KE.util.removeDomain(id, node.href) + '"';
                         if (node.target) attr += ' target="' + node.target + '"';
                         setStartTag(tagName, attr, style);
                         break;
-                    case 'TABLE':
+                    case 'table':
                         if (typeof node.border != 'undefined') attr += ' border="' + node.border + '"';
                         setStartTag(tagName, attr, style, false);
                         break;
-                    case 'EMBED':
+                    case 'embed':
                         if (node.src) attr += ' src="' + KE.util.removeDomain(id, node.src) + '"';
                         if (node.getAttribute('type')) attr += ' type="' + node.getAttribute('type') + '"';
                         if (node.getAttribute('loop')) attr += ' loop="' + node.getAttribute('loop') + '"';
@@ -416,7 +416,7 @@ KE.util = {
                         if (node.getAttribute('quality')) attr += ' quality="' + node.getAttribute('quality') + '"';
                         setStartTag(tagName, attr, style, true);
                         break;
-                    case 'IMG':
+                    case 'img':
                         if (node.src) attr += ' src="' + KE.util.removeDomain(id, node.src) + '"';
                         if (node.width) attr += ' width="' + node.width + '"';
                         if (node.height) attr += ' height="' + node.height + '"';
@@ -425,34 +425,34 @@ KE.util = {
                         if (node.title) attr += ' title="' + node.title + '"';
                         setStartTag(tagName, attr, style, true);
                         break;
-                    case 'HR':
-                    case 'BR':
+                    case 'hr':
+                    case 'br':
                         setStartTag(tagName, attr, style, true);
                         break;
-                    case 'P':
+                    case 'p':
                         if (node.align) attr += ' align="' + node.align + '"';
                         setStartTag(tagName, attr, style, false);
                         break;
-                    case 'TBODY':
-                    case 'TR':
-                    case 'TD':
-                    case 'STRONG':
-                    case 'B':
-                    case 'OL':
-                    case 'UL':
-                    case 'LI':
-                    case 'SUB':
-                    case 'SUP':
-                    case 'BLOCKQUOTE':
-                    case 'H1':
-                    case 'H2':
-                    case 'H3':
-                    case 'H4':
-                    case 'H5':
-                    case 'H6':
-                    case 'EM':
-                    case 'U':
-                    case 'STRIKE':
+                    case 'tbody':
+                    case 'tr':
+                    case 'td':
+                    case 'strong':
+                    case 'b':
+                    case 'ol':
+                    case 'ul':
+                    case 'li':
+                    case 'sub':
+                    case 'sup':
+                    case 'blockquote':
+                    case 'h1':
+                    case 'h2':
+                    case 'h3':
+                    case 'h4':
+                    case 'h5':
+                    case 'h6':
+                    case 'em':
+                    case 'u':
+                    case 'strike':
                         setStartTag(tagName, attr, style, false);
                         break;
                     default:
@@ -470,9 +470,10 @@ KE.util = {
                 }
             }
             if (startTags.length > 0) {
-                var endTag = '</' + startTags.pop() + '>';
-                if (KE.browser == 'IE') endTag += "\n";
-                htmlList.push(endTag);
+                var endTag = startTags.pop();
+                var html = '</' + endTag + '>';
+                if (KE.browser == 'IE' && KE.util.inArray(endTag, ['p', 'div', 'table', 'ol', 'ul'])) html += "\n";
+                htmlList.push(html);
             }
         };
         scanNodes(element);
@@ -880,7 +881,7 @@ KE.create = function(id) {
     KE.history.add(id, false);
     KE.util.focus(id);
 };
-KE.version = '3.0 beta 3';
+KE.version = '3.0 beta 4';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowser();
