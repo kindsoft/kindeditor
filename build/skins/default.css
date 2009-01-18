@@ -2,6 +2,10 @@
     font-size: 12px;
     font-family: "sans serif",tahoma,verdana,helvetica;
 }
+.ke-common-icon {
+background-repeat: no-repeat;
+overflow: hidden;
+}
 .ke-icon-source {
     background-position: 0px 0px;
     width: 39px;

@@ -734,7 +734,7 @@ KE.toolbar = {
                 var url = KE.g[id].skinsPath + KE.g[id].skinType + '.gif';
                 obj.style.backgroundImage = "url(" + url + ")";
             }
-            obj.className = "ke-icon-" + cmd;
+            obj.className = "ke-common-icon ke-icon-" + cmd;
             obj.alt = KE.lang[cmd];
             cell.className = 'ke-icon';
             cell.title = KE.lang[cmd];

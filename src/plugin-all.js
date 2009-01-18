@@ -395,9 +395,6 @@ KE.plugin['flash'] = {
         return true;
     },
     preview : function(id) {
-        var divWidth = 280;
-        var divHeight = 180;
-        var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
         if (!this.check(id, url)) return false;
@@ -412,7 +409,6 @@ KE.plugin['flash'] = {
     },
     exec : function(id) {
         KE.util.select(id);
-        var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
         if (!this.check(id, url)) return false;
@@ -445,7 +441,6 @@ KE.plugin['image'] = {
         } else {
             url = KE.$('url', dialogDoc).value;
         }
-        var title = KE.$('imgTitle', dialogDoc).value;
         var width = KE.$('imgWidth', dialogDoc).value;
         var height = KE.$('imgHeight', dialogDoc).value;
         var border = KE.$('imgBorder', dialogDoc).value;
@@ -477,7 +472,6 @@ KE.plugin['image'] = {
     },
     exec : function(id) {
         KE.util.select(id);
-        var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var type = KE.$('type', dialogDoc).value;
         if (!this.check(id)) return false;
@@ -565,7 +559,6 @@ KE.plugin['link'] = {
             KE.g[id].yesButton.focus();
             return false;
         }
-        var element;
         if (KE.browser == 'IE') {
             if (sel.type.toLowerCase() == 'control') {
                 var el = KE.$$("a", iframeDoc);
@@ -616,7 +609,6 @@ KE.plugin['media'] = {
         return true;
     },
     preview : function(id) {
-        var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
         if (!this.check(id, url)) return false;
@@ -636,7 +628,6 @@ KE.plugin['media'] = {
     },
     exec : function(id) {
         KE.util.select(id);
-        var iframeDoc = KE.g[id].iframeDoc;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('url', dialogDoc).value;
         if (!this.check(id, url)) return false;
@@ -713,9 +704,9 @@ KE.plugin['table'] = {
         KE.util.selection(id);
         var num = 10;
         var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;border-collapse:separate;padding:0;margin:0;">';
-        for (i = 1; i <= num; i++) {
+        for (var i = 1; i <= num; i++) {
             html += '<tr>';
-            for (j = 1; j <= num; j++) {
+            for (var j = 1; j <= num; j++) {
                 var value = i.toString(10) + ',' + j.toString(10);
                 html += '<td id="tableTd' + id + i.toString(10) + '_' + j.toString(10) +
                     '" style="font-size:1px;width:12px;height:12px;background-color:#FFFFFF;' +
