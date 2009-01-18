@@ -372,6 +372,7 @@ KE.util = {
                         setStartTag(tagName, attr, style, false);
                         break;
                      case 'DIV':
+                        if (node.align) attr += ' align="' + node.align + '"';
                         if (node.style.border) {
                             style += 'border:' + node.style.border + ';';
                         } else {
@@ -429,6 +430,9 @@ KE.util = {
                         setStartTag(tagName, attr, style, true);
                         break;
                     case 'P':
+                        if (node.align) attr += ' align="' + node.align + '"';
+                        setStartTag(tagName, attr, style, false);
+                        break;
                     case 'TBODY':
                     case 'TR':
                     case 'TD':
