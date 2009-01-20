@@ -474,7 +474,6 @@ KE.util = {
                         if (startTags.length > 0) {
                             var prevHtml = htmlList[htmlList.length - 1];
                             if (prevHtml.match(/^<p|^<div/) != null) {
-                                alert(prevHtml);
                                 htmlList.push("&nbsp;");
                                 setEndTag();
                             }
