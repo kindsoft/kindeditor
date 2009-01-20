@@ -343,6 +343,14 @@ KE.util = {
             htmlList.push(html);
             if (!endFlag) startTags.push(tagName);
         }
+        var setEndTag = function() {
+            if (startTags.length > 0) {
+                var endTag = startTags.pop();
+                var html = '</' + endTag + '>';
+                if (KE.browser == 'IE' && KE.util.inArray(endTag, ['p', 'div', 'table', 'ol', 'ul'])) html += "\n";
+                htmlList.push(html);
+            }
+        }
         var scanNodes = function(el) {
             var nodes = el.childNodes;
             for (var i = 0; i < nodes.length; i++) {
@@ -414,6 +422,8 @@ KE.util = {
                         if (node.getAttribute('loop')) attr += ' loop="' + node.getAttribute('loop') + '"';
                         if (node.getAttribute('autostart')) attr += ' autostart="' + node.getAttribute('autostart') + '"';
                         if (node.getAttribute('quality')) attr += ' quality="' + node.getAttribute('quality') + '"';
+                        if (node.style.width) style += 'width:' + node.style.width + ';';
+                        if (node.style.height) style += 'height:' + node.style.height + ';';
                         setStartTag(tagName, attr, style, true);
                         break;
                     case 'img':
@@ -460,6 +470,9 @@ KE.util = {
                     }
                     if (node.hasChildNodes()) {
                         scanNodes(node);
+                    } else {
+                        if (startTags.length > 0) htmlList.push("&nbsp;");
+                        setEndTag();
                     }
                     break;
                 case 3:
@@ -469,12 +482,7 @@ KE.util = {
                     break;
                 }
             }
-            if (startTags.length > 0) {
-                var endTag = startTags.pop();
-                var html = '</' + endTag + '>';
-                if (KE.browser == 'IE' && KE.util.inArray(endTag, ['p', 'div', 'table', 'ol', 'ul'])) html += "\n";
-                htmlList.push(html);
-            }
+            setEndTag();
         };
         scanNodes(element);
         return htmlList.join('');
