@@ -471,8 +471,14 @@ KE.util = {
                     if (node.hasChildNodes()) {
                         scanNodes(node);
                     } else {
-                        if (startTags.length > 0) htmlList.push("&nbsp;");
-                        setEndTag();
+                        if (startTags.length > 0) {
+                            var prevHtml = htmlList[htmlList.length - 1];
+                            if (prevHtml.match(/^<p|^<div/) != null) {
+                                alert(prevHtml);
+                                htmlList.push("&nbsp;");
+                                setEndTag();
+                            }
+                        }
                     }
                     break;
                 case 3:
