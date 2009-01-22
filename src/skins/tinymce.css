@@ -246,6 +246,7 @@ overflow: hidden;
     border-collapse:separate;
 }
 .ke-toolbar-table {
+    font-size: 0;
     float: left;
     clear: both;
     padding:0;
@@ -269,6 +270,7 @@ overflow: hidden;
 }
 .ke-bottom {
     width: 100%;
+    font-size: 0;
     height: 5px;
     padding:0;
     margin:0;
