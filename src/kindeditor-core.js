@@ -803,6 +803,8 @@ KE.remove = function(id, mode) {
         var srcTextarea = KE.$(id);
         srcTextarea.parentNode.removeChild(container);
     }
+    document.body.removeChild(KE.g[id].hideDiv);
+    document.body.removeChild(KE.g[id].maskDiv);
 };
 KE.create = function(id, mode) {
     var srcTextarea = KE.$(id);

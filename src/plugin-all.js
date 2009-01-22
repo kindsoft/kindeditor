@@ -95,7 +95,7 @@ KE.plugin['fullscreen'] = {
         var div = KE.g[id].container;
         div.style.left = left + 'px';
         div.style.top = top + 'px';
-        div.style.zIndex = 19811213;
+        div.style.zIndex = 19811211;
         KE.util.resize(id, width, height);
     },
     click : function(id) {
