@@ -796,6 +796,7 @@ KE.history = {
 };
 KE.create = function(id) {
     var srcTextarea = KE.$(id);
+    if (srcTextarea.style.display == "none") return;
     var width = srcTextarea.style.width;
     var height = srcTextarea.style.height;
     var container = KE.$$('div');
