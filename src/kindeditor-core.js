@@ -794,16 +794,28 @@ KE.history = {
         obj.newTextarea.value = nextHtml;
     }
 };
-KE.create = function(id) {
+KE.remove = function(id, mode) {
+    mode = (mode == null) ? 0 : mode;
+    var container = KE.g[id].container;
+    if (mode == 1) {
+        document.body.removeChild(container);
+    } else {
+        var srcTextarea = KE.$(id);
+        srcTextarea.parentNode.removeChild(container);
+    }
+};
+KE.create = function(id, mode) {
     var srcTextarea = KE.$(id);
-    if (srcTextarea.style.display == "none") return;
+    var mode = (mode == null) ? 0 : mode;
+    if (!mode && srcTextarea.style.display == "none") return;
     var width = srcTextarea.style.width;
     var height = srcTextarea.style.height;
     var container = KE.$$('div');
     container.className = 'ke-container';
     container.style.width = width;
     container.style.height = height;
-    srcTextarea.parentNode.insertBefore(container, srcTextarea);
+    if (mode == 1) document.body.appendChild(container);
+    else srcTextarea.parentNode.insertBefore(container, srcTextarea);
     var toolbarDiv = KE.toolbar.create(id);
     container.appendChild(toolbarDiv);
     var iframe = KE.$$('iframe');
@@ -890,8 +902,6 @@ KE.create = function(id) {
         KE.util.resize(id, objWidth, objHeight + top);
     });
     if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
-    KE.g[id].undoStack = [];
-    KE.g[id].redoStack = [];
     KE.history.add(id, false);
     KE.util.focus(id);
 };
@@ -927,6 +937,8 @@ KE.init = function(config) {
     config.defaultItems = defaultItems;
     config.items = config.items || defaultItems;
     KE.g[config.id] = config;
+    KE.g[config.id].undoStack = [];
+    KE.g[config.id].redoStack = [];
     KE.util.loadStyle(config.skinsPath + config.skinType + '.css');
 }
 KE.show = function(config) {

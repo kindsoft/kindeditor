@@ -107,17 +107,21 @@ KE.plugin['fullscreen'] = {
         }
         if (obj.fullscreenMode) {
             obj.fullscreenMode = false;
+            KE.util.setData(id);
+            KE.remove(id, 1);
+            KE.create(id, 2);
             KE.util.showBottom(id);
             document.body.parentNode.style.overflow = 'auto';
-            var div = KE.g[id].container;
-            div.style.position = 'static';
             KE.util.resize(id, parseInt(this.width), parseInt(this.height));
             if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
             KE.event.remove(window, 'resize', resizeListener);
         } else {
             obj.fullscreenMode = true;
+            KE.util.setData(id);
             this.width = obj.container.style.width;
             this.height = obj.container.style.height;
+            KE.remove(id, 2);
+            KE.create(id, 1);
             KE.util.hideBottom(id);
             document.body.parentNode.style.overflow = 'hidden';
             var div = KE.g[id].container;
