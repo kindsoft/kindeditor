@@ -853,7 +853,7 @@ KE.create = function(id) {
         newTextarea.value = srcTextarea.value;
         newTextarea.style.display = 'block';
         iframe.style.display = 'none';
-        KE.toolbar.disable(id, ['source', 'preview', 'fullscreen', 'undo', 'redo']);
+        KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
     }
     if (KE.g[id].autoOnsubmitMode) {
         var form = srcTextarea.parentNode;

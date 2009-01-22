@@ -254,13 +254,13 @@ KE.plugin['source'] = {
             }
             obj.iframe.style.display = 'none';
             obj.newTextarea.style.display = 'block';
-            KE.toolbar.disable(id, ['source', 'preview', 'fullscreen', 'undo', 'redo']);
+            KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
             obj.wyswygMode = false;
         } else {
             obj.iframeDoc.body.innerHTML = obj.newTextarea.value;
             obj.iframe.style.display = 'block';
             obj.newTextarea.style.display = 'none';
-            KE.toolbar.able(id, ['source', 'preview', 'fullscreen', 'undo', 'redo']);
+            KE.toolbar.able(id, ['source', 'preview', 'fullscreen']);
             obj.wyswygMode = true;
         }
         KE.util.focus(id);
