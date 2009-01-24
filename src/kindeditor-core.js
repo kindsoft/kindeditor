@@ -795,7 +795,7 @@ KE.history = {
     }
 };
 KE.remove = function(id, mode) {
-    mode = (mode == null) ? 0 : mode;
+    mode = (typeof mode == "undefined") ? 0 : mode;
     var container = KE.g[id].container;
     if (mode == 1) {
         document.body.removeChild(container);
@@ -805,11 +805,12 @@ KE.remove = function(id, mode) {
     }
     document.body.removeChild(KE.g[id].hideDiv);
     document.body.removeChild(KE.g[id].maskDiv);
+    KE.g[id].containner = null;
 };
 KE.create = function(id, mode) {
     var srcTextarea = KE.$(id);
-    var mode = (mode == null) ? 0 : mode;
-    if (!mode && srcTextarea.style.display == "none") return;
+    mode = (typeof mode == "undefined") ? 0 : mode;
+    if (mode == 0 && KE.g[id].container != null) return;
     var width = srcTextarea.style.width;
     var height = srcTextarea.style.height;
     var container = KE.$$('div');
@@ -914,10 +915,10 @@ KE.browser = KE.util.getBrowser();
 KE.plugin = {};
 KE.g = {};
 KE.init = function(config) {
-    config.wyswygMode = (config.wyswygMode == null) ? true : config.wyswygMode;
-    config.autoOnsubmitMode = (config.autoOnsubmitMode == null) ? true : config.autoOnsubmitMode;
-    config.resizeMode = (config.resizeMode == null) ? 2 : config.resizeMode;
-    config.filterMode = (config.filterMode == null) ? true : config.filterMode;
+    config.wyswygMode = (typeof config.wyswygMode == "undefined") ? true : config.wyswygMode;
+    config.autoOnsubmitMode = (typeof config.autoOnsubmitMode == "undefined") ? true : config.autoOnsubmitMode;
+    config.resizeMode = (typeof config.resizeMode == "undefined") ? 2 : config.resizeMode;
+    config.filterMode = (typeof config.filterMode == "undefined") ? true : config.filterMode;
     config.skinType = config.skinType || 'default';
     config.cssPath = config.cssPath || '';
     config.skinsPath = config.skinsPath || KE.scriptPath + 'skins/';
