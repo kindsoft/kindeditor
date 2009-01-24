@@ -908,7 +908,7 @@ KE.create = function(id, mode) {
     KE.history.add(id, false);
     KE.util.focus(id);
 };
-KE.version = '3.0 beta 4';
+KE.version = '3.0';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowser();
