@@ -347,7 +347,7 @@ KE.util = {
             if (KE.browser == 'IE' && endFlag && KE.util.inArray(tagName, ['br', 'hr'])) html += "\n";
             htmlList.push(html);
             if (!endFlag) startTags.push(tagName);
-        }
+        };
         var setEndTag = function() {
             if (startTags.length > 0) {
                 var endTag = startTags.pop();
@@ -355,7 +355,19 @@ KE.util = {
                 if (KE.browser == 'IE' && KE.util.inArray(endTag, ['p', 'div', 'table', 'ol', 'ul'])) html += "\n";
                 htmlList.push(html);
             }
-        }
+        };
+        var getFontStyle = function(node) {
+            var style = "";
+            if (node.style.color) style += 'color:' + node.style.color + ';';
+            if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
+            if (node.style.fontSize) style += 'font-size:' + node.style.fontSize + ';';
+            if (node.style.fontFamily) style += 'font-family:' + node.style.fontFamily + ';';
+            if (node.style.fontWeight) style += 'font-weight:' + node.style.fontWeight + ';';
+            if (node.style.fontStyle) style += 'font-style:' + node.style.fontStyle + ';';
+            if (node.style.textDecoration) style += 'text-decoration:' + node.style.textDecoration + ';';
+            if (node.style.verticalAlign) style += 'vertical-align:' + node.style.verticalAlign + ';';
+            return style;
+        };
         var scanNodes = function(el) {
             var nodes = el.childNodes;
             for (var i = 0; i < nodes.length; i++) {
@@ -374,14 +386,7 @@ KE.util = {
                         setStartTag(tagName, attr, style, false);
                         break;
                     case 'span':
-                        if (node.style.color) style += 'color:' + node.style.color + ';';
-                        if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
-                        if (node.style.fontSize) style += 'font-size:' + node.style.fontSize + ';';
-                        if (node.style.fontFamily) style += 'font-family:' + node.style.fontFamily + ';';
-                        if (node.style.fontWeight) style += 'font-weight:' + node.style.fontWeight + ';';
-                        if (node.style.fontStyle) style += 'font-style:' + node.style.fontStyle + ';';
-                        if (node.style.textDecoration) style += 'text-decoration:' + node.style.textDecoration + ';';
-                        if (node.style.verticalAlign) style += 'vertical-align:' + node.style.verticalAlign + ';';
+                        style += getFontStyle(node);
                         setStartTag(tagName, attr, style, false);
                         break;
                      case 'div':
@@ -410,6 +415,7 @@ KE.util = {
                             if (node.style.paddingBottom) style += 'padding-bottom:' + node.style.paddingBottom + ';';
                         }
                         if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
+                        style += getFontStyle(node);
                         setStartTag(tagName, attr, style, false);
                         break;
                      case 'a':
@@ -447,6 +453,7 @@ KE.util = {
                     case 'p':
                         if (node.align) attr += ' align="' + node.align + '"';
                         if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
+                        style += getFontStyle(node);
                         setStartTag(tagName, attr, style, false);
                         break;
                     case 'tbody':
