@@ -446,6 +446,7 @@ KE.util = {
                         break;
                     case 'p':
                         if (node.align) attr += ' align="' + node.align + '"';
+                        if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
                         setStartTag(tagName, attr, style, false);
                         break;
                     case 'tbody':
