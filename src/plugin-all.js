@@ -174,10 +174,10 @@ KE.plugin['fontname'] = {
             cmd : cmd,
             width : '160px'
         });
-        for (var i in fontName) {
-            var html = '<span style="font-family: ' + i + ';">' + fontName[i] + '</span>';
-            menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + i + '")'));
-        }
+        KE.each(fontName, function(key, value) {
+            var html = '<span style="font-family: ' + key + ';">' + value + '</span>';
+            menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + key + '")'));
+        });
         menu.show();
     },
     exec : function(id, value) {
@@ -204,10 +204,10 @@ KE.plugin['fontsize'] = {
             cmd : cmd,
             width : '100px'
         });
-        for (var i in fontSize) {
-            var html = '<span style="font-size: ' + fontSize[i] + ';">' + fontSize[i] + '</span>';
-            menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + i + '")'));
-        }
+        KE.each(fontSize, function(key, value) {
+            var html = '<span style="font-size: ' + value + ';">' + value + '</span>';
+            menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + key + '")'));
+        });
         menu.show();
     },
     exec : function(id, value) {
@@ -310,10 +310,10 @@ KE.plugin['title'] = {
             cmd : cmd,
             width : '120px'
         });
-        for (var i in title) {
-            var html = '<' + i + ' style="margin:0px;">' + title[i] + '</' + i + '>';
-            menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "<' + i + '>")'));
-        }
+        KE.each(title, function(key, value) {
+            var html = '<' + key + ' style="margin:0px;">' + value + '</' + key + '>';
+            menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "<' + key + '>")'));
+        });
         menu.show();
     },
     exec : function(id, value) {
@@ -521,7 +521,7 @@ KE.plugin['layer'] = {
             cmd : cmd,
             width : '150px'
         });
-        for (var i in styles) {
+        for (var i = 0; i < styles.length; i++) {
             var html = '<div style="height:15px;' + styles[i] + '"></div>';
             menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "padding:5px;' + styles[i] + '")'));
         }

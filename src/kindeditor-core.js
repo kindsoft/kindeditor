@@ -31,6 +31,11 @@ KE.event = {
         }
     }
 };
+KE.each = function(obj, func) {
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) func(key, obj[key]);
+    }
+};
 KE.util = {
     getDocumentElement : function() {
         return (document.compatMode != "CSS1Compat") ? document.body : document.documentElement;
@@ -74,7 +79,7 @@ KE.util = {
         document.getElementsByTagName("head")[0].appendChild(link);
     },
     inArray : function(str, arr) {
-        for (var i in arr) {if (str == arr[i]) return true;}
+        for (var i = 0; i < arr.length; i++) {if (str == arr[i]) return true;}
         return false;
     },
     escape : function(html) {
@@ -169,7 +174,7 @@ KE.util = {
             'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript',
             'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'unlink'
         ];
-        for (var i in items) {
+        for (var i = 0; i < items.length; i++) {
             KE.plugin[items[i]] = {
                 click : new Function('id', 'KE.util.execCommand(id, "' + items[i] + '", null);')
             };
@@ -690,26 +695,26 @@ KE.dialog = function(arg){
 };
 KE.toolbar = {
     able : function(id, arr) {
-        for (var cmd in KE.g[id].toolbarIcon) {
-            if (KE.util.inArray(cmd, arr)) continue;
-            var obj = KE.g[id].toolbarIcon[cmd];
-            obj.className = 'ke-icon';
-            KE.util.setOpacity(obj, 100);
-            obj.onmouseover = function(){ this.className = "ke-icon-selected"; };
-            obj.onmouseout = function(){ this.className = "ke-icon"; };
-            obj.onclick = new Function('KE.util.click("' + id + '", "' + cmd + '")');
-        }
+        KE.each(KE.g[id].toolbarIcon, function(cmd, obj) {
+            if (!KE.util.inArray(cmd, arr)) {
+                obj.className = 'ke-icon';
+                KE.util.setOpacity(obj, 100);
+                obj.onmouseover = function(){ this.className = "ke-icon-selected"; };
+                obj.onmouseout = function(){ this.className = "ke-icon"; };
+                obj.onclick = new Function('KE.util.click("' + id + '", "' + cmd + '")');
+            }
+        });
     },
     disable : function(id, arr) {
-        for (var cmd in KE.g[id].toolbarIcon) {
-            if (KE.util.inArray(cmd, arr)) continue;
-            var obj = KE.g[id].toolbarIcon[cmd];
-            obj.className = 'ke-icon-disabled';
-            KE.util.setOpacity(obj, 50);
-            obj.onmouseover = null;
-            obj.onmouseout = null;
-            obj.onclick = null;
-        }
+        KE.each(KE.g[id].toolbarIcon, function(cmd, obj) {
+            if (!KE.util.inArray(cmd, arr)) {
+                obj.className = 'ke-icon-disabled';
+                KE.util.setOpacity(obj, 50);
+                obj.onmouseover = null;
+                obj.onmouseout = null;
+                obj.onclick = null;
+            }
+        });
     },
     create : function(id) {
         KE.g[id].toolbarIcon = [];
