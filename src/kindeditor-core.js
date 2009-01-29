@@ -476,6 +476,9 @@ KE.util = {
                     case 'em':
                     case 'u':
                     case 'strike':
+                        if (node.align) attr += ' align="' + node.align + '"';
+                        if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
+                        style += getFontStyle(node);
                         setStartTag(tagName, attr, style, false);
                         break;
                     default:
