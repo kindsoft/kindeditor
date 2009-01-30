@@ -563,27 +563,15 @@ KE.plugin['link'] = {
             KE.g[id].yesButton.focus();
             return false;
         }
-        if (KE.browser == 'IE') {
-            if (sel.type.toLowerCase() == 'control') {
-                var el = KE.$$("a", iframeDoc);
-                el.href = url;
-                if (target) el.target = target;
-                range.item(0).applyElement(el);
-            } else if (sel.type.toLowerCase() == 'text') {
-                iframeDoc.execCommand("createlink", false, url);
-                var el = range.parentElement();
-                if (el && target) el.target = target;
-                KE.history.add(id);
+        iframeDoc.execCommand("createlink", false, "##ke_temp_url##");
+        var arr = iframeDoc.getElementsByTagName('a');
+        for (var i = 0, l = arr.length; i < l; i++) {
+            if (arr[i].href.match(/##ke_temp_url##$/) != null) {
+                arr[i].href = url;
+                if (target) arr[i].target = target;
             }
-        } else {
-            var node = range.cloneContents();
-            var div = KE.$$('div', iframeDoc);
-            div.appendChild(node);
-            var html = '<a href="' + url + '"';
-            if (target) html += ' target="' + target + '"';
-            html += '>' + div.innerHTML + '</a>';
-            KE.util.insertHtml(id, html);
         }
+        KE.history.add(id);
         KE.layout.hide(id);
         KE.util.focus(id);
     }
