@@ -558,7 +558,7 @@ KE.plugin['link'] = {
         var url = KE.$('hyperLink', dialogDoc).value;
         var target = KE.$('linkType', dialogDoc).value;
         if (url.match(/\w+:\/\/.{3,}/) == null) {
-            alert('URL不正确。');
+            alert(KE.lang['invalidUrl']);
             window.focus();
             KE.g[id].yesButton.focus();
             return false;

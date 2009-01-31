@@ -110,5 +110,6 @@ KE.lang = {
     invalidWidth : "宽度必须为数字。",
     invalidHeight : "高度必须为数字。",
     invalidBorder : "边框必须为数字。",
+    invalidUrl : "URL不正确。",
     pleaseInput : "请输入内容"
 };
