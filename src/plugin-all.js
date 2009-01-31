@@ -552,7 +552,6 @@ KE.plugin['link'] = {
     exec : function(id) {
         KE.util.select(id);
         var iframeDoc = KE.g[id].iframeDoc;
-        var sel = KE.g[id].selection;
         var range = KE.g[id].range;
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var url = KE.$('hyperLink', dialogDoc).value;
@@ -563,10 +562,17 @@ KE.plugin['link'] = {
             KE.g[id].yesButton.focus();
             return false;
         }
-        iframeDoc.execCommand("createlink", false, "##ke_temp_url##");
-        var arr = iframeDoc.getElementsByTagName('a');
+        var node;
+        if (KE.browser == 'IE') {
+            node = range.item ? range.item(0).parentNode : range.parentElement();
+        } else {
+            node = (range.startContainer == range.endContainer) ? range.startContainer.parentNode : iframeDoc.body;
+        }
+        if (!node) node = iframeDoc.body;
+        iframeDoc.execCommand("createlink", false, "__ke_temp_url__");
+        var arr = node.getElementsByTagName('a');
         for (var i = 0, l = arr.length; i < l; i++) {
-            if (arr[i].href.match(/##ke_temp_url##$/) != null) {
+            if (arr[i].href.match(/\/?__ke_temp_url__$/) != null) {
                 arr[i].href = url;
                 if (target) arr[i].target = target;
             }
