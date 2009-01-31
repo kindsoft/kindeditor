@@ -6,7 +6,6 @@
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
 * @version 3.0
 *******************************************************************************/
-
 KE.$ = function(id, doc){
     var doc = doc || document;
     return doc.getElementById(id);
@@ -824,6 +823,7 @@ KE.remove = function(id, mode) {
     KE.g[id].containner = null;
 };
 KE.create = function(id, mode) {
+    if (KE.browser == 'IE') try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
     var srcTextarea = KE.$(id);
     mode = (typeof mode == "undefined") ? 0 : mode;
     if (mode == 0 && KE.g[id].container != null) return;
