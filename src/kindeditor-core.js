@@ -879,7 +879,6 @@ KE.create = function(id, mode) {
     iframeDoc.open();
     iframeDoc.write(html);
     iframeDoc.close();
-    if (srcTextarea.value) iframeDoc.body.innerHTML = srcTextarea.value;
     if (!KE.g[id].wyswygMode) {
         newTextarea.value = srcTextarea.value;
         newTextarea.style.display = 'block';
@@ -921,7 +920,11 @@ KE.create = function(id, mode) {
         KE.util.resize(id, objWidth, objHeight + top);
     });
     if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
-    KE.history.add(id, false);
+    setTimeout(
+        function(){
+            if (srcTextarea.value) iframeDoc.body.innerHTML = srcTextarea.value;
+            KE.history.add(id, false);
+        }, 1);
     KE.util.focus(id);
 };
 KE.version = '3.0';
