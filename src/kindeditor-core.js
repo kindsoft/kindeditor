@@ -729,6 +729,9 @@ KE.toolbar = {
     create : function(id) {
         KE.g[id].toolbarIcon = [];
         var toolbar = KE.$$('table');
+        toolbar.oncontextmenu = function() { return false; };
+        toolbar.onmousedown = function() { return false; };
+        toolbar.onmousemove = function() { return false; };
         toolbar.className = 'ke-toolbar';
         toolbar.cellPadding = 0;
         toolbar.cellSpacing = 0;
