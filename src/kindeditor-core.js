@@ -327,7 +327,7 @@ KE.util = {
     },
     removeDomain : function(id, url) {
         for (var i = 0; i < KE.g[id].siteDomains.length; i++) {
-            var domain = "http://" + KE.g[id].siteDomains;
+            var domain = "http://" + KE.g[id].siteDomains[i];
             if (url.indexOf(domain) == 0) {
                 url = url.substr(domain.length);
             }
