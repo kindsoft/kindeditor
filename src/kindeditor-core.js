@@ -930,7 +930,7 @@ KE.create = function(id, mode) {
         }, 1);
     KE.util.focus(id);
 };
-KE.version = '3.0';
+KE.version = '3.0.1';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowser();
