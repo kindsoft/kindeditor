@@ -284,7 +284,7 @@ KE.util = {
             }
         } catch(e) {}
         if (!range) {
-            range = (KE.browser = 'IE') ? doc.body.createTextRange() : doc.createRange();
+            range = (KE.browser == 'IE') ? doc.body.createTextRange() : doc.createRange();
         }
         KE.g[id].selection = sel;
         KE.g[id].range = range;
