@@ -568,6 +568,7 @@ KE.plugin['link'] = {
         } else {
             node = (range.startContainer == range.endContainer) ? range.startContainer.parentNode : iframeDoc.body;
         }
+        if (node && node.tagName == 'A') node = node.parentNode;
         if (!node) node = iframeDoc.body;
         iframeDoc.execCommand("createlink", false, "__ke_temp_url__");
         var arr = node.getElementsByTagName('a');
