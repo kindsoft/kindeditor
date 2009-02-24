@@ -85,6 +85,16 @@ KE.util = {
         html = html.replace(/&/g, "&amp;");
         html = html.replace(/</g, "&lt;");
         html = html.replace(/>/g, "&gt;");
+        html = html.replace(/\xA0/g, " ");
+        html = html.replace(/\x20{2,}/g,
+                            function($0) {
+                                var str = "";
+                                if ($0.length == 2) return "&nbsp; ";
+                                for (var i = 0, len = $0.length - 2; i < len; i++) {
+                                    str += "&nbsp;";
+                                }
+                                return " " + str + " ";
+                            });
         return html;
     },
     getElementPos : function(el) {
