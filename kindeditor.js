@@ -476,14 +476,46 @@ KE.util = {
                     if (typeof htmlTags[tagName] != 'undefined') {
                         var attrStr = '';
                         var styleStr = '';
-                        if (node.className && node.className != 'Apple-style-span') attrStr += ' class="' + node.className + '"';
-                        if (node.id) attrStr += ' id="' + node.id + '"';
                         var attrList = htmlTags[tagName];
                         var endFlag = false;
                         for (var j = 0, l = attrList.length; j < l; j++) {
                             var attr = attrList[j];
                             if (attr == '/') endFlag = true;
-                            else {
+                            else if (attr.charAt(0) == '.') {
+                                var key = attr.substr(1);
+                                var arr = key.split('-');
+                                var jsKey = '';
+                                for (var k = 0, length = arr.length; k < length; k++) {
+                                    jsKey += (k > 0) ? arr[k].charAt(0).toUpperCase() + arr[k].substr(1) : arr[k];
+                                }
+                                if (key == 'border') {
+                                    if (node.style.border) {
+                                        styleStr += 'border:' + node.style.border + ';';
+                                    } else if (node.style.borderWidth && node.style.borderStyle && node.style.borderColor) {
+                                        styleStr += 'border:' + node.style.borderWidth + ' ' + node.style.borderStyle + ' ' + node.style.borderColor + ';';
+                                    }
+                                } else if (key == 'margin') {
+                                    if (node.style.margin) {
+                                        styleStr += 'margin:' + node.style.margin + ';';
+                                    } else {
+                                        if (node.style.marginLeft) styleStr += 'margin-left:' + node.style.marginLeft + ';';
+                                        if (node.style.marginRight) styleStr += 'margin-right:' + node.style.marginRight + ';';
+                                        if (node.style.marginTop) styleStr += 'margin-top:' + node.style.marginTop + ';';
+                                        if (node.style.marginBottom) styleStr += 'margin-bottom:' + node.style.marginBottom + ';';
+                                    }
+                                } else if (key == 'padding') {
+                                    if (node.style.padding) {
+                                        styleStr += 'padding:' + node.style.padding + ';';
+                                    } else {
+                                        if (node.style.paddingLeft) styleStr += 'padding-left:' + node.style.paddingLeft + ';';
+                                        if (node.style.paddingRight) styleStr += 'padding-right:' + node.style.paddingRight + ';';
+                                        if (node.style.paddingTop) styleStr += 'padding-top:' + node.style.paddingTop + ';';
+                                        if (node.style.paddingBottom) styleStr += 'padding-bottom:' + node.style.paddingBottom + ';';
+                                    }
+                                } else {
+                                    if (node.style[jsKey]) styleStr += key + ':' + node.style[jsKey] + ';';
+                                }
+                            } else {
                                 var val = node.getAttribute(attr);
                                 if (val != null && val !== '') {
                                     if (typeof val == 'string' && val.match(/^javascript:/)) val = '';
@@ -491,8 +523,6 @@ KE.util = {
                                 }
                             }
                         }
-                        if (node.style.cssText) styleStr += node.style.cssText;
-                        if (KE.browser == 'IE' && styleStr) styleStr = styleStr.toLowerCase() + ';';
                         setStartTag(tagName, attrStr, styleStr, endFlag);
                     }
                     if (node.hasChildNodes()) {
@@ -974,33 +1004,33 @@ KE.init = function(config) {
     config.defaultItems = defaultItems;
     config.items = config.items || defaultItems;
     var defaultHtmlTags = {
-        'font' : ['color', 'size', 'face'],
-        'span' : [],
-        'div' : ['align'],
+        'font' : ['color', 'size', 'face', '.background-color'],
+        'span' : ['.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'div' : ['class', 'align', '.border', '.margin', '.padding', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'a' : ['href', 'target'],
-        'table' : ['border', 'cellspacing', 'cellpadding', 'width', 'height'],
-        'embed' : ['src', 'type', 'loop', 'autostart', 'quality', '/'],
-        'img' : ['src', 'width', 'height', 'border', 'alt', 'title', '/'],
+        'embed' : ['src', 'type', 'loop', 'autostart', 'quality', '.width', '.height', '/'],
+        'img' : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
         'hr' : ['/'],
         'br' : ['/'],
-        'p' : ['align'],
+        'p' : ['align', 'text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'table' : ['border', 'cellspacing', 'cellpadding', 'width', 'height', '.padding', '.margin', '.border'],
         'tbody': [],
         'tr': [],
-        'td': ['align'],
+        'td': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'strong': [],
         'b': [],
-        'ol': ['align'],
-        'ul': ['align'],
-        'li': ['align'],
+        'ol': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'ul': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'li': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'sub': [],
         'sup': [],
-        'blockquote': ['align'],
-        'h1': ['align'],
-        'h2': ['align'],
-        'h3': ['align'],
-        'h4': ['align'],
-        'h5': ['align'],
-        'h6': ['align'],
+        'blockquote': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h1': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h2': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h3': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h4': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h5': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h6': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'em': [],
         'u': [],
         'strike': []
