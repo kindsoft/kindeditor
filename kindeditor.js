@@ -485,7 +485,10 @@ KE.util = {
                             if (attr == '/') endFlag = true;
                             else {
                                 var val = node.getAttribute(attr);
-                                if (val != null && val !== '' && val.match(/^javascript:/) == null) attrStr += ' ' + attr + '="' + val + '"';
+                                if (val != null && val !== '') {
+                                    if (typeof val == 'string' && val.match(/^javascript:/)) val = '';
+                                    attrStr += ' ' + attr + '="' + val + '"';
+                                }
                             }
                         }
                         if (node.style.cssText) styleStr += node.style.cssText;
