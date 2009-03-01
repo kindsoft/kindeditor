@@ -85,16 +85,8 @@ KE.util = {
         html = html.replace(/&/g, "&amp;");
         html = html.replace(/</g, "&lt;");
         html = html.replace(/>/g, "&gt;");
-        html = html.replace(/\xA0/g, " ");
-        html = html.replace(/\x20{2,}/g,
-                            function($0) {
-                                var str = "";
-                                if ($0.length == 2) return "&nbsp; ";
-                                for (var i = 0, len = $0.length - 2; i < len; i++) {
-                                    str += "&nbsp;";
-                                }
-                                return " " + str + " ";
-                            });
+        html = html.replace(/\xA0/g, "&nbsp;");
+        html = html.replace(/\x20/g, " ");
         return html;
     },
     getElementPos : function(el) {
@@ -345,13 +337,14 @@ KE.util = {
         return url;
     },
     outputHtml : function(id, element) {
+        var htmlTags = KE.g[id].htmlTags;
         var htmlList = [];
         var startTags = [];
-        var setStartTag = function(tagName, attr, style, endFlag) {
+        var setStartTag = function(tagName, attrStr, styleStr, endFlag) {
             var html = '';
             html += '<' + tagName;
-            if (attr) html += attr;
-            if (style) html += ' style="' + style + '"';
+            if (attrStr) html += attrStr;
+            if (styleStr) html += ' style="' + styleStr + '"';
             html += endFlag ? ' />' : '>';
             if (KE.browser == 'IE' && endFlag && KE.util.inArray(tagName, ['br', 'hr'])) html += "\n";
             htmlList.push(html);
@@ -365,133 +358,31 @@ KE.util = {
                 htmlList.push(html);
             }
         };
-        var getFontStyle = function(node) {
-            var style = "";
-            if (node.style.color) style += 'color:' + node.style.color + ';';
-            if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
-            if (node.style.fontSize) style += 'font-size:' + node.style.fontSize + ';';
-            if (node.style.fontFamily) style += 'font-family:' + node.style.fontFamily + ';';
-            if (node.style.fontWeight) style += 'font-weight:' + node.style.fontWeight + ';';
-            if (node.style.fontStyle) style += 'font-style:' + node.style.fontStyle + ';';
-            if (node.style.textDecoration) style += 'text-decoration:' + node.style.textDecoration + ';';
-            if (node.style.verticalAlign) style += 'vertical-align:' + node.style.verticalAlign + ';';
-            return style;
-        };
         var scanNodes = function(el) {
             var nodes = el.childNodes;
-            for (var i = 0; i < nodes.length; i++) {
+            for (var i = 0, len = nodes.length; i < len; i++) {
                 var node = nodes[i];
                 switch (node.nodeType) {
                 case 1:
                     var tagName = node.tagName.toLowerCase();
-                    var attr = '';
-                    var style = '';
-                    switch (tagName) {
-                    case 'font':
-                        if (node.color) attr += ' color="' + node.color + '"';
-                        if (node.size) attr += ' size="' + node.size + '"';
-                        if (node.face) attr += ' face="' + node.face + '"';
-                        if (node.style.backgroundColor) style += 'background-color:' + node.style.backgroundColor + ';';
-                        setStartTag(tagName, attr, style, false);
-                        break;
-                    case 'span':
-                        style += getFontStyle(node);
-                        setStartTag(tagName, attr, style, false);
-                        break;
-                     case 'div':
-                        if (node.align) attr += ' align="' + node.align + '"';
-                        if (node.style.border) {
-                            style += 'border:' + node.style.border + ';';
-                        } else {
-                            if (node.style.borderWidth && node.style.borderStyle && node.style.borderColor) {
-                                style += 'border:' + node.style.borderWidth + ' ' + node.style.borderStyle + ' ' + node.style.borderColor + ';';
+                    if (typeof htmlTags[tagName] != 'undefined') {
+                        var attrStr = '';
+                        var styleStr = '';
+                        if (node.className && node.className != 'Apple-style-span') attrStr += ' class="' + node.className + '"';
+                        if (node.id) attrStr += ' id="' + node.id + '"';
+                        var attrList = htmlTags[tagName];
+                        var endFlag = false;
+                        for (var j = 0, l = attrList.length; j < l; j++) {
+                            var attr = attrList[j];
+                            if (attr == '/') endFlag = true;
+                            else {
+                                var val = node.getAttribute(attr);
+                                if (val != null && val !== '' && val.match(/^javascript:/) == null) attrStr += ' ' + attr + '="' + val + '"';
                             }
                         }
-                        if (node.style.margin) {
-                            style += 'margin:' + node.style.margin + ';';
-                        } else {
-                            if (node.style.marginLeft) style += 'margin-left:' + node.style.marginLeft + ';';
-                            if (node.style.marginRight) style += 'margin-right:' + node.style.marginRight + ';';
-                            if (node.style.marginTop) style += 'margin-top:' + node.style.marginTop + ';';
-                            if (node.style.marginBottom) style += 'margin-bottom:' + node.style.marginBottom + ';';
-                        }
-                        if (node.style.padding) {
-                            style += 'padding:' + node.style.padding + ';';
-                        } else {
-                            if (node.style.paddingLeft) style += 'padding-left:' + node.style.paddingLeft + ';';
-                            if (node.style.paddingRight) style += 'padding-right:' + node.style.paddingRight + ';';
-                            if (node.style.paddingTop) style += 'padding-top:' + node.style.paddingTop + ';';
-                            if (node.style.paddingBottom) style += 'padding-bottom:' + node.style.paddingBottom + ';';
-                        }
-                        if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
-                        style += getFontStyle(node);
-                        setStartTag(tagName, attr, style, false);
-                        break;
-                     case 'a':
-                        if (node.href) attr += ' href="' + KE.util.removeDomain(id, node.href) + '"';
-                        if (node.target) attr += ' target="' + node.target + '"';
-                        setStartTag(tagName, attr, style);
-                        break;
-                    case 'table':
-                        if (typeof node.border != 'undefined') attr += ' border="' + node.border + '"';
-                        setStartTag(tagName, attr, style, false);
-                        break;
-                    case 'embed':
-                        if (node.src) attr += ' src="' + KE.util.removeDomain(id, node.src) + '"';
-                        if (node.getAttribute('type')) attr += ' type="' + node.getAttribute('type') + '"';
-                        if (node.getAttribute('loop')) attr += ' loop="' + node.getAttribute('loop') + '"';
-                        if (node.getAttribute('autostart')) attr += ' autostart="' + node.getAttribute('autostart') + '"';
-                        if (node.getAttribute('quality')) attr += ' quality="' + node.getAttribute('quality') + '"';
-                        if (node.style.width) style += 'width:' + node.style.width + ';';
-                        if (node.style.height) style += 'height:' + node.style.height + ';';
-                        setStartTag(tagName, attr, style, true);
-                        break;
-                    case 'img':
-                        if (node.src) attr += ' src="' + KE.util.removeDomain(id, node.src) + '"';
-                        if (node.width) attr += ' width="' + node.width + '"';
-                        if (node.height) attr += ' height="' + node.height + '"';
-                        if (node.border) attr += ' border="' + node.border + '"';
-                        if (node.alt) attr += ' alt="' + node.alt + '"';
-                        if (node.title) attr += ' title="' + node.title + '"';
-                        setStartTag(tagName, attr, style, true);
-                        break;
-                    case 'hr':
-                    case 'br':
-                        setStartTag(tagName, attr, style, true);
-                        break;
-                    case 'p':
-                        if (node.align) attr += ' align="' + node.align + '"';
-                        if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
-                        style += getFontStyle(node);
-                        setStartTag(tagName, attr, style, false);
-                        break;
-                    case 'tbody':
-                    case 'tr':
-                    case 'td':
-                    case 'strong':
-                    case 'b':
-                    case 'ol':
-                    case 'ul':
-                    case 'li':
-                    case 'sub':
-                    case 'sup':
-                    case 'blockquote':
-                    case 'h1':
-                    case 'h2':
-                    case 'h3':
-                    case 'h4':
-                    case 'h5':
-                    case 'h6':
-                    case 'em':
-                    case 'u':
-                    case 'strike':
-                        if (node.align) attr += ' align="' + node.align + '"';
-                        if (node.style.textAlign) style += 'text-align:' + node.style.textAlign + ';';
-                        style += getFontStyle(node);
-                        setStartTag(tagName, attr, style, false);
-                        break;
-                    default:
-                        break;
+                        if (node.style.cssText) styleStr += node.style.cssText;
+                        if (KE.browser == 'IE' && styleStr) styleStr = styleStr.toLowerCase() + ';';
+                        setStartTag(tagName, attrStr, styleStr, endFlag);
                     }
                     if (node.hasChildNodes()) {
                         scanNodes(node);
@@ -940,7 +831,7 @@ KE.create = function(id, mode) {
         }, 1);
     KE.util.focus(id);
 };
-KE.version = '3.0.1';
+KE.version = '3.0.2';
 KE.scriptPath = KE.util.getScriptPath();
 KE.htmlPath = KE.util.getHtmlPath();
 KE.browser = KE.util.getBrowser();
@@ -971,6 +862,39 @@ KE.init = function(config) {
     ];
     config.defaultItems = defaultItems;
     config.items = config.items || defaultItems;
+    var defaultHtmlTags = {
+        'font' : ['color', 'size', 'face'],
+        'span' : [],
+        'div' : ['align'],
+        'a' : ['href', 'target'],
+        'table' : ['border', 'cellspacing', 'cellpadding', 'width', 'height'],
+        'embed' : ['src', 'type', 'loop', 'autostart', 'quality', '/'],
+        'img' : ['src', 'width', 'height', 'border', 'alt', 'title', '/'],
+        'hr' : ['/'],
+        'br' : ['/'],
+        'p' : ['align'],
+        'tbody': [],
+        'tr': [],
+        'td': ['align'],
+        'strong': [],
+        'b': [],
+        'ol': ['align'],
+        'ul': ['align'],
+        'li': ['align'],
+        'sub': [],
+        'sup': [],
+        'blockquote': ['align'],
+        'h1': ['align'],
+        'h2': ['align'],
+        'h3': ['align'],
+        'h4': ['align'],
+        'h5': ['align'],
+        'h6': ['align'],
+        'em': [],
+        'u': [],
+        'strike': []
+    };
+    config.htmlTags = config.htmlTags || defaultHtmlTags;
     KE.g[config.id] = config;
     KE.g[config.id].undoStack = [];
     KE.g[config.id].redoStack = [];
