@@ -970,7 +970,6 @@ KE.create = function(id, mode) {
             if (srcTextarea.value) iframeDoc.body.innerHTML = srcTextarea.value;
             KE.history.add(id, false);
         }, 1);
-    KE.util.focus(id);
 };
 KE.version = '3.1';
 KE.scriptPath = KE.util.getScriptPath();
@@ -1012,25 +1011,25 @@ KE.init = function(config) {
         'img' : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
         'hr' : ['/'],
         'br' : ['/'],
-        'p' : ['align', 'text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'p' : ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'table' : ['border', 'cellspacing', 'cellpadding', 'width', 'height', '.padding', '.margin', '.border'],
         'tbody': [],
         'tr': [],
-        'td': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'td': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'strong': [],
         'b': [],
-        'ol': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'ul': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'li': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'ol': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'ul': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'li': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'sub': [],
         'sup': [],
-        'blockquote': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'h1': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'h2': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'h3': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'h4': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'h5': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
-        'h6': ['align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'blockquote': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h1': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h2': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h3': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h4': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h5': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
+        'h6': ['align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.vertical-align'],
         'em': [],
         'u': [],
         'strike': []
