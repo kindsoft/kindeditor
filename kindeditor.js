@@ -436,11 +436,10 @@ KE.util = {
         }
     },
     removeDomain : function(id, url) {
-        for (var i = 0; i < KE.g[id].siteDomains.length; i++) {
-            var domain = "http://" + KE.g[id].siteDomains[i];
-            if (url.indexOf(domain) == 0) {
-                url = url.substr(domain.length);
-            }
+        var domains = KE.g[id].siteDomains;
+        for (var i = 0, len = domains.length; i < len; i++) {
+            var domain = "http://" + domains[i];
+            if (url.indexOf(domain) == 0) return url.substr(domain.length);
         }
         return url;
     },
@@ -519,6 +518,8 @@ KE.util = {
                                 var val = node.getAttribute(attr);
                                 if (val != null && val !== '') {
                                     if (typeof val == 'string' && val.match(/^javascript:/)) val = '';
+                                    if ((tagName == 'a' && attr == 'href') || (tagName == 'img' && attr == 'src') ||
+                                        (tagName == 'embed' && attr == 'src')) val = KE.util.removeDomain(id, val);
                                     attrStr += ' ' + attr + '="' + val + '"';
                                 }
                             }
