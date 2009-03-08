@@ -957,7 +957,6 @@ KE.create = function(id, mode) {
     height = container.offsetHeight;
     KE.g[id].width = width + 'px';
     KE.g[id].height = height + 'px';
-    KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         if (KE.g[id].resizeMode == 2) KE.util.resize(id, objWidth + left, objHeight + top);
         else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth, objHeight + top);
@@ -968,6 +967,7 @@ KE.create = function(id, mode) {
     if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
     setTimeout(
         function(){
+            KE.util.resize(id, width, height);
             if (srcTextarea.value) iframeDoc.body.innerHTML = srcTextarea.value;
             KE.history.add(id, false);
         }, 1);
