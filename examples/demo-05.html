@@ -2,19 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>KindEditor 3.1</title>
+  <title>KindEditor 3.2</title>
   <style type="text/css" rel="stylesheet">
-    .source {
-    width: 700px;
-    font-size: 12px;
-    font-family:Courier New;
-    border: 1px solid #AAAAAA;
-    background-color: #F0F0EE;
-    padding: 5px;
-    }
-    .source pre {
-    margin: 0;
-    }
     form {
     margin: 0;
     }
@@ -34,12 +23,6 @@
 </head>
 <body>
   <h3>手动添加Onsubmit事件</h3>
-  <div class="source"><pre>
-KE.show({
-    id : 'content5',
-    autoOnsubmitMode : false,
-    cssPath : './index.css'
-});</pre></div>
   <form name="example" method="post" action="./../php/demo.php" onsubmit="javascript:KE.util.setData('content5');">
     <div class="editor">
       <textarea id="content5" name="content" style="width:700px;height:300px;"></textarea>

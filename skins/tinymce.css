@@ -2,10 +2,6 @@
     font-size: 12px;
     font-family: "sans serif",tahoma,verdana,helvetica;
 }
-.ke-common-icon {
-background-repeat: no-repeat;
-overflow: hidden;
-}
 .ke-icon-source {
     background-position: -260px 0px;
     width: 20px;
@@ -245,6 +241,11 @@ overflow: hidden;
     margin:0;
     border-collapse:separate;
 }
+.ke-toolbar-td {
+    border: 0;
+    padding: 2px 5px;
+    margin: 0;
+}
 .ke-toolbar-table {
     font-size: 0;
     float: left;
@@ -253,7 +254,11 @@ overflow: hidden;
     margin:0;
     border-collapse:separate;
 }
+.ke-toolbar-table td {
+    border:0;
+}
 .ke-toolbar-close {
+    display: block;
     background-position: -902px -2px;
     width: 16px;
     height: 16px;
@@ -265,8 +270,10 @@ overflow: hidden;
     cursor: pointer;
 }
 .ke-form {
-    width: 100%;
+    border: 1px solid #FFFFFF;
     background-color: #FFFFFF;
+    margin-left: 1px;
+    margin-right: 1px;
 }
 .ke-bottom {
     width: 100%;
@@ -290,10 +297,13 @@ overflow: hidden;
     padding:0;
 }
 .ke-bottom-right-img {
-    width: 20px;
-    height: 5px;
+    display: block;
+    background-position: -810px -10px;
+    width: 10px;
+    height: 10px;
 }
 .ke-textarea {
+    width: 100%;
     margin: 0;
     padding: 0;
     border: 0;
@@ -310,13 +320,28 @@ overflow: hidden;
     padding: 0;
     background-color: #FFFFFF;
 }
+.ke-common-icon {
+    display: block;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
 .ke-icon {
+    display: block;
     border: 1px solid #F0F0EE;
     padding: 0px;
     margin: 1px;
     cursor: pointer;
 }
+.ke-icon-on {
+    display: block;
+    border: 1px solid #1F3D74;
+    background-color: #B2BBD0;
+    padding: 0px;
+    margin: 1px;
+    cursor: pointer;
+}
 .ke-icon-selected {
+    display: block;
     border: 1px solid #1F3D74;
     background-color: #B2BBD0;
     padding: 0px;
@@ -324,9 +349,11 @@ overflow: hidden;
     cursor: pointer;
 }
 .ke-icon-disabled {
+    display: block;
     border: 1px solid #F0F0EE;
     padding: 0;
     margin: 1px;
+    cursor: default;
 }
 .ke-menu {
     border-top: 2px solid #DDDDDD;

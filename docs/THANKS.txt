@@ -1,0 +1,15 @@
+1. KDE
+http://www.kde.org/
+KDE是Linux上最好的桌面环境，KindEditor 3.x的工具栏图标来自KDE4。
+   
+2. CHEditor
+http://www.chcode.com/
+CHEditor是一款韩国人开发的收费编辑器，KindEditor 2.x参考了CHEditor的UI和部分代码。
+
+3. TinyMCE
+http://tinymce.moxiecode.com/
+TinyMCE是一款非常优秀的编辑器，KindEditor 2.x和3.x参考了TinyMCE的UI和部分代码，并包含了TinyMCE风格。
+
+4. FCKEditor
+http://www.fckeditor.net/
+FCKEditor是老牌编辑器，KindEditor 2.x参考了FCKEditor的UI和部分代码，并包含了FCKEditor风格。

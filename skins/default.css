@@ -2,10 +2,6 @@
     font-size: 12px;
     font-family: "sans serif",tahoma,verdana,helvetica;
 }
-.ke-common-icon {
-background-repeat: no-repeat;
-overflow: hidden;
-}
 .ke-icon-source {
     background-position: 0px 0px;
     width: 39px;
@@ -232,7 +228,7 @@ overflow: hidden;
     height: 16px;
 }
 .ke-container {
-    border: 3px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
     background-color: #F0F0EE;
     table-layout: fixed;
     overflow: hidden;
@@ -243,6 +239,11 @@ overflow: hidden;
     margin:0;
     border-collapse:separate;
 }
+.ke-toolbar-td {
+    border: 0;
+    padding: 2px 5px;
+    margin: 0;
+}
 .ke-toolbar-table {
     font-size: 0;
     float: left;
@@ -251,7 +252,11 @@ overflow: hidden;
     padding:0;
     border-collapse:separate;
 }
+.ke-toolbar-table td {
+    border:0;
+}
 .ke-toolbar-close {
+    display: block;
     background-position: 0px -688px;
     width: 16px;
     height: 16px;
@@ -265,13 +270,12 @@ overflow: hidden;
 .ke-form {
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;
-    margin-left: 1px;
-    margin-right: 1px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .ke-bottom {
     width: 100%;
     font-size: 0;
-    height: 5px;
     margin:0;
     padding:0;
     border-collapse:separate;
@@ -290,10 +294,13 @@ overflow: hidden;
     padding:0;
 }
 .ke-bottom-right-img {
-    width: 20px;
-    height: 5px;
+    display: block;
+    background-position: -4px -740px;
+    width: 12px;
+    height: 12px;
 }
 .ke-textarea {
+    width: 100%;
     margin: 0;
     padding: 0;
     border: 0;
@@ -310,19 +317,39 @@ overflow: hidden;
     padding: 0;
     background-color: #FFFFFF;
 }
+.ke-common-icon {
+    display: block;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
 .ke-icon {
+    display: block;
     border: 1px solid #F0F0EE;
-    padding: 2px 3px 2px 3px;
+    padding: 1px 2px;
+    margin: 1px;
+    cursor: pointer;
+}
+.ke-icon-on {
+    display: block;
+    border: 1px solid #1F3D74;
+    padding: 1px 2px;
+    margin: 1px;
     cursor: pointer;
 }
 .ke-icon-selected {
+    display: block;
     border: 1px solid #1F3D74;
-    padding: 2px 3px 2px 3px;
+    background-color: #DDDDDD;
+    padding: 1px 2px;
+    margin: 1px;
     cursor: pointer;
 }
 .ke-icon-disabled {
+    display: block;
     border: 1px solid #F0F0EE;
-    padding: 2px 3px 2px 3px;
+    padding: 1px 2px;
+    margin: 1px;
+    cursor: default;
 }
 .ke-menu {
     border-top: 2px solid #DDDDDD;

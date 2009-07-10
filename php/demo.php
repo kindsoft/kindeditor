@@ -3,12 +3,14 @@
 <head>
 <title>KindEditor 3.0</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link href="./common.css" rel="stylesheet" type="text/css" />
+<link href="../examples/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<div class="ke-content">
 <?php
-   echo(stripslashes($_POST['content']));
+     echo($_POST['content']);
 ?>
+</div>
 <center>
 <br />
 <br />
