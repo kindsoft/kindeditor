@@ -233,9 +233,8 @@
     table-layout: fixed;
     overflow: hidden;
     border-collapse:separate;
-}
-.ke-container td {
-    border:0;
+    padding:0;
+    margin:0;
 }
 .ke-toolbar-outer {
     border: 0;
@@ -247,6 +246,11 @@
     padding:0;
     margin:0;
     border-collapse:separate;
+}
+.ke-toolbar td {
+    border:0;
+    padding:0;
+    margin:0;
 }
 .ke-toolbar-table {
     font-size: 0;
@@ -267,6 +271,11 @@
     right: 0;
     top: 0;
     cursor: pointer;
+}
+.ke-bottom-outer {
+    border: 0;
+    padding: 0;
+    margin: 0;
 }
 .ke-bottom {
     width: 100%;
@@ -295,6 +304,7 @@
     height: 12px;
 }
 .ke-textarea-outer {
+    border: 0;
     padding: 0 5px;
     margin: 0;
 }
@@ -305,6 +315,10 @@
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;
     border-collapse:separate;
+}
+.ke-textarea-table td {
+    border:0;
+    padding: 5px;
 }
 .ke-textarea {
     width: 100%;
