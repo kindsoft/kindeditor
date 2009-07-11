@@ -232,6 +232,15 @@
     background-color: #F0F0EE;
     table-layout: fixed;
     overflow: hidden;
+    border-collapse:separate;
+}
+.ke-container td {
+    border:0;
+}
+.ke-toolbar-outer {
+    border: 0;
+    padding: 2px 5px;
+    margin: 0;
 }
 .ke-toolbar {
     width: 100%;
@@ -239,21 +248,13 @@
     margin:0;
     border-collapse:separate;
 }
-.ke-toolbar-td {
-    border: 0;
-    padding: 2px 5px;
-    margin: 0;
-}
 .ke-toolbar-table {
     font-size: 0;
     float: left;
     clear: both;
-    margin:0;
     padding:0;
+    margin:0;
     border-collapse:separate;
-}
-.ke-toolbar-table td {
-    border:0;
 }
 .ke-toolbar-close {
     display: block;
@@ -263,21 +264,15 @@
     position: absolute;
     margin-top: 2px;
     margin-right: 3px;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
     cursor: pointer;
-}
-.ke-form {
-    border: 1px solid #CCCCCC;
-    background-color: #FFFFFF;
-    margin-left: 5px;
-    margin-right: 5px;
 }
 .ke-bottom {
     width: 100%;
     font-size: 0;
-    margin:0;
     padding:0;
+    margin:0;
     border-collapse:separate;
 }
 .ke-bottom-left {
@@ -299,6 +294,18 @@
     width: 12px;
     height: 12px;
 }
+.ke-textarea-outer {
+    padding: 0 5px;
+    margin: 0;
+}
+.ke-textarea-table {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
+    border-collapse:separate;
+}
 .ke-textarea {
     width: 100%;
     margin: 0;
@@ -315,6 +322,7 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    border: 0;
     background-color: #FFFFFF;
 }
 .ke-common-icon {

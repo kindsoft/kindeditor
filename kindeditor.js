@@ -759,13 +759,20 @@ KE.util = {
     getDocumentElement : function() {
         return (document.compatMode != "CSS1Compat") ? document.body : document.documentElement;
     },
-    getDocumentHeight: function() {
+    getDocumentHeight : function() {
         var el = this.getDocumentElement();
         return Math.max(el.scrollHeight, el.clientHeight);
     },
-    getDocumentWidth: function() {
+    getDocumentWidth : function() {
         var el = this.getDocumentElement();
         return Math.max(el.scrollWidth, el.clientWidth);
+    },
+    createTable : function() {
+        var table = KE.$$('table');
+        table.cellPadding = 0;
+        table.cellSpacing = 0;
+        table.border = 0;
+        return {table: table, cell: table.insertRow(0).insertCell(0)};
     },
     loadStyle : function(path) {
         var link = KE.$$('link');
@@ -914,12 +921,6 @@ KE.util = {
         }
         parent.parentNode.removeChild(parent);
     },
-    showBottom : function(id) {
-        KE.g[id].bottom.style.display = 'block';
-    },
-    hideBottom : function(id) {
-        KE.g[id].bottom.style.display = 'none';
-    },
     drag : function(id, mousedownObj, moveObj, func, hideFlag) {
         var obj = KE.g[id];
         mousedownObj.onmousedown = function(event) {
@@ -988,27 +989,11 @@ KE.util = {
         if (width <= obj.minWidth || height <= obj.minHeight) return;
         obj.container.style.width = width + 'px';
         obj.container.style.height = height + 'px';
-        obj.formDiv.style.height = height + 'px';
-        var diff = obj.toolbarDiv.offsetHeight + obj.bottom.offsetHeight;
-        var formBorder = obj.formDiv.offsetHeight - obj.formDiv.clientHeight;
-        height -= diff + formBorder;
-        if (KE.browser == 'IE') {
-            var border = obj.container.offsetWidth - obj.container.clientWidth;
-            if (document.compatMode != "CSS1Compat") {
-                height -= border;
-                width -= border;
-                obj.formDiv.style.height = (height + formBorder) + 'px';
-            } else {
-                obj.formDiv.style.height = height + 'px';
-            }
-            obj.iframe.style.height = height + 'px';
-            obj.newTextarea.style.width = (obj.formDiv.clientWidth - 2) + 'px';
-            obj.newTextarea.style.height = (height - formBorder) + 'px';
-        } else {
-            obj.formDiv.style.height = height + 'px';
-            obj.iframe.style.height = height + 'px';
-            obj.newTextarea.style.height = height + 'px';
-        }
+        var diff = obj.toolbarTable.offsetHeight + obj.bottom.offsetHeight;
+        height -= diff;
+        obj.textareaTable.style.height = height + 'px';
+        obj.iframe.style.height = height + 'px';
+        obj.newTextarea.style.height = (KE.browser == 'IE' ? height - 2 : height) + 'px';
     },
     getData : function(id) {
         var data;
@@ -1490,27 +1475,20 @@ KE.toolbar = {
     },
     create : function(id) {
         KE.g[id].toolbarIcon = [];
-        var toolbar = KE.$$('table');
+        var tableObj = KE.util.createTable();
+        var toolbar = tableObj.table;
+        toolbar.className = 'ke-toolbar';
         toolbar.oncontextmenu = function() { return false; };
         toolbar.onmousedown = function() { return false; };
         toolbar.onmousemove = function() { return false; };
-        toolbar.className = 'ke-toolbar';
-        toolbar.cellPadding = 0;
-        toolbar.cellSpacing = 0;
-        toolbar.border = 0;
-        var row = toolbar.insertRow(0);
-        var toolbarCell = row.insertCell(0);
-        toolbarCell.className = 'ke-toolbar-td';
+        var toolbarCell = tableObj.cell;
         var length = KE.g[id].items.length;
         var cellNum = 0;
         var row;
         for (var i = 0; i < length; i++) {
             var cmd = KE.g[id].items[i];
             if (i == 0 || cmd == '-') {
-                var table = KE.$$('table');
-                table.cellPadding = 0;
-                table.cellSpacing = 0;
-                table.border = 0;
+                var table = KE.util.createTable().table;
                 table.className = 'ke-toolbar-table';
                 row = table.insertRow(0);
                 cellNum = 0;
@@ -1597,27 +1575,36 @@ KE.create = function(id, mode) {
     var srcTextarea = KE.$(id);
     mode = (typeof mode == "undefined") ? 0 : mode;
     if (mode == 0 && KE.g[id].container != null) return;
-    var width = srcTextarea.style.width;
-    var height = srcTextarea.style.height;
-    var container = KE.$$('div');
+    var width = KE.g[id].width || srcTextarea.style.width;
+    var height = KE.g[id].height || srcTextarea.style.height;
+    var tableObj = KE.util.createTable();
+    var container = tableObj.table;
     container.className = 'ke-container';
     container.style.width = width;
     container.style.height = height;
+    var toolbarOuter = tableObj.cell;
+    toolbarOuter.className = 'ke-toolbar-outer';
+    var textareaOuter = container.insertRow(1).insertCell(0);
+    textareaOuter.className = 'ke-textarea-outer';
+    tableObj = KE.util.createTable();
+    var textareaTable = tableObj.table;
+    textareaTable.className = 'ke-textarea-table';
+    var textareaCell = tableObj.cell;
+    textareaOuter.appendChild(textareaTable);
+    var bottomOuter = container.insertRow(2).insertCell(0);
+    bottomOuter.className = 'ke-bottom-outer';
     if (mode == 1) document.body.appendChild(container);
     else srcTextarea.parentNode.insertBefore(container, srcTextarea);
-    var toolbarDiv = KE.toolbar.create(id);
-    container.appendChild(toolbarDiv);
+    var toolbarTable = KE.toolbar.create(id);
+    toolbarOuter.appendChild(toolbarTable);
     var iframe = KE.$$('iframe');
     iframe.className = 'ke-iframe';
     iframe.setAttribute("frameBorder", "0");
     var newTextarea = KE.$$('textarea');
     newTextarea.className = 'ke-textarea';
     newTextarea.style.display = 'none';
-    var formDiv = KE.$$('div');
-    formDiv.className = 'ke-form';
-    formDiv.appendChild(iframe);
-    formDiv.appendChild(newTextarea);
-    container.appendChild(formDiv);
+    textareaCell.appendChild(iframe);
+    textareaCell.appendChild(newTextarea);
     var bottom = KE.$$('table');
     bottom.className = 'ke-bottom';
     bottom.cellPadding = 0;
@@ -1633,7 +1620,7 @@ KE.create = function(id, mode) {
     span.style.backgroundImage = "url(" + url + ")";
     span.className = 'ke-bottom-right-img';
     bottomRight.appendChild(span);
-    container.appendChild(bottom);
+    bottomOuter.appendChild(bottom);
     var hideDiv = KE.$$('div');
     hideDiv.style.display = 'none';
     var maskDiv = KE.$$('div');
@@ -1671,8 +1658,8 @@ KE.create = function(id, mode) {
     KE.event.add(newTextarea, 'click', new Function('KE.layout.hide("' + id + '")'));
     KE.event.input(newTextarea, new Function('KE.history.add("' + id + '", true)'));
     KE.g[id].container = container;
-    KE.g[id].toolbarDiv = toolbarDiv;
-    KE.g[id].formDiv = formDiv;
+    KE.g[id].toolbarTable = toolbarTable;
+    KE.g[id].textareaTable = textareaTable;
     KE.g[id].iframe = iframe;
     KE.g[id].newTextarea = newTextarea;
     KE.g[id].srcTextarea = srcTextarea;
@@ -1693,7 +1680,6 @@ KE.create = function(id, mode) {
     KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         KE.util.resize(id, objWidth, objHeight + top);
     }, true);
-    if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
     for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
         var cmd = KE.g[id].items[i];
         if (KE.plugin[cmd] && KE.plugin[cmd].init) KE.plugin[cmd].init(id);
@@ -1855,10 +1841,8 @@ KE.plugin['fullscreen'] = {
             KE.util.setData(id);
             KE.remove(id, 1);
             KE.create(id, 2);
-            KE.util.showBottom(id);
             document.body.parentNode.style.overflow = 'auto';
             KE.util.resize(id, parseInt(this.width), parseInt(this.height));
-            if (!KE.g[id].resizeMode) KE.util.hideBottom(id);
             KE.event.remove(window, 'resize', resizeListener);
             KE.toolbar.unselect(id, "fullscreen");
         } else {
@@ -1868,7 +1852,6 @@ KE.plugin['fullscreen'] = {
             this.height = obj.container.style.height;
             KE.remove(id, 2);
             KE.create(id, 1);
-            KE.util.hideBottom(id);
             document.body.parentNode.style.overflow = 'hidden';
             var div = KE.g[id].container;
             div.style.position = 'absolute';
