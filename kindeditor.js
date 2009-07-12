@@ -986,6 +986,8 @@ KE.util = {
     },
     resize : function(id, width, height) {
         var obj = KE.g[id];
+        if (width.match(/%$/)) width = obj.container.offsetWidth + 'px';
+        if (height.match(/%$/)) height = obj.container.offsetHeight + 'px';
         if (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight) return;
         obj.container.style.width = width;
         obj.container.style.height = height;
