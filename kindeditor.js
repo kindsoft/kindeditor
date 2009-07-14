@@ -4,12 +4,12 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.2
+* @version 3.2.1
 *******************************************************************************/
 
 var KE = {};
 
-KE.version = '3.2';
+KE.version = '3.2.1';
 
 KE.lang = {
     source : '切换模式',
@@ -251,6 +251,7 @@ KE.selection = function(win, doc) {
                     var nodes = parentNode.childNodes;
                     if (nodes.length == 0) return {node: parentNode, pos: 0};
                     var startNode;
+                    var endElement;
                     var startPos = 0;
                     var offset = 0;
                     var isEnd = false;
@@ -283,8 +284,10 @@ KE.selection = function(win, doc) {
                             length = node.nodeValue.length;
                             startPos += length;
                         }
+                        if (!isEnd) endElement = node;
                         offset += length;
                     }
+                    if (!startNode) startNode = endElement;
                     var testRange = range.duplicate();
                     testRange.moveToElementText(parentNode);
                     testRange.collapse(false);
@@ -872,7 +875,7 @@ KE.util = {
         return doc.createRange ? doc.createRange() : doc.body.createTextRange();
     },
     getNodeType : function(node) {
-        return (node.tagName && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
+        return (node.nodeType == 1 && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
     },
     getNodeTextLength : function(node) {
         var type = KE.util.getNodeType(node);
@@ -968,8 +971,7 @@ KE.util = {
         }
     },
     getFullHtml : function(id, tagLineMode) {
-        var html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-        html += '<html xmlns="http://www.w3.org/1999/xhtml">';
+        var html = '<html>';
         html += '<head>';
         html += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
         html += '<title>KindEditor</title>';
@@ -1184,7 +1186,7 @@ KE.util = {
                                 if (val) styleStr += key + ':' + val + ';';
                             } else {
                                 var val = node.getAttribute(attr);
-                                if (val != null && val !== '') {
+                                if (val !== null) {
                                     val = KE.util.removeDomain(id, tagName, attr, val);
                                     attrStr += ' ' + attr + '="' + val + '"';
                                 }
@@ -1197,7 +1199,7 @@ KE.util = {
                     } else {
                         if (startTags.length > 0) {
                             var prevHtml = htmlList[htmlList.length - 1];
-                            if (prevHtml.match(/^<p|^<div/) != null) {
+                            if (typeof prevHtml != "undefined" && prevHtml.match(/^<p|^<div/) != null) {
                                 htmlList.push("&nbsp;");
                             }
                         }
@@ -2139,7 +2141,7 @@ KE.plugin['emoticons'] = {
     },
     exec : function(id, value) {
         KE.util.select(id);
-        var html = '<img src="' + KE.g[id].pluginsPath + 'emoticons/' + value + '" border="0">';
+        var html = '<img src="' + KE.g[id].pluginsPath + 'emoticons/' + value + '" border="0" />';
         KE.util.insertHtml(id, html);
         KE.layout.hide(id);
         KE.util.focus(id);
