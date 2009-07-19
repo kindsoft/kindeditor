@@ -715,7 +715,8 @@ KE.cmd = function(id) {
         var endNode = keRange.endNode;
         var endPos = keRange.endPos;
         this.keSel.focus();
-        if (keRange.getText() === '') return;
+        var text = keRange.getText();
+        if (text.replace(/\s+/g, '') === '') return;
         var startParent = this.getTopParent(tagNames, startNode);
         var endParent = this.getTopParent(tagNames, endNode);
         if (startParent) {
@@ -1661,9 +1662,6 @@ KE.create = function(id, mode) {
     KE.event.add(newTextarea, 'click', new Function('KE.layout.hide("' + id + '")'));
     KE.event.input(newTextarea, new Function('KE.history.add("' + id + '", true)'));
     KE.g[id].container = container;
-    KE.g[id].toolbarOuter = toolbarOuter;
-    KE.g[id].textareaOuter = textareaOuter;
-    KE.g[id].bottomOuter = bottomOuter;
     KE.g[id].toolbarTable = toolbarTable;
     KE.g[id].textareaTable = textareaTable;
     KE.g[id].iframe = iframe;
