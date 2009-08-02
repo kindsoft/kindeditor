@@ -313,11 +313,11 @@ KE.selection = function(win, doc) {
             startPos = range.startOffset;
             endNode = range.endContainer;
             endPos = range.endOffset;
-            if (startNode.nodeType == 1) {
+            if (startNode.nodeType == 1 && typeof startNode.childNodes[startPos] != "undefined") {
                 startNode = startNode.childNodes[startPos];
                 startPos = startNode.nodeType == 1 ? 0 : startNode.nodeValue.length;
             }
-            if (endNode.nodeType == 1) {
+            if (endNode.nodeType == 1 && typeof endNode.childNodes[endPos] != "undefined") {
                 endNode = endNode.childNodes[endPos];
                 endPos = endNode.nodeType == 1 ? 0 : endNode.nodeValue.length;
             }
@@ -827,7 +827,7 @@ KE.util = {
     getElementPos : function(el) {
         var x = 0;
         var y = 0;
-        if (el.getBoundingClientRect) {
+        if (KE.browser != "WEBKIT") {
             var box = el.getBoundingClientRect();
             var el = this.getDocumentElement();
             x = box.left + el.scrollLeft - el.clientLeft;

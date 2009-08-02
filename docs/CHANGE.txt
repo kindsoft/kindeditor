@@ -12,7 +12,7 @@ ver 3.2.1
 6. 修改了range在text range的最后位置时wrap方法不正常的问题。
 7. getPureData方法过滤&nbsp;。
 8. 修改了htmlTags的默认值。
-
+9. 修改了在WEBKIT系列浏览器上有滚动条时下拉框定位不正确的问题。
 
 ver 3.2 (2009-07-12)
 1. 工具栏图标可以反映选中状态。
