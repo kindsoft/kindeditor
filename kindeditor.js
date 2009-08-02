@@ -1016,17 +1016,19 @@ KE.util = {
         html += '</html>';
         return html;
     },
-    resize : function(id, width, height) {
+    resize : function(id, width, height, isCheck) {
         var obj = KE.g[id];
         if (width.match(/%$/)) width = obj.container.offsetWidth + 'px';
         if (height.match(/%$/)) height = obj.container.offsetHeight + 'px';
-        if (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight) return;
+        if (isCheck && (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight)) return;
         obj.container.style.width = width;
         obj.container.style.height = height;
         var diff = parseInt(height) - obj.toolbarTable.offsetHeight - obj.bottom.offsetHeight;
-        obj.textareaTable.style.height = diff + 'px';
-        obj.iframe.style.height = diff + 'px';
-        obj.newTextarea.style.height = diff + 'px';
+        if (diff >= 0) {
+            obj.textareaTable.style.height = diff + 'px';
+            obj.iframe.style.height = diff + 'px';
+            obj.newTextarea.style.height = diff + 'px';
+        }
     },
     getData : function(id) {
         var data;
@@ -1706,11 +1708,11 @@ KE.create = function(id, mode) {
     KE.g[id].height = height;
     KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-        if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px');
-        else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px');
+        if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
+        else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true);
     }, true);
     KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-        KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px');
+        if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true);
     }, true);
     for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
         var cmd = KE.g[id].items[i];
@@ -1880,8 +1882,8 @@ KE.plugin['fullscreen'] = {
         } else {
             this.isSelected = true;
             KE.util.setData(id);
-            this.width = KE.g[id].width;
-            this.height = KE.g[id].height;
+            this.width = KE.g[id].container.style.width;
+            this.height = KE.g[id].container.style.height;
             KE.remove(id, 2);
             KE.create(id, 1);
             document.body.parentNode.style.overflow = 'hidden';
