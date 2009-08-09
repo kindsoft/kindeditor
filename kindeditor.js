@@ -1219,7 +1219,7 @@ KE.util = {
                                 if (val) styleStr += key + ':' + val + ';';
                             } else {
                                 var val = node.getAttribute(attr);
-                                if (val !== null) {
+                                if (val !== null && val !== "") {
                                     val = KE.util.removeDomain(id, tagName, attr, val);
                                     attrStr += ' ' + attr + '="' + val + '"';
                                 }
