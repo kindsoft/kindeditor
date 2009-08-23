@@ -4,12 +4,12 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.2.1
+* @version 3.2.2
 *******************************************************************************/
 
 var KE = {};
 
-KE.version = '3.2.1';
+KE.version = '3.2.2';
 
 KE.lang = {
     source : '切换模式',
@@ -208,6 +208,35 @@ KE.event = {
                 return false;
             }
         });
+    },
+    ready : function(func) {
+        var loaded = false;
+        var readyFunc = function() {
+            if (loaded) return;
+            loaded = true;
+            func();
+        };
+        if (document.addEventListener) {
+            this.add(document, "DOMContentLoaded", readyFunc);
+        } else if (document.attachEvent){
+            this.add(document, "readystatechange", function() {
+                if (document.readyState == "complete") readyFunc();
+            });
+            if ( document.documentElement.doScroll && typeof window.frameElement === "undefined" ) {
+                var ieReadyFunc = function() {
+                    if (loaded) return;
+                    try {
+                        document.documentElement.doScroll("left");
+                    } catch( error ) {
+                        setTimeout(ieReadyFunc, 0);
+                        return;
+                    }
+                    readyFunc();
+                };
+                ieReadyFunc();
+            }
+        }
+        this.add(window, 'load', readyFunc);
     }
 };
 
@@ -1750,7 +1779,7 @@ KE.init = function(config) {
 
 KE.show = function(config) {
     KE.init(config);
-    KE.event.add(window, 'load', new Function('KE.create("' + config.id + '")'));
+    KE.event.ready(new Function('KE.create("' + config.id + '")'));
 };
 
 KE.plugin['about'] = {
