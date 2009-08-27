@@ -158,7 +158,7 @@ KE.setting = {
         br : ['/'],
         'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
             'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family',
-            '.font-weight', '.font-style', '.text-decoration', '.vertical-align'
+            '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent'
         ],
         'tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
     }
