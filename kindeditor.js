@@ -4,7 +4,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.2.2
+* @version 3.3
 *******************************************************************************/
 
 var KE = {};
@@ -1823,8 +1823,16 @@ KE.plugin['wordpaste'] = {
         KE.util.select(id);
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var wordIframe = KE.$('wordIframe', dialogDoc);
-        var wordDoc = KE.util.getIframeDoc(wordIframe);
-        KE.util.insertHtml(id, KE.format.getHtml(wordDoc.body.innerHTML, KE.g[id].htmlTags));
+        var str = KE.util.getIframeDoc(wordIframe).body.innerHTML;
+        str = str.replace(/<meta(\n|.)*?>/ig, "");
+        str = str.replace(/<!(\n|.)*?>/ig, "");
+        str = str.replace(/<style[^>]*>(\n|.)*?<\/style>/ig, "");
+        str = str.replace(/<script[^>]*>(\n|.)*?<\/script>/ig, "");
+        str = str.replace(/<w:[^>]+>(\n|.)*?<\/w:[^>]+>/ig, "");
+        str = str.replace(/<xml>(\n|.)*?<\/xml>/ig, "");
+        str = str.replace(/\r\n|\n|\r/ig, "");
+        str = KE.format.getHtml(str, KE.g[id].htmlTags);
+        KE.util.insertHtml(id, str);
         KE.layout.hide(id);
         KE.util.focus(id);
     }
