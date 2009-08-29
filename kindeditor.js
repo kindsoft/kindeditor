@@ -1133,6 +1133,12 @@ KE.util = {
         if (isCheck && (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight)) return;
         obj.container.style.width = width;
         obj.container.style.height = height;
+        if (!obj.toolbarTable.offsetHeight) {
+            setTimeout(function () {
+                KE.util.resize(id, width, height, isCheck);
+            }, 0);
+            return;
+        }
         var diff = parseInt(height) - obj.toolbarTable.offsetHeight - obj.bottom.offsetHeight;
         if (diff >= 0) {
             obj.textareaTable.style.height = diff + 'px';
@@ -1689,6 +1695,7 @@ KE.create = function(id, mode) {
     KE.g[id].iframeDoc = iframeDoc;
     KE.g[id].width = width;
     KE.g[id].height = height;
+    KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
         else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true);
@@ -1704,7 +1711,6 @@ KE.create = function(id, mode) {
         function(){
             if (srcTextarea.value !== "") iframeDoc.body.innerHTML = srcTextarea.value;
             KE.history.add(id, false);
-            KE.util.resize(id, width, height);
         }, 1);
 };
 
