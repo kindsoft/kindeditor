@@ -864,14 +864,14 @@ KE.format = {
                         });
                         if (val.charAt(0) !== '"') val = '"' + val + '"';
                     }
-                    return ' ' + key + '=' + val;
+                    return ' ' + key + '=' + val + ' ';
                 });
                 attr = attr.replace(/\s+(\w+)(\s+|$)/g, function($0, $1) {
                     var key = $1.toLowerCase();
                     if (isFilter) {
                         if (key.charAt(0) === "." || typeof htmlTagHash[tagName][key] == "undefined") return ' ';
                     }
-                    return ' ' + key + '="' + key + '"';
+                    return ' ' + key + '="' + key + '"' + ' ';
                 });
                 attr = KE.util.trim(attr);
                 attr = attr.replace(/\s+/g, ' ');
