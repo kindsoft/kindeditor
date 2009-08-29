@@ -1073,8 +1073,12 @@ KE.util = {
             var pos = KE.util.getCoords(ev);
             var objTop = parseInt(moveObj.style.top);
             var objLeft = parseInt(moveObj.style.left);
-            var objWidth = parseInt(moveObj.style.width);
-            var objHeight = parseInt(moveObj.style.height);
+            var objWidth = moveObj.style.width;
+            var objHeight = moveObj.style.height;
+            if (objWidth.match(/%$/)) objWidth = moveObj.offsetWidth + 'px';
+            if (objHeight.match(/%$/)) objHeight = moveObj.offsetHeight + 'px';
+            objWidth = parseInt(objWidth);
+            objHeight = parseInt(objHeight);
             var mouseTop = pos.y;
             var mouseLeft = pos.x;
             var dragFlag = true;
@@ -1128,8 +1132,6 @@ KE.util = {
     },
     resize : function(id, width, height, isCheck) {
         var obj = KE.g[id];
-        if (width.match(/%$/)) width = obj.container.offsetWidth + 'px';
-        if (height.match(/%$/)) height = obj.container.offsetHeight + 'px';
         if (isCheck && (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight)) return;
         obj.container.style.width = width;
         obj.container.style.height = height;
@@ -1329,10 +1331,15 @@ KE.dialog = function(arg){
     this.getPos = function() {
         var arg = this.arg;
         var id = this.arg.id;
+        var obj = KE.g[id];
         var pos = KE.util.getElementPos(KE.g[id].container);
         var height = arg.height + this.topHeight + this.bottomHeight;
-        var xDiff = Math.round(parseInt(KE.g[id].container.style.width) / 2) - Math.round(arg.width / 2);
-        var yDiff = Math.round(parseInt(KE.g[id].container.style.height) / 2) - Math.round(height / 2);
+        var w = obj.container.style.width;
+        var h = obj.container.style.height;
+        if (w.match(/%$/)) w = obj.container.offsetWidth + 'px';
+        if (h.match(/%$/)) h = obj.container.offsetHeight + 'px';
+        var xDiff = Math.round(parseInt(w) / 2) - Math.round(arg.width / 2);
+        var yDiff = Math.round(parseInt(h) / 2) - Math.round(height / 2);
         var x = xDiff < 0 ? pos.x : pos.x + xDiff;
         var y = yDiff < 0 ? pos.y : pos.y + yDiff;
         return {'x' : x, 'y' : y};
@@ -1866,8 +1873,8 @@ KE.plugin['fullscreen'] = {
         } else {
             this.isSelected = true;
             KE.util.setData(id);
-            this.width = KE.g[id].container.style.width;
-            this.height = KE.g[id].container.style.height;
+            this.width = obj.container.style.width;
+            this.height = obj.container.style.height;
             KE.remove(id, 2);
             resetSize(id);
             KE.create(id, 1);
