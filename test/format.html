@@ -15,7 +15,7 @@
   <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
 </head>
 <body>
-  <div id="test01"><span style="color:#FF0000;">test</span></div>
+  <div id="test01"><span style="color:#FF0000;"><strong>test</strong></span></div>
   <div id="test02">123<div style="color:#FF0000;background-color:#00FF00;font-size:18px;font-weight:bold;" class="spanclass">test</div>123</div>
   <div id="test03"><input type="checkbox" id="chk" value=1 checked> <label for="chk"><strong>checkbox</strong></label></div>
   <div id="test04"><img border="0" src="http://localhost/ke/plugins/emoticons/etc_01.gif" /> test </div>
@@ -25,7 +25,7 @@
   <div id="debug"></div>
 
   <script type="text/javascript">
-    test("001", KE.format.getHtml(KE.$("test01").innerHTML), '<span style="color:#ff0000;">test</span>');
+    test("001", KE.format.getHtml(KE.$("test01").innerHTML), '<span style="color:#ff0000;"><strong>test</strong></span>');
     test("002", KE.format.getHtml(KE.$("test01").innerHTML, {span:[".color"]}), '<span style="color:#ff0000;">test</span>');
     test("003", KE.format.getHtml(KE.$("test01").innerHTML, {span:[".font-size", "class"]}), '<span>test</span>');
     test("004", KE.format.getHtml(KE.$("test01").innerHTML, {div:[".font-size", "class"]}), 'test');
