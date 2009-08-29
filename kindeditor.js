@@ -9,7 +9,7 @@
 
 var KE = {};
 
-KE.version = '3.2.2';
+KE.version = '3.3';
 
 KE.lang = {
     source : '切换模式',
@@ -105,7 +105,6 @@ KE.setting = {
     minWidth : 200,
     minHeight : 100,
     minChangeSize : 5,
-    siteDomains : [],
     items : [
         'source', 'preview', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
         'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
@@ -805,7 +804,86 @@ KE.cmd = function(id) {
             this.keSel.addRange(keRange);
         } catch(e) {}
     };
-}
+};
+
+KE.format = {
+    getHtml : function(html, htmlTags) {
+        var isFilter = (typeof htmlTags == "undefined") ? false : true;
+        var domain = document.domain;
+        var arrayToHash = function(arr) {
+            var hash = {};
+            for (var i = 0, len = arr.length; i < len; i++) hash[arr[i]] = 1;
+            return hash;
+        };
+        var htmlTagHash = {};
+        if (isFilter) {
+            KE.each(htmlTags, function(key, val) {
+                var arr = key.split(',');
+                for (var i = 0, len = arr.length; i < len; i++) htmlTagHash[arr[i]] = arrayToHash(val);
+            });
+        }
+        var noEndTagHash = arrayToHash(KE.setting.noEndTags);
+        var inlineTagHash = arrayToHash(KE.setting.inlineTags);
+        html = html.replace(/<(\/)?(\w+)(.*?)(\/)?>/g, function($0, $1, $2, $3, $4) {
+            var startSlash = $1 || '';
+            var tagName = $2.toLowerCase();
+            var attr = $3 || '';
+            var endSlash = $4 || '';
+            if (isFilter && typeof htmlTagHash[tagName] == "undefined") return '';
+            if (endSlash === '' && typeof noEndTagHash[tagName] != "undefined") endSlash = ' /';
+            var nl = '';
+            if (KE.browser == 'IE' && endSlash && typeof inlineTagHash[tagName] == "undefined") nl = "\r\n";
+            if (attr !== '') {
+                attr = attr.replace(/\s*([^\s]+?)=(".*?"|[^\s]*)/g, function($0, $1, $2) {
+                    var key = $1.toLowerCase();
+                    var val = $2 || '';
+                    if (isFilter) {
+                        if (key.charAt(0) === "." || (key !== "style" && typeof htmlTagHash[tagName][key] == "undefined")) return ' ';
+                    }
+                    if (val === '') {
+                        val = '""';
+                    } else {
+                        if (key === "style") {
+                            val = val.substr(1, val.length - 2);
+                            val = val.replace(/\s*([^\s]+?)\s*:(.*?)(;|$)/g, function($0, $1, $2) {
+                                var k = $1.toLowerCase();
+                                if (isFilter) {
+                                    if (typeof htmlTagHash[tagName]['.' + k] == "undefined") return '';
+                                }
+                                var v = KE.util.trim($2.toLowerCase());
+                                v = KE.util.rgbToHex(v);
+                                return k + ':' + v + ';';
+                            });
+                            val = KE.util.trim(val);
+                            if (val === '') return '';
+                            val = '"' + val + '"';
+                        }
+                        val = val.replace(/http:\/\/(.*?)\//g, function($0, $1) {
+                            if ($1 === domain) return '/';
+                            else return $0;
+                        });
+                        if (val.charAt(0) !== '"') val = '"' + val + '"';
+                    }
+                    return ' ' + key + '=' + val;
+                });
+                attr = attr.replace(/\s+(\w+)(\s+|$)/g, function($0, $1) {
+                    var key = $1.toLowerCase();
+                    if (isFilter) {
+                        if (key.charAt(0) === "." || typeof htmlTagHash[tagName][key] == "undefined") return ' ';
+                    }
+                    return ' ' + key + '="' + key + '"';
+                });
+                attr = KE.util.trim(attr);
+                attr = attr.replace(/\s+/g, ' ');
+                if (attr) attr = ' ' + attr;
+                return '<' + startSlash + tagName + attr + endSlash + '>' + nl;
+            } else {
+                return '<' + startSlash + tagName + endSlash + '>' + nl;
+            }
+        });
+        return html;
+    }
+};
 
 KE.util = {
     getDocumentElement : function() {
@@ -836,6 +914,9 @@ KE.util = {
     inArray : function(str, arr) {
         for (var i = 0; i < arr.length; i++) {if (str == arr[i]) return true;}
         return false;
+    },
+    trim : function(str) {
+        return str.replace(/^\s+|\s+$/g, "");
     },
     getJsKey : function(key) {
         var arr = key.split('-');
@@ -897,7 +978,7 @@ KE.util = {
             s = parseInt(s).toString(16);
             return s.length > 1 ? s : '0' + s;
         };
-        return str.replace(/rgb\s*?\(\s*?([0-9]+)\s*?,\s*?([0-9]+)\s*?,\s*?([0-9]+)\s*?\)/ig,
+        return str.replace(/rgb\s*?\(\s*?(\d+)\s*?,\s*?(\d+)\s*?,\s*?(\d+)\s*?\)/ig,
                            function($0, $1, $2, $3) {
                                return '#' + hex($1) + hex($2) + hex($3);
                            }
@@ -1063,9 +1144,9 @@ KE.util = {
         var data;
         if (KE.g[id].wyswygMode) {
             if (KE.g[id].filterMode) {
-                data = KE.util.outputHtml(id, KE.g[id].iframeDoc.body);
+                data = KE.format.getHtml(KE.g[id].iframeDoc.body.innerHTML, KE.g[id].htmlTags);
             } else {
-                data = KE.util.htmlToXhtml(id, KE.g[id].iframeDoc.body);
+                data = KE.format.getHtml(KE.g[id].iframeDoc.body.innerHTML);
             }
         } else {
             data = KE.g[id].newTextarea.value;
@@ -1153,133 +1234,6 @@ KE.util = {
         } else {
             this.execCommand(id, 'inserthtml', html);
         }
-    },
-    removeDomain : function(id, tagName, key, url) {
-        if ((tagName == 'a' && key == 'href') || (tagName == 'img' && key == 'src') || (tagName == 'embed' && key == 'src')) {
-            var domains = KE.g[id].siteDomains;
-            for (var i = 0, len = domains.length; i < len; i++) {
-                var domain = "http://" + domains[i];
-                if (url.indexOf(domain) == 0) return url.substr(domain.length);
-            }
-        }
-        return url;
-    },
-    htmlToXhtml : function(id, element) {
-        KE.util.trimNodes(element);
-        var html = element.innerHTML;
-        var tags = KE.setting.noEndTags;
-        for (var i = 0, len = tags.length; i < len; i++) {
-            html = html.replace(new RegExp("<(" + tags[i] + ")\\s+(.*?[^\\/])>", "gi"), "<$1 $2 />");
-            html = html.replace(new RegExp("<(" + tags[i] + ")>", "gi"), "<$1 />");
-        }
-        html = html.replace(/<(\w+)(.*?)>/g, function($0, $1, $2) {
-            var tagName = $1.toLowerCase();
-            var attr = $2;
-            attr = attr.replace(/(\w+)=([^\s]+)/gi, function($0, $1, $2) {
-                var key = $1.toLowerCase();
-                var val = $2;
-                var first = $2.charAt(0);
-                var last = $2.charAt($2.length - 1);
-                if (first === '"' && last === '"') {
-                    val = '"' + KE.util.removeDomain(id, tagName, key, val.substr(1, val.length - 2)) + '"';
-                } else if (first !== '"' && last !== '"') {
-                    val = '"' + KE.util.removeDomain(id, tagName, key, val) + '"';
-                }
-                return key + '=' + val;
-            });
-            attr = attr.replace(/\s+style=".*?"/gi, function($0) {
-                return KE.util.rgbToHex($0.toLowerCase());
-            });
-            return '<' + tagName + attr + '>';
-        });
-        html = html.replace(/(<\/\w+>)/g, function($0, $1) {
-            return $1.toLowerCase();
-        });
-        return html;
-    },
-    outputHtml : function(id, element) {
-        var newHtmlTags = [];
-        KE.each(KE.g[id].htmlTags, function(key, val) {
-            var arr = key.split(',');
-            for (var i = 0, len = arr.length; i < len; i++) {
-                newHtmlTags[arr[i]] = val;
-            }
-        });
-        var htmlList = [];
-        KE.util.trimNodes(element);
-        var scanNodes = function(el) {
-            var startTags = [];
-            var setStartTag = function(tagName, attrStr, styleStr, isEnd) {
-                var html = '';
-                html += '<' + tagName;
-                if (attrStr) html += attrStr;
-                if (styleStr) html += ' style="' + styleStr + '"';
-                html += isEnd ? ' />' : '>';
-                if (KE.browser == 'IE' && isEnd && KE.util.inArray(tagName, ['br', 'hr'])) html += "\n";
-                if (typeof newHtmlTags[tagName] == 'object') htmlList.push(html);
-                if (!isEnd) startTags.push(tagName);
-            };
-            var setEndTag = function() {
-                if (startTags.length > 0) {
-                    var tagName = startTags.pop();
-                    if (typeof newHtmlTags[tagName] != 'object') return;
-                    var html = '</' + tagName + '>';
-                    if (KE.browser == 'IE' && KE.util.inArray(tagName, ['p', 'div', 'table', 'ol', 'ul'])) html += "\n";
-                    htmlList.push(html);
-                }
-            };
-            var nodes = el.childNodes;
-            for (var i = 0, len = nodes.length; i < len; i++) {
-                var node = nodes[i];
-                switch (node.nodeType) {
-                case 1:
-                    var tagName = node.tagName.toLowerCase();
-                    var attrStr = '';
-                    var styleStr = '';
-                    var isEnd = false;
-                    if (typeof newHtmlTags[tagName] == 'object') {
-                        var attrList = newHtmlTags[tagName];
-                        for (var j = 0, l = attrList.length; j < l; j++) {
-                            var attr = attrList[j];
-                            if (attr == '/') isEnd = true;
-                            else if (attr.charAt(0) == '.') {
-                                var key = attr.substr(1);
-                                var val = KE.util.getStyle(node, key);
-                                if (val) styleStr += key + ':' + val + ';';
-                            } else {
-                                var val = node.getAttribute(attr);
-                                if (val !== null && val !== "") {
-                                    val = KE.util.removeDomain(id, tagName, attr, val);
-                                    attrStr += ' ' + attr + '="' + val + '"';
-                                }
-                            }
-                        }
-                    }
-                    setStartTag(tagName, attrStr, styleStr, isEnd);
-                    if (node.hasChildNodes()) {
-                        scanNodes(node);
-                    } else {
-                        if (startTags.length > 0) {
-                            var prevHtml = htmlList[htmlList.length - 1];
-                            if (typeof prevHtml != "undefined" && prevHtml.match(/^<p|^<div/) != null) {
-                                htmlList.push("&nbsp;");
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-                    htmlList.push(KE.util.escape(node.nodeValue));
-                    break;
-                default:
-                    break;
-                }
-                setEndTag();
-            }
-            setEndTag();
-        };
-        scanNodes(element);
-        var html = htmlList.join('');
-        return html;
     }
 };
 
@@ -1767,7 +1721,6 @@ KE.init = function(config) {
     config.minWidth = config.minWidth || KE.setting.minWidth;
     config.minHeight = config.minHeight || KE.setting.minHeight;
     config.minChangeSize = config.minChangeSize || KE.setting.minChangeSize;
-    config.siteDomains = config.siteDomains || KE.setting.siteDomains;
     config.defaultItems = KE.setting.items;
     config.items = config.items || KE.setting.items;
     config.htmlTags = config.htmlTags || KE.setting.htmlTags;
@@ -1839,8 +1792,7 @@ KE.plugin['plainpaste'] = {
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var html = KE.$('textArea', dialogDoc).value;
         html = KE.util.escape(html);
-        var re = new RegExp("\r\n|\n|\r", "g");
-        html = html.replace(re, "<br />$&");
+        html = html.replace(/\r\n|\n|\r/g, "<br />$&");
         KE.util.insertHtml(id, html);
         KE.layout.hide(id);
         KE.util.focus(id);
@@ -1866,7 +1818,7 @@ KE.plugin['wordpaste'] = {
         var dialogDoc = KE.util.getIframeDoc(KE.g[id].dialog);
         var wordIframe = KE.$('wordIframe', dialogDoc);
         var wordDoc = KE.util.getIframeDoc(wordIframe);
-        KE.util.insertHtml(id, KE.util.outputHtml(id, wordDoc.body));
+        KE.util.insertHtml(id, KE.format.getHtml(wordDoc.body.innerHTML, KE.g[id].htmlTags));
         KE.layout.hide(id);
         KE.util.focus(id);
     }
@@ -2076,9 +2028,9 @@ KE.plugin['source'] = {
         } else {
             KE.layout.hide(id);
             if (KE.g[id].filterMode) {
-                obj.newTextarea.value = KE.util.outputHtml(id, obj.iframeDoc.body);
+                obj.newTextarea.value = KE.format.getHtml(obj.iframeDoc.body.innerHTML, KE.g[id].htmlTags);
             } else {
-                obj.newTextarea.value = KE.util.htmlToXhtml(id, obj.iframeDoc.body);
+                obj.newTextarea.value = KE.format.getHtml(obj.iframeDoc.body.innerHTML);
             }
             obj.iframe.style.display = 'none';
             obj.newTextarea.style.display = 'block';

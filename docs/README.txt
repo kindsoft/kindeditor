@@ -1,17 +1,17 @@
 #######################################################################
 # 
-# KindEditor 3.x 自述文件
+# KindEditor 自述文件
 #
 #######################################################################
 
-简单使用方法
+快速入门
 
 1. 下载KindEditor最新版本。
    下载地址：http://code.google.com/p/kindeditor/downloads/list
 
 2. 解压zip文件，并把所有文件上传到您的网站程序目录下，例如：http://你的域名/editor/。
 
-3. 要添加编辑器的页面头部添加以下代码，id为textarea控件的ID。
+3. 页面头部添加以下代码，id为textarea控件的ID。
    -----------------------------------------------------------------------
    <script type="text/javascript" charset="utf-8" src="/editor/kindeditor.js"></script>
    <script type="text/javascript">
