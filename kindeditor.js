@@ -1689,7 +1689,6 @@ KE.create = function(id, mode) {
     KE.g[id].iframeDoc = iframeDoc;
     KE.g[id].width = width;
     KE.g[id].height = height;
-    KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
         else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true);
@@ -1705,6 +1704,7 @@ KE.create = function(id, mode) {
         function(){
             if (srcTextarea.value !== "") iframeDoc.body.innerHTML = srcTextarea.value;
             KE.history.add(id, false);
+            KE.util.resize(id, width, height);
         }, 1);
 };
 
@@ -1825,39 +1825,28 @@ KE.plugin['wordpaste'] = {
 };
 
 KE.plugin['fullscreen'] = {
-    resetFull : function(id) {
-        var el = KE.util.getDocumentElement();
-        var width = el.clientWidth;
-        var height = el.clientHeight;
-        var left,top;
-        if (KE.browser == 'IE' || KE.browser == 'OPERA') {
-            left = document.body.parentNode.scrollLeft;
-            top = document.body.parentNode.scrollTop;
-        } else {
-            left = window.scrollX;
-            top = window.scrollY;
-        }
-        var div = KE.g[id].container;
-        div.style.left = left + 'px';
-        div.style.top = top + 'px';
-        div.style.zIndex = 19811211;
-        KE.util.resize(id, width + 'px', height + 'px');
-    },
     click : function(id) {
         var obj = KE.g[id];
         var self = this;
+        var resetSize = function(id) {
+            var el = KE.util.getDocumentElement();
+            obj.width = el.clientWidth + 'px';
+            obj.height = el.clientHeight + 'px';
+        };
         var resizeListener = function(e) {
             if (self.isSelected) {
-                KE.plugin["fullscreen"].resetFull(id);
+                resetSize(id);
+                KE.util.resize(id, obj.width, obj.height);
             }
         }
         if (this.isSelected) {
             this.isSelected = false;
             KE.util.setData(id);
             KE.remove(id, 1);
+            obj.width = this.width;
+            obj.height = this.height;
             KE.create(id, 2);
             document.body.parentNode.style.overflow = 'auto';
-            KE.util.resize(id, this.width, this.height);
             KE.event.remove(window, 'resize', resizeListener);
             KE.toolbar.unselect(id, "fullscreen");
         } else {
@@ -1866,11 +1855,22 @@ KE.plugin['fullscreen'] = {
             this.width = KE.g[id].container.style.width;
             this.height = KE.g[id].container.style.height;
             KE.remove(id, 2);
+            resetSize(id);
             KE.create(id, 1);
             document.body.parentNode.style.overflow = 'hidden';
+            var left,top;
+            if (KE.browser == 'IE' || KE.browser == 'OPERA') {
+                left = document.body.parentNode.scrollLeft;
+                top = document.body.parentNode.scrollTop;
+            } else {
+                left = window.scrollX;
+                top = window.scrollY;
+            }
             var div = KE.g[id].container;
             div.style.position = 'absolute';
-            this.resetFull(id);
+            div.style.left = left + 'px';
+            div.style.top = top + 'px';
+            div.style.zIndex = 19811211;
             KE.event.add(window, 'resize', resizeListener);
             KE.toolbar.select(id, "fullscreen");
         }
