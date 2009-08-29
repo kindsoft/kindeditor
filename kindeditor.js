@@ -2506,47 +2506,66 @@ KE.plugin['specialchar'] = {
 };
 
 KE.plugin['table'] = {
-    selected : function(id, i, j) {
-        var text = i.toString(10) + ' by ' + j.toString(10) + ' Table';
-        KE.$('tableLocation' + id).innerHTML = text;
-        var num = 10;
-        for (var m = 1; m <= num; m++) {
-            for (var n = 1; n <= num; n++) {
-                var td = KE.$('tableTd' + id + m.toString(10) + '_' + n.toString(10) + '');
-                if (m <= i && n <= j) {
-                    td.style.backgroundColor = '#CCCCCC';
-                } else {
-                    td.style.backgroundColor = '#FFFFFF';
-                }
-            }
-        }
-    },
     click : function(id) {
-        var cmd = 'table';
-        KE.util.selection(id);
+        var self = this;
         var num = 10;
-        var html = '<table cellpadding="0" cellspacing="0" border="0" style="width:130px;border-collapse:separate;padding:0;margin:0;">';
-        for (var i = 1; i <= num; i++) {
-            html += '<tr>';
-            for (var j = 1; j <= num; j++) {
-                var value = i.toString(10) + ',' + j.toString(10);
-                html += '<td id="tableTd' + id + i.toString(10) + '_' + j.toString(10) +
-                    '" style="font-size:1px;width:12px;height:12px;background-color:#FFFFFF;' +
-                    'border:1px solid #DDDDDD;cursor:pointer;margin:0;padding:0;" ' +
-                    'onclick="javascript:KE.plugin[\'table\'].exec(\'' + id + '\', \'' + value + '\');" ' +
-                    'onmouseover="javascript:KE.plugin[\'table\'].selected(\'' + id + '\', \'' + i.toString(10) +
-                    '\', \'' + j.toString(10) + '\');">&nbsp;</td>';
+        var cmd = 'table';
+        var cellArr = [];
+        KE.util.selection(id);
+        var table = KE.$$('table');
+        table.cellPadding = 0;
+        table.cellSpacing = 2;
+        table.border = 0;
+        table.style.margin = 0;
+        table.style.padding = 0;
+        table.style.borderCollapse = 'separate';
+        for (var i = 0; i < num; i++) {
+            var row = table.insertRow(i);
+            cellArr[i] = [];
+            for (var j = 0; j < num; j++) {
+                var value = (i + 1) + ',' + (j + 1);
+                var cell = row.insertCell(j);
+                cellArr[i][j] = cell;
+                cell.style.margin = 0;
+                cell.style.padding = '1px';
+                cell.style.border = '1px solid #DDDDDD';
+                cell.style.backgroundColor = '#FFFFFF';
+                cell.style.cursor = 'pointer';
+                cell.style.fontSize = '1px';
+                cell.style.width = '12px';
+                cell.style.height = '12px';
+                cell.id = value;
+                cell.onmouseover = function() {
+                    var location = this.id.split(',');
+                    var x = location[0];
+                    var y = location[1];
+                    self.locationCell.innerHTML = x + ' by ' + y + ' Table';
+                    for (var m = 0; m < num; m++) {
+                        for (var n = 0; n < num; n++) {
+                            var cell = cellArr[m][n];
+                            if (m < x && n < y) cell.style.backgroundColor = '#CCCCCC';
+                            else cell.style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                };
+                cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + value + '")');
             }
-            html += '</tr>';
         }
-        html += '<tr><td colspan="10" id="tableLocation' + id +
-            '" style="font-size:12px;text-align:center;height:20px;margin:0;padding:0;border:0;"></td></tr>';
-        html += '</table>';
+        var row = table.insertRow(num);
+        var cell = row.insertCell(0);
+        cell.colSpan = 10;
+        cell.style.fontSize = '12px';
+        cell.style.textAlign = 'center';
+        cell.style.height = '20px';
+        cell.style.margin = 0;
+        cell.style.padding = 0;
+        cell.style.border = 0;
+        self.locationCell = cell;
         var menu = new KE.menu({
             id : id,
             cmd : cmd
         });
-        menu.insert(html);
+        menu.append(table);
         menu.show();
     },
     exec : function(id, value) {
