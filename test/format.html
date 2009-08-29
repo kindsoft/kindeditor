@@ -20,6 +20,7 @@
   <div id="test03"><input type="checkbox" id="chk" value=1 checked> <label for="chk"><strong>checkbox</strong></label></div>
   <div id="test04"><img border="0" src="http://localhost/ke/plugins/emoticons/etc_01.gif" /> test </div>
   <div id="test05"><img border="0" src="http://www.kindsoft.net/images/logo_180_30.gif" /> test </div>
+  <div id="test06"><span style="font-family:times new roman;"><strong>test</strong></span></div>
 
   <div>##### result #####</div>
   <div id="debug"></div>
@@ -44,6 +45,7 @@
     test("014", KE.format.getHtml(KE.$("test04").innerHTML), '<img border="0" src="/ke/plugins/emoticons/etc_01.gif" /> test ');
 
     test("015", KE.format.getHtml(KE.$("test05").innerHTML), '<img border="0" src="http://www.kindsoft.net/images/logo_180_30.gif" /> test ');
+    test("016", KE.format.getHtml(KE.$("test06").innerHTML), '<span style="font-family:times new roman;"><strong>test</strong></span>');
 
     function test(id, result, expected) {
         result = result.replace(/\r\n|\n|\r/g, "");

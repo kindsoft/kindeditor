@@ -866,7 +866,7 @@ KE.format = {
                     }
                     return ' ' + key + '=' + val + ' ';
                 });
-                attr = attr.replace(/\s+(\w+)(\s+|$)/g, function($0, $1) {
+                attr = attr.replace(/\s+(checked|selected|disabled|readonly)(\s+|$)/ig, function($0, $1) {
                     var key = $1.toLowerCase();
                     if (isFilter) {
                         if (key.charAt(0) === "." || typeof htmlTagHash[tagName][key] == "undefined") return ' ';
