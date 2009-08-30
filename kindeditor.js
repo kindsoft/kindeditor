@@ -1714,11 +1714,8 @@ KE.create = function(id, mode) {
         var cmd = KE.g[id].items[i];
         if (KE.plugin[cmd] && KE.plugin[cmd].init) KE.plugin[cmd].init(id);
     }
-    setTimeout(
-        function(){
-            if (srcTextarea.value !== "") iframeDoc.body.innerHTML = srcTextarea.value;
-            KE.history.add(id, false);
-        }, 1);
+    if (srcTextarea.value !== "") iframeDoc.body.innerHTML = srcTextarea.value;
+    KE.history.add(id, false);
 };
 
 KE.init = function(config) {
