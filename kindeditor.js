@@ -194,7 +194,7 @@ KE.event = {
     },
     input : function(el, func) {
         this.add(el, 'keyup', function(e) {
-            if (!e.ctrlKey && !e.shiftKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18)) {
+            if (!e.ctrlKey && !e.shiftKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116) {
                 func(e);
                 return false;
             }
@@ -226,7 +226,7 @@ KE.event = {
                     if (loaded) return;
                     try {
                         document.documentElement.doScroll("left");
-                    } catch( error ) {
+                    } catch(e) {
                         setTimeout(ieReadyFunc, 0);
                         return;
                     }
@@ -1686,7 +1686,7 @@ KE.create = function(id, mode) {
     KE.event.add(iframeDoc, 'click', new Function('KE.layout.hide("' + id + '")'));
     KE.event.add(iframeDoc, 'click', new Function('KE.toolbar.updateState("' + id + '")'));
     KE.event.input(iframeDoc, new Function('KE.history.add("' + id + '", true)'));
-    KE.event.add(iframeDoc, 'keyup', new Function('KE.toolbar.updateState("' + id + '")'));
+    KE.event.input(iframeDoc, new Function('KE.toolbar.updateState("' + id + '")'));
     KE.event.add(newTextarea, 'click', new Function('KE.layout.hide("' + id + '")'));
     KE.event.input(newTextarea, new Function('KE.history.add("' + id + '", true)'));
     KE.g[id].container = container;
