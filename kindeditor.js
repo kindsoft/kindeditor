@@ -1876,9 +1876,9 @@ KE.plugin['fullscreen'] = {
             this.width = obj.container.style.width;
             this.height = obj.container.style.height;
             KE.remove(id, 2);
+            document.body.parentNode.style.overflow = 'hidden';
             resetSize(id);
             KE.create(id, 1);
-            document.body.parentNode.style.overflow = 'hidden';
             var left,top;
             if (KE.browser == 'IE' || KE.browser == 'OPERA') {
                 left = document.body.parentNode.scrollLeft;
