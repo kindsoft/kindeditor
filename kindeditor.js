@@ -1130,14 +1130,15 @@ KE.util = {
         html += '</html>';
         return html;
     },
-    resize : function(id, width, height, isCheck) {
+    resize : function(id, width, height, isCheck, isResizeWidth) {
+        isResizeWidth = (typeof isResizeWidth == "undefined") ? true : isResizeWidth;
         var obj = KE.g[id];
         if (isCheck && (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight)) return;
-        obj.container.style.width = width;
+        if (isResizeWidth) obj.container.style.width = width;
         obj.container.style.height = height;
         if (!obj.toolbarTable.offsetHeight) {
             setTimeout(function () {
-                KE.util.resize(id, width, height, isCheck);
+                KE.util.resize(id, width, height, isCheck, isResizeWidth);
             }, 0);
             return;
         }
@@ -1607,8 +1608,8 @@ KE.create = function(id, mode) {
     var srcTextarea = KE.$(id);
     mode = (typeof mode == "undefined") ? 0 : mode;
     if (mode == 0 && KE.g[id].container != null) return;
-    var width = KE.g[id].width || srcTextarea.style.width;
-    var height = KE.g[id].height || srcTextarea.style.height;
+    var width = KE.g[id].width || srcTextarea.style.width || srcTextarea.offsetWidth + 'px';
+    var height = KE.g[id].height || srcTextarea.style.height || srcTextarea.offsetHeight + 'px';
     var tableObj = KE.util.createTable();
     var container = tableObj.table;
     container.className = 'ke-container';
@@ -1705,10 +1706,10 @@ KE.create = function(id, mode) {
     KE.util.resize(id, width, height);
     KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
         if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
-        else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true);
+        else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
     }, true);
     KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-        if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true);
+        if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
     }, true);
     for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
         var cmd = KE.g[id].items[i];
