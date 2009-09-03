@@ -1150,26 +1150,22 @@ KE.util = {
         }
     },
     getData : function(id) {
-        var data;
-        if (KE.g[id].wyswygMode) {
-            if (KE.g[id].filterMode) {
-                data = KE.format.getHtml(KE.g[id].iframeDoc.body.innerHTML, KE.g[id].htmlTags);
-            } else {
-                data = KE.format.getHtml(KE.g[id].iframeDoc.body.innerHTML);
-            }
-        } else {
-            data = KE.g[id].newTextarea.value;
+        var obj = KE.g[id];
+        if (!obj.wyswygMode) {
+            obj.iframeDoc.body.innerHTML = obj.newTextarea.value;
         }
-        return data;
+        if (obj.filterMode) {
+            return KE.format.getHtml(obj.iframeDoc.body.innerHTML, obj.htmlTags);
+        } else {
+            return KE.format.getHtml(obj.iframeDoc.body.innerHTML);
+        }
     },
     getSrcData : function(id) {
-        var data;
-        if (KE.g[id].wyswygMode) {
-            data = KE.g[id].iframeDoc.body.innerHTML;
-        } else {
-            data = KE.g[id].newTextarea.value;
+        var obj = KE.g[id];
+        if (!obj.wyswygMode) {
+            obj.iframeDoc.body.innerHTML = obj.newTextarea.value;
         }
-        return data;
+        return obj.iframeDoc.body.innerHTML;
     },
     getPureData : function(id) {
         var data = this.getSrcData(id);
@@ -1179,12 +1175,10 @@ KE.util = {
         return data;
     },
     setData : function(id) {
-        var data = this.getData(id);
-        KE.g[id].srcTextarea.value = data;
+        KE.g[id].srcTextarea.value = this.getData(id);
     },
     setPureData : function(id) {
-        var data = this.getPureData(id);
-        KE.g[id].srcTextarea.value = data;
+        KE.g[id].srcTextarea.value = this.getPureData(id);
     },
     focus : function(id) {
         if (KE.g[id].wyswygMode) {
@@ -2047,7 +2041,7 @@ KE.plugin['source'] = {
         } else {
             KE.layout.hide(id);
             if (KE.g[id].filterMode) {
-                obj.newTextarea.value = KE.format.getHtml(obj.iframeDoc.body.innerHTML, KE.g[id].htmlTags);
+                obj.newTextarea.value = KE.format.getHtml(obj.iframeDoc.body.innerHTML, obj.htmlTags);
             } else {
                 obj.newTextarea.value = KE.format.getHtml(obj.iframeDoc.body.innerHTML);
             }
