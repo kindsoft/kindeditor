@@ -151,7 +151,7 @@ KE.setting = {
             '.font-style', '.text-decoration', '.vertical-align'
         ],
         a : ['class', 'href', 'target', 'name'],
-        embed : ['src', 'type', 'loop', 'autostart', 'quality', '.width', '.height', '/'],
+        embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', '/'],
         img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
         hr : ['class', '/'],
         br : ['/'],
