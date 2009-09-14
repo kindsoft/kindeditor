@@ -4,12 +4,12 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.3
+* @version 3.3.1
 *******************************************************************************/
 
 var KE = {};
 
-KE.version = '3.3';
+KE.version = '3.3.1';
 
 KE.lang = {
     source : '切换模式',
@@ -810,20 +810,15 @@ KE.format = {
     getHtml : function(html, htmlTags) {
         var isFilter = (typeof htmlTags == "undefined") ? false : true;
         var domain = document.domain;
-        var arrayToHash = function(arr) {
-            var hash = {};
-            for (var i = 0, len = arr.length; i < len; i++) hash[arr[i]] = 1;
-            return hash;
-        };
         var htmlTagHash = {};
         if (isFilter) {
             KE.each(htmlTags, function(key, val) {
                 var arr = key.split(',');
-                for (var i = 0, len = arr.length; i < len; i++) htmlTagHash[arr[i]] = arrayToHash(val);
+                for (var i = 0, len = arr.length; i < len; i++) htmlTagHash[arr[i]] = KE.util.arrayToHash(val);
             });
         }
-        var noEndTagHash = arrayToHash(KE.setting.noEndTags);
-        var inlineTagHash = arrayToHash(KE.setting.inlineTags);
+        var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
+        var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
         html = html.replace(/<(\/)?(\w+)(.*?)(\/)?>/g, function($0, $1, $2, $3, $4) {
             var startSlash = $1 || '';
             var tagName = $2.toLowerCase();
@@ -881,6 +876,16 @@ KE.format = {
                 return '<' + startSlash + tagName + endSlash + '>' + nl;
             }
         });
+        var reg = KE.setting.inlineTags.join('|');
+        var trimHtml = function(inHtml) {
+            var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
+                if ($1 == $2) return '';
+                else return $0;
+            });
+            if (inHtml !== outHtml) outHtml = trimHtml(outHtml);
+            return outHtml;
+        };
+        html = trimHtml(html);
         return html;
     }
 };
@@ -925,6 +930,11 @@ KE.util = {
             key += (i > 0) ? arr[i].charAt(0).toUpperCase() + arr[i].substr(1) : arr[i];
         }
         return key;
+    },
+    arrayToHash : function(arr) {
+        var hash = {};
+        for (var i = 0, len = arr.length; i < len; i++) hash[arr[i]] = 1;
+        return hash;
     },
     escape : function(html) {
         html = html.replace(/&/g, "&amp;");
@@ -984,23 +994,6 @@ KE.util = {
                            }
                           );
     },
-    getStyle : function(el, key) {
-        var arr = key.split('-');
-        key = "";
-        for (var i = 0, len = arr.length; i < len; i++) {
-            key += (i > 0) ? arr[i].charAt(0).toUpperCase() + arr[i].substr(1) : arr[i];
-        }
-        var val = el.style[key];
-        if (!val) {
-            var css = el.getAttribute("style");
-            if (css) {
-                var re = new RegExp("(^|[^\w\-])" + key + "\s*:\s*([^;]+)", "ig");
-                var arr = re.exec(css);
-                if (arr) val = arr[2];
-            }
-        }
-        return KE.util.rgbToHex(val);
-    },
     createRange : function(doc) {
         return doc.createRange ? doc.createRange() : doc.body.createTextRange();
     },
@@ -1041,17 +1034,6 @@ KE.util = {
             range.moveStart('character', offset);
             return range;
         }
-    },
-    trimNodes : function(parent) {
-        if (KE.util.getNodeType(parent) != 1) return;
-        if (KE.util.inArray(parent.tagName.toLowerCase(), KE.setting.inlineTags) && KE.util.getNodeTextLength(parent) == 0) {
-            parent.parentNode.removeChild(parent);
-            return;
-        }
-        KE.eachNode(parent, function(node) {
-            KE.util.trimNodes(node);
-            return true;
-        });
     },
     removeParent : function(parent) {
         if (parent.hasChildNodes) {
@@ -1176,9 +1158,6 @@ KE.util = {
     },
     setData : function(id) {
         KE.g[id].srcTextarea.value = this.getData(id);
-    },
-    setPureData : function(id) {
-        KE.g[id].srcTextarea.value = this.getPureData(id);
     },
     focus : function(id) {
         if (KE.g[id].wyswygMode) {

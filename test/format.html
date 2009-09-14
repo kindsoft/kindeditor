@@ -21,6 +21,7 @@
   <div id="test04"><img border="0" src="http://localhost/ke/plugins/emoticons/etc_01.gif" /> test </div>
   <div id="test05"><img border="0" src="http://www.kindsoft.net/images/logo_180_30.gif" /> test </div>
   <div id="test06"><span style="font-family:times new roman;"><strong>test</strong></span></div>
+  <div id="test07"><span style="font-family:times new roman;"><strong></strong></span>test</div>
 
   <div>##### result #####</div>
   <div id="debug"></div>
@@ -46,6 +47,8 @@
 
     test("015", KE.format.getHtml(KE.$("test05").innerHTML), '<img border="0" src="http://www.kindsoft.net/images/logo_180_30.gif" /> test ');
     test("016", KE.format.getHtml(KE.$("test06").innerHTML), '<span style="font-family:times new roman;"><strong>test</strong></span>');
+
+    test("017", KE.format.getHtml(KE.$("test07").innerHTML), 'test');
 
     function test(id, result, expected) {
         result = result.replace(/\r\n|\n|\r/g, "");
