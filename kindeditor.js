@@ -1820,14 +1820,18 @@ KE.plugin['fullscreen'] = {
     click : function(id) {
         var obj = KE.g[id];
         var self = this;
-        var resetSize = function(id) {
+        var resetSize = function() {
             var el = KE.util.getDocumentElement();
             obj.width = el.clientWidth + 'px';
             obj.height = el.clientHeight + 'px';
         };
-        var resizeListener = function(e) {
-            if (self.isSelected) {
-                resetSize(id);
+        var windowSize = '';
+        var resizeListener = function() {
+            var el = KE.util.getDocumentElement();
+            var size = [el.clientWidth, el.clientHeight].join('');
+            if (windowSize != size) {
+                windowSize = size;
+                resetSize();
                 KE.util.resize(id, obj.width, obj.height);
             }
         }
@@ -1848,7 +1852,7 @@ KE.plugin['fullscreen'] = {
             this.height = obj.container.style.height;
             KE.remove(id, 2);
             document.body.parentNode.style.overflow = 'hidden';
-            resetSize(id);
+            resetSize();
             KE.create(id, 1);
             var left,top;
             if (KE.browser == 'IE' || KE.browser == 'OPERA') {
