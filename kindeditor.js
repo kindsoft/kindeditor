@@ -138,7 +138,7 @@ KE.setting = {
         div : [
             'class', 'align', '.border', '.margin', '.padding', '.text-align', '.color',
             '.background-color', '.font-size', '.font-family', '.font-weight',
-            '.font-style', '.text-decoration', '.vertical-align'
+            '.font-style', '.text-decoration', '.vertical-align', '.margin-left'
         ],
         table: [
             'class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align',
@@ -157,7 +157,7 @@ KE.setting = {
         br : ['/'],
         'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
             'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family',
-            '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent'
+            '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
         ],
         'tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
     }
