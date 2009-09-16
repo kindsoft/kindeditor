@@ -885,8 +885,7 @@ KE.format = {
             if (inHtml !== outHtml) outHtml = trimHtml(outHtml);
             return outHtml;
         };
-        html = trimHtml(html);
-        return html;
+        return trimHtml(html);
     }
 };
 
