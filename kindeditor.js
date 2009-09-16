@@ -1563,24 +1563,26 @@ KE.history = {
 };
 
 KE.remove = function(id, mode) {
+    if (!KE.g[id].container) return false;
     mode = (typeof mode == "undefined") ? 0 : mode;
     var container = KE.g[id].container;
     if (mode == 1) {
         document.body.removeChild(container);
     } else {
-        var srcTextarea = KE.$(id);
+        var srcTextarea = KE.g[id].srcTextarea;
         srcTextarea.parentNode.removeChild(container);
+        if (mode == 0) srcTextarea.style.display = '';
     }
     document.body.removeChild(KE.g[id].hideDiv);
     document.body.removeChild(KE.g[id].maskDiv);
-    KE.g[id].containner = null;
+    KE.g[id].container = null;
 };
 
 KE.create = function(id, mode) {
     if (KE.browser == 'IE') try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
     var srcTextarea = KE.$(id);
     mode = (typeof mode == "undefined") ? 0 : mode;
-    if (mode == 0 && KE.g[id].container != null) return;
+    if (mode == 0 && KE.g[id].container) return;
     var width = KE.g[id].width || srcTextarea.style.width || srcTextarea.offsetWidth + 'px';
     var height = KE.g[id].height || srcTextarea.style.height || srcTextarea.offsetHeight + 'px';
     var tableObj = KE.util.createTable();
