@@ -1664,6 +1664,16 @@ KE.create = function(id, mode) {
     KE.event.input(iframeDoc, new Function('KE.toolbar.updateState("' + id + '")'));
     KE.event.add(newTextarea, 'click', new Function('KE.layout.hide("' + id + '")'));
     KE.event.input(newTextarea, new Function('KE.history.add("' + id + '", true)'));
+    KE.event.add(iframeDoc, 'keydown', function(e) {
+        if (e.keyCode == 9) {
+            KE.util.selection(id);
+            KE.util.insertHtml(id, '　　');
+            KE.util.select(id);
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
+            return false;
+        }
+    });
     KE.g[id].container = container;
     KE.g[id].toolbarTable = toolbarTable;
     KE.g[id].textareaTable = textareaTable;
