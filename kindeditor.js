@@ -890,8 +890,9 @@ KE.format = {
 };
 
 KE.util = {
-    getDocumentElement : function() {
-        return (document.compatMode != "CSS1Compat") ? document.body : document.documentElement;
+    getDocumentElement : function(doc) {
+        doc = doc || document;
+        return (doc.compatMode != "CSS1Compat") ? doc.body : doc.documentElement;
     },
     getDocumentHeight : function() {
         var el = this.getDocumentElement();
@@ -963,9 +964,9 @@ KE.util = {
         }
         return {'x' : x, 'y' : y};
     },
-    getCoords : function(ev) {
+    getCoords : function(ev, doc) {
         ev = ev || window.event;
-        var el = this.getDocumentElement();
+        var el = this.getDocumentElement(doc);
         if (ev.pageX) return { x : ev.pageX, y : ev.pageY};
         return {
             x : ev.clientX + el.scrollLeft - el.clientLeft,
@@ -1045,13 +1046,11 @@ KE.util = {
         }
         parent.parentNode.removeChild(parent);
     },
-    drag : function(id, mousedownObj, moveObj, func, hideFlag) {
+    drag : function(id, mousedownObj, moveObj, func) {
         var obj = KE.g[id];
-        mousedownObj.onmousedown = function(event) {
-            if (hideFlag && obj.wyswygMode) obj.iframe.style.display = 'none';
-            if (KE.browser != 'IE') event.preventDefault();
-            var ev = event || window.event;
-            var pos = KE.util.getCoords(ev);
+        mousedownObj.onmousedown = function(e) {
+            if (KE.browser != 'IE') e.preventDefault();
+            var pos = KE.util.getCoords(e);
             var objTop = parseInt(moveObj.style.top);
             var objLeft = parseInt(moveObj.style.left);
             var objWidth = moveObj.style.width;
@@ -1063,24 +1062,34 @@ KE.util = {
             var mouseTop = pos.y;
             var mouseLeft = pos.x;
             var dragFlag = true;
-            var moveListener = function(event) {
+            var moveListener = function(e) {
                 if (dragFlag) {
-                    var ev = event || window.event;
-                    var pos = KE.util.getCoords(ev);
+                    var pos = KE.util.getCoords(e);
                     var top = pos.y - mouseTop;
                     var left = pos.x - mouseLeft;
                     func(objTop, objLeft, objWidth, objHeight, top, left);
                 }
-                return false;
             };
-            var upListener = function(event) {
-                if (hideFlag && obj.wyswygMode) obj.iframe.style.display = '';
+            var iframePos = KE.util.getElementPos(obj.iframe);
+            var iframeMoveListener = function(e) {
+                if (dragFlag) {
+                    var pos = KE.util.getCoords(e, obj.iframeDoc);
+                    var top = iframePos.y + pos.y - mouseTop;
+                    var left = iframePos.x + pos.x - mouseLeft;
+                    func(objTop, objLeft, objWidth, objHeight, top, left);
+                }
+            };
+            var upListener = function(e) {
                 dragFlag = false;
                 KE.event.remove(document, 'mousemove', moveListener);
                 KE.event.remove(document, 'mouseup', upListener);
+                KE.event.remove(obj.iframeDoc, 'mousemove', iframeMoveListener);
+                KE.event.remove(obj.iframeDoc, 'mouseup', upListener);
             };
             KE.event.add(document, 'mousemove', moveListener);
             KE.event.add(document, 'mouseup', upListener);
+            KE.event.add(obj.iframeDoc, 'mousemove', iframeMoveListener);
+            KE.event.add(obj.iframeDoc, 'mouseup', upListener);
         };
     },
     setDefaultPlugin : function(id) {
@@ -1693,10 +1702,10 @@ KE.create = function(id, mode) {
         KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
             if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
             else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-        }, true);
+        });
         KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
             if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-        }, true);
+        });
     }
     for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
         var cmd = KE.g[id].items[i];
