@@ -1114,6 +1114,7 @@ KE.util = {
     resize : function(id, width, height, isCheck, isResizeWidth) {
         isResizeWidth = (typeof isResizeWidth == "undefined") ? true : isResizeWidth;
         var obj = KE.g[id];
+        if (!obj.container) return;
         if (isCheck && (parseInt(width) <= obj.minWidth || parseInt(height) <= obj.minHeight)) return;
         if (isResizeWidth) obj.container.style.width = width;
         obj.container.style.height = height;
@@ -1688,13 +1689,15 @@ KE.create = function(id, mode) {
     KE.g[id].width = width;
     KE.g[id].height = height;
     KE.util.resize(id, width, height);
-    KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-        if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
-        else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-    }, true);
-    KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-        if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-    }, true);
+    if (KE.g[id].resizeMode > 0) {
+        KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
+            if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
+            else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+        }, true);
+        KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
+            if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+        }, true);
+    }
     for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
         var cmd = KE.g[id].items[i];
         if (KE.plugin[cmd] && KE.plugin[cmd].init) KE.plugin[cmd].init(id);
@@ -1838,6 +1841,7 @@ KE.plugin['fullscreen'] = {
         };
         var windowSize = '';
         var resizeListener = function() {
+            if (!self.isSelected) return;
             var el = KE.util.getDocumentElement();
             var size = [el.clientWidth, el.clientHeight].join('');
             if (windowSize != size) {
