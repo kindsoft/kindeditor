@@ -8,8 +8,6 @@ $save_url = './../attached/';
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 //最大文件大小
 $max_size = 1000000;
-//更改目录权限
-@mkdir($save_path, 0777);
 
 //有上传文件时
 if (empty($_FILES) === false) {
@@ -55,6 +53,7 @@ if (empty($_FILES) === false) {
     if (move_uploaded_file($tmp_name, $file_path) === false) {
         alert("上传文件失败。");
     }
+    @chmod($file_path, 0644);
     $file_url = $save_url . $new_file_name;
     //插入图片，关闭层
     echo '<html>';
