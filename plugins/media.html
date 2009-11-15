@@ -4,41 +4,64 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Media</title>
   <style type="text/css" rel="stylesheet">
-    body {
-    font-size:12px;
-    margin: 0px;
-    background-color:#F0F0EE;
-    }
-    td.left {
-    font-size:12px;
-    width: 40px;
-    padding: 2px;
-    }
-    td.right {
-    font-size:12px;
-    padding: 2px;
-    }
-    div.preview {
-    border: 1px solid #AAAAAA;
-    background-color: #FFFFFF;
-    width: 270px;
-    height: 200px;
-    margin: 0px 0px 10px 0px;
-    }
-    div.preview div {
-    margin: 5px;
-    }
+	body {
+		font-size:12px;
+		font-family: "sans serif",tahoma,verdana,helvetica;
+		margin:0;
+		background-color:#F0F0EE;
+		overflow:hidden;
+	}
+	label {
+		cursor:pointer;
+	}
+	.main {
+		margin: 10px;
+	}
+	.table  {
+		list-style-image:none;
+		list-style-position:outside;
+		list-style-type:none;
+		margin:0;
+		padding:0;
+		display:block;
+	}
+	.table li {
+		padding:0;
+		margin-bottom:10px;
+		display:list-item;
+		line-height:1.5;
+	}
+	.table li label {
+		font-weight:bold;
+	}
+	.table li input {
+		vertical-align:middle;
+	}
+	.table li img {
+		vertical-align:middle;
+	}
   </style>
 </head>
 <body>
-  <div class="preview"><div id="previewDiv"></div></div>
-  <table border="0" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="left">URL:</td>
-      <td class="right">
-        <input type="text" id="url" name="url" value="http://" maxlength="255" style="width:210px;" />
-      </td>
-    </tr>
-  </table>
+	<div class="main">
+		<ul class="table">
+			<li>
+				<label for="url">媒体文件地址</label>
+				<input type="text" id="url" name="url" value="http://" maxlength="255" style="width:90%;" />
+			</li>
+			<li>
+				<label for="width">宽度</label>
+				<input type="text" id="width" name="width" value="550" maxlength="4" style="width:50px;" /> px
+			</li>
+			<li>
+				<label for="height">高度</label>
+				<input type="text" id="height" name="height" value="400" maxlength="4" style="width:50px;" /> px
+			</li>
+			<li>
+				<label for="autostart">自动播放</label>
+				<input type="checkbox" id="autostart" name="autostart" value="1" />
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

@@ -11,25 +11,20 @@
     margin-top: 5px;
     margin-bottom: 5px;
     }
-    div.relative {
-    position:relative;
-    }
   </style>
   <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
   <script type="text/javascript">
     KE.show({
-        id : 'content7',
-        cssPath : './index.css',
-        allowFileManager : true
+        id : 'content1',
+		beforeCreate : function() { alert('开始创建编辑器。'); },
+		afterCreate : function() { alert('编辑器创建成功。'); }
     });
   </script>
 </head>
 <body>
-  <h3>插入图片时允许浏览服务器</h3>
-  <div class="relative">
-    <div class="editor">
-      <textarea id="content7" name="content" style="width:700px;height:300px;visibility:hidden;"></textarea>
-    </div>
+  <h3>设置回调函数</h3>
+  <div class="editor">
+    <textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
   </div>
 </body>
 </html>

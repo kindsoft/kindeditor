@@ -8,7 +8,11 @@
 <body>
 <div class="ke-content">
 <?php
-     echo($_POST['content']);
+	if (get_magic_quotes_gpc()) {
+		echo(stripslashes($_POST['content']));
+	} else {
+		echo($_POST['content']);
+	}
 ?>
 </div>
 <center>

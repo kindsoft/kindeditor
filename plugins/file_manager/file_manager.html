@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>File Manager</title>
+		<link type="text/css" rel="stylesheet" href="./file_manager.css" />
+		<script type="text/javascript" charset="utf-8" src="./file_manager.js"></script>
+	</head>
+	<body>
+		<table class="top" border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td>
+					<img src="./images/go-up.gif" width="16" height="16" border="0" alt="上一级目录" align="absmiddle" />
+					<a id="moveup" href="javascript:;">移到上一级文件夹</a>
+				</td>
+				<td align="right">
+					显示方式：<select id="viewType" name="viewType">
+						<option value="VIEW" selected="selected">缩略图</option>
+						<option value="LIST">详细信息</option>
+					</select>
+					排序方式：<select id="orderType" name="orderType">
+						<option value="NAME" selected="selected">名称</option>
+						<option value="SIZE">大小</option>
+						<option value="TYPE">类型</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td height="5"></td>
+				<td height="5"></td>
+			</tr>
+		</table>
+		<div id="listDiv" class="file-list"></div>
+		<div id="viewDiv" class="file-view"></div>
+	</body>
+</html>

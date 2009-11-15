@@ -1,63 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>KE.format test</title>
-  <style type="text/css" rel="stylesheet">
-    form {
-    margin: 0;
-    }
-    .editor {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    }
-  </style>
-  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-</head>
-<body>
-  <div id="test01"><span style="color:#FF0000;"><strong>test</strong></span></div>
-  <div id="test02">123<div style="color:#FF0000;background-color:#00FF00;font-size:18px;font-weight:bold;" class="spanclass">test</div>123</div>
-  <div id="test03"><input type="checkbox" id="chk" value=1 checked> <label for="chk"><strong>checkbox</strong></label></div>
-  <div id="test04"><img border="0" src="http://localhost/ke/plugins/emoticons/etc_01.gif" /> test </div>
-  <div id="test05"><img border="0" src="http://www.kindsoft.net/images/logo_180_30.gif" /> test </div>
-  <div id="test06"><span style="font-family:times new roman;"><strong>test</strong></span></div>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>KE.format Test</title>
+		<link type="text/css" rel="stylesheet" href="./qunit.css" />
+		<script type="text/javascript" charset="utf-8" src="./qunit.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./format.js"></script>
+	</head>
+	<body>
+		<div style="display:none;">
   <div id="test07"><span style="font-family:times new roman;"><strong></strong></span>test</div>
 
-  <div>##### result #####</div>
-  <div id="debug"></div>
+			<input type="hidden" id="test01" name="test01" value="../images/xxx.gif" style="width:100%" />
+			<input type="hidden" id="test02" name="test02" value="./../../images/xxx.gif" style="width:100%" />
+			<input type="hidden" id="test03" name="test03" value="/ke/images/xxx.gif" style="width:100%" />
+			<input type="hidden" id="test04" name="test04" value="http://localhost/ke/images/xxx.gif" style="width:100%" />
+			<input type="hidden" id="test05" name="test05" value="http://www.163.com/images/xxx.gif" style="width:100%" />
 
-  <script type="text/javascript">
-    test("001", KE.format.getHtml(KE.$("test01").innerHTML), '<span style="color:#ff0000;"><strong>test</strong></span>');
-    test("002", KE.format.getHtml(KE.$("test01").innerHTML, {span:[".color"]}), '<span style="color:#ff0000;">test</span>');
-    test("003", KE.format.getHtml(KE.$("test01").innerHTML, {span:[".font-size", "class"]}), '<span>test</span>');
-    test("004", KE.format.getHtml(KE.$("test01").innerHTML, {div:[".font-size", "class"]}), 'test');
+			<div id="test11"><span style="color:#FF0000;"><strong>test</strong></span></div>
+			<div id="test12">123<div style="color:#FF0000;background-color:#00FF00;font-size:18px;font-weight:bold;" class="spanclass">test</div>123</div>
+			<div id="test13"><input type="checkbox" id="chk" value=1 checked="checked" /> <label for="chk"><strong>checkbox</strong></label></div>
+			<div id="test14"><img src="./../plugins/emoticons/etc_01.gif" /> test</div>
+			<div id="test15"><img src="http://www.kindsoft.net/images/logo_180_30.gif" /> test</div>
+			<div id="test16"><span style="font-family:times new roman;"><strong>test</strong></span></div>
 
-    test("005", KE.format.getHtml(KE.$("test02").innerHTML), '123<div style="color:#ff0000;background-color:#00ff00;font-size:18px;font-weight:bold;" class="spanclass">test</div>123');
-    test("006", KE.format.getHtml(KE.$("test02").innerHTML, {span:[".color"]}), '123test123');
-    test("007", KE.format.getHtml(KE.$("test02").innerHTML, {div:[".font-size", "class"]}), '123<div style="font-size:18px;" class="spanclass">test</div>123');
-    test("008", KE.format.getHtml(KE.$("test02").innerHTML, {div:[".color"]}), '123<div style="color:#ff0000;">test</div>123');
-    test("009", KE.format.getHtml(KE.$("test02").innerHTML, {div:[".color", ".font-weight"]}), '123<div style="color:#ff0000;font-weight:bold;">test</div>123');
-
-    test("010", KE.format.getHtml(KE.$("test03").innerHTML), '<input type="checkbox" id="chk" value="1" checked="checked" /> <label for="chk"><strong>checkbox</strong></label>');
-    test("011", KE.format.getHtml(KE.$("test03").innerHTML, {input:["type", "value"]}), '<input type="checkbox" value="1" /> checkbox');
-    test("012", KE.format.getHtml(KE.$("test03").innerHTML, {input:["checked"],label:[]}), '<input checked="checked" /> <label>checkbox</label>');
-    test("013", KE.format.getHtml(KE.$("test03").innerHTML, {}), ' checkbox');
-
-    test("014", KE.format.getHtml(KE.$("test04").innerHTML), '<img border="0" src="/ke/plugins/emoticons/etc_01.gif" /> test ');
-
-    test("015", KE.format.getHtml(KE.$("test05").innerHTML), '<img border="0" src="http://www.kindsoft.net/images/logo_180_30.gif" /> test ');
-    test("016", KE.format.getHtml(KE.$("test06").innerHTML), '<span style="font-family:times new roman;"><strong>test</strong></span>');
-
-    test("017", KE.format.getHtml(KE.$("test07").innerHTML), 'test');
-
-    function test(id, result, expected) {
-        result = result.replace(/\r\n|\n|\r/g, "");
-        var log = "";
-        if (result === expected) log = id + " [ok]<br />";
-        else log = id + " [ng]<br />result: -->" + KE.util.escape(result) + "<--<br />expected: -->" + KE.util.escape(expected) + "<--<br />";
-        var debug = KE.$("debug");
-        debug.innerHTML += log;
-    }
-  </script>
-</body>
+		</div>
+		<h1 id="qunit-header">KE.format Test</h1>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+	</body>
 </html>

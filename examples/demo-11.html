@@ -24,8 +24,6 @@
             });
             KE.event.ready(function(){
                 KE.create(editorId);
-                //IE下回车时生成<br />
-                KE.util.pToBr(editorId);
                 //可视化模式下输入文字时
                 KE.event.input(KE.g[editorId].iframeDoc, function(){
                     KE.$('word_count').innerHTML = KE.util.getPureData(editorId).length;
@@ -38,7 +36,7 @@
         </script>
     </head>
     <body>
-        <h3>在IE回车时插入BR、统计字数</h3>
+        <h3>统计字数</h3>
         <div class="editor">
             <textarea id="content11" name="content" cols="100" rows="20"></textarea>
         </div>

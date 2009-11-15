@@ -18,6 +18,15 @@
         id : 'content3',
         cssPath : './index.css'
     });
+    function createEditor(id) {
+        KE.create(id);
+        KE.util.focus(id);
+    }
+    function removeEditor(id) {
+        KE.util.setData(id);
+        KE.remove(id);
+        KE.$(id).focus();
+    }
   </script>
 </head>
 <body>
@@ -26,7 +35,8 @@
     <div class="editor">
       <textarea id="content3" name="content" style="width:700px;height:300px;"></textarea>
     </div>
-    <input type="button" name="button" value="加载编辑器" onclick="javascript:KE.create('content3');" />
+    <input type="button" name="button" value="加载编辑器" onclick="javascript:createEditor('content3');" />
+    <input type="button" name="button" value="卸载编辑器" onclick="javascript:removeEditor('content3');" />
     <input type="button" name="button" value="卸载编辑器" onclick="javascript:KE.remove('content3');" />
     <input type="submit" name="button" value="提交内容" />
   </form>

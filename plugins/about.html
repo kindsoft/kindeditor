@@ -4,39 +4,59 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>About</title>
   <style type="text/css" rel="stylesheet">
-    body {
-    font-size:12px;
-    margin: 5px;
-    background-color:#F0F0EE;
-    }
-    div.title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #FB7155;
-    margin-bottom: 5px;
-    }
-    td.left {
-    font-size: 12px;
-    width: 70px;
-    padding: 2px;
-    }
-    td.right {
-    font-size: 12px;
-    padding: 2px;
-    }
+	body {
+		font-size:12px;
+		font-family: "sans serif",tahoma,verdana,helvetica;
+		margin:0;
+		background-color:#F0F0EE;
+		overflow:hidden;
+	}
+	.main {
+		margin: 10px;
+	}
+	.title {
+		font-size: 18px;
+		font-weight: bold;
+		color: #FB7155;
+		margin-bottom: 5px;
+	}
+	.table {
+		list-style-image:none;
+		list-style-position:outside;
+		list-style-type:none;
+		margin:0;
+		padding:0;
+		display:block;
+	}
+	.table li {
+		padding:0;
+		margin-bottom:10px;
+		display:list-item;
+	}
+	.table li label {
+		font-weight:bold;
+	}
+	.table li input {
+		vertical-align:middle;
+	}
+	.table li img {
+		vertical-align:middle;
+	}
   </style>
 </head>
 <body>
-  <div class="title">KindEditor</div>
-  <table border="0" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="left">版本: </td>
-      <td class="right">3.3.1</td>
-    </tr>
-    <tr>
-      <td class="left">技术支持: </td>
-      <td class="right"><a href="http://www.kindsoft.net/" target="_blank">http://www.kindsoft.net/</a></td>
-    </tr>
-  </table>
+	<div class="main">
+		<div class="title">KindEditor</div>
+		<ul class="table">
+			<li>
+				<label for="url">版本</label>
+				<script type="text/javascript">document.write(parent.KE.version);</script>
+			</li>
+			<li>
+				<label for="width">技术支持</label>
+				<a href="http://www.kindsoft.net/" target="_blank">http://www.kindsoft.net/</a>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

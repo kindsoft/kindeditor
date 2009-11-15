@@ -41,21 +41,40 @@
 		vertical-align:middle;
 	}
   </style>
+	<script type="text/javascript">
+		var KE = parent.KE;
+		location.href.match(/\?id=([\w-]+)/i);
+		var id = RegExp.$1;
+		KE.event.ready(function() {
+			var hyperLink = KE.$('hyperLink', document);
+			var linkType = KE.$('linkType', document);
+			var linkNode = KE.plugin['link'].getSelectedNode(id);
+			if (linkNode) {
+				var src = KE.format.getUrl(linkNode.href, KE.g[id].urlType);
+				var target = linkNode.target;
+				hyperLink.value = src;
+				linkType.value = target == '_blank' ? target : '_self';
+				var range = KE.g[id].keRange;
+				range.selectTextNode(linkNode);
+				KE.g[id].keSel.addRange(range);
+			}
+			KE.util.hideLoadingPage(id);
+		}, window, document);
+	</script>
 </head>
 <body>
 	<div class="main">
 		<ul class="table">
 			<li>
-				<label for="url">Flash地址</label>
-				<input type="text" id="url" name="url" value="http://" maxlength="255" style="width:90%;" />
+				<label for="hyperLink">URL</label>
+				<input type="text" id="hyperLink" name="hyperLink" value="http://" style="width:90%;" />
 			</li>
 			<li>
-				<label for="width">宽度</label>
-				<input type="text" id="width" name="width" value="550" maxlength="4" style="width:50px;" /> px
-			</li>
-			<li>
-				<label for="height">高度</label>
-				<input type="text" id="height" name="height" value="400" maxlength="4" style="width:50px;" /> px
+				<label for="linkType">打开类型</label>
+				<select id="linkType" name="linkType">
+				  <option value="_blank">新窗口</option>
+				  <option value="_self">当前窗口</option>
+				</select>
 			</li>
 		</ul>
 	</div>
