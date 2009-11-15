@@ -2054,7 +2054,6 @@ KE.create = function(id, mode) {
 			}
 		}
 	};
-	//KE.event.add(iframeWin, 'blur', function() { KE.util.selection(id); });
 	KE.event.add(iframeDoc, 'click', selectImageForWebkit);
 	KE.event.add(iframeDoc, 'contextmenu', selectImageForWebkit);
 	KE.event.add(iframeDoc, 'click', hideMenu);
