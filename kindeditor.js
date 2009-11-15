@@ -1361,10 +1361,11 @@ KE.util = {
 		KE.g[id].srcTextarea.value = this.getData(id);
 	},
 	focus : function(id) {
-		if (KE.g[id].wyswygMode) {
-			KE.g[id].iframeWin.focus();
+		var g = KE.g[id];
+		if (g.wyswygMode) {
+			g.iframeWin.focus();
 		} else {
-			KE.g[id].newTextarea.focus();
+			g.newTextarea.focus();
 		}
 	},
 	click : function(id, cmd) {
@@ -1410,14 +1411,32 @@ KE.util = {
 	},
 	insertHtml : function(id, html) {
 		if (html == '') return;
-		this.select(id);
-		this.pasteHtml(id, html);
+		var g = KE.g[id];
+		if (KE.browser == 'IE') {
+			this.select(id);
+			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
+			else g.range.pasteHTML(html);
+			this.select(id);
+		} else {
+			this.pasteHtml(id, html);
+		}
 		KE.history.add(id, false);
 	},
 	setFullHtml : function(id, html) {
 		html = html.replace(/\r\n|\n|\r/g, '');
 		if (KE.browser != 'IE' && html === '') html = '<br />';
 		KE.g[id].iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, html);
+	},
+	addTabEvent : function(id) {
+		KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
+			if (e.keyCode == 9) {
+				KE.util.selection(id);
+				KE.util.insertHtml(id, '　　');
+				if (e.preventDefault) e.preventDefault();
+				if (e.stopPropagation) e.stopPropagation();
+				return false;
+			}
+		});
 	},
 	addContextmenuEvent : function(id) {
 		var g = KE.g[id];
@@ -2016,8 +2035,7 @@ KE.create = function(id, mode) {
 		}
 	}
 	var hideMenu = function() {
-		hideDiv.innerHTML = '';
-		hideDiv.style.display = 'none';
+		KE.layout.hide(id);
 	};
 	var updateToolbar = function () {
 		KE.toolbar.updateState(id);
@@ -2025,7 +2043,7 @@ KE.create = function(id, mode) {
 	var addHistory = function () {
 		KE.history.add(id, true);
 	};
-	KE.event.add(iframeDoc, 'click', function(e) {
+	var selectImageForWebkit = function(e) {
 		if (KE.browser == 'WEBKIT') {
 			var target = e.srcElement || e.target;
 			if (target.tagName.toLowerCase() == 'img') {
@@ -2035,23 +2053,16 @@ KE.create = function(id, mode) {
 				KE.g[id].keSel.addRange(range);
 			}
 		}
-		hideMenu();
-	});
+	};
+	//KE.event.add(iframeWin, 'blur', function() { KE.util.selection(id); });
+	KE.event.add(iframeDoc, 'click', selectImageForWebkit);
+	KE.event.add(iframeDoc, 'contextmenu', selectImageForWebkit);
+	KE.event.add(iframeDoc, 'click', hideMenu);
 	KE.event.add(iframeDoc, 'click', updateToolbar);
 	KE.event.input(iframeDoc, addHistory);
 	KE.event.input(iframeDoc, updateToolbar);
 	KE.event.add(newTextarea, 'click', hideMenu);
 	KE.event.input(newTextarea, addHistory);
-	KE.event.add(iframeDoc, 'keydown', function(e) {
-		if (e.keyCode == 9) {
-			KE.util.selection(id);
-			KE.util.insertHtml(id, '　　');
-			KE.util.select(id);
-			if (e.preventDefault) e.preventDefault();
-			if (e.stopPropagation) e.stopPropagation();
-			return false;
-		}
-	});
 	KE.g[id].container = container;
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;
@@ -2081,6 +2092,7 @@ KE.create = function(id, mode) {
 	}
 	KE.util.addContextmenuEvent(id);
 	KE.util.addNewlineEvent(id);
+	KE.util.addTabEvent(id);
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, false);
 	if (KE.g[id].afterCreate) KE.g[id].afterCreate();
@@ -2160,7 +2172,6 @@ KE.plugin['plainpaste'] = {
 		this.dialog.show();
 	},
 	exec : function(id) {
-		KE.util.select(id);
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var html = KE.$('textArea', dialogDoc).value;
 		html = KE.util.escape(html);
@@ -2186,7 +2197,6 @@ KE.plugin['wordpaste'] = {
 		this.dialog.show();
 	},
 	exec : function(id) {
-		KE.util.select(id);
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var wordIframe = KE.$('wordIframe', dialogDoc);
 		var str = KE.util.getIframeDoc(wordIframe).body.innerHTML;
@@ -2549,7 +2559,6 @@ KE.plugin['emoticons'] = {
 		this.menu = menu;
 	},
 	exec : function(id, value) {
-		KE.util.select(id);
 		var html = '<img src="' + KE.g[id].pluginsPath + 'emoticons/' + value + '" border="0" />';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
@@ -2619,7 +2628,6 @@ KE.plugin['flash'] = {
 		return true;
 	},
 	exec : function(id) {
-		KE.util.select(id);
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var url = KE.$('url', dialogDoc).value;
 		var width = KE.$('width', dialogDoc).value;
@@ -2634,35 +2642,11 @@ KE.plugin['flash'] = {
 
 KE.plugin['image'] = {
 	getSelectedNode : function(id) {
-		var startNode = KE.g[id].keRange.startNode;
-		var startPos = KE.g[id].keRange.startPos;
-		var endNode = KE.g[id].keRange.endNode;
-		var endPos = KE.g[id].keRange.endPos;
-		var startImg = null;
-		var endImg = null;
-		if (startNode.nodeType == 1 && startNode.tagName.toLowerCase() == 'img') {
-			startImg = startNode;
-		} else {
-			if (startNode.nodeType == 3 && startPos == startNode.nodeValue.length) {
-				var nextNode = startNode.nextSibling;
-				if (nextNode) {
-					if (nextNode.nodeType == 1 && nextNode.tagName.toLowerCase() == 'img') startImg = nextNode;
-				}
-			}
-		}
-		if (endNode.nodeType == 1 && endNode.tagName.toLowerCase() == 'img') {
-			endImg = endNode;
-		} else {
-			if (endPos == 0) {
-				var prevNode = endNode.previousSibling;
-				if (prevNode) {
-					if (prevNode.nodeType == 1 && prevNode.tagName.toLowerCase() == 'img') endImg = prevNode;
-				}
-			}
-		}
-		if (startImg && endImg && startImg === endImg && !startImg.className.match(/^ke-\w+/i)) {
-			return startImg;
-		}
+		var g = KE.g[id];
+		var startNode = g.keRange.startNode;
+		if (startNode.nodeType != 1) return;
+		if (startNode.tagName.toLowerCase() != 'img') return;
+		if (!startNode.className.match(/^ke-\w+/i)) return startNode;
 	},
 	init : function(id) {
 		var self = this;
@@ -2724,7 +2708,6 @@ KE.plugin['image'] = {
 		return true;
 	},
 	exec : function(id) {
-		KE.util.select(id);
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var type = KE.$('type', dialogDoc).value;
 		if (!this.check(id)) return false;
@@ -2784,7 +2767,6 @@ KE.plugin['layer'] = {
 		this.menu = menu;
 	},
 	exec : function(id, value) {
-		KE.util.select(id);
 		var html = '<div style="' + value + '">' + KE.lang['pleaseInput'] + '</div>';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
@@ -2794,11 +2776,13 @@ KE.plugin['layer'] = {
 
 KE.plugin['link'] = {
 	getSelectedNode : function(id) {
-		var startNode = KE.g[id].keRange.startNode;
-		var startPos = KE.g[id].keRange.startPos;
-		var endNode = KE.g[id].keRange.endNode;
-		var endPos = KE.g[id].keRange.endPos;
-		var inlineTagHash = KE.util.arrayToHash(KE.g[id].inlineTags);
+		var g = KE.g[id];
+		var range = g.keRange;
+		var startNode = range.startNode;
+		var startPos = range.startPos;
+		var endNode = range.endNode;
+		var endPos = range.endPos;
+		var inlineTagHash = KE.util.arrayToHash(g.inlineTags);
 		var findLinkNode = function(node) {
 			while (node) {
 				if (node.nodeType == 1) {
@@ -2956,7 +2940,6 @@ KE.plugin['media'] = {
 		return true;
 	},
 	exec : function(id) {
-		KE.util.select(id);
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var url = KE.$('url', dialogDoc).value;
 		var width = KE.$('width', dialogDoc).value;
@@ -3018,7 +3001,6 @@ KE.plugin['specialchar'] = {
 		this.menu = menu;
 	},
 	exec : function(id, value) {
-		KE.util.select(id);
 		KE.util.insertHtml(id, value);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -3091,7 +3073,6 @@ KE.plugin['table'] = {
 		this.menu = menu;
 	},
 	exec : function(id, value) {
-		KE.util.select(id);
 		var location = value.split(',');
 		var html = '<table border="1">';
 		for (var i = 0; i < location[0]; i++) {
