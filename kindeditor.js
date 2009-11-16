@@ -86,7 +86,8 @@ KE.scriptPath = (function() {
 
 KE.browser = (function() {
 	var ua = navigator.userAgent.toLowerCase();
-	if (ua.indexOf("msie") > -1) return 'IE';
+	if (ua.indexOf("msie 6.0") > -1) return 'IE6';
+	else if (ua.indexOf("msie") > -1) return 'IE';
 	else if (ua.indexOf("webkit") > -1) return 'WEBKIT';
 	else if (ua.indexOf("gecko") > -1) return 'GECKO';
 	else if (ua.indexOf("opera") > -1) return 'OPERA';
@@ -1234,7 +1235,7 @@ KE.util = {
 		if (diff >= 0) {
 			g.textareaTable.style.height = diff + 'px';
 			g.iframe.style.height = diff + 'px';
-			g.newTextarea.style.height = (document.compatMode != "CSS1Compat" ? diff - 2 : diff) + 'px';
+			g.newTextarea.style.height = ((KE.browser == 'IE6' || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
 		}
 	},
 	hideLoadingPage : function(id) {
@@ -1951,7 +1952,7 @@ KE.remove = function(id, mode) {
 
 KE.create = function(id, mode) {
 	if (KE.g[id].beforeCreate) KE.g[id].beforeCreate();
-	if (KE.browser == 'IE') try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
+	if (KE.browser == 'IE6') try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
 	var srcTextarea = KE.$(id);
 	mode = (typeof mode == "undefined") ? 0 : mode;
 	if (mode == 0 && KE.g[id].container) return;
