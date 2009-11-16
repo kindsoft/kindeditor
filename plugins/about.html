@@ -6,6 +6,7 @@
   <style type="text/css" rel="stylesheet">
 	body {
 		font-size:12px;
+		line-height: 1.5;
 		font-family: "sans serif",tahoma,verdana,helvetica;
 		margin:0;
 		background-color:#F0F0EE;
@@ -18,7 +19,7 @@
 		font-size: 18px;
 		font-weight: bold;
 		color: #FB7155;
-		margin-bottom: 5px;
+		margin-bottom: 10px;
 	}
 	.table {
 		list-style-image:none;
@@ -30,7 +31,7 @@
 	}
 	.table li {
 		padding:0;
-		margin-bottom:10px;
+		margin:0;
 		display:list-item;
 	}
 	.table li label {
@@ -46,15 +47,12 @@
 </head>
 <body>
 	<div class="main">
-		<div class="title">KindEditor</div>
 		<ul class="table">
 			<li>
-				<label for="url">版本</label>
-				<script type="text/javascript">document.write(parent.KE.version);</script>
+				KindEditor <script type="text/javascript">document.write(parent.KE.version);</script> - HTML可视化编辑器
 			</li>
 			<li>
-				<label for="width">技术支持</label>
-				<a href="http://www.kindsoft.net/" target="_blank">http://www.kindsoft.net/</a>
+				Copyright &copy; <a href="http://www.kindsoft.net/" target="_blank">kindsoft.net</a> All rights reserved.
 			</li>
 		</ul>
 	</div>

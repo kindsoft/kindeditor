@@ -7,11 +7,6 @@
 	width: 20px;
 	height: 20px;
 }
-.ke-icon-preview {
-	background-position: -420px -20px;
-	width: 20px;
-	height: 20px;
-}
 .ke-icon-print {
 	background-position: -440px -20px;
 	width: 20px;
@@ -97,16 +92,6 @@
 	width: 20px;
 	height: 20px;
 }
-.ke-icon-date {
-	background-position: -140px -20px;
-	width: 20px;
-	height: 20px;
-}
-.ke-icon-time {
-	background-position: -160px -20px;
-	width: 20px;
-	height: 20px;
-}
 .ke-icon-title {
 	background-position: -20px -40px;
 	width: 86px;
@@ -172,18 +157,8 @@
 	width: 20px;
 	height: 20px;
 }
-.ke-icon-layer {
-	background-position: -240px -20px;
-	width: 20px;
-	height: 20px;
-}
 .ke-icon-table {
 	background-position: -580px -20px;
-	width: 20px;
-	height: 20px;
-}
-.ke-icon-specialchar {
-	background-position: -240px 0px;
 	width: 20px;
 	height: 20px;
 }
@@ -399,13 +374,13 @@
 .ke-menu-noselected {
 	background-color: #F0F0EE;
 	color: #222222;
-	padding: 2px;
+	padding: 2px 30px 2px 10px;
 	cursor: pointer;
 }
 .ke-menu-selected {
 	background-color: #1F3D74;
 	color: #FFFFFF;
-	padding: 2px;
+	padding: 2px 30px 2px 10px;
 	cursor: pointer;
 }
 .ke-contextmenu {
@@ -425,14 +400,14 @@
 	background-color: #F0F0EE;
 	color: #222222;
 	font-size: 12px;
-	padding: 2px;
+	padding: 2px 30px 2px 10px;
 	cursor: pointer;
 }
 .ke-contextmenu-selected {
 	background-color: #1F3D74;
 	color: #FFFFFF;
 	font-size: 12px;
-	padding: 2px;
+	padding: 2px 30px 2px 10px;
 	cursor: pointer;
 }
 .ke-dialog {

@@ -13,7 +13,6 @@ KE.version = '3.4';
 
 KE.lang = {
 	source : '切换模式',
-	preview : '预览',
 	undo : '后退(Ctrl+Z)',
 	redo : '前进(Ctrl+Y)',
 	cut : '剪切(Ctrl+X)',
@@ -32,8 +31,6 @@ KE.lang = {
 	outdent : '减少缩进',
 	subscript : '下标',
 	superscript : '上标',
-	date : '插入当前日期',
-	time : '插入当前时间',
 	title : '标题',
 	fontname : '字体',
 	fontsize : '文字大小',
@@ -49,7 +46,6 @@ KE.lang = {
 	media : '插入多媒体',
 	layer : '插入层',
 	table : '插入表格',
-	specialchar : '插入特殊字符',
 	hr : '插入横线',
 	emoticons : '插入笑脸',
 	link : '超级连接',
@@ -110,14 +106,13 @@ KE.setting = {
 	minHeight : 100,
 	minChangeSize : 5,
 	items : [
-		'source', 'preview', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'source', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-		'superscript', 'date', 'time', '-',
+		'superscript', 'selectall', '-',
 		'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold',
-		'italic', 'underline', 'strikethrough', 'removeformat', 'selectall', 'image',
-		'flash', 'media', 'layer', 'table', 'specialchar', 'hr',
-		'emoticons', 'link', 'unlink', 'about'
+		'italic', 'underline', 'strikethrough', 'removeformat', 'image',
+		'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', 'about'
 	],
 	colorTable : [
 		["#FFFFFF","#E5E4E4","#D9D8D8","#C0BDBD","#A7A4A4","#8E8A8B","#827E7F","#767173","#5C585A","#000000"],
@@ -1456,8 +1451,7 @@ KE.util = {
 				var menu = new KE.menu({
 					id : id,
 					event : e,
-					type : 'contextmenu',
-					width : '160px'
+					type : 'contextmenu'
 				});
 				for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
 					var item = g.contextmenuItems[i];
@@ -1554,7 +1548,6 @@ KE.menu = function(arg){
 		var self = this;
 		var cDiv = KE.$$('div');
 		cDiv.className = 'ke-' + this.type + '-noselected';
-		cDiv.style.width = arg.width;
 		cDiv.onmouseover = function() { this.className = 'ke-' + self.type + '-selected'; }
 		cDiv.onmouseout = function() { this.className = 'ke-' + self.type + '-noselected'; }
 		cDiv.onclick = event;
@@ -2022,7 +2015,7 @@ KE.create = function(id, mode) {
 		newTextarea.value = KE.util.execSetHtmlHooks(id, srcTextarea.value);
 		newTextarea.style.display = 'block';
 		iframe.style.display = 'none';
-		KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
+		KE.toolbar.disable(id, ['source', 'fullscreen']);
 		KE.toolbar.select(id, 'source');
 	}
 	if (KE.g[id].autoOnsubmitMode) {
@@ -2125,7 +2118,7 @@ KE.plugin['about'] = {
 			id : id,
 			cmd : 'about',
 			width : 300,
-			height : 100,
+			height : 70,
 			title : KE.lang['about'],
 			noButton : KE.lang['close']
 		});
@@ -2323,8 +2316,7 @@ KE.plugin['fontname'] = {
 		KE.util.selection(id);
 		var menu = new KE.menu({
 			id : id,
-			cmd : cmd,
-			width : '160px'
+			cmd : cmd
 		});
 		KE.each(fontName, function(key, value) {
 			var html = '<span style="font-family: ' + key + ';">' + value + '</span>';
@@ -2349,8 +2341,7 @@ KE.plugin['fontsize'] = {
 		KE.util.selection(id);
 		var menu = new KE.menu({
 			id : id,
-			cmd : cmd,
-			width : '100px'
+			cmd : cmd
 		});
 		for (var i = 0, len = fontSize.length; i < len; i++) {
 			var value = fontSize[i];
@@ -2374,22 +2365,6 @@ KE.plugin['hr'] = {
 		KE.util.selection(id);
 		KE.util.insertHtml(id, '<hr />');
 		KE.util.focus(id);
-	}
-};
-
-KE.plugin['preview'] = {
-	click : function(id) {
-		var dialog = new KE.dialog({
-			id : id,
-			cmd : 'preview',
-			html : KE.util.getData(id),
-			width : 600,
-			height : 400,
-			useFrameCSS : true,
-			title : KE.lang['preview'],
-			noButton : KE.lang['close']
-		});
-		dialog.show();
 	}
 };
 
@@ -2424,7 +2399,7 @@ KE.plugin['source'] = {
 			KE.util.setFullHtml(id, g.newTextarea.value);
 			g.iframe.style.display = 'block';
 			g.newTextarea.style.display = 'none';
-			KE.toolbar.able(id, ['source', 'preview', 'fullscreen']);
+			KE.toolbar.able(id, ['source', 'fullscreen']);
 			g.wyswygMode = true;
 			this.isSelected = false;
 			KE.toolbar.unselect(id, "source");
@@ -2433,7 +2408,7 @@ KE.plugin['source'] = {
 			g.newTextarea.value = KE.util.getData(id);
 			g.iframe.style.display = 'none';
 			g.newTextarea.style.display = 'block';
-			KE.toolbar.disable(id, ['source', 'preview', 'fullscreen']);
+			KE.toolbar.disable(id, ['source', 'fullscreen']);
 			g.wyswygMode = false;
 			this.isSelected = true;
 			KE.toolbar.select(id, "source");
@@ -2496,8 +2471,7 @@ KE.plugin['title'] = {
 		KE.util.selection(id);
 		var menu = new KE.menu({
 			id : id,
-			cmd : cmd,
-			width : '120px'
+			cmd : cmd
 		});
 		KE.each(title, function(key, value) {
 			var html = '<' + key + ' style="margin:0px;">' + value + '</' + key + '>';
@@ -2742,38 +2716,6 @@ KE.plugin['image'] = {
 	}
 };
 
-KE.plugin['layer'] = {
-	click : function(id) {
-		var cmd = 'layer';
-		var styles = [
-			'margin:5px;border:1px solid #000000;',
-			'margin:5px;border:2px solid #000000;',
-			'margin:5px;border:1px dashed #000000;',
-			'margin:5px;border:2px dashed #000000;',
-			'margin:5px;border:1px dotted #000000;',
-			'margin:5px;border:2px dotted #000000;'
-		];
-		KE.util.selection(id);
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd,
-			width : '150px'
-		});
-		for (var i = 0; i < styles.length; i++) {
-			var html = '<div style="height:15px;' + styles[i] + '"></div>';
-			menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "padding:5px;' + styles[i] + '")'));
-		}
-		menu.show();
-		this.menu = menu;
-	},
-	exec : function(id, value) {
-		var html = '<div style="' + value + '">' + KE.lang['pleaseInput'] + '</div>';
-		KE.util.insertHtml(id, html);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
 KE.plugin['link'] = {
 	getSelectedNode : function(id) {
 		var g = KE.g[id];
@@ -2953,60 +2895,6 @@ KE.plugin['media'] = {
 	}
 };
 
-KE.plugin['specialchar'] = {
-	click : function(id) {
-		var charTable = [
-			['§','№','☆','★','○','●','◎','◇','◆','□'],
-			['℃','‰','■','△','▲','※','→','←','↑','↓'],
-			['〓','¤','°','＃','＆','＠','＼','︿','＿','￣'],
-			['―','α','β','γ','δ','ε','ζ','η','θ','ι'],
-			['κ','λ','μ','ν','ξ','ο','π','ρ','σ','τ'],
-			['υ','φ','χ','ψ','ω','≈','≡','≠','＝','≤'],
-			['≥','＜','＞','≮','≯','∷','±','＋','－','×'],
-			['÷','／','∫','∮','∝','∞','∧','∨','∑','∏'],
-			['∪','∩','∈','∵','∴','⊥','∥','∠','⌒','⊙'],
-			['≌','∽','〖','〗','【','】','（','）','［','］']
-		];
-		var cmd = 'specialchar';
-		KE.util.selection(id);
-		var table = KE.$$('table');
-		table.cellPadding = 0;
-		table.cellSpacing = 2;
-		table.border = 0;
-		table.style.margin = 0;
-		table.style.padding = 0;
-		table.style.borderCollapse = 'separate';
-		table.style.borderSpacing = '2px';
-		for (var i = 0; i < charTable.length; i++) {
-			var row = table.insertRow(i);
-			for (var j = 0; j < charTable[i].length; j++) {
-				var cell = row.insertCell(j);
-				cell.style.padding = '1px';
-				cell.style.margin = 0;
-				cell.style.border = '1px solid #AAAAAA';
-				cell.style.fontSize = '12px';
-				cell.style.cursor = 'pointer';
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
-				cell.onmouseout = function() {this.style.borderColor = '#AAAAAA'; }
-				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + charTable[i][j] + '")');
-				cell.innerHTML = charTable[i][j];
-			}
-		}
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd
-		});
-		menu.append(table);
-		menu.show();
-		this.menu = menu;
-	},
-	exec : function(id, value) {
-		KE.util.insertHtml(id, value);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
 KE.plugin['table'] = {
 	click : function(id) {
 		var self = this;
@@ -3034,7 +2922,7 @@ KE.plugin['table'] = {
 				cell.style.border = '1px solid #DDDDDD';
 				cell.style.backgroundColor = '#FFFFFF';
 				cell.style.cursor = 'pointer';
-				cell.style.fontSize = '1px';
+				cell.style.overflow = 'hidden';
 				cell.style.width = '12px';
 				cell.style.height = '12px';
 				cell.id = value;
