@@ -1413,7 +1413,6 @@ KE.util = {
 			this.select(id);
 			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
 			else g.range.pasteHTML(html);
-			this.select(id);
 		} else {
 			this.pasteHtml(id, html);
 		}
@@ -2284,20 +2283,6 @@ KE.plugin['bgcolor'] = {
 	}
 };
 
-KE.plugin['date'] = {
-	click : function(id) {
-		var date = new Date();
-		var year = date.getFullYear().toString(10);
-		var month = (date.getMonth() + 1).toString(10);
-		month = month.length < 2 ? '0' + month : month;
-		var day = date.getDate().toString(10);
-		day = day.length < 2 ? '0' + day : day;
-		var value = year + '-' + month + '-' + day;
-		KE.util.selection(id);
-		KE.util.insertHtml(id, value);
-	}
-};
-
 KE.plugin['fontname'] = {
 	click : function(id) {
 		var fontName = {
@@ -2440,21 +2425,6 @@ KE.plugin['textcolor'] = {
 		KE.history.add(id, false);
 		this.menu.hide();
 		KE.util.focus(id);
-	}
-};
-
-KE.plugin['time'] = {
-	click : function(id) {
-		var date = new Date();
-		var hour = date.getHours().toString(10);
-		hour = hour.length < 2 ? '0' + hour : hour;
-		var minute = date.getMinutes().toString(10);
-		minute = minute.length < 2 ? '0' + minute : minute;
-		var second = date.getSeconds().toString(10);
-		second = second.length < 2 ? '0' + second : second;
-		var value = hour + ':' + minute + ':' + second;
-		KE.util.selection(id);
-		KE.util.insertHtml(id, value);
 	}
 };
 
