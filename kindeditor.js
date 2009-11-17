@@ -1407,7 +1407,7 @@ KE.util = {
 		g.keSel.addRange(g.keRange);
 	},
 	insertHtml : function(id, html) {
-		if (html == '') return;
+		if (html === '') return;
 		var g = KE.g[id];
 		if (KE.browser.IE) {
 			this.select(id);
@@ -1473,8 +1473,9 @@ KE.util = {
 	},
 	addNewlineEvent : function(id) {
 		var g = KE.g[id];
+		if (KE.browser.IE && g.newlineTag.toLowerCase() != 'br') return;
+		if (KE.browser.OPERA) return;
 		KE.event.add(g.iframeDoc, 'keydown', function(e) {
-			if (KE.browser.OPERA) return true;
 			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
 			KE.util.selection(id);
 			var parent = g.keRange.getParentElement();
@@ -2117,8 +2118,10 @@ KE.plugin['about'] = {
 		var dialog = new KE.dialog({
 			id : id,
 			cmd : 'about',
+			file : 'about.html?id=' + id + '&ver=' + KE.version,
 			width : 300,
 			height : 70,
+			loadingMode : true,
 			title : KE.lang['about'],
 			noButton : KE.lang['close']
 		});
@@ -2156,8 +2159,10 @@ KE.plugin['plainpaste'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'plainpaste',
+			file : 'plainpaste.html?id=' + id + '&ver=' + KE.version,
 			width : 400,
 			height : 300,
+			loadingMode : true,
 			title : KE.lang['plainpaste'],
 			yesButton : KE.lang['yes'],
 			noButton : KE.lang['no']
@@ -2181,8 +2186,10 @@ KE.plugin['wordpaste'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'wordpaste',
+			file : 'wordpaste.html?id=' + id + '&ver=' + KE.version,
 			width : 400,
 			height : 300,
+			loadingMode : true,
 			title : KE.lang['wordpaste'],
 			yesButton : KE.lang['yes'],
 			noButton : KE.lang['no']
@@ -2543,8 +2550,10 @@ KE.plugin['flash'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'flash',
+			file : 'flash.html?id=' + id + '&ver=' + KE.version,
 			width : 400,
 			height : 140,
+			loadingMode : true,
 			title : KE.lang['flash'],
 			yesButton : KE.lang['yes'],
 			noButton : KE.lang['no']
@@ -2823,8 +2832,10 @@ KE.plugin['media'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'media',
+			file : 'media.html?id=' + id + '&ver=' + KE.version,
 			width : 400,
 			height : 170,
+			loadingMode : true,
 			title : KE.lang['media'],
 			yesButton : KE.lang['yes'],
 			noButton : KE.lang['no']

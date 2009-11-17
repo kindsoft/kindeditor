@@ -19,6 +19,8 @@
   </style>
   <script type="text/javascript">
 	var KE = parent.KE;
+	location.href.match(/\?id=([\w-]+)/i);
+	var id = RegExp.$1;
 	KE.event.ready(function() {
 		var iframe = KE.$('wordIframe', document);
 		var iframeDoc = KE.util.getIframeDoc(iframe);
@@ -29,6 +31,7 @@
 		if (!KE.browser.IE) iframeDoc.write('<br />');
 		iframeDoc.write('</body></html>');
 		iframeDoc.close();
+		KE.util.hideLoadingPage(id);
 	}, window, document);
   </script>
 </head>

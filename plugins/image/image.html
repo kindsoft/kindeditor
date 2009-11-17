@@ -145,6 +145,14 @@
 					fileManager.show();
 				});
 				selectTab(0);
+				var alignIds = ['default', 'left', 'right'];
+				for (var i = 0, len = alignIds.length; i < len; i++) {
+					KE.event.add(KE.$(alignIds[i] + 'Img', document), 'click', (function(i) {
+						return function() {
+							KE.$(alignIds[i] + 'Chk', document).checked = true;
+						};
+					})(i));
+				}
 				KE.util.hideLoadingPage(id);
 			}, window, document);
 		</script>
@@ -178,9 +186,9 @@
 					</li>
 					<li>
 						<label>对齐方式</label>
-						<input type="radio" name="align" value="" checked="checked" /> <img src="./images/align_top.gif" width="23" height="25" border="0" alt="默认方式" title="默认方式" />
-						<input type="radio" name="align" value="left" /> <img src="./images/align_left.gif" width="23" height="25" border="0" alt="左对齐" title="左对齐" />
-						<input type="radio" name="align" value="right" /> <img src="./images/align_right.gif" width="23" height="25" border="0" alt="右对齐" title="右对齐" />
+						<input type="radio" id="defaultChk" name="align" value="" checked="checked" /> <img id="defaultImg" src="./images/align_top.gif" width="23" height="25" border="0" alt="默认方式" title="默认方式" />
+						<input type="radio" id="leftChk" name="align" value="left" /> <img id="leftImg" src="./images/align_left.gif" width="23" height="25" border="0" alt="左对齐" title="左对齐" />
+						<input type="radio" id="rightChk" name="align" value="right" /> <img id="rightImg" src="./images/align_right.gif" width="23" height="25" border="0" alt="右对齐" title="右对齐" />
 					</li>
 				</ul>
 			</form>

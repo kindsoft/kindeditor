@@ -11,36 +11,9 @@ body {
 	font-family: "sans serif",tahoma,verdana,helvetica;
 	line-height: 1.5;
 }
-/*
 p {
-	background-image:url(./p.gif);
-	background-position:right top;
-	background-repeat:no-repeat;
+	margin: 5px 0;
 }
-div {
-	background-image:url(./div.gif);
-	background-position:right top;
-	background-repeat:no-repeat;
-}
-ul {
-	background-image:url(./ul.gif);
-	background-position:right top;
-	background-repeat:no-repeat;
-}
-ol {
-	background-image:url(./ol.gif);
-	background-position:right top;
-	background-repeat:no-repeat;
-}
-dl {
-	background-image:url(./dl.gif);
-	background-position:right top;
-	background-repeat:no-repeat;
-}
-p,div,ul,ol,dl {
-	border:1px dotted #CCCCCC;
-}
-*/
 .ke-flash {
 	border:1px solid #AAAAAA;
 	background-image:url(./flash.gif);

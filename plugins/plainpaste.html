@@ -17,6 +17,14 @@
 	overflow: auto;
 	}
   </style>
+  <script type="text/javascript">
+	var KE = parent.KE;
+	location.href.match(/\?id=([\w-]+)/i);
+	var id = RegExp.$1;
+	KE.event.ready(function() {
+		KE.util.hideLoadingPage(id);
+	}, window, document);
+  </script>
 </head>
 <body>
 <div style="margin-bottom:10px;">请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。</div>
