@@ -82,12 +82,13 @@ KE.scriptPath = (function() {
 
 KE.browser = (function() {
 	var ua = navigator.userAgent.toLowerCase();
-	if (ua.indexOf("msie 6.0") > -1) return 'IE6';
-	else if (ua.indexOf("msie") > -1) return 'IE';
-	else if (ua.indexOf("webkit") > -1) return 'WEBKIT';
-	else if (ua.indexOf("gecko") > -1) return 'GECKO';
-	else if (ua.indexOf("opera") > -1) return 'OPERA';
-	else return "";
+	return {
+		VERSION: ua.match(/(msie|firefox|webkit|opera)[\/:\s]([\d.]+)/) ? RegExp.$2 : '0',
+		IE: (ua.indexOf('msie') > -1 && ua.indexOf('opera') == -1),
+		GECKO: (ua.indexOf('gecko') > -1 && ua.indexOf('khtml') == -1),
+		WEBKIT: (ua.indexOf('applewebkit') > -1),
+		OPERA: (ua.indexOf('opera') > -1)
+	};
 })();
 
 KE.setting = {
@@ -271,7 +272,7 @@ KE.selection = function(win, doc) {
 		this.sel = sel;
 		this.range = range;
 		var startNode, startPos, endNode, endPos;
-		if (KE.browser == 'IE') {
+		if (KE.browser.IE) {
 			if (range.item) {
 				var el = range.item(0);
 				startNode = endNode = el;
@@ -356,7 +357,7 @@ KE.selection = function(win, doc) {
 	this.init();
 	this.addRange = function(keRange) {
 		this.keRange = keRange;
-		if (KE.browser == 'IE') {
+		if (KE.browser.IE) {
 			var getEndRange = function(isStart) {
 				var range = KE.util.createRange(doc);
 				var node = isStart ? keRange.startNode : keRange.endNode;
@@ -412,7 +413,7 @@ KE.selection = function(win, doc) {
 		}
 	};
 	this.focus = function() {
-		if (KE.browser == 'IE' && this.range != null) this.range.select();
+		if (KE.browser.IE && this.range != null) this.range.select();
 	}
 };
 
@@ -462,7 +463,7 @@ KE.range = function(doc) {
 	this.comparePoints = function(how, range) {
 		var compareNodes = function(nodeA, posA, nodeB, posB) {
 			var cmp;
-			if (KE.browser == 'IE') {
+			if (KE.browser.IE) {
 				var getStartRange = function(node, pos, isStart) {
 					var range = KE.util.createRange(doc);
 					var type = KE.util.getNodeType(node);
@@ -1052,7 +1053,7 @@ KE.util = {
 	},
 	getScrollPos : function() {
 		var x, y;
-		if (KE.browser == 'IE' || KE.browser == 'OPERA') {
+		if (KE.browser.IE || KE.browser.OPERA) {
 			var el = this.getDocumentElement();
 			x = el.scrollLeft;
 			y = el.scrollTop;
@@ -1230,7 +1231,7 @@ KE.util = {
 		if (diff >= 0) {
 			g.textareaTable.style.height = diff + 'px';
 			g.iframe.style.height = diff + 'px';
-			g.newTextarea.style.height = ((KE.browser == 'IE6' || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
+			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 7) || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
 		}
 	},
 	hideLoadingPage : function(id) {
@@ -1377,7 +1378,7 @@ KE.util = {
 		g.range = g.keSel.range;
 	},
 	select : function(id) {
-		if (KE.browser == 'IE') KE.g[id].range.select();
+		if (KE.browser.IE) KE.g[id].range.select();
 	},
 	execCommand : function(id, cmd, value) {
 		try {
@@ -1391,7 +1392,7 @@ KE.util = {
 		var imgStr = '<img id="__ke_temp_tag__" style="display:none;" />';
 		if (isStart) html = imgStr + html;
 		else html += imgStr;
-		if (KE.browser == 'IE') {
+		if (KE.browser.IE) {
 			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
 			else g.range.pasteHTML(html);
 		} else {
@@ -1408,7 +1409,7 @@ KE.util = {
 	insertHtml : function(id, html) {
 		if (html == '') return;
 		var g = KE.g[id];
-		if (KE.browser == 'IE') {
+		if (KE.browser.IE) {
 			this.select(id);
 			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
 			else g.range.pasteHTML(html);
@@ -1420,7 +1421,7 @@ KE.util = {
 	},
 	setFullHtml : function(id, html) {
 		html = html.replace(/\r\n|\n|\r/g, '');
-		if (KE.browser != 'IE' && html === '') html = '<br />';
+		if (!KE.browser.IE && html === '') html = '<br />';
 		KE.g[id].iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, html);
 	},
 	addTabEvent : function(id) {
@@ -1474,7 +1475,7 @@ KE.util = {
 	addNewlineEvent : function(id) {
 		var g = KE.g[id];
 		KE.event.add(g.iframeDoc, 'keydown', function(e) {
-			if (KE.browser == 'OPERA') return true;
+			if (KE.browser.OPERA) return true;
 			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
 			KE.util.selection(id);
 			var parent = g.keRange.getParentElement();
@@ -1483,9 +1484,9 @@ KE.util = {
 				if (!KE.util.inArray(tagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'])) {
 					KE.util.pasteHtml(id, '<br />');
 					var nextNode = g.keRange.startNode.nextSibling;
-					if (KE.browser == 'IE') {
+					if (KE.browser.IE) {
 						if (!nextNode) KE.util.pasteHtml(id, '<br />', true);
-					} else if (KE.browser == 'WEBKIT') {
+					} else if (KE.browser.WEBKIT) {
 						if (!nextNode || (nextNode.nodeType == 3 && nextNode.nodeValue === '')) {
 							KE.util.pasteHtml(id, '<br />', true);
 						}
@@ -1945,7 +1946,7 @@ KE.remove = function(id, mode) {
 
 KE.create = function(id, mode) {
 	if (KE.g[id].beforeCreate) KE.g[id].beforeCreate();
-	if (KE.browser == 'IE6') try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
+	if (KE.browser.IE && KE.browser.VERSION < 7) try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
 	var srcTextarea = KE.$(id);
 	mode = (typeof mode == "undefined") ? 0 : mode;
 	if (mode == 0 && KE.g[id].container) return;
@@ -2038,7 +2039,7 @@ KE.create = function(id, mode) {
 		KE.history.add(id, true);
 	};
 	var selectImageForWebkit = function(e) {
-		if (KE.browser == 'WEBKIT') {
+		if (KE.browser.WEBKIT) {
 			var target = e.srcElement || e.target;
 			if (target.tagName.toLowerCase() == 'img') {
 				KE.util.selection(id);
