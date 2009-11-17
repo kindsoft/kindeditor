@@ -496,3 +496,23 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-plugin-table-table {
+	margin:0;
+	padding:0;
+	border-collapse:separate;
+}
+.ke-plugin-table-table td {
+	border:0;
+	margin:0;
+	padding:0;
+}
+.ke-plugin-table-table td div {
+	border:1px solid #DDDDDD;
+	background-color:#FFFFFF;
+	cursor:pointer;
+	overflow:hidden;
+	margin:1px;
+	padding:0;
+	width:12px;
+	height:12px;
+}

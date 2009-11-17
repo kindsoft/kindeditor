@@ -2886,42 +2886,33 @@ KE.plugin['table'] = {
 		KE.util.selection(id);
 		var table = KE.$$('table');
 		table.cellPadding = 0;
-		table.cellSpacing = 2;
+		table.cellSpacing = 0;
 		table.border = 0;
-		table.style.margin = 0;
-		table.style.padding = 0;
-		table.style.borderCollapse = 'separate';
-		table.style.borderSpacing = '2px';
+		table.className = 'ke-plugin-table-table';
 		for (var i = 0; i < num; i++) {
 			var row = table.insertRow(i);
 			cellArr[i] = [];
 			for (var j = 0; j < num; j++) {
 				var value = (i + 1) + ',' + (j + 1);
 				var cell = row.insertCell(j);
-				cellArr[i][j] = cell;
-				cell.style.margin = 0;
-				cell.style.padding = 0;
-				cell.style.border = '1px solid #DDDDDD';
-				cell.style.backgroundColor = '#FFFFFF';
-				cell.style.cursor = 'pointer';
-				cell.style.overflow = 'hidden';
-				cell.style.width = '12px';
-				cell.style.height = '12px';
-				cell.id = value;
-				cell.onmouseover = function() {
-					var location = this.id.split(',');
-					var x = location[0];
-					var y = location[1];
-					self.locationCell.innerHTML = x + ' by ' + y + ' Table';
-					for (var m = 0; m < num; m++) {
-						for (var n = 0; n < num; n++) {
-							var cell = cellArr[m][n];
-							if (m < x && n < y) cell.style.backgroundColor = '#CCCCCC';
-							else cell.style.backgroundColor = '#FFFFFF';
+				var div = KE.$$('div');
+				cell.appendChild(div);
+				cellArr[i][j] = div;
+				div.onmouseover = (function(x, y) {
+					return function() {
+						self.locationCell.innerHTML = x + ' by ' + y + ' Table';
+						for (var m = 0; m < num; m++) {
+							for (var n = 0; n < num; n++) {
+								var cell = cellArr[m][n];
+								if (m < x && n < y) cell.style.backgroundColor = '#CCCCCC';
+								else cell.style.backgroundColor = '#FFFFFF';
+							}
 						}
-					}
-				};
-				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + value + '")');
+					};
+				})(i + 1, j + 1);
+				div.onclick = (function(value) {
+					return function() { KE.plugin[cmd].exec(id, value); };
+				})(value);
 			}
 		}
 		var row = table.insertRow(num);
