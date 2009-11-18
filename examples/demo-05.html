@@ -4,34 +4,43 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>KindEditor</title>
   <style type="text/css" rel="stylesheet">
-    form {
-    margin: 0;
-    }
-    .editor {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    }
+	form {
+	margin: 0;
+	}
+	.editor {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	}
   </style>
   <!-- 手动添加编辑器的CSS，可放在其它CSS文件后面，防止CSS定义被覆盖。  -->
   <!-- 注：这时必须把loadStyleMode参数设置为false，否则会重复加载同一个CSS文件。 -->
   <link rel="stylesheet" type="text/css" href="./../skins/oxygen.css" />
   <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
   <script type="text/javascript">
-    KE.show({
-        id : 'content5',
-        autoOnsubmitMode : false, //不会自动把KE.util.setData添加到onsubmit事件里。
-        loadStyleMode : false, //不会自动加载CSS文件。
-        cssPath : './index.css'
-    });
+	KE.show({
+		id : 'content5',
+		autoOnsubmitMode : false, //不会自动把KE.util.setData添加到onsubmit事件里。
+		loadStyleMode : false, //不会自动加载CSS文件。
+		cssPath : './index.css'
+	});
+	function checkForm() {
+		var data = KE.util.getPureData('content5').replace(/\r\n|\n|\r/, '').replace(/^\s+|\s+$/, '');
+		if (data.length == 0) {
+			alert('请输入内容！');
+			return false;
+		}
+		KE.util.setData('content5');
+		return true;
+	}
   </script>
 </head>
 <body>
   <h3>手动添加Onsubmit事件、手动添加CSS文件</h3>
-  <form name="example" method="post" action="./../php/demo.php" onsubmit="javascript:KE.util.setData('content5');">
-    <div class="editor">
-      <textarea id="content5" name="content" style="width:700px;height:300px;"></textarea>
-    </div>
-    <input type="submit" name="button" value="提交内容" />
+  <form name="example" method="post" action="./../php/demo.php" onsubmit="javascript:return checkForm();">
+	<div class="editor">
+	  <textarea id="content5" name="content" style="width:700px;height:300px;"></textarea>
+	</div>
+	<input type="submit" name="button" value="提交内容" />
   </form>
 </body>
 </html>

@@ -26,11 +26,11 @@
                 KE.create(editorId);
                 //可视化模式下输入文字时
                 KE.event.input(KE.g[editorId].iframeDoc, function(){
-                    KE.$('word_count').innerHTML = KE.util.getPureData(editorId).length;
+                    KE.$('word_count').innerHTML = KE.util.getData(editorId).length;
                 });
                 //代码模式下输入文字时
                 KE.event.input(KE.g[editorId].newTextarea, function(){
-                    KE.$('word_count').innerHTML = KE.util.getPureData(editorId).length;
+                    KE.$('word_count').innerHTML = KE.util.getData(editorId).length;
                 });
             });
         </script>
@@ -40,6 +40,6 @@
         <div class="editor">
             <textarea id="content11" name="content" cols="100" rows="20"></textarea>
         </div>
-        您当前输入了 <span id="word_count">0</span> 个文字。
+        您当前输入了 <span id="word_count">0</span> 个文字。（字数统计包含HTML代码。）
     </body>
 </html>

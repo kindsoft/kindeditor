@@ -1348,10 +1348,9 @@ KE.util = {
 		return this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 	},
 	getPureData : function(id) {
-		var data = this.getSrcData(id);
-		data = data.replace(/<br[\s\/]{0,2}>/ig, "\r\n");
-		data = data.replace(/<.*?>/ig, "");
-		data = data.replace(/&nbsp;/ig, "");
+		var data = this.getData(id);
+		data = data.replace(/<(?!img|embed).*?>/ig, '');
+		data = data.replace(/&nbsp;/ig, ' ');
 		return data;
 	},
 	setData : function(id) {
@@ -1409,6 +1408,7 @@ KE.util = {
 	insertHtml : function(id, html) {
 		if (html === '') return;
 		var g = KE.g[id];
+		if (!g.wyswygMode) return;
 		if (KE.browser.IE) {
 			this.select(id);
 			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
