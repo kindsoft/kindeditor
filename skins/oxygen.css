@@ -250,7 +250,7 @@
 	right: 0;
 	top: 0;
 	cursor: pointer;
-	background-image: url(./default/default.gif);
+	background-image: url(./oxygen/oxygen.gif);
 }
 .ke-bottom-outer {
 	border: 0;
@@ -282,7 +282,7 @@
 	background-position: -4px -740px;
 	width: 12px;
 	height: 12px;
-	background-image: url(./default/default.gif);
+	background-image: url(./oxygen/oxygen.gif);
 }
 .ke-textarea-outer {
 	border: 0;
@@ -324,7 +324,7 @@
 	display: block;
 	background-repeat: no-repeat;
 	overflow: hidden;
-	background-image: url(./default/default.gif);
+	background-image: url(./oxygen/oxygen.gif);
 }
 .ke-icon {
 	display: block;

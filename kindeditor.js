@@ -98,7 +98,7 @@ KE.setting = {
 	resizeMode : 2,
 	filterMode : true,
 	urlType : 'relative',
-	skinType : 'default',
+	skinType : 'oxygen',
 	newlineTag : 'br',
 	cssPath : '',
 	skinsPath : KE.scriptPath + 'skins/',
