@@ -9,7 +9,11 @@
       margin-bottom: 5px;
       }
       .ke-icon-remote_image {
+      background-image: url(./../skins/oxygen/oxygen.gif);
       background-position: 0px -496px;
+      display: block;
+      background-repeat: no-repeat;
+      overflow: hidden;
       width: 16px;
       height: 16px;
       }
@@ -23,7 +27,7 @@ KE.plugin['remote_image'] = {
         var dialog = new KE.dialog({
             id : id,
             cmd : 'remote_image',
-            file : '../examples/remote_image.html',
+            file : '../examples/remote_image.html', //相对于plugins的路径
             width : 310,
             height : 90,
             title : KE.lang['image'],

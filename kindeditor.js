@@ -1842,6 +1842,7 @@ KE.toolbar = {
 		});
 	},
 	create : function(id) {
+		var defaultItemHash = KE.util.arrayToHash(KE.setting.items);
 		KE.g[id].toolbarIcon = [];
 		var tableObj = KE.util.createTable();
 		var toolbar = tableObj.table;
@@ -1874,12 +1875,16 @@ KE.toolbar = {
 					KE.util.click(id, cmd);
 				};
 			})(id, cmd);
-			a.onmouseover = function(){ this.className = "ke-icon-on"; };
-			a.onmouseout = function(){ this.className = "ke-icon"; };
+			a.onmouseover = function(){ this.className = 'ke-icon-on'; };
+			a.onmouseout = function(){ this.className = 'ke-icon'; };
 			a.hidefocus = true;
 			a.title = KE.lang[cmd];
 			var span = KE.$$('span');
-			span.className = "ke-common-icon ke-icon-" + cmd;
+			if (typeof defaultItemHash[cmd] == 'undefined') {
+				span.className = 'ke-icon-' + cmd;
+			} else {
+				span.className = 'ke-common-icon ke-icon-' + cmd;
+			}
 			a.appendChild(span);
 			cell.appendChild(a);
 			KE.g[id].toolbarIcon[cmd] = [a, span];
