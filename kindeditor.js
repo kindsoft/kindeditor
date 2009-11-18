@@ -96,7 +96,7 @@ KE.setting = {
 	autoOnsubmitMode : true,
 	loadStyleMode : true,
 	resizeMode : 2,
-	filterMode : true,
+	filterMode : false,
 	urlType : 'relative',
 	skinType : 'oxygen',
 	newlineTag : 'br',
