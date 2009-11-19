@@ -889,8 +889,8 @@ KE.format = {
 					for (var i = 0; i < depth; i++) {
 						arr.push('..');
 					}
-					var prefix = '.';
-					if (arr.length > 0) prefix += '/' + arr.join('/');
+					var prefix = './';
+					if (arr.length > 0) prefix += arr.join('/');
 					return prefix + url.substr(path.length);
 				} else {
 					if (path.match(/^(.*)\//)) {
@@ -899,7 +899,7 @@ KE.format = {
 					}
 				}
 			};
-			var url = getRelativePath(host + '/' + pathname, 0);
+			url = getRelativePath(host + '/' + (pathname === '/' ? '' : pathname), 0);
 		} else if (mode == 'absolute') {
 			if (url.substr(0, host.length) === host) {
 				url = url.substr(host.length);
@@ -1952,7 +1952,7 @@ KE.remove = function(id, mode) {
 KE.create = function(id, mode) {
 	if (KE.g[id].beforeCreate) KE.g[id].beforeCreate();
 	if (KE.browser.IE && KE.browser.VERSION < 7) try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
-	var srcTextarea = KE.$(id);
+	var srcTextarea = KE.$(id) || document.getElementsByName(id)[0];
 	mode = (typeof mode == "undefined") ? 0 : mode;
 	if (mode == 0 && KE.g[id].container) return;
 	var width = KE.g[id].width || srcTextarea.style.width || srcTextarea.offsetWidth + 'px';
