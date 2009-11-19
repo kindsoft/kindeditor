@@ -326,6 +326,8 @@
 	display: block;
 	background-repeat: no-repeat;
 	overflow: hidden;
+}
+.ke-common-icon-url {
 	background-image: url(./tinymce/tinymce.gif);
 }
 .ke-icon {

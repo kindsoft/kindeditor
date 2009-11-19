@@ -1881,9 +1881,9 @@ KE.toolbar = {
 			a.title = KE.lang[cmd];
 			var span = KE.$$('span');
 			if (typeof defaultItemHash[cmd] == 'undefined') {
-				span.className = 'ke-icon-' + cmd;
-			} else {
 				span.className = 'ke-common-icon ke-icon-' + cmd;
+			} else {
+				span.className = 'ke-common-icon ke-common-icon-url ke-icon-' + cmd;
 			}
 			a.appendChild(span);
 			cell.appendChild(a);
@@ -2641,7 +2641,7 @@ KE.plugin['image'] = {
 			cmd : 'image',
 			file : 'image/image.html?id=' + id + '&ver=' + KE.version,
 			width : 400,
-			height : 130,
+			height : 230,
 			loadingMode : true,
 			title : KE.lang['image'],
 			yesButton : KE.lang['yes'],
@@ -2652,6 +2652,9 @@ KE.plugin['image'] = {
 	check : function(id) {
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var type = KE.$('type', dialogDoc).value;
+		var width = KE.$('imgWidth', dialogDoc).value;
+		var height = KE.$('imgHeight', dialogDoc).value;
+		var title = KE.$('imgTitle', dialogDoc).value;
 		var url = '';
 		if (type == 2) {
 			url = KE.$('imgFile', dialogDoc).value;
@@ -2660,6 +2663,18 @@ KE.plugin['image'] = {
 		}
 		if (!url.match(/\.(jpg|jpeg|gif|bmp|png)(\s|$)/i)) {
 			alert(KE.lang['invalidImg']);
+			window.focus();
+			this.dialog.yesButton.focus();
+			return false;
+		}
+		if (!width.match(/^\d+$/)) {
+			alert(KE.lang['invalidWidth']);
+			window.focus();
+			this.dialog.yesButton.focus();
+			return false;
+		}
+		if (!height.match(/^\d+$/)) {
+			alert(KE.lang['invalidHeight']);
 			window.focus();
 			this.dialog.yesButton.focus();
 			return false;
@@ -2676,6 +2691,9 @@ KE.plugin['image'] = {
 			return false;
 		} else {
 			var url = KE.$('url', dialogDoc).value;
+			var width = KE.$('imgWidth', dialogDoc).value;
+			var height = KE.$('imgHeight', dialogDoc).value;
+			var title = KE.$('imgTitle', dialogDoc).value;
 			var alignElements = dialogDoc.getElementsByName('align');
 			var align = '';
 			for (var i = 0, len = alignElements.length; i < len; i++) {
@@ -2684,7 +2702,7 @@ KE.plugin['image'] = {
 					break;
 				}
 			}
-			this.insert(id, url, '', 0, 0, 0, align);
+			this.insert(id, url, title, width, height, 0, align);
 		}
 	},
 	insert : function(id, url, title, width, height, border, align) {

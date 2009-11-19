@@ -16,6 +16,9 @@
 			label {
 				cursor:pointer;
 			}
+			#resetBtn {
+				margin-left:10px;
+			}
 			.main {
 				margin: 10px;
 			}
@@ -86,6 +89,10 @@
 				var urlBox = KE.$('url', document);
 				var alignElements = document.getElementsByName('align');
 				var fileBox = KE.$('imgFile', document);
+				var widthBox = KE.$('imgWidth', document);
+				var heightBox = KE.$('imgHeight', document);
+				var titleBox = KE.$('imgTitle', document);
+				var resetBtn = KE.$('resetBtn', document);
 				var tabNavi = KE.$('tabNavi', document);
 				var viewServer = KE.$('viewServer', document);
 				var liList = tabNavi.getElementsByTagName('li');
@@ -120,6 +127,9 @@
 				if (imgNode) {
 					var src = KE.format.getUrl(imgNode.src, KE.g[id].urlType);
 					urlBox.value = src;
+					widthBox.value = imgNode.width || imgNode.style.width.replace(/(\d+).*/, '$1') || 0;
+					heightBox.value = imgNode.height || imgNode.style.height.replace(/(\d+).*/, '$1') || 0;
+					titleBox.value = (typeof imgNode.alt != 'undefined') ? imgNode.alt : imgNode.title;
 					for (var i = 0, len = alignElements.length; i < len; i++) {
 						if (alignElements[i].value == imgNode.align) {
 							alignElements[i].checked = true;
@@ -153,6 +163,19 @@
 						};
 					})(i));
 				}
+				KE.event.add(resetBtn, 'click', function() {
+					var g = KE.g[id];
+					var img = KE.$$('img', g.iframeDoc);
+					img.src = urlBox.value;
+					img.style.position = 'absolute';
+					img.style.visibility = 'hidden';
+					img.style.top = '0px';
+					img.style.left = '1000px';
+					g.iframeDoc.body.appendChild(img);
+					widthBox.value = img.width;
+					heightBox.value = img.height;
+					g.iframeDoc.body.removeChild(img);
+				});
 				KE.util.hideLoadingPage(id);
 			}, window, document);
 		</script>
@@ -185,10 +208,20 @@
 						</div>
 					</li>
 					<li>
+						<label for="imgWidth">图片尺寸</label>
+						宽 <input type="text" id="imgWidth" name="imgWidth" value="0" maxlength="4" style="width:50px;text-align:right;" />
+						高 <input type="text" id="imgHeight" name="imgHeight" value="0" maxlength="4" style="width:50px;text-align:right;" />
+						<input type="button" id="resetBtn" value="重置" />
+					</li>
+					<li>
 						<label>对齐方式</label>
 						<input type="radio" id="defaultChk" name="align" value="" checked="checked" /> <img id="defaultImg" src="./images/align_top.gif" width="23" height="25" border="0" alt="默认方式" title="默认方式" />
 						<input type="radio" id="leftChk" name="align" value="left" /> <img id="leftImg" src="./images/align_left.gif" width="23" height="25" border="0" alt="左对齐" title="左对齐" />
 						<input type="radio" id="rightChk" name="align" value="right" /> <img id="rightImg" src="./images/align_right.gif" width="23" height="25" border="0" alt="右对齐" title="右对齐" />
+					</li>
+					<li>
+						<label for="imgTitle">图片说明</label>
+						<input type="text" id="imgTitle" name="imgTitle" value="" maxlength="255" style="width:95%;" />
 					</li>
 				</ul>
 			</form>
