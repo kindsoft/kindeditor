@@ -44,7 +44,6 @@ KE.lang = {
 	image : '图片',
 	flash : '插入Flash',
 	media : '插入多媒体',
-	layer : '插入层',
 	table : '插入表格',
 	hr : '插入横线',
 	emoticons : '插入笑脸',
@@ -67,7 +66,10 @@ KE.lang = {
 	invalidHeight : "高度必须为数字。",
 	invalidBorder : "边框必须为数字。",
 	invalidUrl : "请输入有效的URL地址。",
-	pleaseInput : "请输入内容"
+	pleaseInput : "请输入内容",
+	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
+	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
+	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
 };
 
 KE.scriptPath = (function() {
@@ -1248,9 +1250,9 @@ KE.util = {
 	},
 	setDefaultPlugin : function(id) {
 		var items = [
-			'cut', 'copy', 'paste', 'selectall', 'justifyleft', 'justifycenter', 'justifyright',
-			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript',
-			'bold', 'italic', 'underline', 'strikethrough', 'unlink'
+			'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 
+			'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript', 
+			'superscript', 'bold', 'italic', 'underline', 'strikethrough', 'unlink'
 		];
 		for (var i = 0; i < items.length; i++) {
 			KE.plugin[items[i]] = {
@@ -2158,6 +2160,42 @@ KE.plugin['redo'] = {
 	}
 };
 
+KE.plugin['cut'] = {
+	click : function(id) {
+		try {
+			if (!KE.g[id].iframeDoc.queryCommandSupported('cut')) throw 'e';
+		} catch(e) {
+			alert(KE.lang.cutError);
+			return;
+		}
+		KE.util.execCommand(id, 'cut', null);
+	}
+};
+
+KE.plugin['copy'] = {
+	click : function(id) {
+		try {
+			if (!KE.g[id].iframeDoc.queryCommandSupported('copy')) throw 'e';
+		} catch(e) {
+			alert(KE.lang.copyError);
+			return;
+		}
+		KE.util.execCommand(id, 'copy', null);
+	}
+};
+
+KE.plugin['paste'] = {
+	click : function(id) {
+		try {
+			if (!KE.g[id].iframeDoc.queryCommandSupported('paste')) throw 'e';
+		} catch(e) {
+			alert(KE.lang.pasteError);
+			return;
+		}
+		KE.util.execCommand(id, 'paste', null);
+	}
+};
+
 KE.plugin['plainpaste'] = {
 	click : function(id) {
 		KE.util.selection(id);
@@ -2762,7 +2800,7 @@ KE.plugin['link'] = {
 			click : function(id, menu) {
 				KE.util.select(id);
 				menu.hide();
-				KE.util.execCommand(id, 'unlink');
+				KE.util.execCommand(id, 'unlink', null);
 			},
 			cond : function(id) {
 				return self.getSelectedNode(id);
