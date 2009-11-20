@@ -127,8 +127,8 @@
 				if (imgNode) {
 					var src = KE.format.getUrl(imgNode.src, KE.g[id].urlType);
 					urlBox.value = src;
-					widthBox.value = imgNode.width || imgNode.style.width.replace(/(\d+).*/, '$1') || 0;
-					heightBox.value = imgNode.height || imgNode.style.height.replace(/(\d+).*/, '$1') || 0;
+					widthBox.value = imgNode.width;
+					heightBox.value = imgNode.height;
 					titleBox.value = (typeof imgNode.alt != 'undefined') ? imgNode.alt : imgNode.title;
 					for (var i = 0, len = alignElements.length; i < len; i++) {
 						if (alignElements[i].value == imgNode.align) {
@@ -191,10 +191,7 @@
 			<input type="hidden" id="type" name="type" value="" />
 			<form name="uploadForm" method="post" enctype="multipart/form-data" action="./../../php/upload.php">
 				<input type="hidden" id="editorId" name="id" value="" />
-				<input type="hidden" name="imgWidth" value="" />
-				<input type="hidden" name="imgHeight" value="" />
-				<input type="hidden" name="imgBorder" value="" />
-				<input type="hidden" name="imgTitle" value="" />
+				<input type="hidden" name="imgBorder" value="0" />
 				<ul class="table">
 					<li>
 						<div id="tab1" style="display:none;">
