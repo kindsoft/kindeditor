@@ -892,8 +892,8 @@ KE.format = {
 						arr.push('..');
 					}
 					var prefix = './';
-					if (arr.length > 0) prefix += arr.join('/');
-					return prefix + url.substr(path.length);
+					if (arr.length > 0) prefix += arr.join('/') + '/';
+					return prefix + url.substr(path.length + 1);
 				} else {
 					if (path.match(/^(.*)\//)) {
 						path = RegExp.$1;
