@@ -859,7 +859,7 @@ KE.format = {
 		mode = mode.toLowerCase();
 		if (!KE.util.inArray(mode, ['absolute', 'relative', 'domain'])) return url;
 		host = host || location.protocol + '//' + location.host;
-		pathname = pathname || (location.pathname.match(/^(\/.*)\//) ? RegExp.$1 : '/');
+		pathname = pathname || (location.pathname.match(/^(\/.*)\//) ? RegExp.$1 : '');
 		if (url.match(/^(\w+:\/\/[^\/]*)/)) {
 			if (RegExp.$1 !== host) return url;
 		}
@@ -890,11 +890,11 @@ KE.format = {
 					}
 					var prefix = '.';
 					if (arr.length > 0) prefix += '/' + arr.join('/');
+					if (pathname == '/') prefix += '/';
 					return prefix + url.substr(path.length);
 				} else {
 					if (path.match(/^(.*)\//)) {
-						path = RegExp.$1;
-						return getRelativePath(path, ++depth);
+						return getRelativePath(RegExp.$1, ++depth);
 					}
 				}
 			};
