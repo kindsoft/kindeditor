@@ -854,17 +854,14 @@ KE.cmd = function(id) {
 };
 
 KE.format = {
-	getUrl : function(url, mode) {
+	getUrl : function(url, mode, host, pathname) {
 		if (!mode) return url;
 		mode = mode.toLowerCase();
 		if (!KE.util.inArray(mode, ['absolute', 'relative', 'domain'])) return url;
-		if (url.match(/^\w+:\/\/([^\/]*)/)) {
-			if (RegExp.$1 !== location.host) return url;
-		}
-		var host = location.protocol + '//' + location.host;
-		var pathname = '/';
-		if (location.pathname.match(/^\/(.*)\//)) {
-			pathname = RegExp.$1;
+		host = host || location.protocol + '//' + location.host;
+		pathname = pathname || (location.pathname.match(/^(\/.*)\//) ? RegExp.$1 : '/');
+		if (url.match(/^(\w+:\/\/[^\/]*)/)) {
+			if (RegExp.$1 !== host) return url;
 		}
 		var getRealPath = function(path) {
 			var parts = path.split('/');
@@ -891,9 +888,9 @@ KE.format = {
 					for (var i = 0; i < depth; i++) {
 						arr.push('..');
 					}
-					var prefix = './';
-					if (arr.length > 0) prefix += arr.join('/') + '/';
-					return prefix + url.substr(path.length + 1);
+					var prefix = '.';
+					if (arr.length > 0) prefix += '/' + arr.join('/');
+					return prefix + url.substr(path.length);
 				} else {
 					if (path.match(/^(.*)\//)) {
 						path = RegExp.$1;
@@ -901,7 +898,7 @@ KE.format = {
 					}
 				}
 			};
-			url = getRelativePath(host + '/' + (pathname === '/' ? '' : pathname), 0);
+			url = getRelativePath(host + pathname, 0);
 		} else if (mode == 'absolute') {
 			if (url.substr(0, host.length) === host) {
 				url = url.substr(host.length);

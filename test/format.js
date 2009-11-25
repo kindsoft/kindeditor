@@ -3,27 +3,27 @@ module("KE.format");
 test("URL format test", function() {
 	equals(KE.format.getUrl(KE.$("test01").value, "absolute"), '/ke/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test01").value, "relative"), './../images/xxx.gif');
-	equals(KE.format.getUrl(KE.$("test01").value, "domain"), 'http://localhost/ke/images/xxx.gif');
+	equals(KE.format.getUrl(KE.$("test01").value, "domain", 'http://localhost', '/ke'), 'http://localhost/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test01").value), '../images/xxx.gif');
 
 	equals(KE.format.getUrl(KE.$("test02").value, "absolute"), '/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test02").value, "relative"), './../../images/xxx.gif');
-	equals(KE.format.getUrl(KE.$("test02").value, "domain"), 'http://localhost/images/xxx.gif');
+	equals(KE.format.getUrl(KE.$("test02").value, "domain", 'http://localhost:8080', '/ke/test'), 'http://localhost:8080/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test02").value), './../../images/xxx.gif');
 
 	equals(KE.format.getUrl(KE.$("test03").value, "absolute"), '/ke/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test03").value, "relative"), './../images/xxx.gif');
-	equals(KE.format.getUrl(KE.$("test03").value, "domain"), 'http://localhost/ke/images/xxx.gif');
+	equals(KE.format.getUrl(KE.$("test03").value, "domain", 'http://localhost', '/ke/test'), 'http://localhost/ke/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test03").value), '/ke/images/xxx.gif');
 
 	equals(KE.format.getUrl(KE.$("test04").value, "absolute"), '/ke/images/xxx.gif');
-	equals(KE.format.getUrl(KE.$("test04").value, "relative"), './../images/xxx.gif');
-	equals(KE.format.getUrl(KE.$("test04").value, "domain"), 'http://localhost/ke/images/xxx.gif');
+	equals(KE.format.getUrl(KE.$("test04").value, "relative", 'http://localhost', '/ke/images'), './xxx.gif');
+	equals(KE.format.getUrl(KE.$("test04").value, "domain", 'http://localhost', '/ke'), 'http://localhost/ke/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test04").value), 'http://localhost/ke/images/xxx.gif');
 
 	equals(KE.format.getUrl(KE.$("test05").value, "absolute"), 'http://www.163.com/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test05").value, "relative"), 'http://www.163.com/images/xxx.gif');
-	equals(KE.format.getUrl(KE.$("test05").value, "domain"), 'http://www.163.com/images/xxx.gif');
+	equals(KE.format.getUrl(KE.$("test05").value, "domain", 'http://localhost', '/ke'), 'http://www.163.com/images/xxx.gif');
 	equals(KE.format.getUrl(KE.$("test05").value), 'http://www.163.com/images/xxx.gif');
 });
 
