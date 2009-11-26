@@ -85,6 +85,7 @@
 			var fileManager = null;
 			var allowUpload = (typeof KE.g[id].allowUpload == 'undefined') ? true : KE.g[id].allowUpload;
 			var allowFileManager = (typeof KE.g[id].allowFileManager == 'undefined') ? false : KE.g[id].allowFileManager;
+			var referMethod = (typeof KE.g[id].referMethod == 'undefined') ? '' : KE.g[id].referMethod;
 			KE.event.ready(function() {
 				var typeBox = KE.$('type', document);
 				var urlBox = KE.$('url', document);
@@ -156,6 +157,7 @@
 					fileManager.show();
 				});
 				selectTab(0);
+				KE.$('referMethod', document).value = referMethod;
 				var alignIds = ['default', 'left', 'right'];
 				for (var i = 0, len = alignIds.length; i < len; i++) {
 					KE.event.add(KE.$(alignIds[i] + 'Img', document), 'click', (function(i) {
@@ -192,6 +194,7 @@
 			<input type="hidden" id="type" name="type" value="" />
 			<form name="uploadForm" method="post" enctype="multipart/form-data" action="./../../php/upload.php">
 				<input type="hidden" id="editorId" name="id" value="" />
+				<input type="hidden" id="referMethod" name="referMethod" value="" />
 				<input type="hidden" name="imgBorder" value="0" />
 				<ul class="table">
 					<li>
