@@ -85,7 +85,7 @@ KE.scriptPath = (function() {
 KE.browser = (function() {
 	var ua = navigator.userAgent.toLowerCase();
 	return {
-		VERSION: ua.match(/(msie|firefox|webkit|opera)[\/:\s]([\d.]+)/) ? RegExp.$2 : '0',
+		VERSION: ua.match(/(msie|firefox|webkit|opera)[\/:\s](\d+)/) ? RegExp.$2 : '0',
 		IE: (ua.indexOf('msie') > -1 && ua.indexOf('opera') == -1),
 		GECKO: (ua.indexOf('gecko') > -1 && ua.indexOf('khtml') == -1),
 		WEBKIT: (ua.indexOf('applewebkit') > -1),
@@ -358,6 +358,7 @@ KE.selection = function(win, doc) {
 	};
 	this.init();
 	this.addRange = function(keRange) {
+		if (KE.browser.GECKO && KE.browser.VERSION < 3) return;
 		this.keRange = keRange;
 		if (KE.browser.IE) {
 			var getEndRange = function(isStart) {
@@ -1063,11 +1064,23 @@ KE.util = {
 		return {x : x, y : y};
 	},
 	getElementPos : function(el) {
-		var box = el.getBoundingClientRect();
-		var el = this.getDocumentElement();
-		var pos = this.getScrollPos();
-		var x = box.left + pos.x - el.clientLeft;
-		var y = box.top + pos.y - el.clientTop;
+		var x = 0, y = 0;
+		if (el.getBoundingClientRect) {
+			var box = el.getBoundingClientRect();
+			var el = this.getDocumentElement();
+			var pos = this.getScrollPos();
+			x = box.left + pos.x - el.clientLeft;
+			y = box.top + pos.y - el.clientTop;
+		} else {
+            x = el.offsetLeft;
+            y = el.offsetTop;
+            var parent = el.offsetParent;
+            while (parent) {
+                x += parent.offsetLeft;
+                y += parent.offsetTop;
+                parent = parent.offsetParent;
+            }
+		}
 		return {x : x, y : y};
 	},
 	getCoords : function(ev) {
@@ -1412,6 +1425,9 @@ KE.util = {
 			this.select(id);
 			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
 			else g.range.pasteHTML(html);
+		} else if (KE.browser.GECKO && KE.browser.VERSION < 3) {
+			this.execCommand(id, 'inserthtml', html);
+			return;
 		} else {
 			this.pasteHtml(id, html);
 		}
@@ -1473,6 +1489,7 @@ KE.util = {
 	addNewlineEvent : function(id) {
 		var g = KE.g[id];
 		if (KE.browser.IE && g.newlineTag.toLowerCase() != 'br') return;
+		if (KE.browser.GECKO && KE.browser.VERSION < 3 && g.newlineTag.toLowerCase() != 'p') return;
 		if (KE.browser.OPERA) return;
 		KE.event.add(g.iframeDoc, 'keydown', function(e) {
 			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
@@ -2091,9 +2108,11 @@ KE.create = function(id, mode) {
 	KE.util.addContextmenuEvent(id);
 	KE.util.addNewlineEvent(id);
 	KE.util.addTabEvent(id);
-	KE.util.setFullHtml(id, srcTextarea.value);
-	KE.history.add(id, false);
-	if (KE.g[id].afterCreate) KE.g[id].afterCreate();
+	window.setTimeout(function() {
+		KE.util.setFullHtml(id, srcTextarea.value);
+		KE.history.add(id, false);
+		if (KE.g[id].afterCreate) KE.g[id].afterCreate();
+	}, 0);
 };
 
 KE.init = function(config) {

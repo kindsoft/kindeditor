@@ -374,7 +374,7 @@ KE.event.ready(function() {
 				}
 			}
 		};
-		req.send();
+		req.send(null);
 	};
 	var reloadPage = function (path, order, func) {
 		httpRequest('?path=' + path + '&order=' + order, func);

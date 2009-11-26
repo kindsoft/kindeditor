@@ -24,7 +24,6 @@
 	KE.event.ready(function() {
 		var iframe = KE.$('wordIframe', document);
 		var iframeDoc = KE.util.getIframeDoc(iframe);
-		iframeDoc.designMode = "On";
 		iframeDoc.open();
 		iframeDoc.write('<html><head><title>WordPaste</title></head>');
 		iframeDoc.write('<body style="background-color:#FFFFFF;font-size:12px;margin:2px;" />');
@@ -32,6 +31,9 @@
 		iframeDoc.write('</body></html>');
 		iframeDoc.close();
 		KE.util.hideLoadingPage(id);
+		window.setTimeout(function() {
+			iframeDoc.designMode = "On";
+		}, 0);
 	}, window, document);
   </script>
 </head>
