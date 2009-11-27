@@ -30,6 +30,12 @@ test("URL format test", function() {
 	equals(KE.format.getUrl(KE.$("test06").value, "relative", 'http://kindsoft.net', '/'), './kindeditor/plugins/emoticons/etc_01.gif');
 	equals(KE.format.getUrl(KE.$("test06").value, "domain", 'http://kindsoft.net', '/'), 'http://kindsoft.net/kindeditor/plugins/emoticons/etc_01.gif');
 	equals(KE.format.getUrl(KE.$("test06").value), 'http://kindsoft.net/kindeditor/plugins/emoticons/etc_01.gif');
+
+	equals(KE.format.getUrl(KE.$("test07").value, "absolute", 'http://kindsoft.net', '/'), 'mailto:test@test.com');
+	equals(KE.format.getUrl(KE.$("test07").value, "relative", 'http://kindsoft.net', '/'), 'mailto:test@test.com');
+	equals(KE.format.getUrl(KE.$("test07").value, "domain", 'http://kindsoft.net', '/'), 'mailto:test@test.com');
+	equals(KE.format.getUrl(KE.$("test07").value), 'mailto:test@test.com');
+
 });
 
 test("HTML format test", function() {

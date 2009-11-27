@@ -864,6 +864,7 @@ KE.format = {
 		if (url.match(/^(\w+:\/\/[^\/]*)/)) {
 			if (RegExp.$1 !== host) return url;
 		}
+		if (url.match(/^mailto:/i)) return url;
 		var getRealPath = function(path) {
 			var parts = path.split('/');
 			paths = [];
