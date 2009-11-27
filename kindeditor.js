@@ -979,20 +979,16 @@ KE.format = {
 				return '<' + startSlash + tagName + endSlash + '>' + nl;
 			}
 		});
-		if (isFilter) {
-			var reg = KE.setting.inlineTags.join('|');
-			var trimHtml = function(inHtml) {
-				var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
-					if ($1 == $2) return '';
-					else return $0;
-				});
-				if (inHtml !== outHtml) outHtml = trimHtml(outHtml);
-				return outHtml;
-			};
-			return trimHtml(html);
-		} else {
-			return html;
-		}
+		var reg = KE.setting.inlineTags.join('|');
+		var trimHtml = function(inHtml) {
+			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
+				if ($1 == $2) return '';
+				else return $0;
+			});
+			if (inHtml !== outHtml) outHtml = trimHtml(outHtml);
+			return outHtml;
+		};
+		return trimHtml(html);
 	}
 };
 
