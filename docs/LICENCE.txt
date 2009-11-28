@@ -1,6 +1,6 @@
 KindEditor 版权声明
 
-1. KindEditor 源代码：
+1. 源代码：
    KindEditor源代码采用LGPL开源协议，下面是对LGPL协议的简单解释，详细内容请参考LGPL协议全文。
    1) 源代码包含所有html、js、css文件，源代码版权归KindEditor所有。
    2) 可以自由修改源代码，但必须公开修改后的源代码，并修改后的源代码版权归KindEditor所有。
