@@ -1637,6 +1637,7 @@ KE.dialog = function(arg){
 		return {x : x, y : y};
 	};
 	this.hide = function() {
+		if (arg.beforeHide) arg.beforeHide();
 		var id = arg.id;
 		var stack = KE.g[id].dialogStack;
 		if (stack[stack.length - 1] != this) return false;
@@ -1646,10 +1647,11 @@ KE.dialog = function(arg){
 			KE.g[id].hideDiv.style.display = 'none';
 			KE.g[id].maskDiv.style.display = 'none';
 		}
-		if (arg.hideHandler) arg.hideHandler();
+		if (arg.afterHide) arg.afterHide();
 		KE.util.focus(id);
 	};
 	this.show = function() {
+		if (arg.beforeShow) arg.beforeShow();
 		var self = this;
 		var id = arg.id;
 		var div = KE.$$('div');
@@ -1781,6 +1783,7 @@ KE.dialog = function(arg){
 		KE.g[id].noButton = noButton;
 		KE.g[id].previewButton = previewButton;
 		if (!arg.loadingMode) KE.util.hideLoadingPage(id);
+		if (arg.afterShow) arg.afterShow();
 	};
 };
 
@@ -2623,13 +2626,13 @@ KE.plugin['flash'] = {
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (!width.match(/^\d+$/)) {
+		if (!width.match(/^\d*$/)) {
 			alert(KE.lang['invalidWidth']);
 			window.focus();
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (!height.match(/^\d+$/)) {
+		if (!height.match(/^\d*$/)) {
 			alert(KE.lang['invalidHeight']);
 			window.focus();
 			this.dialog.yesButton.focus();
@@ -2718,13 +2721,13 @@ KE.plugin['image'] = {
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (!width.match(/^\d+$/)) {
+		if (!width.match(/^\d*$/)) {
 			alert(KE.lang['invalidWidth']);
 			window.focus();
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (!height.match(/^\d+$/)) {
+		if (!height.match(/^\d*$/)) {
 			alert(KE.lang['invalidHeight']);
 			window.focus();
 			this.dialog.yesButton.focus();
@@ -2923,13 +2926,13 @@ KE.plugin['media'] = {
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (!width.match(/^\d+$/)) {
+		if (!width.match(/^\d*$/)) {
 			alert(KE.lang['invalidWidth']);
 			window.focus();
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (!height.match(/^\d+$/)) {
+		if (!height.match(/^\d*$/)) {
 			alert(KE.lang['invalidHeight']);
 			window.focus();
 			this.dialog.yesButton.focus();

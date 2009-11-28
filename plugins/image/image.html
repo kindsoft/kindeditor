@@ -99,6 +99,12 @@
 				var viewServer = KE.$('viewServer', document);
 				var liList = tabNavi.getElementsByTagName('li');
 				var selectTab = function(num) {
+					if (num == 1) resetBtn.style.display = 'none';
+					else resetBtn.style.display = '';
+					widthBox.value = '';
+					heightBox.value = '';
+					titleBox.value = '';
+					alignElements[0].checked = true;
 					for (var i = 0, len = liList.length; i < len; i++) {
 						var li = liList[i];
 						if (i === num) {
@@ -125,6 +131,7 @@
 					viewServer.parentNode.removeChild(viewServer);
 					urlBox.style.width = '300px';
 				}
+				selectTab(0);
 				var imgNode = KE.plugin['image'].getSelectedNode(id);
 				if (imgNode) {
 					var src = KE.format.getUrl(imgNode.src, KE.g[id].urlType);
@@ -150,13 +157,12 @@
 						loadingMode : true,
 						title : '浏览服务器',
 						noButton : '取消',
-						hideHandler : function() {
+						afterHide : function() {
 							fileManager = null;
 						}
 					});
 					fileManager.show();
 				});
-				selectTab(0);
 				KE.$('referMethod', document).value = referMethod;
 				var alignIds = ['default', 'left', 'right'];
 				for (var i = 0, len = alignIds.length; i < len; i++) {
@@ -210,8 +216,8 @@
 					</li>
 					<li>
 						<label for="imgWidth">图片大小</label>
-						宽 <input type="text" id="imgWidth" name="imgWidth" value="0" maxlength="4" style="width:50px;text-align:right;" />
-						高 <input type="text" id="imgHeight" name="imgHeight" value="0" maxlength="4" style="width:50px;text-align:right;" />
+						宽 <input type="text" id="imgWidth" name="imgWidth" value="" maxlength="4" style="width:50px;text-align:right;" />
+						高 <input type="text" id="imgHeight" name="imgHeight" value="" maxlength="4" style="width:50px;text-align:right;" />
 						<img src="./images/refresh.gif" width="16" height="16" id="resetBtn" alt="重置大小" title="重置大小" />
 					</li>
 					<li>
