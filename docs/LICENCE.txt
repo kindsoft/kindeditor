@@ -1,8 +1,18 @@
-KindEditor License
+KindEditor 版权声明
 
-The source code is distributed under the LGPL, so you have the freedom to use it however you want. 
-The full text of the license can be found http://www.opensource.org/licenses/lgpl-license.php
+1. KindEditor 源代码：
+   KindEditor源代码采用LGPL开源协议，下面是对LGPL协议的简单解释，详细内容请参考LGPL协议全文。
+   1) 源代码包含所有html、js、css文件，源代码版权归KindEditor所有。
+   2) 可以自由修改源代码，但必须公开修改后的源代码，并修改后的源代码版权归KindEditor所有。
+   3) 遵守本协议的情况下，可以集成到商业程序。
 
-The icons is from Oxygen icons. Oxygen icon theme is dual licensed. 
-You may copy it under the Creative Common Attribution-ShareAlike 3.0 License or the GNU Library General Public License.
-http://creativecommons.org/licenses/by-sa/3.0/
+   LGPL协议全文：http://www.opensource.org/licenses/lgpl-license.php
+
+2. 风格图标：
+   KindEditor默认风格里的大部分图标采用了oxygen图标，oxygen图标版权归oxygen团队所有。
+   oxygen版权声明：http://www.oxygen-icons.org/?page_id=4
+
+3. 表情图标：
+   从3.4版本开始，KindEditor的默认表情图片采用了QQ表情，QQ表情图片版权归QQ开发商腾讯公司所有。
+   QQ表情图片位于plugins/emoticons目录下。
+

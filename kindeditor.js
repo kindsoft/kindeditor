@@ -46,7 +46,7 @@ KE.lang = {
 	media : '插入多媒体',
 	table : '插入表格',
 	hr : '插入横线',
-	emoticons : '插入笑脸',
+	emoticons : '插入表情',
 	link : '超级连接',
 	unlink : '取消超级连接',
 	fullscreen : '全屏显示',
@@ -2527,15 +2527,8 @@ KE.plugin['title'] = {
 
 KE.plugin['emoticons'] = {
 	click : function(id) {
-		var emoticonTable = [
-			['etc_01.gif','etc_02.gif','etc_03.gif','etc_04.gif','etc_05.gif','etc_06.gif'],
-			['etc_07.gif','etc_08.gif','etc_09.gif','etc_10.gif','etc_11.gif','etc_12.gif'],
-			['etc_13.gif','etc_14.gif','etc_15.gif','etc_16.gif','etc_17.gif','etc_18.gif'],
-			['etc_19.gif','etc_20.gif','etc_21.gif','etc_22.gif','etc_23.gif','etc_24.gif'],
-			['etc_25.gif','etc_26.gif','etc_27.gif','etc_28.gif','etc_29.gif','etc_30.gif'],
-			['etc_31.gif','etc_32.gif','etc_33.gif','etc_34.gif','etc_35.gif','etc_36.gif']
-		];
 		var cmd = 'emoticons';
+		var rows = 9, cells = 15;
 		KE.util.selection(id);
 		var table = KE.$$('table');
 		table.cellPadding = 0;
@@ -2543,13 +2536,14 @@ KE.plugin['emoticons'] = {
 		table.border = 0;
 		table.style.margin = 0;
 		table.style.padding = 0;
-		table.style.width = '120px';
-		table.style.height = '120px';
+		table.style.width = '390px';
+		table.style.height = '252px';
 		table.style.borderCollapse = 'separate';
 		table.style.borderSpacing = '2px';
-		for (var i = 0; i < emoticonTable.length; i++) {
+		var num = 0;
+		for (var i = 0; i < rows; i++) {
 			var row = table.insertRow(i);
-			for (var j = 0; j < emoticonTable[i].length; j++) {
+			for (var j = 0; j < cells; j++) {
 				var cell = row.insertCell(j);
 				cell.style.margin = 0;
 				cell.style.padding = '1px';
@@ -2557,10 +2551,17 @@ KE.plugin['emoticons'] = {
 				cell.style.cursor = 'pointer';
 				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
 				cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; }
-				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + emoticonTable[i][j] + '")');
-				var img = KE.$$('img');
-				img.src = KE.g[id].pluginsPath + 'emoticons/' + emoticonTable[i][j];
-				cell.appendChild(img);
+				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + num + '.gif")');
+				var span = KE.$$('span');
+				span.style.display = 'block';
+				span.style.backgroundRepeat = 'no-repeat';
+				span.style.overflow = 'hidden';
+				span.style.backgroundPosition = '-' + (24 * num) + 'px 0px';
+				span.style.width = '24px';
+				span.style.height = '24px';
+				span.style.backgroundImage = 'url(' + KE.g[id].pluginsPath + 'emoticons/qq.gif)';
+				cell.appendChild(span);
+				num++;
 			}
 		}
 		var menu = new KE.menu({
@@ -2572,7 +2573,7 @@ KE.plugin['emoticons'] = {
 		this.menu = menu;
 	},
 	exec : function(id, value) {
-		var html = '<img src="' + KE.g[id].pluginsPath + 'emoticons/' + value + '" border="0" />';
+		var html = '<img src="' + KE.g[id].pluginsPath + 'emoticons/' + value + '" width="24" height="24" border="0" alt="" />';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
 		KE.util.focus(id);
