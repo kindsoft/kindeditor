@@ -1524,6 +1524,7 @@ KE.util = {
 KE.layout = {
 	hide : function(id) {
 		var g = KE.g[id];
+		if (g.dialogStack.length > 0) g.dialogStack.pop();
 		g.hideDiv.innerHTML = '';
 		g.hideDiv.style.display = 'none';
 		g.maskDiv.style.display = 'none';
@@ -1640,7 +1641,7 @@ KE.dialog = function(arg){
 		if (arg.beforeHide) arg.beforeHide();
 		var id = arg.id;
 		var stack = KE.g[id].dialogStack;
-		if (stack[stack.length - 1] != this) return false;
+		if (stack[stack.length - 1] != this) return;
 		stack.pop();
 		KE.g[id].hideDiv.removeChild(this.div);
 		if (stack.length < 1) {
@@ -2352,17 +2353,17 @@ KE.plugin['bgcolor'] = {
 KE.plugin['fontname'] = {
 	click : function(id) {
 		var fontName = {
-			'SimSun'			 : '宋体',
-			'SimHei'			 : '黑体',
-			'FangSong_GB2312'	: '仿宋体',
-			'KaiTi_GB2312'	   : '楷体',
-			'NSimSun'			: '新宋体',
-			'Arial'			  : 'Arial',
-			'Arial Black'		: 'Arial Black',
-			'Times New Roman'	: 'Times New Roman',
-			'Courier New'		: 'Courier New',
-			'Tahoma'			 : 'Tahoma',
-			'Verdana'			: 'Verdana'
+			'SimSun' : '宋体',
+			'SimHei' : '黑体',
+			'FangSong_GB2312' : '仿宋体',
+			'KaiTi_GB2312' : '楷体',
+			'NSimSun' : '新宋体',
+			'Arial' : 'Arial',
+			'Arial Black' : 'Arial Black',
+			'Times New Roman' : 'Times New Roman',
+			'Courier New' : 'Courier New',
+			'Tahoma' : 'Tahoma',
+			'Verdana' : 'Verdana'
 		};
 		var cmd = 'fontname';
 		KE.util.selection(id);
