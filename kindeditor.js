@@ -1524,7 +1524,7 @@ KE.util = {
 KE.layout = {
 	hide : function(id) {
 		var g = KE.g[id];
-		if (g.dialogStack.length > 0) g.dialogStack.pop();
+		g.dialogStack = [];
 		g.hideDiv.innerHTML = '';
 		g.hideDiv.style.display = 'none';
 		g.maskDiv.style.display = 'none';
@@ -2235,7 +2235,7 @@ KE.plugin['plainpaste'] = {
 		html = KE.util.escape(html);
 		html = html.replace(/\r\n|\n|\r/g, "<br />$&");
 		KE.util.insertHtml(id, html);
-		this.dialog.hide();
+		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
 };
@@ -2270,7 +2270,7 @@ KE.plugin['wordpaste'] = {
 		str = KE.util.execGetHtmlHooks(id, str);
 		str = KE.format.getHtml(str, KE.g[id].htmlTags, KE.g[id].urlType);
 		KE.util.insertHtml(id, str);
-		this.dialog.hide();
+		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
 };
@@ -2639,7 +2639,7 @@ KE.plugin['flash'] = {
 		if (!this.check(id, url, width, height)) return false;
 		var html = KE.util.getMediaImage(id, 'flash', url, width, height);
 		KE.util.insertHtml(id, html);
-		this.dialog.hide();
+		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
 };
@@ -2759,7 +2759,7 @@ KE.plugin['image'] = {
 		html += 'alt="' + title + '" ';
 		html += 'border="' + border + '" />';
 		KE.util.insertHtml(id, html);
-		this.dialog.hide();
+		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
 };
@@ -2856,7 +2856,7 @@ KE.plugin['link'] = {
 			}
 		}
 		KE.history.add(id);
-		this.dialog.hide();
+		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
 };
@@ -2940,7 +2940,7 @@ KE.plugin['media'] = {
 		var autostart = KE.$('autostart', dialogDoc).checked ? 'true' : 'false';
 		var html = KE.util.getMediaImage(id, null, url, width, height, autostart);
 		KE.util.insertHtml(id, html);
-		this.dialog.hide();
+		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
 };
