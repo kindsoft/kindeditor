@@ -501,17 +501,46 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-plugin-emoticons-table {
+	margin:0;
+	padding:0;
+	border-collapse:separate;
+	width:390px;
+	height:252px;
+}
+.ke-plugin-emoticons-td {
+	margin:0;
+	padding:1px;
+	border:1px solid #F0F0EE;
+	cursor:pointer;
+}
+.ke-plugin-emoticons-span {
+	display:block;
+	background-repeat:no-repeat;
+	overflow:hidden;
+	width:24px;
+	height:24px;
+	background-image:url(./../plugins/emoticons/qq.gif);
+}
 .ke-plugin-table-table {
 	margin:0;
 	padding:0;
 	border-collapse:separate;
 }
-.ke-plugin-table-table td {
+.ke-plugin-table-table-td {
 	border:0;
 	margin:0;
 	padding:0;
 }
-.ke-plugin-table-table td div {
+.ke-plugin-table-td-top {
+	font-size:12px;
+	text-align:center;
+	height:20px;
+	border:0;
+	margin:0;
+	padding:0;
+}
+.ke-plugin-table-table-div {
 	border:1px solid #DDDDDD;
 	background-color:#FFFFFF;
 	cursor:pointer;

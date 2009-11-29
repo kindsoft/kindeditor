@@ -2531,35 +2531,22 @@ KE.plugin['emoticons'] = {
 		var rows = 9, cells = 15;
 		KE.util.selection(id);
 		var table = KE.$$('table');
+		table.className = 'ke-plugin-emoticons-table';
 		table.cellPadding = 0;
 		table.cellSpacing = 2;
 		table.border = 0;
-		table.style.margin = 0;
-		table.style.padding = 0;
-		table.style.width = '390px';
-		table.style.height = '252px';
-		table.style.borderCollapse = 'separate';
-		table.style.borderSpacing = '2px';
 		var num = 0;
 		for (var i = 0; i < rows; i++) {
 			var row = table.insertRow(i);
 			for (var j = 0; j < cells; j++) {
 				var cell = row.insertCell(j);
-				cell.style.margin = 0;
-				cell.style.padding = '1px';
-				cell.style.border = '1px solid #F0F0EE';
-				cell.style.cursor = 'pointer';
+				cell.className = 'ke-plugin-emoticons-td';
 				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
 				cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; }
 				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + num + '.gif")');
 				var span = KE.$$('span');
-				span.style.display = 'block';
-				span.style.backgroundRepeat = 'no-repeat';
-				span.style.overflow = 'hidden';
+				span.className = 'ke-plugin-emoticons-span';
 				span.style.backgroundPosition = '-' + (24 * num) + 'px 0px';
-				span.style.width = '24px';
-				span.style.height = '24px';
-				span.style.backgroundImage = 'url(' + KE.g[id].pluginsPath + 'emoticons/qq.gif)';
 				cell.appendChild(span);
 				num++;
 			}
@@ -2975,7 +2962,9 @@ KE.plugin['table'] = {
 			for (var j = 0; j < num; j++) {
 				var value = (i + 1) + ',' + (j + 1);
 				var cell = row.insertCell(j);
+				cell.className = 'ke-plugin-table-td';
 				var div = KE.$$('div');
+				div.className = 'ke-plugin-table-div';
 				cell.appendChild(div);
 				cellArr[i][j] = div;
 				div.onmouseover = (function(x, y) {
@@ -2997,13 +2986,8 @@ KE.plugin['table'] = {
 		}
 		var row = table.insertRow(num);
 		var cell = row.insertCell(0);
+		cell.className = 'ke-plugin-table-td-top';
 		cell.colSpan = 10;
-		cell.style.fontSize = '12px';
-		cell.style.textAlign = 'center';
-		cell.style.height = '20px';
-		cell.style.margin = 0;
-		cell.style.padding = 0;
-		cell.style.border = 0;
 		self.locationCell = cell;
 		var menu = new KE.menu({
 			id : id,
