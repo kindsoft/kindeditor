@@ -2093,15 +2093,13 @@ KE.create = function(id, mode) {
 	KE.g[id].width = width;
 	KE.g[id].height = height;
 	KE.util.resize(id, width, height);
-	if (KE.g[id].resizeMode > 0) {
-		KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-			if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
-			else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-		});
-		KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-			if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-		});
-	}
+	KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
+		if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
+		else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+	});
+	KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
+		if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+	});
 	for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
 		var cmd = KE.g[id].items[i];
 		if (KE.plugin[cmd] && KE.plugin[cmd].init) KE.plugin[cmd].init(id);
@@ -2116,24 +2114,25 @@ KE.create = function(id, mode) {
 	}, 0);
 };
 
-KE.init = function(config) {
-	var id = config.id;
+KE.init = function(args) {
+	var g = KE.g[args.id] = args;
+	g.config = {};
+	g.undoStack = [];
+	g.redoStack = [];
+	g.dialogStack = [];
+	g.contextmenuItems = [];
+	g.getHtmlHooks = [];
+	g.setHtmlHooks = [];
 	KE.each(KE.setting, function(key, val) {
-		config[key] = (typeof config[key] == 'undefined') ? val : config[key];
+		g[key] = (typeof args[key] == 'undefined') ? val : args[key];
+		g.config[key] = g[key];
 	});
-	KE.g[id] = config;
-	KE.g[id].undoStack = [];
-	KE.g[id].redoStack = [];
-	KE.g[id].dialogStack = [];
-	KE.g[id].contextmenuItems = [];
-	KE.g[id].getHtmlHooks = [];
-	KE.g[id].setHtmlHooks = [];
-	if (config.loadStyleMode) KE.util.loadStyle(config.skinsPath + config.skinType + '.css');
+	if (g.loadStyleMode) KE.util.loadStyle(g.skinsPath + g.skinType + '.css');
 }
 
-KE.show = function(config) {
-	KE.init(config);
-	KE.event.ready(function() { KE.create(config.id); });
+KE.show = function(args) {
+	KE.init(args);
+	KE.event.ready(function() { KE.create(args.id); });
 };
 
 KE.plugin['about'] = {
@@ -2304,6 +2303,7 @@ KE.plugin['fullscreen'] = {
 			KE.create(id, 2);
 			document.body.parentNode.style.overflow = 'auto';
 			KE.event.remove(window, 'resize', resizeListener);
+			g.resizeMode = g.config.resizeMode;
 			KE.toolbar.unselect(id, "fullscreen");
 		} else {
 			this.isSelected = true;
@@ -2321,6 +2321,7 @@ KE.plugin['fullscreen'] = {
 			div.style.top = pos.y + 'px';
 			div.style.zIndex = 19811211;
 			KE.event.add(window, 'resize', resizeListener);
+			g.resizeMode = 0;
 			KE.toolbar.select(id, "fullscreen");
 		}
 	}

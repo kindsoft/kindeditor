@@ -1,19 +1,19 @@
-KindEditor ��Ȩ����
+KindEditor 版权声明
 
-1. Դ���룺
-   KindEditorԴ�������LGPL��ԴЭ�飬�����Ƕ�LGPLЭ��ĸ�Ҫ����ϸ������ο�LGPLЭ��ȫ�ġ�
+1. 源代码：
+   KindEditor源代码采用LGPL开源协议，下面是对LGPL协议的概要。
 
-   1) ����������ʹ�á��޸ġ��ַ�Դ���롣
-   2) ��������ȫ������Դ����İ�Ȩ�������޸ĳ̶���Σ�Դ����İ�Ȩ��KindEditor�Ŷ����С�
-   3) �����������Ҫ�޸ĺ��Դ���룬���������ṩԴ���롣
+   1) 您可以自由使用、修改、分发源代码。
+   2) 您必须完全放弃对源代码的版权，无论修改程度如何，源代码的版权归KindEditor团队所有。
+   3) 如果有人向您要修改后的源代码，您有义务提供源代码。
 
-   LGPLЭ��ȫ�ģ�http://www.opensource.org/licenses/lgpl-license.php
+   LGPL协议全文：http://www.opensource.org/licenses/lgpl-license.php
 
-2. ���ͼ�꣺
-   KindEditorĬ�Ϸ����Ĵ󲿷�ͼ�������oxygenͼ�꣬oxygenͼ���Ȩ��oxygen�Ŷ����С�
-   oxygen��Ȩ������http://www.oxygen-icons.org/?page_id=4
+2. 风格图标：
+   KindEditor默认风格里的大部分图标采用了oxygen图标，oxygen图标版权归oxygen团队所有。
+   oxygen版权声明：http://www.oxygen-icons.org/?page_id=4
 
-3. ����ͼ�꣺
-   ��3.4�汾��ʼ��KindEditor��Ĭ�ϱ���ͼƬ������QQ���飬QQ����ͼƬ��Ȩ��QQ��������Ѷ��˾���С�
-   QQ����ͼƬλ��plugins/emoticonsĿ¼�¡�
+3. 表情图标：
+   从3.4版本开始，KindEditor的默认表情图片采用了QQ表情，QQ表情图片版权归QQ开发商腾讯公司所有。
+   QQ表情图片位于plugins/emoticons目录下。
 
