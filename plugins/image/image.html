@@ -197,8 +197,9 @@
 					<li>电脑里的图片</li>
 				</ul>
 			</div>
+			<iframe name="uploadIframe" id="uploadIframe" style="display:none;"></iframe>
 			<input type="hidden" id="type" name="type" value="" />
-			<form name="uploadForm" method="post" enctype="multipart/form-data" action="./../../php/upload.php">
+			<form name="uploadForm" method="post" enctype="multipart/form-data" target="uploadIframe" action="./../../php/upload.php">
 				<input type="hidden" id="editorId" name="id" value="" />
 				<input type="hidden" id="referMethod" name="referMethod" value="" />
 				<input type="hidden" name="imgBorder" value="0" />

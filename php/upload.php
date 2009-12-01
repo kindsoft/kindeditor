@@ -62,7 +62,9 @@ if (empty($_FILES) === false) {
 	echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
 	echo '</head>';
 	echo '<body>';
-	echo '<script type="text/javascript">parent.KE.plugin["image"].insert("' . $_POST['id'] . '", "' . $file_url . '","' . $_POST['imgTitle'] . '","' . $_POST['imgWidth'] . '","' . $_POST['imgHeight'] . '","' . $_POST['imgBorder'] . '","' . $_POST['align'] . '");</script>';
+	echo '<script type="text/javascript">';
+	echo 'parent.parent.KE.plugin["image"].insert("' . $_POST['id'] . '", "' . $file_url . '","' . $_POST['imgTitle'] . '","' . $_POST['imgWidth'] . '","' . $_POST['imgHeight'] . '","' . $_POST['imgBorder'] . '","' . $_POST['align'] . '");';
+	echo '</script>';
 	echo '</body>';
 	echo '</html>';
 }
@@ -76,7 +78,7 @@ function alert($msg)
 	echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
 	echo '</head>';
 	echo '<body>';
-	echo '<script type="text/javascript">alert("'.$msg.'");history.back();</script>';
+	echo '<script type="text/javascript">alert("'.$msg.'");</script>';
 	echo '</body>';
 	echo '</html>';
 	exit;
