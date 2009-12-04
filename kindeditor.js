@@ -863,8 +863,9 @@ KE.format = {
 		pathname = pathname || (location.pathname.match(/^(\/.*)\//) ? RegExp.$1 : '');
 		if (url.match(/^(\w+:\/\/[^\/]*)/)) {
 			if (RegExp.$1 !== host) return url;
+		} else if (url.match(/^\w+:/)) {
+			return url;
 		}
-		if (url.match(/^mailto:/i)) return url;
 		var getRealPath = function(path) {
 			var parts = path.split('/');
 			paths = [];
