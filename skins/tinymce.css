@@ -532,7 +532,7 @@
 	margin:0;
 	padding:0;
 }
-.ke-plugin-table-td-top {
+.ke-plugin-table-td-bottom {
 	font-size:12px;
 	text-align:center;
 	height:20px;
@@ -540,7 +540,7 @@
 	margin:0;
 	padding:0;
 }
-.ke-plugin-table-table-div {
+.ke-plugin-table-div {
 	border:1px solid #DDDDDD;
 	background-color:#FFFFFF;
 	cursor:pointer;

@@ -2989,7 +2989,7 @@ KE.plugin['table'] = {
 		}
 		var row = table.insertRow(num);
 		var cell = row.insertCell(0);
-		cell.className = 'ke-plugin-table-td-top';
+		cell.className = 'ke-plugin-table-td-bottom';
 		cell.colSpan = 10;
 		self.locationCell = cell;
 		var menu = new KE.menu({
