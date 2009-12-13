@@ -1501,11 +1501,15 @@ KE.util = {
 					if (KE.browser.IE) {
 						if (!nextNode) KE.util.pasteHtml(id, '<br />', true);
 					} else if (KE.browser.WEBKIT) {
-						if (!nextNode || (nextNode.nodeType == 3 && nextNode.nodeValue === '')) {
-							KE.util.pasteHtml(id, '<br />', true);
-						}
 						if (!nextNode) {
 							KE.util.pasteHtml(id, '<br />', true);
+						} else {
+							var range = new KE.range(g.iframeDoc);
+							range.selectNode(nextNode.parentNode);
+							range.setStart(nextNode, 0);
+							if (range.cloneContents().innerHTML.replace(/<(?!img|embed).*?>/ig, '') === '') {
+								KE.util.pasteHtml(id, '<br />', true);
+							}
 						}
 					}
 					if (e.preventDefault) e.preventDefault();
