@@ -470,8 +470,21 @@
 	background-color:#FFFFFF;
 	font-size: 12px;
 }
-.ke-picker-cell {
+.ke-picker-table {
+	margin:0;
+	padding:0;
+	border-collapse: separate;
+}
+.ke-picker-td {
 	width: 16px;
+	height: 14px;
+	font-size: 12px;
+	border: 1px solid #F0F0EE;
+	cursor: pointer;
+	margin:0;
+	padding:0;
+}
+.ke-picker-td-top {
 	height: 14px;
 	font-size: 12px;
 	border: 1px solid #F0F0EE;

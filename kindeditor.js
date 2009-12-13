@@ -1588,17 +1588,14 @@ KE.menu = function(arg){
 	this.picker = function() {
 		var colorTable = KE.g[arg.id].colorTable;
 		var table = KE.$$('table');
+		table.className = 'ke-picker-table';
 		table.cellPadding = 0;
 		table.cellSpacing = 0;
 		table.border = 0;
-		table.style.margin = 0;
-		table.style.padding = 0;
-		table.style.borderCollapse = 'separate';
 		var row = table.insertRow(0);
 		var cell = row.insertCell(0);
 		cell.colSpan = colorTable[0].length;
-		cell.className = 'ke-picker-cell';
-		cell.style.backgroundColor = '#FFFFFF';
+		cell.className = 'ke-picker-td-top';
 		cell.title = KE.lang['noColor'];
 		cell.onmouseover = function() {this.style.borderColor = '#000000'; };
 		cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; };
@@ -1608,7 +1605,7 @@ KE.menu = function(arg){
 			var row = table.insertRow(i + 1);
 			for (var j = 0; j < colorTable[i].length; j++) {
 				var cell = row.insertCell(j);
-				cell.className = 'ke-picker-cell';
+				cell.className = 'ke-picker-td';
 				cell.style.backgroundColor = colorTable[i][j];
 				cell.title = colorTable[i][j];
 				cell.onmouseover = function() {this.style.borderColor = '#000000'; };
