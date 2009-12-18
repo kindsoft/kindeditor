@@ -13,3 +13,6 @@ http://ckeditor.com/
 5. jQuery
 http://jquery.com/
 
+6. QQ
+http://www.qq.com/
+

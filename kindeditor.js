@@ -1992,16 +1992,19 @@ KE.create = function(id, mode) {
 	textareaOuter.appendChild(textareaTable);
 	var bottomOuter = container.insertRow(2).insertCell(0);
 	bottomOuter.className = 'ke-bottom-outer';
+	srcTextarea.style.display = 'none';
 	if (mode == 1) document.body.appendChild(container);
 	else srcTextarea.parentNode.insertBefore(container, srcTextarea);
 	var toolbarTable = KE.toolbar.create(id);
 	toolbarOuter.appendChild(toolbarTable);
 	var iframe = KE.$$('iframe');
 	iframe.className = 'ke-iframe';
-	iframe.setAttribute("frameBorder", "0");
+	iframe.setAttribute("frameborder", "0");
+	iframe.style.height = 0;
 	var newTextarea = KE.$$('textarea');
 	newTextarea.className = 'ke-textarea';
 	newTextarea.style.display = 'none';
+	newTextarea.style.height = 0;
 	textareaCell.appendChild(iframe);
 	textareaCell.appendChild(newTextarea);
 	var bottom = KE.$$('table');
@@ -2027,7 +2030,6 @@ KE.create = function(id, mode) {
 	KE.util.setOpacity(maskDiv, 50);
 	document.body.appendChild(hideDiv);
 	document.body.appendChild(maskDiv);
-	srcTextarea.style.display = 'none';
 	KE.util.setDefaultPlugin(id);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
