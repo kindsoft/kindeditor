@@ -446,18 +446,17 @@ KE.range = function(doc) {
 		return parentNode ? parentNode : doc.body;
 	};
 	this.getNodeList = function() {
+		var self = this;
 		var parentNode = this.getParentElement();
 		var nodeList = [];
-		var keRange = this;
-		var startNode = this.startNode;
 		var isStarted = false;
-		if (parentNode == startNode) isStarted = true;
+		if (parentNode == self.startNode) isStarted = true;
 		if (isStarted) nodeList.push(parentNode);
 		KE.eachNode(parentNode, function(node) {
-			if (node == startNode) isStarted = true;
+			if (node == self.startNode) isStarted = true;
 			var range = new KE.range(doc);
 			range.selectTextNode(node);
-			if (range.comparePoints('START_TO_END', keRange) >= 0) return false;
+			if (range.comparePoints('START_TO_END', self) >= 0) return false;
 			if (isStarted) nodeList.push(node);
 			return true;
 		});
