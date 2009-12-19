@@ -1363,7 +1363,7 @@ KE.util = {
 		return data;
 	},
 	setData : function(id) {
-		KE.g[id].srcTextarea.value = this.getData(id);
+		if (KE.g[id].srcTextarea) KE.g[id].srcTextarea.value = this.getData(id);
 	},
 	focus : function(id) {
 		var g = KE.g[id];
@@ -1998,7 +1998,7 @@ KE.create = function(id, mode) {
 	toolbarOuter.appendChild(toolbarTable);
 	var iframe = KE.$$('iframe');
 	iframe.className = 'ke-iframe';
-	iframe.setAttribute("frameborder", "0");
+	iframe.setAttribute("frameBorder", "0");
 	iframe.style.height = 0;
 	var newTextarea = KE.$$('textarea');
 	newTextarea.className = 'ke-textarea';
