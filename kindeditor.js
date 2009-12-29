@@ -102,6 +102,7 @@ KE.setting = {
 	urlType : 'relative',
 	skinType : 'oxygen',
 	newlineTag : 'br',
+	dialogAlignType : 'editor',
 	cssPath : '',
 	skinsPath : KE.scriptPath + 'skins/',
 	pluginsPath : KE.scriptPath + 'plugins/',
@@ -1629,12 +1630,23 @@ KE.dialog = function(arg){
 	this.zIndex = 19811214;
 	this.getPos = function() {
 		var id = arg.id;
-		var el = KE.util.getDocumentElement();
-		var scrollPos = KE.util.getScrollPos();
+		var g = KE.g[id];
 		var width = arg.width + this.widthMargin;
 		var height = arg.height + this.heightMargin;
-		var x = Math.round(scrollPos.x + (el.clientWidth - width) / 2);
-		var y = Math.round(scrollPos.y + (el.clientHeight - height) / 2);
+		var x = 0, y = 0;
+		if (g.dialogAlignType == 'page') {
+			var el = KE.util.getDocumentElement();
+			var scrollPos = KE.util.getScrollPos();
+			x = Math.round(scrollPos.x + (el.clientWidth - width) / 2);
+			y = Math.round(scrollPos.y + (el.clientHeight - height) / 2);
+		} else {
+			var pos = KE.util.getElementPos(KE.g[id].container);
+			var el = g.container;
+			var xDiff = Math.round(el.clientWidth / 2) - Math.round(width / 2);
+			var yDiff = Math.round(el.clientHeight / 2) - Math.round(height / 2);
+			x = xDiff < 0 ? pos.x : pos.x + xDiff;
+			y = yDiff < 0 ? pos.y : pos.y + yDiff;
+		}
 		x = x < 0 ? 0 : x;
 		y = y < 0 ? 0 : y;
 		return {x : x, y : y};
