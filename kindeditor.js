@@ -1211,17 +1211,20 @@ KE.util = {
 					func(objTop, objLeft, objWidth, objHeight, top, left);
 				}
 			};
-			var upListener = function(e) {
+			var selectListener = function() { return false; };
+			var upListener = function() {
 				dragFlag = false;
 				KE.event.remove(document, 'mousemove', moveListener);
 				KE.event.remove(document, 'mouseup', upListener);
 				KE.event.remove(g.iframeDoc, 'mousemove', iframeMoveListener);
 				KE.event.remove(g.iframeDoc, 'mouseup', upListener);
+				KE.event.remove(document, 'selectstart', selectListener);
 			};
 			KE.event.add(document, 'mousemove', moveListener);
 			KE.event.add(document, 'mouseup', upListener);
 			KE.event.add(g.iframeDoc, 'mousemove', iframeMoveListener);
 			KE.event.add(g.iframeDoc, 'mouseup', upListener);
+			KE.event.add(document, 'selectstart', selectListener);
 		};
 	},
 	resize : function(id, width, height, isCheck, isResizeWidth) {
