@@ -183,6 +183,7 @@ var JSON_URL = './../../php/file_manager_json.php';
 var KE = parent.KE;
 location.href.match(/\?id=([\w-]+)/i);
 var id = RegExp.$1;
+var fileManagerJson = (typeof KE.g[id].fileManagerJson == 'undefined') ? JSON_URL : KE.g[id].fileManagerJson;
 KE.event.ready(function() {
 	var moveupLink = KE.$('moveup', document);
 	var viewType = KE.$('viewType', document);
@@ -362,7 +363,7 @@ KE.event.ready(function() {
 	var httpRequest = function (param, func) {
 		KE.util.showLoadingPage(id);
 		var req = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
-		var url = JSON_URL;
+		var url = fileManagerJson;
 		url += param;
 		url += (url.match(/\?/) ? "&" : "?") + (new Date()).getTime()
 		req.open('GET', url, true);
