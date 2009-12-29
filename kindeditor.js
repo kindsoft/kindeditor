@@ -1628,11 +1628,11 @@ KE.dialog = function(arg){
 	this.widthMargin = 20;
 	this.heightMargin = 90;
 	this.zIndex = 19811214;
+	var width = arg.width + this.widthMargin;
+	var height = arg.height + this.heightMargin;
 	this.getPos = function() {
 		var id = arg.id;
 		var g = KE.g[id];
-		var width = arg.width + this.widthMargin;
-		var height = arg.height + this.heightMargin;
 		var x = 0, y = 0;
 		if (g.dialogAlignType == 'page') {
 			var el = KE.util.getDocumentElement();
@@ -1677,8 +1677,8 @@ KE.dialog = function(arg){
 		}
 		div.style.zIndex = this.zIndex;
 		var pos = this.getPos();
-		div.style.width = (arg.width + this.widthMargin) + 'px';
-		div.style.height = (arg.height + this.heightMargin) + 'px';
+		div.style.width = width + 'px';
+		div.style.height = height + 'px';
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
 		var titleDiv = KE.$$('div');
@@ -1690,9 +1690,18 @@ KE.dialog = function(arg){
 		span.title = KE.lang['close'];
 		span.onclick = function () { self.hide(); };
 		titleDiv.appendChild(span);
+		var docEl = KE.util.getDocumentElement();
+		var maxTop = docEl.clientHeight - height - 2;
+		var maxLeft = docEl.clientWidth - width - 2;
 		KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
-			div.style.top = (objTop + top) + 'px';
-			div.style.left = (objLeft + left) + 'px';
+			top = objTop + top;
+			left = objLeft + left;
+			if (top < 0) top = 0;
+			if (left < 0) left = 0;
+			if (top > maxTop) top = maxTop;
+			if (left > maxLeft) left = maxLeft;
+			div.style.top = top + 'px';
+			div.style.left = left + 'px';
 		});
 		div.appendChild(titleDiv);
 		var bodyDiv = KE.$$('div');
