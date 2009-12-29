@@ -1343,6 +1343,7 @@ KE.util = {
 		}
 		var html = this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 		html = html.replace(/^\s*<br[^>]*>\s*$/ig, '');
+		html = html.replace(/^\s*<p>\s*&nbsp;\s*<\/p>\s*$/ig, '');
 		if (g.filterMode) {
 			return KE.format.getHtml(html, g.htmlTags, g.urlType);
 		} else {
