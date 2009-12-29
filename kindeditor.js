@@ -1,15 +1,16 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
+* Copyright (C) 2006-2010 Longhao Luo
 *
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.4
+* @version 3.4.1
 *******************************************************************************/
 
 var KE = {};
 
-KE.version = '3.4';
+KE.version = '3.4.1';
 
 KE.lang = {
 	source : '切换模式',
