@@ -102,7 +102,7 @@ KE.setting = {
 	urlType : 'relative',
 	skinType : 'oxygen',
 	newlineTag : 'br',
-	dialogAlignType : 'editor',
+	dialogAlignType : 'page',
 	cssPath : '',
 	skinsPath : KE.scriptPath + 'skins/',
 	pluginsPath : KE.scriptPath + 'plugins/',
