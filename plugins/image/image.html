@@ -86,6 +86,7 @@
 			var allowUpload = (typeof KE.g[id].allowUpload == 'undefined') ? true : KE.g[id].allowUpload;
 			var allowFileManager = (typeof KE.g[id].allowFileManager == 'undefined') ? false : KE.g[id].allowFileManager;
 			var referMethod = (typeof KE.g[id].referMethod == 'undefined') ? '' : KE.g[id].referMethod;
+			var imageUploadCgi = (typeof KE.g[id].imageUploadCgi == 'undefined') ? './../../php/upload.php' : KE.g[id].imageUploadCgi;
 			KE.event.ready(function() {
 				var typeBox = KE.$('type', document);
 				var urlBox = KE.$('url', document);
@@ -163,6 +164,7 @@
 					});
 					fileManager.show();
 				});
+				KE.$('uploadForm', document).action = imageUploadCgi;
 				KE.$('referMethod', document).value = referMethod;
 				var alignIds = ['default', 'left', 'right'];
 				for (var i = 0, len = alignIds.length; i < len; i++) {
@@ -199,7 +201,7 @@
 			</div>
 			<iframe name="uploadIframe" id="uploadIframe" style="display:none;"></iframe>
 			<input type="hidden" id="type" name="type" value="" />
-			<form name="uploadForm" method="post" enctype="multipart/form-data" target="uploadIframe" action="./../../php/upload.php">
+			<form id="uploadForm" name="uploadForm" method="post" enctype="multipart/form-data" target="uploadIframe">
 				<input type="hidden" id="editorId" name="id" value="" />
 				<input type="hidden" id="referMethod" name="referMethod" value="" />
 				<input type="hidden" name="imgBorder" value="0" />
