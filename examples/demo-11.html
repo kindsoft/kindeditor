@@ -1,45 +1,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>KindEditor</title>
-        <style type="text/css" rel="stylesheet">
-            form {
-                margin: 0;
-            }
-            .editor {
-                margin-top: 5px;
-                margin-bottom: 5px;
-            }
-            #word_count {
-                font-weight: bold;
-            }
-        </style>
-        <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-        <script type="text/javascript">
-            var editorId = 'content11';
-            KE.init({
-                id : editorId,
-                cssPath : './index.css'
-            });
-            KE.event.ready(function(){
-                KE.create(editorId);
-                //可视化模式下输入文字时
-                KE.event.input(KE.g[editorId].iframeDoc, function(){
-                    KE.$('word_count').innerHTML = KE.util.getData(editorId).length;
-                });
-                //代码模式下输入文字时
-                KE.event.input(KE.g[editorId].newTextarea, function(){
-                    KE.$('word_count').innerHTML = KE.util.getData(editorId).length;
-                });
-            });
-        </script>
-    </head>
-    <body>
-        <h3>统计字数</h3>
-        <div class="editor">
-            <textarea id="content11" name="content" cols="100" rows="20"></textarea>
-        </div>
-        您当前输入了 <span id="word_count">0</span> 个文字。（字数统计包含HTML代码。）
-    </body>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>KindEditor</title>
+		<style type="text/css" rel="stylesheet">
+			form {
+				margin: 0;
+			}
+			.editor {
+				margin-top: 5px;
+				margin-bottom: 5px;
+			}
+			#word_count {
+				font-weight: bold;
+			}
+		</style>
+		<script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
+		<script type="text/javascript">
+			KE.show({
+				id : 'content11',
+				cssPath : './index.css',
+				afterCreate : function(id){
+					//可视化模式下输入文字时
+					KE.event.input(KE.g[id].iframeDoc, function(){
+						KE.$('word_count').innerHTML = KE.util.getData(id).length;
+					});
+					//代码模式下输入文字时
+					KE.event.input(KE.g[id].newTextarea, function(){
+						KE.$('word_count').innerHTML = KE.util.getData(id).length;
+					});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<h3>统计字数</h3>
+		<div class="editor">
+			<textarea id="content11" name="content" cols="100" rows="20"></textarea>
+		</div>
+		您当前输入了 <span id="word_count">0</span> 个文字。（字数统计包含HTML代码。）
+	</body>
 </html>

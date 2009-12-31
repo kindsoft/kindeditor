@@ -1656,7 +1656,7 @@ KE.dialog = function(arg){
 		return {x : x, y : y};
 	};
 	this.hide = function() {
-		if (arg.beforeHide) arg.beforeHide();
+		if (arg.beforeHide) arg.beforeHide(id);
 		var id = arg.id;
 		var stack = KE.g[id].dialogStack;
 		if (stack[stack.length - 1] != this) return;
@@ -1666,11 +1666,11 @@ KE.dialog = function(arg){
 			KE.g[id].hideDiv.style.display = 'none';
 			KE.g[id].maskDiv.style.display = 'none';
 		}
-		if (arg.afterHide) arg.afterHide();
+		if (arg.afterHide) arg.afterHide(id);
 		KE.util.focus(id);
 	};
 	this.show = function() {
-		if (arg.beforeShow) arg.beforeShow();
+		if (arg.beforeShow) arg.beforeShow(id);
 		var self = this;
 		var id = arg.id;
 		var div = KE.$$('div');
@@ -1811,7 +1811,7 @@ KE.dialog = function(arg){
 		KE.g[id].noButton = noButton;
 		KE.g[id].previewButton = previewButton;
 		if (!arg.loadingMode) KE.util.hideLoadingPage(id);
-		if (arg.afterShow) arg.afterShow();
+		if (arg.afterShow) arg.afterShow(id);
 	};
 };
 
@@ -1994,7 +1994,7 @@ KE.remove = function(id, mode) {
 };
 
 KE.create = function(id, mode) {
-	if (KE.g[id].beforeCreate) KE.g[id].beforeCreate();
+	if (KE.g[id].beforeCreate) KE.g[id].beforeCreate(id);
 	if (KE.browser.IE && KE.browser.VERSION < 7) try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
 	var srcTextarea = KE.$(id) || document.getElementsByName(id)[0];
 	mode = (typeof mode == "undefined") ? 0 : mode;
@@ -2139,7 +2139,7 @@ KE.create = function(id, mode) {
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
 		KE.history.add(id, false);
-		if (KE.g[id].afterCreate) KE.g[id].afterCreate();
+		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);
 };
 
