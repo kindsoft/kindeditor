@@ -1914,12 +1914,12 @@ KE.toolbar = {
 			var a = KE.$$('a');
 			a.className = 'ke-icon';
 			a.href = 'javascript:;';
-			a.onclick = (function(id, cmd) {
+			a.onclick = (function(cmd) {
 				return function() {
 					KE.util.click(id, cmd);
 					return false;
 				};
-			})(id, cmd);
+			})(cmd);
 			a.onmouseover = function(){ this.className = 'ke-icon-on'; };
 			a.onmouseout = function(){ this.className = 'ke-icon'; };
 			a.hidefocus = true;
