@@ -1917,6 +1917,7 @@ KE.toolbar = {
 			a.onclick = (function(id, cmd) {
 				return function() {
 					KE.util.click(id, cmd);
+					return false;
 				};
 			})(id, cmd);
 			a.onmouseover = function(){ this.className = 'ke-icon-on'; };
