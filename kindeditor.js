@@ -1278,8 +1278,10 @@ KE.util = {
 		html += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 		html += '<title>KindEditor</title>';
 		html += '<link href="' + KE.g[id].skinsPath + 'common/editor.css?ver=' + KE.version + '" rel="stylesheet" type="text/css" />';
-		if (KE.g[id].cssPath) {
-			html += '<link href="' + KE.g[id].cssPath + '" rel="stylesheet" type="text/css" />';
+		var cssPath = KE.g[id].cssPath;
+		if (typeof cssPath == 'string') cssPath = [cssPath]; 
+		for (var i = 0, len = cssPath.length; i < len; i++) {
+			html += '<link href="' + cssPath[i] + '" rel="stylesheet" type="text/css" />';
 		}
 		html += '</head>';
 		html += '<body class="ke-content"></body>';
