@@ -100,7 +100,7 @@ KE.setting = {
 	loadStyleMode : true,
 	resizeMode : 2,
 	filterMode : false,
-	urlType : 'relative',
+	urlType : '',
 	skinType : 'oxygen',
 	newlineTag : 'br',
 	dialogAlignType : 'page',
@@ -1314,7 +1314,7 @@ KE.util = {
 	},
 	getMediaEmbed : function(id, type, url, width, height, autostart) {
 		type = this.getMediaType(type, url);
-		var html = '<embed src="' + url + '" ';
+		var html = '<embed src="' + url + '" kesrc="' + url + '" ';
 		if (width > 0) html += 'width="' + width + '" ';
 		if (height > 0) html += 'height="' + height + '" ';
 		var mediaType = KE.g[id].mediaTypes[type];
@@ -2134,6 +2134,20 @@ KE.create = function(id, mode) {
 		var cmd = KE.g[id].items[i];
 		if (KE.plugin[cmd] && KE.plugin[cmd].init) KE.plugin[cmd].init(id);
 	}
+	KE.g[id].getHtmlHooks.push(function(html) {
+		return html.replace(/(<[^>]*)kesrc="([^"]+)"([^>]*>)/ig, function(full, start, src, end) {
+			full = full.replace(/(\s+(?:href|src)=")[^"]+(")/i, '$1' + src + '$2');
+			full = full.replace(/\s+kesrc="[^"]+"/i, '');
+			return full;
+		});
+	});
+	KE.g[id].setHtmlHooks.push(function(html) {
+		return html.replace(/(<[^>]*)(href|src)="([^"]+)"([^>]*>)/ig, function(full, start, key, src, end) {
+			if (full.match(/\skesrc="[^"]+"/i)) return full;
+			full = start + key + '="' + src + '"' + ' kesrc="' + src + '"' + end;
+			return full;
+		});
+	});
 	KE.util.addContextmenuEvent(id);
 	KE.util.addNewlineEvent(id);
 	KE.util.addTabEvent(id);
@@ -2592,7 +2606,8 @@ KE.plugin['emoticons'] = {
 		this.menu = menu;
 	},
 	exec : function(id, value) {
-		var html = '<img src="' + KE.g[id].pluginsPath + 'emoticons/' + value + '" width="24" height="24" border="0" alt="" />';
+		var url = KE.g[id].pluginsPath + 'emoticons/' + value;
+		var html = '<img src="' + url + '" kesrc="' + url + '" width="24" height="24" border="0" alt="" />';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -2620,6 +2635,7 @@ KE.plugin['flash'] = {
 		KE.g[id].setHtmlHooks.push(function(html) {
 			return html.replace(/<embed[^>]*type="application\/x-shockwave-flash"[^>]*>/ig, function($0) {
 				var src = $0.match(/\s+src="([^"]+)"/i) ? RegExp.$1 : '';
+				if ($0.match(/\s+kesrc="([^"]+)"/i)) src = RegExp.$1;
 				var width = $0.match(/\s+width="([^"]+)"/i) ? RegExp.$1 : 0;
 				var height = $0.match(/\s+height="([^"]+)"/i) ? RegExp.$1 : 0;
 				return KE.util.getMediaImage(id, 'flash', src, width, height);
@@ -2642,7 +2658,7 @@ KE.plugin['flash'] = {
 		this.dialog.show();
 	},
 	check : function(id, url, width, height) {
-		if (!url.match(/\w+:\/\/.{3,}/)) {
+		if (!url.match(/^.{3,}$/)) {
 			alert(KE.lang['invalidUrl']);
 			window.focus();
 			this.dialog.yesButton.focus();
@@ -2782,7 +2798,7 @@ KE.plugin['image'] = {
 		}
 	},
 	insert : function(id, url, title, width, height, border, align) {
-		var html = '<img src="' + url + '" ';
+		var html = '<img src="' + url + '" kesrc="' + url + '" ';
 		if (width > 0) html += 'width="' + width + '" ';
 		if (height > 0) html += 'height="' + height + '" ';
 		if (title) html += 'title="' + title + '" ';
@@ -2881,8 +2897,9 @@ KE.plugin['link'] = {
 		iframeDoc.execCommand('createlink', false, '__ke_temp_url__');
 		var arr = node.getElementsByTagName('a');
 		for (var i = 0, l = arr.length; i < l; i++) {
-			if (arr[i].href.match(/\/?__ke_temp_url__$/) != null) {
+			if (arr[i].href.match(/\/?__ke_temp_url__$/)) {
 				arr[i].href = url;
+				arr[i].setAttribute('kesrc', url);
 				if (target) arr[i].target = target;
 			}
 		}
@@ -2919,6 +2936,7 @@ KE.plugin['media'] = {
 			return html.replace(/<embed[^>]*type="([^"]+)"[^>]*>/ig, function($0, $1) {
 				if (typeof typeHash[$1] == 'undefined') return $0;
 				var src = $0.match(/\s+src="([^"]+)"/i) ? RegExp.$1 : '';
+				if ($0.match(/\s+kesrc="([^"]+)"/i)) src = RegExp.$1;
 				var width = $0.match(/\s+width="([^"]+)"/i) ? RegExp.$1 : 0;
 				var height = $0.match(/\s+height="([^"]+)"/i) ? RegExp.$1 : 0;
 				var autostart = $0.match(/\s+autostart="([^"]+)"/i) ? RegExp.$1 : 'false';
@@ -2942,7 +2960,7 @@ KE.plugin['media'] = {
 		this.dialog.show();
 	},
 	check : function(id, url, width, height) {
-		if (!url.match(/^\w+:\/\/.{3,}\.(swf|flv|mp3|wav|wma|wmv|mid|avi|mpg|mpeg|asf|rm|rmvb)(\?|$)/i)) {
+		if (!url.match(/^.{3,}\.(swf|flv|mp3|wav|wma|wmv|mid|avi|mpg|mpeg|asf|rm|rmvb)(\?|$)/i)) {
 			alert(KE.lang['invalidMedia']);
 			window.focus();
 			this.dialog.yesButton.focus();

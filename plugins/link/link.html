@@ -50,7 +50,11 @@
 			var linkType = KE.$('linkType', document);
 			var linkNode = KE.plugin['link'].getSelectedNode(id);
 			if (linkNode) {
-				var src = KE.format.getUrl(linkNode.href, KE.g[id].urlType);
+				var tempDiv = KE.$$('div');
+				tempDiv.appendChild(linkNode.cloneNode(false));
+				var linkHtml = tempDiv.innerHTML;
+				var src = linkNode.href;
+				if (linkHtml.match(/kesrc="([^"]+)"/i)) src = RegExp.$1;
 				var target = linkNode.target;
 				hyperLink.value = src;
 				linkType.value = target == '_blank' ? target : '_self';

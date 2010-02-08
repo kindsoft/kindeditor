@@ -237,7 +237,7 @@ KE.event.ready(function() {
 	};
 	var bindEvent = function (el, result, data, createFunc) {
 		var fileUrl = result.current_url + data.filename;
-		fileUrl = KE.format.getUrl(fileUrl, KE.g[id].urlType);
+		fileUrl = KE.format.getUrl(fileUrl, 'absolute');
 		if (data.is_dir) {
 			el.onclick = (function (url, path, title) {
 				return function () {

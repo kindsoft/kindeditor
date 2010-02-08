@@ -135,7 +135,11 @@
 				selectTab(0);
 				var imgNode = KE.plugin['image'].getSelectedNode(id);
 				if (imgNode) {
-					var src = KE.format.getUrl(imgNode.src, KE.g[id].urlType);
+					var tempDiv = KE.$$('div');
+					tempDiv.appendChild(imgNode.cloneNode(false));
+					var imgHtml = tempDiv.innerHTML;
+					var src = imgNode.src;
+					if (imgHtml.match(/kesrc="([^"]+)"/i)) src = RegExp.$1;
 					urlBox.value = src;
 					widthBox.value = imgNode.width;
 					heightBox.value = imgNode.height;
