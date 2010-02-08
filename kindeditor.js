@@ -2130,10 +2130,9 @@ KE.create = function(id, mode) {
 	KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
 		if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
 	});
-	for (var i = 0, len = KE.g[id].items.length; i < len; i++) {
-		var cmd = KE.g[id].items[i];
-		if (KE.plugin[cmd] && KE.plugin[cmd].init) KE.plugin[cmd].init(id);
-	}
+	KE.each(KE.plugin, function(cmd, plugin) {
+		if (plugin.init) plugin.init(id);
+	});
 	KE.g[id].getHtmlHooks.push(function(html) {
 		return html.replace(/(<[^>]*)kesrc="([^"]+)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]+(")/i, '$1' + src + '$2');
