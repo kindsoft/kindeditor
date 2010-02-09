@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>event test</title>
+  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
+  <script type="text/javascript">
+	KE.event.ready(function() {
+		var keyStr = '1,2,3,4,5,6,7,8,9,13,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z';
+		var keys = keyStr.split(',');
+		for (var i = 0, len = keys.length; i < len; i++) {
+			var key = keys[i];
+			KE.event.ctrl(document, key, (function(key) {
+				return function(e) {
+					var name = (key == 13) ? 'Enter' : key.toUpperCase();
+					KE.$('output').value = 'Ctrl+' + name;
+				}
+			})(key));
+		}
+	});
+  </script>
+</head>
+<body>
+	<h3>event test</h3>
+	<input type="text" id="output" value="" style="width:300px;" />
+</body>
+</html>

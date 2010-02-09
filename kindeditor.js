@@ -198,8 +198,9 @@ KE.event = {
 		});
 	},
 	ctrl : function(el, key, func) {
+		key = key.toString().match(/^\d{2,}$/) ? key : key.toUpperCase().charCodeAt(0);
 		this.add(el, 'keydown', function(e) {
-			if (e.ctrlKey && e.keyCode == key.toUpperCase().charCodeAt(0) && !e.shiftKey && !e.altKey) {
+			if (e.ctrlKey && e.keyCode == key && !e.shiftKey && !e.altKey) {
 				func(e);
 				if (e.preventDefault) e.preventDefault();
 				if (e.stopPropagation) e.stopPropagation();
