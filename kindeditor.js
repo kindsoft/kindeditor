@@ -903,7 +903,7 @@ KE.format = {
 					}
 				}
 			};
-			url = getRelativePath(host + pathname, 0);
+			url = getRelativePath(host + pathname, 0).substr(2);
 		} else if (mode == 'absolute') {
 			if (url.substr(0, host.length) === host) {
 				url = url.substr(host.length);

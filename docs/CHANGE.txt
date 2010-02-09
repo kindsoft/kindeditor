@@ -16,6 +16,7 @@ ver 3.4.1
 * 只要KE.plugin里有定义就执行插件的init处理。
 * cssPath参数可指定多个CSS文件。
 * KE.event.ctrl函数可以直接传入keyCode数字。
+* urlType为relative时省略当前路径标识符。
 
 ver 3.4 (2009-12-19)
 * 添加了图片修改/删除功能。
