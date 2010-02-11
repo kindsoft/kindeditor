@@ -1714,10 +1714,10 @@ KE.dialog = function(arg){
 		KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
 			top = objTop + top;
 			left = objLeft + left;
-			if (top < minTop) top = minTop;
-			if (left < minLeft) left = minLeft;
 			if (top > maxTop) top = maxTop;
 			if (left > maxLeft) left = maxLeft;
+			if (top < minTop) top = minTop;
+			if (left < minLeft) left = minLeft;
 			div.style.top = top + 'px';
 			div.style.left = left + 'px';
 		});
