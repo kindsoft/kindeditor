@@ -1637,6 +1637,15 @@ KE.dialog = function(arg){
 	this.zIndex = 19811214;
 	var width = arg.width + this.widthMargin;
 	var height = arg.height + this.heightMargin;
+	var minTop, minLeft, maxTop, maxLeft;
+	var setLimitNumber = function() {
+		var docEl = KE.util.getDocumentElement();
+		var pos = KE.util.getScrollPos();
+		minTop = pos.y;
+		minLeft = pos.x;
+		maxTop = pos.y + docEl.clientHeight - height - 2;
+		maxLeft = pos.x + docEl.clientWidth - width - 2;
+	};
 	this.getPos = function() {
 		var id = arg.id;
 		var g = KE.g[id];
@@ -1669,6 +1678,8 @@ KE.dialog = function(arg){
 			KE.g[id].hideDiv.style.display = 'none';
 			KE.g[id].maskDiv.style.display = 'none';
 		}
+		KE.event.remove(window, 'resize', setLimitNumber);
+		KE.event.remove(window, 'scroll', setLimitNumber);
 		if (arg.afterHide) arg.afterHide(id);
 		KE.util.focus(id);
 	};
@@ -1697,14 +1708,14 @@ KE.dialog = function(arg){
 		span.title = KE.lang['close'];
 		span.onclick = function () { self.hide(); };
 		titleDiv.appendChild(span);
-		var docEl = KE.util.getDocumentElement();
-		var maxTop = docEl.clientHeight - height - 2;
-		var maxLeft = docEl.clientWidth - width - 2;
+		setLimitNumber();
+		KE.event.add(window, 'resize', setLimitNumber);
+		KE.event.add(window, 'scroll', setLimitNumber);
 		KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
 			top = objTop + top;
 			left = objLeft + left;
-			if (top < 0) top = 0;
-			if (left < 0) left = 0;
+			if (top < minTop) top = minTop;
+			if (left < minLeft) left = minLeft;
 			if (top > maxTop) top = maxTop;
 			if (left > maxLeft) left = maxLeft;
 			div.style.top = top + 'px';
