@@ -57,10 +57,7 @@ if (empty($_FILES) === false) {
 	$file_url = $save_url . $new_file_name;
 	
 	header('Content-type: text/html; charset=UTF-8');
-	echo json_encode(array(
-		'error' => 0,
-		'url' => $file_url
-	));
+	echo json_encode(array('error' => 0, 'url' => $file_url));
 	exit;
 }
 
