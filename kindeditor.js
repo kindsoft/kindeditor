@@ -1126,8 +1126,8 @@ KE.util = {
 		}
 		return hash;
 	},
-	// the code of parseJson from http://www.json.org/
 	parseJson : function (text) {
+		// the code of parseJson from http://www.json.org/
 		var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
 		cx.lastIndex = 0;
 		if (cx.test(text)) {
@@ -2822,9 +2822,12 @@ KE.plugin['image'] = {
 		if (type == 2) {
 			KE.$('editorId', dialogDoc).value = id;
 			var uploadIframe = KE.$('uploadIframe', dialogDoc);
-			KE.event.add(uploadIframe, 'load', function() {
+			KE.util.showLoadingPage(id);
+			var onloadFunc = function() {
+				KE.event.remove(uploadIframe, 'load', onloadFunc);
 				var uploadDoc = KE.util.getIframeDoc(uploadIframe);
 				var data = KE.util.parseJson(uploadDoc.body.innerHTML);
+				KE.util.hideLoadingPage(id);
 				if (typeof data === 'object' && 'error' in data) {
 					if (data.error === 0) {
 						self.insert(id, data.url, title, width, height, 0, align);
@@ -2833,7 +2836,8 @@ KE.plugin['image'] = {
 						return false;
 					}
 				}
-			});
+			};
+			KE.event.add(uploadIframe, 'load', onloadFunc);
 			dialogDoc.uploadForm.submit();
 			return;
 		} else {
