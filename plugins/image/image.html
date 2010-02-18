@@ -135,7 +135,7 @@
 				selectTab(0);
 				var imgNode = KE.plugin['image'].getSelectedNode(id);
 				if (imgNode) {
-					var tempDiv = KE.$$('div');
+					var tempDiv = KE.$$('div', KE.g[id].iframeDoc);
 					tempDiv.appendChild(imgNode.cloneNode(false));
 					var imgHtml = tempDiv.innerHTML;
 					var src = imgNode.src;

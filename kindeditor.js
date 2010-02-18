@@ -1263,9 +1263,9 @@ KE.util = {
 	},
 	setDefaultPlugin : function(id) {
 		var items = [
-			'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 
-			'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript', 
-			'superscript', 'bold', 'italic', 'underline', 'strikethrough', 'unlink'
+			'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
+			'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', 'bold', 'italic', 'underline', 'strikethrough'
 		];
 		for (var i = 0; i < items.length; i++) {
 			KE.plugin[items[i]] = {
@@ -1280,7 +1280,7 @@ KE.util = {
 		html += '<title>KindEditor</title>';
 		html += '<link href="' + KE.g[id].skinsPath + 'common/editor.css?ver=' + KE.version + '" rel="stylesheet" type="text/css" />';
 		var cssPath = KE.g[id].cssPath;
-		if (typeof cssPath == 'string') cssPath = [cssPath]; 
+		if (typeof cssPath == 'string') cssPath = [cssPath];
 		for (var i = 0, len = cssPath.length; i < len; i++) {
 			html += '<link href="' + cssPath[i] + '" rel="stylesheet" type="text/css" />';
 		}
@@ -2862,17 +2862,6 @@ KE.plugin['link'] = {
 				return self.getSelectedNode(id);
 			}
 		});
-		KE.g[id].contextmenuItems.push({
-			text : KE.lang['deleteLink'],
-			click : function(id, menu) {
-				KE.util.select(id);
-				menu.hide();
-				KE.util.execCommand(id, 'unlink', null);
-			},
-			cond : function(id) {
-				return self.getSelectedNode(id);
-			}
-		});
 	},
 	click : function(id) {
 		KE.util.selection(id);
@@ -2918,6 +2907,34 @@ KE.plugin['link'] = {
 		}
 		KE.history.add(id);
 		KE.layout.hide(id);
+		KE.util.focus(id);
+	}
+};
+
+KE.plugin['unlink'] = {
+	init : function(id) {
+		var self = this;
+		KE.g[id].contextmenuItems.push({
+			text : KE.lang['deleteLink'],
+			click : function(id, menu) {
+				KE.util.select(id);
+				menu.hide();
+				self.click(id);
+			},
+			cond : function(id) {
+				return KE.plugin['link'].getSelectedNode(id);
+			}
+		});
+	},
+	click : function(id) {
+		KE.util.selection(id);
+		var linkNode = KE.plugin['link'].getSelectedNode(id);
+		if (!linkNode) return;
+		var range = KE.g[id].keRange;
+		range.selectTextNode(linkNode);
+		KE.g[id].keSel.addRange(range);
+		KE.util.select(id);
+		KE.util.execCommand(id, 'unlink', null);
 		KE.util.focus(id);
 	}
 };

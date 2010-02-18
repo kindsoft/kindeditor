@@ -50,7 +50,7 @@
 			var linkType = KE.$('linkType', document);
 			var linkNode = KE.plugin['link'].getSelectedNode(id);
 			if (linkNode) {
-				var tempDiv = KE.$$('div');
+				var tempDiv = KE.$$('div', KE.g[id].iframeDoc);
 				tempDiv.appendChild(linkNode.cloneNode(false));
 				var linkHtml = tempDiv.innerHTML;
 				var src = linkNode.href;
