@@ -1126,6 +1126,23 @@ KE.util = {
 		}
 		return hash;
 	},
+	// the code of parseJson from http://www.json.org/
+	parseJson : function (text) {
+		var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+		cx.lastIndex = 0;
+		if (cx.test(text)) {
+			text = text.replace(cx, function (a) {
+				return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+			});
+		}
+		if (/^[\],:{}\s]*$/.
+		test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+		replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+		replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+			return eval('(' + text + ')');
+		}
+		throw 'JSON parse error';
+	},
 	createRange : function(doc) {
 		return doc.createRange ? doc.createRange() : doc.body.createTextRange();
 	},
@@ -2787,26 +2804,40 @@ KE.plugin['image'] = {
 		return true;
 	},
 	exec : function(id) {
+		var self = this;
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var type = KE.$('type', dialogDoc).value;
+		var width = KE.$('imgWidth', dialogDoc).value;
+		var height = KE.$('imgHeight', dialogDoc).value;
+		var title = KE.$('imgTitle', dialogDoc).value;
+		var alignElements = dialogDoc.getElementsByName('align');
+		var align = '';
+		for (var i = 0, len = alignElements.length; i < len; i++) {
+			if (alignElements[i].checked) {
+				align = alignElements[i].value;
+				break;
+			}
+		}
 		if (!this.check(id)) return false;
 		if (type == 2) {
 			KE.$('editorId', dialogDoc).value = id;
+			var uploadIframe = KE.$('uploadIframe', dialogDoc);
+			KE.event.add(uploadIframe, 'load', function() {
+				var uploadDoc = KE.util.getIframeDoc(uploadIframe);
+				var data = KE.util.parseJson(uploadDoc.body.innerHTML);
+				if (typeof data === 'object' && 'error' in data) {
+					if (data.error === 0) {
+						self.insert(id, data.url, title, width, height, 0, align);
+					} else {
+						alert(data.message);
+						return false;
+					}
+				}
+			});
 			dialogDoc.uploadForm.submit();
-			return false;
+			return;
 		} else {
 			var url = KE.$('url', dialogDoc).value;
-			var width = KE.$('imgWidth', dialogDoc).value;
-			var height = KE.$('imgHeight', dialogDoc).value;
-			var title = KE.$('imgTitle', dialogDoc).value;
-			var alignElements = dialogDoc.getElementsByName('align');
-			var align = '';
-			for (var i = 0, len = alignElements.length; i < len; i++) {
-				if (alignElements[i].checked) {
-					align = alignElements[i].value;
-					break;
-				}
-			}
 			this.insert(id, url, title, width, height, 0, align);
 		}
 	},

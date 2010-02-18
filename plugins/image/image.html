@@ -86,7 +86,7 @@
 			var allowUpload = (typeof KE.g[id].allowUpload == 'undefined') ? true : KE.g[id].allowUpload;
 			var allowFileManager = (typeof KE.g[id].allowFileManager == 'undefined') ? false : KE.g[id].allowFileManager;
 			var referMethod = (typeof KE.g[id].referMethod == 'undefined') ? '' : KE.g[id].referMethod;
-			var imageUploadCgi = (typeof KE.g[id].imageUploadCgi == 'undefined') ? './../../php/upload.php' : KE.g[id].imageUploadCgi;
+			var imageUploadJson = (typeof KE.g[id].imageUploadJson == 'undefined') ? '../../php/upload_json.php' : KE.g[id].imageUploadJson;
 			KE.event.ready(function() {
 				var typeBox = KE.$('type', document);
 				var urlBox = KE.$('url', document);
@@ -168,7 +168,7 @@
 					});
 					fileManager.show();
 				});
-				KE.$('uploadForm', document).action = imageUploadCgi;
+				KE.$('uploadForm', document).action = imageUploadJson;
 				KE.$('referMethod', document).value = referMethod;
 				var alignIds = ['default', 'left', 'right'];
 				for (var i = 0, len = alignIds.length; i < len; i++) {

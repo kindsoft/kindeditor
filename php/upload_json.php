@@ -1,9 +1,9 @@
 <?php
 
 //文件保存目录路径
-$save_path = './../attached/';
+$save_path = '../attached/';
 //文件保存目录URL
-$save_url = './../attached/';
+$save_url = '../attached/';
 //定义允许上传的文件扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 //最大文件大小
@@ -55,32 +55,18 @@ if (empty($_FILES) === false) {
 	}
 	@chmod($file_path, 0644);
 	$file_url = $save_url . $new_file_name;
-	//插入图片，关闭层
-	echo '<html>';
-	echo '<head>';
-	echo '<title>Insert Image</title>';
-	echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
-	echo '</head>';
-	echo '<body>';
-	echo '<script type="text/javascript">';
-	echo 'parent.parent.KE.plugin["image"].insert("' . $_POST['id'] . '", "' . $file_url . '","' . $_POST['imgTitle'] . '","' . $_POST['imgWidth'] . '","' . $_POST['imgHeight'] . '","' . $_POST['imgBorder'] . '","' . $_POST['align'] . '");';
-	echo '</script>';
-	echo '</body>';
-	echo '</html>';
+	
+	header('Content-type: text/html; charset=UTF-8');
+	echo json_encode(array(
+		'error' => 0,
+		'url' => $file_url
+	));
+	exit;
 }
 
-//提示，关闭层
-function alert($msg)
-{
-	echo '<html>';
-	echo '<head>';
-	echo '<title>error</title>';
-	echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">';
-	echo '</head>';
-	echo '<body>';
-	echo '<script type="text/javascript">alert("'.$msg.'");</script>';
-	echo '</body>';
-	echo '</html>';
+function alert($msg) {
+	header('Content-type: text/html; charset=UTF-8');
+	echo json_encode(array('error' => 1, 'message' => $msg));
 	exit;
 }
 ?>
