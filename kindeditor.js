@@ -1489,7 +1489,8 @@ KE.util = {
 				var menu = new KE.menu({
 					id : id,
 					event : e,
-					type : 'contextmenu'
+					type : 'contextmenu',
+					width : 120
 				});
 				for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
 					var item = g.contextmenuItems[i];
@@ -1562,7 +1563,7 @@ KE.layout = {
 };
 
 KE.menu = function(arg){
-	this.getPos = function() {
+	this.getPos = function(width, height) {
 		var id = arg.id;
 		var x = 0;
 		var y = 0;
@@ -1577,15 +1578,24 @@ KE.menu = function(arg){
 			x = pos.x + iframePos.x;
 			y = pos.y + iframePos.y + 5;
 		}
-		return { x : x, y : y };
+		if (width > 0 || height > 0) {
+			var scrollPos = KE.util.getScrollPos();
+			var docEl = KE.util.getDocumentElement();
+			var maxTop = scrollPos.y + docEl.clientHeight - height - 2;
+			var maxLeft = scrollPos.x + docEl.clientWidth - width - 2;
+			if (y > maxTop) y = maxTop;
+			if (x > maxLeft) x = maxLeft;
+		}
+		return {x : x, y : y};
 	};
 	this.init = function() {
 		this.type = (arg.type && arg.type == 'contextmenu') ? arg.type : 'menu';
 		var div = KE.$$('div');
 		div.className = 'ke-' + this.type;
-		var pos = this.getPos();
+		var pos = this.getPos(0, 0);
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
+		if (arg.width) div.style.width = arg.width + 'px';
 		this.div = div;
 	};
 	this.init();
@@ -1613,6 +1623,9 @@ KE.menu = function(arg){
 		var id = arg.id;
 		KE.g[id].hideDiv.style.display = '';
 		KE.g[id].hideDiv.appendChild(this.div);
+		var pos = this.getPos(this.div.clientWidth, this.div.clientHeight);
+		this.div.style.top = pos.y + 'px';
+		this.div.style.left = pos.x + 'px';
 	};
 	this.picker = function() {
 		var colorTable = KE.g[arg.id].colorTable;

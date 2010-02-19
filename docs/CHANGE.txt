@@ -13,6 +13,7 @@ ver 3.4.1
 * 修改了在IE8上点击工具栏触发onbeforeunload事件的问题。
 * 修改了输入带冒号的标签时HTML格式出现错误的问题。
 * 修改了在Firefox上不选中超级连接时不能取消超级连接的问题。
+* 修改了当页面比较小时下拉菜单超出页面的问题。
 * beforeCreate、afterCreate等回调函数添加了id参数。
 * 改善了URL格式化规则，urlType参数默认为空，当urlType为空时不修改URL。
 * 只要KE.plugin里有定义就执行插件的init处理。
