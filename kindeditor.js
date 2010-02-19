@@ -2938,6 +2938,11 @@ KE.plugin['link'] = {
 			this.dialog.yesButton.focus();
 			return false;
 		}
+		if (KE.browser.WEBKIT && KE.g[id].keRange.getText() === '') {
+			KE.layout.hide(id);
+			KE.util.focus(id);
+			return false;
+		}
 		var node = KE.g[id].keRange.getParentElement();
 		while (node) {
 			if (node.tagName.toLowerCase() == 'a' || node.tagName.toLowerCase() == 'body') break;
