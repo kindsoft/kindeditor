@@ -101,7 +101,7 @@ KE.setting = {
 	resizeMode : 2,
 	filterMode : false,
 	urlType : '',
-	skinType : 'oxygen',
+	skinType : 'default',
 	newlineTag : 'br',
 	dialogAlignType : 'page',
 	cssPath : '',
