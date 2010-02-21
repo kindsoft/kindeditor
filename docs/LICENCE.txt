@@ -11,8 +11,7 @@ KindEditor 版权声明
    LGPL协议原文：http://www.opensource.org/licenses/lgpl-license.php
 
 2. 风格图标：
-   KindEditor的小图标来自MS office和oxygen，office图标版权归微软公司所有，oxygen图标版权归oxygen团队所有。
-   oxygen版权声明：http://www.oxygen-icons.org/?page_id=4
+   KindEditor的小图标来自MS office，office图标版权归微软公司所有。
 
 3. 表情图标：
    从3.4版本开始，KindEditor的默认表情图片采用了QQ表情，QQ表情图片版权归QQ开发商腾讯公司所有。
