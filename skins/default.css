@@ -94,27 +94,27 @@
 }
 .ke-icon-title {
 	background-position: 0px -336px;
-	width: 39px;
+	width: 25px;
 	height: 16px;
 }
 .ke-icon-fontname {
 	background-position: 0px -352px;
-	width: 39px;
+	width: 21px;
 	height: 16px;
 }
 .ke-icon-fontsize {
 	background-position: 0px -368px;
-	width: 39px;
+	width: 23px;
 	height: 16px;
 }
 .ke-icon-textcolor {
 	background-position: 0px -384px;
-	width: 16px;
+	width: 20px;
 	height: 16px;
 }
 .ke-icon-bgcolor {
 	background-position: 0px -400px;
-	width: 16px;
+	width: 20px;
 	height: 16px;
 }
 .ke-icon-bold {
@@ -250,7 +250,7 @@
 	right: 0;
 	top: 0;
 	cursor: pointer;
-	background-image: url(./office/office.gif);
+	background-image: url(./default/default.gif);
 }
 .ke-bottom-outer {
 	border: 0;
@@ -282,7 +282,7 @@
 	background-position: -4px -740px;
 	width: 12px;
 	height: 12px;
-	background-image: url(./office/office.gif);
+	background-image: url(./default/default.gif);
 }
 .ke-textarea-outer {
 	border: 0;
@@ -326,7 +326,7 @@
 	overflow: hidden;
 }
 .ke-common-icon-url {
-	background-image: url(./office/office.gif);
+	background-image: url(./default/default.gif);
 }
 .ke-icon {
 	display: block;
@@ -337,14 +337,14 @@
 }
 .ke-icon-on {
 	display: block;
-	border: 1px solid #1F3D74;
+	border: 1px solid #4086FF;
 	padding: 1px 2px;
 	margin: 1px;
 	cursor: pointer;
 }
 .ke-icon-selected {
 	display: block;
-	border: 1px solid #1F3D74;
+	border: 1px solid #4086FF;
 	background-color: #DDDDDD;
 	padding: 1px 2px;
 	margin: 1px;
@@ -377,7 +377,7 @@
 	cursor: pointer;
 }
 .ke-menu-selected {
-	background-color: #1F3D74;
+	background-color: #4086FF;
 	color: #FFFFFF;
 	padding: 2px 30px 2px 10px;
 	cursor: pointer;
@@ -403,7 +403,7 @@
 	cursor: pointer;
 }
 .ke-contextmenu-selected {
-	background-color: #1F3D74;
+	background-color: #4086FF;
 	color: #FFFFFF;
 	font-size: 12px;
 	padding: 2px 30px 2px 10px;

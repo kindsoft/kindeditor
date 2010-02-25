@@ -101,7 +101,7 @@ KE.setting = {
 	resizeMode : 2,
 	filterMode : false,
 	urlType : '',
-	skinType : 'office',
+	skinType : 'default',
 	newlineTag : 'br',
 	dialogAlignType : 'page',
 	cssPath : '',
@@ -2590,8 +2590,7 @@ KE.plugin['title'] = {
 			'H2' : '标题 2',
 			'H3' : '标题 3',
 			'H4' : '标题 4',
-			'H5' : '标题 5',
-			'H6' : '标题 6'
+			'P' : '正 文'
 		};
 		var cmd = 'title';
 		KE.util.selection(id);
