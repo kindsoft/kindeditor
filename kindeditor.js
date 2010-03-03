@@ -10,7 +10,7 @@
 
 var KE = {};
 
-KE.version = '3.4.1';
+KE.version = '3.4.2';
 
 KE.lang = {
 	source : '切换模式',
@@ -924,7 +924,8 @@ KE.format = {
 		var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
 		var endlineTagHash = KE.util.arrayToHash(KE.setting.endlineTags);
 		html = html.replace(/\r\n|\n|\r/g, '');
-		html = html.replace(/<(\/)?([\w:]+)(.*?)(\/)?>/g, function($0, $1, $2, $3, $4) {
+		var re = /<(\/)?([\w-:]+)((?:\s+|(?:\s+[\w-:]+)|(?:\s+[\w-:]+=[\w-:]+)|(?:\s+[\w-:]+="[^"]*")|(?:\s+[\w-:]+='[^']*'))*)(\/)?>/g;
+		html = html.replace(re, function($0, $1, $2, $3, $4) {
 			var startSlash = $1 || '';
 			var tagName = $2.toLowerCase();
 			var attr = $3 || '';
@@ -934,7 +935,7 @@ KE.format = {
 			var nl = '';
 			if ((startSlash || endSlash) && typeof endlineTagHash[tagName] != "undefined") nl = "\r\n";
 			if (attr !== '') {
-				attr = attr.replace(/\s*([^\s]+?)=(".*?"|[^\s]*)/g, function($0, $1, $2) {
+				attr = attr.replace(/\s*([\w-:]+)=([\w-:]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
 					var key = $1.toLowerCase();
 					var val = $2 || '';
 					if (isFilter) {
