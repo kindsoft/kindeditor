@@ -22,6 +22,7 @@
   <script type="text/javascript">
 	KE.show({
 		id : 'content1',
+		allowFileManager : true,
 		afterCreate : function(id) {
 			KE.event.input(KE.g[id].iframeDoc, function() {
 				document.getElementById('content_html').value = KE.util.getData(id);

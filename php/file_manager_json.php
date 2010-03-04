@@ -1,11 +1,16 @@
 <?php
+
+/**
+本PHP程序属于一个服务器端程序的例子，不正确的使用可能威胁服务器的安全，使用之前请仔细确认相关安全设置。
+*/
+
 $php_path = dirname(__FILE__) . '/';
-$php_url = dirname($_SERVER['PHP_SELF']);
+$php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
 //根目录路径，可以指定绝对路径，比如 /var/www/attached/
-$root_path = $php_path . './../attached/';
+$root_path = $php_path . '../attached/';
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
-$root_url = $php_url .'./../attached/';
+$root_url = $php_url . '../attached/';
 //图片扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 
