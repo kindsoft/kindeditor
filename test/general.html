@@ -12,14 +12,19 @@
 	margin-bottom: 5px;
 	}
   </style>
-  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
+  <link type="text/css" rel="stylesheet" href="firebug/firebug-lite.css" />
+  <script type="text/javascript" src="firebug/firebug-lite.js"></script>
+<script type="text/javascript">
+	firebug.env.css = 'firebug-lite.css';
+	firebug.env.height = 160;
+</script>
+  <script type="text/javascript" charset="utf-8" src="../kindeditor.js"></script>
   <script type="text/javascript">
 	KE.show({
 		id : 'content1',
-		cssPath : './../examples/index.css',
-		afterCreate : function() {
-			KE.event.input(KE.g['content1'].iframeDoc, function() {
-				document.getElementById('content_html').value = KE.util.getData('content1');
+		afterCreate : function(id) {
+			KE.event.input(KE.g[id].iframeDoc, function() {
+				document.getElementById('content_html').value = KE.util.getData(id);
 			});
 		}
 	});

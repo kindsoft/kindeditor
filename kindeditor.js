@@ -1300,7 +1300,7 @@ KE.util = {
 		var cssPath = KE.g[id].cssPath;
 		if (typeof cssPath == 'string') cssPath = [cssPath];
 		for (var i = 0, len = cssPath.length; i < len; i++) {
-			html += '<link href="' + cssPath[i] + '" rel="stylesheet" type="text/css" />';
+			if (cssPath[i] !== '') html += '<link href="' + cssPath[i] + '" rel="stylesheet" type="text/css" />';
 		}
 		html += '</head>';
 		html += '<body class="ke-content"></body>';
