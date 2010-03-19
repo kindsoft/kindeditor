@@ -1213,12 +1213,16 @@ KE.util = {
 			objHeight = parseInt(objHeight);
 			var mouseTop = pos.y;
 			var mouseLeft = pos.x;
+			var scrollPos = KE.util.getScrollPos();
+			var scrollTop = scrollPos.y;
+			var scrollLeft = scrollPos.x;
 			var dragFlag = true;
 			var moveListener = function(e) {
 				if (dragFlag) {
 					var pos = KE.util.getCoords(e);
-					var top = pos.y - mouseTop;
-					var left = pos.x - mouseLeft;
+					var scrollPos = KE.util.getScrollPos();
+					var top = parseInt(pos.y - mouseTop - scrollTop + scrollPos.y);
+					var left = parseInt(pos.x - mouseLeft - scrollLeft + scrollPos.x);
 					func(objTop, objLeft, objWidth, objHeight, top, left);
 				}
 			};
@@ -1226,8 +1230,8 @@ KE.util = {
 			var iframeMoveListener = function(e) {
 				if (dragFlag) {
 					var pos = KE.util.getCoords(e, g.iframeDoc);
-					var top = iframePos.y + pos.y - mouseTop;
-					var left = iframePos.x + pos.x - mouseLeft;
+					var top = parseInt(iframePos.y + pos.y - mouseTop - scrollTop);
+					var left = parseInt(iframePos.x + pos.x - mouseLeft - scrollLeft);
 					func(objTop, objLeft, objWidth, objHeight, top, left);
 				}
 			};
