@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.4.1
+* @version 3.4.2
 *******************************************************************************/
 
 var KE = {};
@@ -929,7 +929,7 @@ KE.format = {
 			var startSlash = $1 || '';
 			var tagName = $2.toLowerCase();
 			var attr = $3 || '';
-			var endSlash = $4 || '';
+			var endSlash = $4 ? ' ' + $4 : '';
 			if (isFilter && typeof htmlTagHash[tagName] == "undefined") return '';
 			if (endSlash === '' && typeof noEndTagHash[tagName] != "undefined") endSlash = ' /';
 			var nl = '';
@@ -1024,6 +1024,16 @@ KE.util = {
 		link.setAttribute('href', path);
 		document.getElementsByTagName("head")[0].appendChild(link);
 	},
+	getAttrList : function(tag) {
+		var re = /\s+(?:([\w-:]+)|(?:([\w-:]+)=([\w-:]+))|(?:([\w-:]+)="([^"]*)")|(?:([\w-:]+)='([^']*)'))(?=(?:\s|\/|>)+)/g;
+		var arr, key, val, list = {};
+		while ((arr = re.exec(tag))) {
+			key = arr[1] || arr[2] || arr[4] || arr[6];
+			val = arr[1] || (arr[2] ? arr[3] : (arr[4] ? arr[5] : arr[7]));
+			list[key] = val;
+		}
+		return list;
+	},
 	inArray : function(str, arr) {
 		for (var i = 0; i < arr.length; i++) {if (str == arr[i]) return true;}
 		return false;
@@ -1111,21 +1121,6 @@ KE.util = {
 				return '#' + hex($1) + hex($2) + hex($3);
 			}
 		);
-	},
-	hashToStr : function(hash) {
-		var str = '';
-		KE.each(hash, function(key, val) {
-			str += key + ":'" + val + "',";
-		});
-		return str.length > 0 ? str.substr(0, str.length - 1) : '';
-	},
-	strToHash : function(str) {
-		var hash = {};
-		var re = /(\w+)\s*:\s*'([^']+)'/g;
-		while (re.exec(str)) {
-			hash[RegExp.$1] = RegExp.$2;
-		}
-		return hash;
 	},
 	parseJson : function (text) {
 		// the code of parseJson from http://www.json.org/
@@ -1311,45 +1306,31 @@ KE.util = {
 		html += '</html>';
 		return html;
 	},
-	getMediaType : function(type, url) {
-		if (type === null) {
-			if (url.match(/\.(rm|rmvb)(\?|$)/i)) return 'rm';
-			else if (url.match(/\.(swf|flv)(\?|$)/i)) return 'flash';
-			else return 'media';
-		}
-		return type.toLowerCase();
+	getMediaType : function(src) {
+		if (src.match(/\.(rm|rmvb)(\?|$)/i)) return 'rm';
+		else if (src.match(/\.(swf|flv)(\?|$)/i)) return 'flash';
+		else return 'media';
 	},
-	getMediaImage : function(id, type, url, width, height, autostart) {
-		type = this.getMediaType(type, url);
-		var hash = {
-			src : url,
-			width : width,
-			height : height
-		};
-		if (typeof autostart != 'undefined') hash.autostart = autostart;
-		var title = this.hashToStr(hash);
+	getMediaImage : function(id, type, attrs) {
+		var width = attrs.width;
+		var height = attrs.height;
+		type = type || this.getMediaType(attrs.src);
+		var srcTag = this.getMediaEmbed(attrs);
 		var style = '';
 		if (width > 0) style += 'width:' + width + 'px;';
 		if (height > 0) style += 'height:' + height + 'px;';
 		var className = 'ke-' + type;
 		var html = '<img class="' + className + '" src="' + KE.g[id].skinsPath + 'common/blank.gif" ';
 		if (style !== '') html += 'style="' + style + '" ';
-		html += 'title="' + title + '" alt="flash" />';
+		html += 'kesrctag="' + escape(srcTag) + '" alt="" />';
 		return html;
 	},
-	getMediaEmbed : function(id, type, url, width, height, autostart) {
-		type = this.getMediaType(type, url);
-		var html = '<embed src="' + url + '" kesrc="' + url + '" ';
-		if (width > 0) html += 'width="' + width + '" ';
-		if (height > 0) html += 'height="' + height + '" ';
-		var mediaType = KE.g[id].mediaTypes[type];
-		if (type == 'rm') {
-			html += 'type="' + mediaType + '" loop="true" autostart="' + autostart + '" />';
-		} else if (type == 'flash') {
-			html += 'type="' + mediaType + '" quality="high" />';
-		} else {
-			html += 'type="' + mediaType + '" loop="true" autostart="' + autostart + '" />';
-		}
+	getMediaEmbed : function(attrs) {
+		var html = '<embed ';
+		KE.each(attrs, function(key, val) {
+			html += key + '="' + val + '" ';
+		});
+		html += '/>';
 		return html;
 	},
 	execGetHtmlHooks : function(id, html) {
@@ -2670,22 +2651,26 @@ KE.plugin['flash'] = {
 				var height = imgStr.match(/style="[^"]*;?\s*height:\s*(\d+)/i) ? RegExp.$1 : 0;
 				width = width || (imgStr.match(/width="([^"]+)"/i) ? RegExp.$1 : 0);
 				height = height || (imgStr.match(/height="([^"]+)"/i) ? RegExp.$1 : 0);
-				if (imgStr.match(/title="([^"]+)"/i)) {
-					var hash = KE.util.strToHash(RegExp.$1);
-					var src = hash.src || '';
-					width = width || hash.width || 0;
-					height = height || hash.height || 0;
-					return KE.util.getMediaEmbed(id, 'flash', src, width, height);
+				if (imgStr.match(/kesrctag="([^"]+)"/i)) {
+					var attrs = KE.util.getAttrList(unescape(RegExp.$1));
+					attrs.width = width || attrs.width || 0;
+					attrs.height = height || attrs.height || 0;
+					attrs.kesrc = attrs.src;
+					return KE.util.getMediaEmbed(attrs);
 				}
 			});
 		});
 		KE.g[id].setHtmlHooks.push(function(html) {
-			return html.replace(/<embed[^>]*type="application\/x-shockwave-flash"[^>]*>/ig, function($0) {
+			return html.replace(/<embed[^>]*type="application\/x-shockwave-flash"[^>]*>(?:<\/embed>)?/ig, function($0) {
 				var src = $0.match(/\s+src="([^"]+)"/i) ? RegExp.$1 : '';
 				if ($0.match(/\s+kesrc="([^"]+)"/i)) src = RegExp.$1;
 				var width = $0.match(/\s+width="([^"]+)"/i) ? RegExp.$1 : 0;
 				var height = $0.match(/\s+height="([^"]+)"/i) ? RegExp.$1 : 0;
-				return KE.util.getMediaImage(id, 'flash', src, width, height);
+				var attrs = KE.util.getAttrList($0);
+				attrs.src = src;
+				attrs.width = width;
+				attrs.height = height;
+				return KE.util.getMediaImage(id, 'flash', attrs);
 			});
 		});
 	},
@@ -2731,7 +2716,13 @@ KE.plugin['flash'] = {
 		var width = KE.$('width', dialogDoc).value;
 		var height = KE.$('height', dialogDoc).value;
 		if (!this.check(id, url, width, height)) return false;
-		var html = KE.util.getMediaImage(id, 'flash', url, width, height);
+		var html = KE.util.getMediaImage(id, 'flash', {
+			src : url,
+			type : KE.g[id].mediaTypes['flash'],
+			width : width,
+			height : height,
+			quality : 'high'
+		});
 		KE.util.insertHtml(id, html);
 		KE.layout.hide(id);
 		KE.util.focus(id);
@@ -3009,25 +3000,27 @@ KE.plugin['media'] = {
 				var height = $0.match(/style="[^"]*;?\s*height:\s*(\d+)/i) ? RegExp.$1 : 0;
 				width = width || ($0.match(/width="([^"]+)"/i) ? RegExp.$1 : 0);
 				height = height || ($0.match(/height="([^"]+)"/i) ? RegExp.$1 : 0);
-				if ($0.match(/\s+title="([^"]+)"/i)) {
-					var hash = KE.util.strToHash(RegExp.$1);
-					var src = hash.src || '';
-					width = width || hash.width || 0;
-					height = height || hash.height || 0;
-					autostart = hash.autostart || 'false';
-					return KE.util.getMediaEmbed(id, null, src, width, height, autostart);
+				if ($0.match(/\s+kesrctag="([^"]+)"/i)) {
+					var attrs = KE.util.getAttrList(unescape(RegExp.$1));
+					attrs.width = width || attrs.width || 0;
+					attrs.height = height || attrs.height || 0;
+					attrs.kesrc = attrs.src;
+					return KE.util.getMediaEmbed(attrs);
 				}
 			});
 		});
 		KE.g[id].setHtmlHooks.push(function(html) {
-			return html.replace(/<embed[^>]*type="([^"]+)"[^>]*>/ig, function($0, $1) {
+			return html.replace(/<embed[^>]*type="([^"]+)"[^>]*>(?:<\/embed>)?/ig, function($0, $1) {
 				if (typeof typeHash[$1] == 'undefined') return $0;
 				var src = $0.match(/\s+src="([^"]+)"/i) ? RegExp.$1 : '';
 				if ($0.match(/\s+kesrc="([^"]+)"/i)) src = RegExp.$1;
 				var width = $0.match(/\s+width="([^"]+)"/i) ? RegExp.$1 : 0;
 				var height = $0.match(/\s+height="([^"]+)"/i) ? RegExp.$1 : 0;
-				var autostart = $0.match(/\s+autostart="([^"]+)"/i) ? RegExp.$1 : 'false';
-				return KE.util.getMediaImage(id, null, src, width, height, autostart);
+				var attrs = KE.util.getAttrList($0);
+				attrs.src = src;
+				attrs.width = width;
+				attrs.height = height;
+				return KE.util.getMediaImage(id, '', attrs);
 			});
 		});
 	},
@@ -3074,7 +3067,14 @@ KE.plugin['media'] = {
 		var height = KE.$('height', dialogDoc).value;
 		if (!this.check(id, url, width, height)) return false;
 		var autostart = KE.$('autostart', dialogDoc).checked ? 'true' : 'false';
-		var html = KE.util.getMediaImage(id, null, url, width, height, autostart);
+		var html = KE.util.getMediaImage(id, '', {
+			src : url,
+			type : KE.g[id].mediaTypes[KE.util.getMediaType(url)],
+			width : width,
+			height : height,
+			autostart : autostart,
+			loop : 'true'
+		});
 		KE.util.insertHtml(id, html);
 		KE.layout.hide(id);
 		KE.util.focus(id);
