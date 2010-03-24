@@ -2734,8 +2734,10 @@ KE.plugin['image'] = {
 	getSelectedNode : function(id) {
 		var g = KE.g[id];
 		var startNode = g.keRange.startNode;
+		var endNode = g.keRange.endNode;
 		if (startNode.nodeType != 1) return;
 		if (startNode.tagName.toLowerCase() != 'img') return;
+		if (startNode != endNode) return;
 		if (!startNode.className.match(/^ke-\w+/i)) return startNode;
 	},
 	init : function(id) {
