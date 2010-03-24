@@ -1892,11 +1892,12 @@ KE.toolbar = {
 				var span = obj[1];
 				a.className = 'ke-icon';
 				KE.util.setOpacity(span, 100);
-				a.onclick = (function(id, cmd) {
+				a.onclick = (function(cmd) {
 					return function() {
 						KE.util.click(id, cmd);
+						return false;
 					};
-				})(id, cmd);
+				})(cmd);
 				a.onmouseover = function(){ this.className = "ke-icon-on"; };
 				a.onmouseout = function(){ this.className = "ke-icon"; };
 			}
