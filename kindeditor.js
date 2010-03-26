@@ -1567,9 +1567,7 @@ KE.menu = function(arg){
 		if (width > 0 || height > 0) {
 			var scrollPos = KE.util.getScrollPos();
 			var docEl = KE.util.getDocumentElement();
-			var maxTop = scrollPos.y + docEl.clientHeight - height - 2;
 			var maxLeft = scrollPos.x + docEl.clientWidth - width - 2;
-			if (y > maxTop) y = maxTop;
 			if (x > maxLeft) x = maxLeft;
 		}
 		return {x : x, y : y};
