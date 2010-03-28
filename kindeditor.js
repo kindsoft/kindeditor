@@ -2923,8 +2923,10 @@ KE.plugin['link'] = {
 		this.dialog.show();
 	},
 	exec : function(id) {
+		var g = KE.g[id];
 		KE.util.select(id);
-		var iframeDoc = KE.g[id].iframeDoc;
+		var range = g.keRange;
+		var iframeDoc = g.iframeDoc;
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var url = KE.$('hyperLink', dialogDoc).value;
 		var target = KE.$('linkType', dialogDoc).value;
@@ -2934,24 +2936,26 @@ KE.plugin['link'] = {
 			this.dialog.yesButton.focus();
 			return false;
 		}
-		if (KE.browser.WEBKIT && KE.g[id].keRange.getText() === '') {
-			KE.layout.hide(id);
-			KE.util.focus(id);
-			return false;
-		}
-		var node = KE.g[id].keRange.getParentElement();
+		var node = range.getParentElement();
 		while (node) {
 			if (node.tagName.toLowerCase() == 'a' || node.tagName.toLowerCase() == 'body') break;
 			node = node.parentNode;
 		}
 		node = node.parentNode;
-		iframeDoc.execCommand('createlink', false, '__ke_temp_url__');
-		var arr = node.getElementsByTagName('a');
-		for (var i = 0, l = arr.length; i < l; i++) {
-			if (arr[i].href.match(/\/?__ke_temp_url__$/)) {
-				arr[i].href = url;
-				arr[i].setAttribute('kesrc', url);
-				if (target) arr[i].target = target;
+		if (range.startNode.nodeType == 3 && range.startNode === range.endNode && range.startPos == range.endPos) {
+			var html = '<a href="' + url + '"';
+			if (target) html += ' target="' + target + '"';
+			html += '>' + url + '</a>';
+			KE.util.insertHtml(id, html);
+		} else {
+			iframeDoc.execCommand('createlink', false, '__ke_temp_url__');
+			var arr = node.getElementsByTagName('a');
+			for (var i = 0, l = arr.length; i < l; i++) {
+				if (arr[i].href.match(/\/?__ke_temp_url__$/)) {
+					arr[i].href = url;
+					arr[i].setAttribute('kesrc', url);
+					if (target) arr[i].target = target;
+				}
 			}
 		}
 		KE.history.add(id);
