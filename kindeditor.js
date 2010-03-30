@@ -343,14 +343,26 @@ KE.selection = function(win, doc) {
 			startPos = range.startOffset;
 			endNode = range.endContainer;
 			endPos = range.endOffset;
-			if (startNode.nodeType == 1 && typeof startNode.childNodes[startPos] != "undefined") {
+			if (startNode.nodeType == 1 && typeof startNode.childNodes[startPos] != 'undefined') {
 				startNode = startNode.childNodes[startPos];
 				startPos = 0;
 			}
-			if (endNode.nodeType == 1 && endPos > 0) {
-				if (typeof endNode.childNodes[endPos - 1] != "undefined") {
+			if (endNode.nodeType == 1) {
+				endPos = endPos == 0 ? 1 : endPos;
+				if (typeof endNode.childNodes[endPos - 1] != 'undefined') {
 					endNode = endNode.childNodes[endPos - 1];
 					endPos = (endNode.nodeType == 1) ? 0 : endNode.nodeValue.length;
+				}
+			}
+			if (startNode.nodeType == 1 && endNode.nodeType == 3 && endPos == 0 && endNode.previousSibling) {
+				var node = endNode.previousSibling;
+				while (node) {
+					if (node === startNode) {
+						endNode = startNode;
+						break;
+					}
+					if (node.childNodes.length != 1) break;
+					node = node.childNodes[0];
 				}
 			}
 		}
@@ -517,7 +529,7 @@ KE.range = function(doc) {
 	this.setTextStart = function(node, pos) {
 		var textNode = node;
 		KE.eachNode(node, function(n) {
-			if (KE.util.getNodeType(n) == 3 && n.nodeValue.length > 0) {
+			if (KE.util.getNodeType(n) == 3 && n.nodeValue.length > 0 || KE.util.getNodeType(n) == 88) {
 				textNode = n;
 				pos = 0;
 				return false;
@@ -537,9 +549,9 @@ KE.range = function(doc) {
 	this.setTextEnd = function(node, pos) {
 		var textNode = node;
 		KE.eachNode(node, function(n) {
-			if (KE.util.getNodeType(n) == 3 && n.nodeValue.length > 0) {
+			if (KE.util.getNodeType(n) == 3 && n.nodeValue.length > 0 || KE.util.getNodeType(n) == 88) {
 				textNode = n;
-				pos = n.nodeValue.length;
+				pos = KE.util.getNodeType(n) == 3 ? n.nodeValue.length : 0;
 			}
 			return true;
 		});
@@ -1369,10 +1381,15 @@ KE.util = {
 		return this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 	},
 	getPureData : function(id) {
-		var data = this.getData(id);
-		data = data.replace(/<(?!img|embed).*?>/ig, '');
-		data = data.replace(/&nbsp;/ig, ' ');
-		return data;
+		return this.extractText(this.getData(id));
+	},
+	extractText : function(str) {
+		str = str.replace(/<(?!img|embed).*?>/ig, '');
+		str = str.replace(/&nbsp;/ig, ' ');
+		return str;
+	},
+	isEmpty : function(id) {
+		return this.getPureData(id).replace(/\r\n|\n|\r/, '').replace(/^\s+|\s+$/, '') === '';
 	},
 	setData : function(id) {
 		if (KE.g[id].srcTextarea) KE.g[id].srcTextarea.value = this.getData(id);
@@ -1447,6 +1464,17 @@ KE.util = {
 		if (!KE.browser.IE && html === '') html = '<br />';
 		KE.g[id].iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, html);
 	},
+	selectImageWebkit : function(id, e, isSelection) {
+		if (KE.browser.WEBKIT) {
+			var target = e.srcElement || e.target;
+			if (target.tagName.toLowerCase() == 'img') {
+				if (isSelection) KE.util.selection(id);
+				var range = KE.g[id].keRange;
+				range.selectNode(target);
+				KE.g[id].keSel.addRange(range);
+			}
+		}
+	},
 	addTabEvent : function(id) {
 		KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
 			if (e.keyCode == 9) {
@@ -1463,6 +1491,7 @@ KE.util = {
 		if (g.contextmenuItems.length == 0) return;
 		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
 			KE.util.selection(id);
+			KE.util.selectImageWebkit(id, e, false);
 			var showFlag = false;
 			for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
 				var item = g.contextmenuItems[i];
@@ -2119,19 +2148,11 @@ KE.create = function(id, mode) {
 	var addHistory = function () {
 		KE.history.add(id, true);
 	};
-	var selectImageForWebkit = function(e) {
-		if (KE.browser.WEBKIT) {
-			var target = e.srcElement || e.target;
-			if (target.tagName.toLowerCase() == 'img') {
-				KE.util.selection(id);
-				var range = KE.g[id].keRange;
-				range.selectNode(target);
-				KE.g[id].keSel.addRange(range);
-			}
-		}
-	};
-	KE.event.add(iframeDoc, 'click', selectImageForWebkit);
-	KE.event.add(iframeDoc, 'contextmenu', selectImageForWebkit);
+	if (KE.browser.WEBKIT) {
+		KE.event.add(iframeDoc, 'click', function(e) {
+			KE.util.selectImageWebkit(id, e, true);
+		});
+	}
 	KE.event.add(iframeDoc, 'click', hideMenu);
 	KE.event.add(iframeDoc, 'click', updateToolbar);
 	KE.event.input(iframeDoc, addHistory);
@@ -2942,7 +2963,8 @@ KE.plugin['link'] = {
 			node = node.parentNode;
 		}
 		node = node.parentNode;
-		if (range.startNode.nodeType == 3 && range.startNode === range.endNode && range.startPos == range.endPos) {
+		var text = typeof KE.g[id].range.text != 'undefined' ? KE.g[id].range.text : KE.g[id].range.toString();
+		if (text === '') {
 			var html = '<a href="' + url + '"';
 			if (target) html += ' target="' + target + '"';
 			html += '>' + url + '</a>';
