@@ -2963,8 +2963,13 @@ KE.plugin['link'] = {
 			node = node.parentNode;
 		}
 		node = node.parentNode;
-		var text = typeof KE.g[id].range.text != 'undefined' ? KE.g[id].range.text : KE.g[id].range.toString();
-		if (text === '') {
+		var isEmpty = true;
+		if (KE.browser.IE) {
+			isEmpty = g.range.item ? false : (g.range.text === '');
+		} else {
+			isEmpty = (range.startNode.nodeType == 1 && range.startNode === range.endNode) ? false : (g.range.toString() === '');
+		}
+		if (isEmpty) {
 			var html = '<a href="' + url + '"';
 			if (target) html += ' target="' + target + '"';
 			html += '>' + url + '</a>';
