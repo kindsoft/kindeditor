@@ -2965,13 +2965,9 @@ KE.plugin['link'] = {
 			node = node.parentNode;
 		}
 		node = node.parentNode;
-		var isEmpty = true;
 		var isItem = (startNode.nodeType == 1 && startNode === endNode);
-		if (KE.browser.IE) {
-			isEmpty = isItem ? false : (g.range.text === '');
-		} else {
-			isEmpty = isItem ? false : (g.range.toString() === '');
-		}
+		var isEmpty = !isItem;
+		if (!isItem) isEmpty = KE.browser.IE ? g.range.text === '' : g.range.toString() === '';
 		if (isEmpty) {
 			var html = '<a href="' + url + '"';
 			if (target) html += ' target="' + target + '"';
