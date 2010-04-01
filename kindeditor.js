@@ -1841,7 +1841,7 @@ KE.dialog = function(arg){
 		else if (noButton) noButton.focus();
 		if (typeof arg.html != "undefined") {
 			var dialogDoc = KE.util.getIframeDoc(iframe);
-			var html = KE.util.getFullHtml(id, false);
+			var html = KE.util.getFullHtml(id);
 			dialogDoc.open();
 			dialogDoc.write(html);
 			dialogDoc.close();
