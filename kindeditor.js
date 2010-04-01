@@ -2947,6 +2947,8 @@ KE.plugin['link'] = {
 		var g = KE.g[id];
 		KE.util.select(id);
 		var range = g.keRange;
+		var startNode = range.startNode;
+		var endNode = range.endNode;
 		var iframeDoc = g.iframeDoc;
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var url = KE.$('hyperLink', dialogDoc).value;
@@ -2964,10 +2966,11 @@ KE.plugin['link'] = {
 		}
 		node = node.parentNode;
 		var isEmpty = true;
+		var isItem = (startNode.nodeType == 1 && startNode === endNode);
 		if (KE.browser.IE) {
-			isEmpty = g.range.item ? false : (g.range.text === '');
+			isEmpty = isItem ? false : (g.range.text === '');
 		} else {
-			isEmpty = (range.startNode.nodeType == 1 && range.startNode === range.endNode) ? false : (g.range.toString() === '');
+			isEmpty = isItem ? false : (g.range.toString() === '');
 		}
 		if (isEmpty) {
 			var html = '<a href="' + url + '"';
@@ -2983,6 +2986,19 @@ KE.plugin['link'] = {
 					arr[i].setAttribute('kesrc', url);
 					if (target) arr[i].target = target;
 				}
+			}
+			if (KE.browser.WEBKIT && isItem && startNode.tagName.toLowerCase() == 'img') {
+				var parent = startNode.parentNode;
+				if (parent.tagName.toLowerCase() != 'a') {
+					var a = KE.$$('a', iframeDoc);
+					parent.insertBefore(a, startNode);
+					a.appendChild(startNode);
+					parent = a;
+				}
+				parent.href = url;
+				parent.setAttribute('kesrc', url);
+				if (target) parent.target = target;
+				g.keSel.addRange(range);
 			}
 		}
 		KE.history.add(id);
@@ -3007,14 +3023,25 @@ KE.plugin['unlink'] = {
 		});
 	},
 	click : function(id) {
+		var g = KE.g[id];
 		KE.util.selection(id);
 		var linkNode = KE.plugin['link'].getSelectedNode(id);
 		if (!linkNode) return;
-		var range = KE.g[id].keRange;
+		var range = g.keRange;
 		range.selectTextNode(linkNode);
-		KE.g[id].keSel.addRange(range);
+		g.keSel.addRange(range);
 		KE.util.select(id);
 		KE.util.execCommand(id, 'unlink', null);
+		var startNode = range.startNode;
+		var endNode = range.endNode;
+		var isItem = (startNode.nodeType == 1 && startNode === endNode);
+		if (KE.browser.WEBKIT && isItem && startNode.tagName.toLowerCase() == 'img') {
+			var parent = startNode.parentNode;
+			if (parent.tagName.toLowerCase() == 'a') {
+				KE.util.removeParent(parent);
+				g.keSel.addRange(range);
+			}
+		}
 		KE.util.focus(id);
 	}
 };
