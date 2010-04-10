@@ -5,12 +5,12 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.4.2
+* @version 3.4.3
 *******************************************************************************/
 
 var KE = {};
 
-KE.version = '3.4.2';
+KE.version = '3.4.3';
 
 KE.lang = {
 	source : '切换模式',
@@ -1066,13 +1066,19 @@ KE.util = {
 		for (var i = 0, len = arr.length; i < len; i++) hash[arr[i]] = 1;
 		return hash;
 	},
-	escape : function(html) {
-		html = html.replace(/&/g, "&amp;");
-		html = html.replace(/</g, "&lt;");
-		html = html.replace(/>/g, "&gt;");
-		html = html.replace(/\xA0/g, "&nbsp;");
-		html = html.replace(/\x20/g, " ");
-		return html;
+	escape : function(str) {
+		str = str.replace(/&/g, '&amp;');
+		str = str.replace(/</g, '&lt;');
+		str = str.replace(/>/g, '&gt;');
+		str = str.replace(/"/g, '&quot;');
+		return str;
+	},
+	unescape : function(str) {
+		str = str.replace(/&lt;/g, '<');
+		str = str.replace(/&gt;/g, '>');
+		str = str.replace(/&quot;/g, '"');
+		str = str.replace(/&amp;/g, '&');
+		return str;
 	},
 	getScrollPos : function() {
 		var x, y;
@@ -1135,7 +1141,7 @@ KE.util = {
 		);
 	},
 	parseJson : function (text) {
-		// the code of parseJson from http://www.json.org/
+		// the parseJson code is from http://www.json.org/
 		var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
 		cx.lastIndex = 0;
 		if (cx.test(text)) {
@@ -2325,6 +2331,7 @@ KE.plugin['plainpaste'] = {
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var html = KE.$('textArea', dialogDoc).value;
 		html = KE.util.escape(html);
+		html = html.replace(/ /g, '&nbsp;');
 		html = html.replace(/\r\n|\n|\r/g, "<br />$&");
 		KE.util.insertHtml(id, html);
 		KE.layout.hide(id);

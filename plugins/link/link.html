@@ -56,7 +56,7 @@
 				var src = linkNode.href;
 				if (linkHtml.match(/kesrc="([^"]+)"/i)) src = RegExp.$1;
 				var target = linkNode.target;
-				hyperLink.value = src;
+				hyperLink.value = KE.util.unescape(src);
 				linkType.value = target == '_blank' ? target : '';
 				var range = KE.g[id].keRange;
 				range.selectTextNode(linkNode);
