@@ -16,9 +16,8 @@
 			cssPath : './index.css',
 			resizeMode : 0,
 			afterCreate : function(id) {
-				KE.create(id);
 				KE.toolbar.disable(id, []);
-				KE.g[id].iframeDoc.designMode = "off";
+				KE.readonly(id);
 				KE.g[id].newTextarea.disabled = true;
 			}
 		});

@@ -2038,6 +2038,13 @@ KE.history = {
 	}
 };
 
+KE.readonly = function(id, isReadonly) {
+	isReadonly = typeof isReadonly == 'undefined' ? true : false;
+	var g = KE.g[id];
+	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
+	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
+};
+
 KE.remove = function(id, mode) {
 	if (!KE.g[id].container) return false;
 	mode = (typeof mode == "undefined") ? 0 : mode;
@@ -2123,7 +2130,6 @@ KE.create = function(id, mode) {
 	KE.util.setDefaultPlugin(id);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
-	iframeDoc.designMode = "On";
 	var html = KE.util.getFullHtml(id);
 	iframeDoc.open();
 	iframeDoc.write(html);
@@ -2208,6 +2214,7 @@ KE.create = function(id, mode) {
 	KE.util.addTabEvent(id);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
+		KE.readonly(id, false);
 		KE.history.add(id, false);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);

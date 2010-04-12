@@ -32,7 +32,8 @@
 		iframeDoc.close();
 		KE.util.hideLoadingPage(id);
 		window.setTimeout(function() {
-			iframeDoc.designMode = "On";
+			if (KE.browser.IE) iframeDoc.body.contentEditable = 'true';
+			else iframeDoc.designMode = 'on';
 		}, 0);
 	}, window, document);
   </script>
