@@ -16,7 +16,17 @@
   <script type="text/javascript">
     KE.show({
         id : 'content1',
-        cssPath : './index.css'
+        cssPath : './index.css',
+		afterCreate : function(id) {
+			KE.event.ctrl(document, 13, function() {
+				KE.util.setData(id);
+				window.example.submit();
+			});
+			KE.event.ctrl(KE.g[id].iframeDoc, 13, function() {
+				KE.util.setData(id);
+				window.example.submit();
+			});
+		}
     });
   </script>
 </head>
@@ -35,7 +45,7 @@ KindEditor非常适合在CMS、商城、论坛、博客、Wiki、电子邮件等
     </div>
     <input type="button" name="button" value="取得内容" onclick="javascript:alert(KE.util.getData('content1'));" />
     <input type="button" name="button" value="取得纯文本" onclick="javascript:alert(KE.util.getPureData('content1'));" />
-    <input type="submit" name="button" value="提交内容" />
+    <input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
   </form>
 </body>
 </html>
