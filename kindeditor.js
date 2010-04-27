@@ -1684,10 +1684,10 @@ KE.dialog = function(arg){
 	this.widthMargin = 20;
 	this.heightMargin = 90;
 	this.zIndex = 19811214;
-	var width = arg.width + this.widthMargin;
-	var height = arg.height + this.heightMargin;
 	var minTop, minLeft, maxTop, maxLeft;
 	var setLimitNumber = function() {
+		var width = arg.width + this.widthMargin;
+		var height = arg.height + this.heightMargin;
 		var docEl = KE.util.getDocumentElement();
 		var pos = KE.util.getScrollPos();
 		minTop = pos.y;
@@ -1696,6 +1696,8 @@ KE.dialog = function(arg){
 		maxLeft = pos.x + docEl.clientWidth - width - 2;
 	};
 	this.getPos = function() {
+		var width = arg.width + this.widthMargin;
+		var height = arg.height + this.heightMargin;
 		var id = arg.id;
 		var g = KE.g[id];
 		var x = 0, y = 0;
@@ -1734,6 +1736,8 @@ KE.dialog = function(arg){
 	};
 	this.show = function() {
 		if (arg.beforeShow) arg.beforeShow(id);
+		var width = arg.width + this.widthMargin;
+		var height = arg.height + this.heightMargin;
 		var self = this;
 		var id = arg.id;
 		var div = KE.$$('div');
@@ -1839,7 +1843,9 @@ KE.dialog = function(arg){
 			};
 			bottomDiv.appendChild(previewButton);
 		}
-		div.appendChild(bottomDiv);
+		if (arg.yesButton || arg.noButton || arg.previewButton) {
+			div.appendChild(bottomDiv);
+		}
 		KE.g[id].hideDiv.style.display = '';
 		KE.g[id].hideDiv.appendChild(div);
 		window.focus();
