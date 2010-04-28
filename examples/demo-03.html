@@ -16,11 +16,13 @@
   <script type="text/javascript">
     KE.init({
         id : 'content3',
-        cssPath : './index.css'
+        cssPath : './index.css',
+		afterCreate : function(id) {
+			KE.util.focus(id);
+		}
     });
     function createEditor(id) {
         KE.create(id);
-        KE.util.focus(id);
     }
     function removeEditor(id) {
         KE.util.setData(id);
