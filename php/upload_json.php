@@ -51,7 +51,7 @@ if (empty($_FILES) === false) {
 		alert("上传文件扩展名是不允许的扩展名。");
 	}
 	//新文件名
-	$new_file_name = date("YmdHms") . '_' . rand(10000, 99999) . '.' . $file_ext;
+	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;
 	//移动文件
 	$file_path = $save_path . $new_file_name;
 	if (move_uploaded_file($tmp_name, $file_path) === false) {
