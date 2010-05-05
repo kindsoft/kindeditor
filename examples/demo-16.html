@@ -13,11 +13,16 @@
 	<script type="text/javascript">
 		KE.init({
 			id : 'content1',
-			cssPath : './index.css'
+			cssPath : './index.css',
+			afterCreate : function(id) {
+				KE.util.focus(id);
+			}
 		});
 		KE.event.ready(function() {
 			KE.create('content1');
-			KE.plugin['fullscreen'].click('content1');
+			setTimeout(function() {
+				KE.plugin['fullscreen'].click('content1');
+			}, 1);
 		});
 	</script>
   </head>
