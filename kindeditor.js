@@ -1368,7 +1368,7 @@ KE.util = {
 	getData : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
-			g.iframeDoc.body.innerHTML = g.newTextarea.value;
+			g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, g.newTextarea.value);
 		}
 		var html = this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 		html = html.replace(/^\s*<br[^>]*>\s*$/ig, '');
@@ -1382,7 +1382,7 @@ KE.util = {
 	getSrcData : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
-			g.iframeDoc.body.innerHTML = g.newTextarea.value;
+			g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, g.newTextarea.value);
 		}
 		return this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 	},
@@ -1468,7 +1468,10 @@ KE.util = {
 	setFullHtml : function(id, html) {
 		html = html.replace(/\r\n|\n|\r/g, '');
 		if (!KE.browser.IE && html === '') html = '<br />';
-		KE.g[id].iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, html);
+		var html = KE.util.execSetHtmlHooks(id, html);
+		KE.g[id].iframeDoc.body.innerHTML = html;
+		KE.g[id].newTextarea.value = html;
+		KE.g[id].newTextarea.value = KE.util.getData(id);
 	},
 	selectImageWebkit : function(id, e, isSelection) {
 		if (KE.browser.WEBKIT) {
