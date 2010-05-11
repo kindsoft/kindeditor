@@ -1884,6 +1884,7 @@ KE.dialog = function(arg){
 		KE.g[id].previewButton = previewButton;
 		if (!arg.loadingMode) KE.util.hideLoadingPage(id);
 		if (arg.afterShow) arg.afterShow(id);
+		if (KE.g[id].afterDialogCreate) KE.g[id].afterDialogCreate(id);
 	};
 };
 
