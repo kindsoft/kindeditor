@@ -294,7 +294,7 @@ KE.selection = function(win, doc) {
 					var startPos = 0;
 					var isEnd = false;
 					var testRange = range.duplicate();
-					testRange.moveToElementText(parentNode);
+					KE.util.moveToElementText(testRange, parentNode);
 					for (var i = 0, len = nodes.length; i < len; i++) {
 						var node = nodes[i];
 						var cmp = testRange.compareEndPoints('StartToStart', pointRange);
@@ -311,7 +311,7 @@ KE.selection = function(win, doc) {
 						}
 						if (node.nodeType == 1) {
 							var nodeRange = range.duplicate();
-							nodeRange.moveToElementText(node);
+							KE.util.moveToElementText(nodeRange, node);
 							testRange.setEndPoint('StartToEnd', nodeRange);
 							if (isEnd) startPos += nodeRange.text.length;
 							else startPos = 0;
@@ -326,7 +326,7 @@ KE.selection = function(win, doc) {
 						return {node: startNode, pos: startNode.nodeType == 1 ? 1 : startNode.nodeValue.length};
 					}
 					testRange = range.duplicate();
-					testRange.moveToElementText(parentNode);
+					KE.util.moveToElementText(testRange, parentNode);
 					testRange.setEndPoint('StartToEnd', pointRange);
 					startPos -= testRange.text.replace(/\r\n|\n|\r/g, '').length;
 					return {node: startNode, pos: startPos};
@@ -380,7 +380,7 @@ KE.selection = function(win, doc) {
 				var range = KE.util.createRange(doc);
 				var node = isStart ? keRange.startNode : keRange.endNode;
 				if (node.nodeType == 1) {
-					range.moveToElementText(node);
+					KE.util.moveToElementText(range, node);
 					range.collapse(isStart);
 				} else if (node.nodeType == 3) {
 					range = KE.util.getNodeStartRange(doc, node);
@@ -394,7 +394,7 @@ KE.selection = function(win, doc) {
 				if (node == keRange.endNode && KE.util.getNodeType(node) == 1 && KE.util.getNodeTextLength(node) == 0) {
 					var temp = doc.createTextNode(" ");
 					node.appendChild(temp);
-					this.range.moveToElementText(node);
+					KE.util.moveToElementText(this.range, node);
 					this.range.collapse(false);
 					this.range.select();
 					node.removeChild(temp);
@@ -485,7 +485,7 @@ KE.range = function(doc) {
 					var range = KE.util.createRange(doc);
 					var type = KE.util.getNodeType(node);
 					if (type == 1) {
-						range.moveToElementText(node);
+						KE.util.moveToElementText(range, node);
 						range.collapse(isStart);
 					} else if (type == 3) {
 						range = KE.util.getNodeStartRange(doc, node);
@@ -1163,6 +1163,14 @@ KE.util = {
 	getNodeType : function(node) {
 		return (node.nodeType == 1 && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
 	},
+	moveToElementText : function (range, el) {
+		var node = el;
+		while (node) {
+			if (node.nodeName.toLowerCase() === 'marquee') return;
+			node = node.parentNode;
+		}
+		range.moveToElementText(el);
+	},
 	getNodeTextLength : function(node) {
 		var type = KE.util.getNodeType(node);
 		if (type == 1) {
@@ -1176,7 +1184,7 @@ KE.util = {
 		var range = KE.util.createRange(doc);
 		var type = node.nodeType;
 		if (type == 1) {
-			range.moveToElementText(node);
+			KE.util.moveToElementText(range, node);
 			return range;
 		} else if (type == 3) {
 			var offset = 0;
@@ -1184,7 +1192,7 @@ KE.util = {
 			while (sibling) {
 				if (sibling.nodeType == 1) {
 					var nodeRange = KE.util.createRange(doc);
-					nodeRange.moveToElementText(sibling);
+					KE.util.moveToElementText(nodeRange, sibling);
 					range.setEndPoint('StartToEnd', nodeRange);
 					range.moveStart('character', offset);
 					return range;
@@ -1193,7 +1201,7 @@ KE.util = {
 				}
 				sibling = sibling.previousSibling;
 			}
-			range.moveToElementText(node.parentNode);
+			KE.util.moveToElementText(range, node.parentNode);
 			range.moveStart('character', offset);
 			return range;
 		}
