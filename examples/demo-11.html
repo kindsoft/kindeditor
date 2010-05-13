@@ -19,17 +19,10 @@
 		<script type="text/javascript">
 			KE.show({
 				id : 'content11',
-				cssPath : './index.css',
-				afterCreate : function(id){
-					//可视化模式下输入文字时
-					KE.event.input(KE.g[id].iframeDoc, function(){
-						KE.$('word_count').innerHTML = KE.util.getData(id).length;
-					});
-					//代码模式下输入文字时
-					KE.event.input(KE.g[id].newTextarea, function(){
-						KE.$('word_count').innerHTML = KE.util.getData(id).length;
-					});
-				}
+				cssPath : './index.css'
+			});
+			KE.onchange('content11', function(id) {
+				KE.$('word_count').innerHTML = KE.util.getData(id).length;
 			});
 		</script>
 	</head>

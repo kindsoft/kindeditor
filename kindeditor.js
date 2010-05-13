@@ -2038,6 +2038,10 @@ KE.toolbar = {
 KE.history = {
 	add : function(id, minChangeFlag) {
 		var g = KE.g[id];
+		var handlers = KE.g[id].onchangeHandlerStack;
+		for (var i = 0, len = handlers.length; i < len; i++) {
+			handlers[i]();
+		}
 		var html = KE.util.getSrcData(id);
 		if (g.undoStack.length > 0) {
 			var prevHtml = g.undoStack[g.undoStack.length - 1];
@@ -2095,6 +2099,7 @@ KE.remove = function(id, mode) {
 	KE.g[id].contextmenuItems = [];
 	KE.g[id].getHtmlHooks = [];
 	KE.g[id].setHtmlHooks = [];
+	KE.g[id].onchangeHandlerStack = [];
 };
 
 KE.create = function(id, mode) {
@@ -2252,6 +2257,15 @@ KE.create = function(id, mode) {
 	}, 0);
 };
 
+KE.onchange = function(id, func) {
+	function handler() {
+		func(id);
+	};
+	KE.g[id].onchangeHandlerStack.push(handler);
+	KE.event.input(KE.g[id].iframeDoc, handler);
+	KE.event.input(KE.g[id].newTextarea, handler);
+};
+
 KE.init = function(args) {
 	var g = KE.g[args.id] = args;
 	g.config = {};
@@ -2261,6 +2275,7 @@ KE.init = function(args) {
 	g.contextmenuItems = [];
 	g.getHtmlHooks = [];
 	g.setHtmlHooks = [];
+	g.onchangeHandlerStack = [];
 	KE.each(KE.setting, function(key, val) {
 		g[key] = (typeof args[key] == 'undefined') ? val : args[key];
 		g.config[key] = g[key];
