@@ -1551,6 +1551,12 @@ KE.util = {
 			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
 			KE.util.selection(id);
 			var parent = g.keRange.getParentElement();
+			// return if parent in MARQUEE element
+			var node = parent;
+			while (node) {
+				if (node.nodeName.toLowerCase() === 'marquee') return;
+				node = node.parentNode;
+			}
 			var tagName = parent.tagName.toLowerCase();
 			if (g.newlineTag.toLowerCase() == 'br') {
 				if (!KE.util.inArray(tagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'])) {

@@ -12,6 +12,7 @@ ver 3.4.3
 * BUG: 修改了PHP上传程序日期格式不正确的问题。
 * BUG: 修改了在IE上代码模式下全屏本地URL自动变成绝对URL的问题。
 * BUG: 修改了在代码模式下KE.util.setFullHtml函数不显示HTML内容的问题。
+* BUG: 修改了在MARQUEE元素里回车换行出现JS错误的问题。
 
 ver 3.4.2 (2010-04-04)
 * 增加: 添加了KE.util.isEmpty函数，用于判断编辑器是否有可见内容。
