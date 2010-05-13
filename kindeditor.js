@@ -196,6 +196,14 @@ KE.event = {
 				return false;
 			}
 		});
+		function handler (e) {
+			window.setTimeout(function() {
+				func(e);
+			}, 1);
+		}
+		var newElement = (el.nodeName == '#document') ? el.body : el;
+		this.add(newElement, 'paste', handler);
+		this.add(newElement, 'cut', handler);
 	},
 	ctrl : function(el, key, func) {
 		key = key.toString().match(/^\d{2,}$/) ? key : key.toUpperCase().charCodeAt(0);
