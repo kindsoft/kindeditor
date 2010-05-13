@@ -2748,22 +2748,20 @@ KE.plugin['flash'] = {
 		this.dialog.show();
 	},
 	check : function(id, url, width, height) {
+		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		if (!url.match(/^.{3,}$/)) {
 			alert(KE.lang['invalidUrl']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('url', dialogDoc).focus();
 			return false;
 		}
 		if (!width.match(/^\d*$/)) {
 			alert(KE.lang['invalidWidth']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('width', dialogDoc).focus();
 			return false;
 		}
 		if (!height.match(/^\d*$/)) {
 			alert(KE.lang['invalidHeight']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('height', dialogDoc).focus();
 			return false;
 		}
 		return true;
@@ -2845,28 +2843,25 @@ KE.plugin['image'] = {
 		var width = KE.$('imgWidth', dialogDoc).value;
 		var height = KE.$('imgHeight', dialogDoc).value;
 		var title = KE.$('imgTitle', dialogDoc).value;
-		var url = '';
+		var urlBox;
 		if (type == 2) {
-			url = KE.$('imgFile', dialogDoc).value;
+			urlBox = KE.$('imgFile', dialogDoc);
 		} else {
-			url = KE.$('url', dialogDoc).value;
+			urlBox = KE.$('url', dialogDoc);
 		}
-		if (!url.match(/\.(jpg|jpeg|gif|bmp|png)(\s|$)/i)) {
+		if (!urlBox.value.match(/\.(jpg|jpeg|gif|bmp|png)(\s|$)/i)) {
 			alert(KE.lang['invalidImg']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			urlBox.focus();
 			return false;
 		}
 		if (!width.match(/^\d*$/)) {
 			alert(KE.lang['invalidWidth']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('imgWidth', dialogDoc).focus();
 			return false;
 		}
 		if (!height.match(/^\d*$/)) {
 			alert(KE.lang['invalidHeight']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('imgHeight', dialogDoc).focus();
 			return false;
 		}
 		return true;
@@ -2993,8 +2988,7 @@ KE.plugin['link'] = {
 		var target = KE.$('linkType', dialogDoc).value;
 		if (!url.match(/.+/) || url.match(/^\w+:\/\/\/?$/)) {
 			alert(KE.lang['invalidUrl']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('hyperLink', dialogDoc).focus();
 			return false;
 		}
 		var node = range.getParentElement();
@@ -3133,22 +3127,20 @@ KE.plugin['media'] = {
 		this.dialog.show();
 	},
 	check : function(id, url, width, height) {
+		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		if (!url.match(/^.{3,}\.(swf|flv|mp3|wav|wma|wmv|mid|avi|mpg|mpeg|asf|rm|rmvb)(\?|$)/i)) {
 			alert(KE.lang['invalidMedia']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('url', dialogDoc).focus();
 			return false;
 		}
 		if (!width.match(/^\d*$/)) {
 			alert(KE.lang['invalidWidth']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('width', dialogDoc).focus();
 			return false;
 		}
 		if (!height.match(/^\d*$/)) {
 			alert(KE.lang['invalidHeight']);
-			window.focus();
-			this.dialog.yesButton.focus();
+			KE.$('height', dialogDoc).focus();
 			return false;
 		}
 		return true;

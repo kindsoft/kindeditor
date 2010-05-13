@@ -6,6 +6,7 @@
 ver 3.4.3
 * 增加: 增加了afterDialogCreate属性，设置弹出dialog后执行的回调函数。
 * 改善: 弹出框未指定任何按钮(yesButton, noButton, previewButton)时，不显示底部DIV。
+* 改善: 确定alert框后将焦点设置到输入错误的输入框。
 * BUG: 修改了重复编辑超级链接时每次都添加&amp;的问题。
 * BUG: 修改了在IE上右键菜单没有复制、剪切项目的问题。
 * BUG: 修改了在IE上没有格式化<font color=#000>代码的问题。
