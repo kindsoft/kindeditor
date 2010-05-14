@@ -2429,6 +2429,38 @@ KE.plugin['wordpaste'] = {
 		this.dialog.show();
 	},
 	exec : function(id) {
+		var htmlTags = {
+			font : ['color', 'size', 'face', '.background-color'],
+			span : [
+				'.color', '.background-color', '.font-size', '.font-family', '.background',
+				'.font-weight', '.font-style', '.text-decoration', '.vertical-align'
+			],
+			div : [
+				'align', '.border', '.margin', '.padding', '.text-align', '.color',
+				'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
+				'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
+			],
+			table: [
+				'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align',
+				'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
+				'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background'
+			],
+			'td,th': [
+				'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+				'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
+				'.font-style', '.text-decoration', '.vertical-align', '.background'
+			],
+			a : ['href', 'target', 'name'],
+			embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', '/'],
+			img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
+			hr : ['/'],
+			br : ['/'],
+			'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
+				'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+				'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
+			],
+			'tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
+		};
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var wordIframe = KE.$('wordIframe', dialogDoc);
 		var str = KE.util.getIframeDoc(wordIframe).body.innerHTML;
@@ -2440,7 +2472,7 @@ KE.plugin['wordpaste'] = {
 		str = str.replace(/<xml>(\n|.)*?<\/xml>/ig, "");
 		str = str.replace(/\r\n|\n|\r/ig, "");
 		str = KE.util.execGetHtmlHooks(id, str);
-		str = KE.format.getHtml(str, KE.g[id].htmlTags, KE.g[id].urlType);
+		str = KE.format.getHtml(str, htmlTags, KE.g[id].urlType);
 		KE.util.insertHtml(id, str);
 		KE.layout.hide(id);
 		KE.util.focus(id);
