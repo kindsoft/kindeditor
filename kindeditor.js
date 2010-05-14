@@ -1426,20 +1426,32 @@ KE.util = {
 	},
 	click : function(id, cmd) {
 		KE.layout.hide(id);
-		KE.util.focus(id);
 		KE.plugin[cmd].click(id);
 	},
 	selection : function(id) {
+		if (!KE.browser.IE || !KE.g[id].keRange) {
+			this.setSelection(id);
+		}
+	},
+	setSelection : function(id) {
 		var g = KE.g[id];
-		g.keSel = new KE.selection(g.iframeWin, g.iframeDoc);
-		g.keRange = g.keSel.keRange;
-		g.sel = g.keSel.sel;
-		g.range = g.keSel.range;
+		var keSel = new KE.selection(g.iframeWin, g.iframeDoc);
+		if (!g.keRange) {
+			KE.util.focus(id);
+		}
+		if (!KE.browser.IE || keSel.range.parentElement().ownerDocument === g.iframeDoc) {
+			g.keSel = keSel;
+			g.keRange = g.keSel.keRange;
+			g.sel = g.keSel.sel;
+			g.range = g.keSel.range;
+		}
 	},
 	select : function(id) {
-		if (KE.browser.IE) KE.g[id].range.select();
+		if (KE.browser.IE && KE.g[id].range) KE.g[id].range.select();
 	},
 	execCommand : function(id, cmd, value) {
+		KE.util.focus(id);
+		KE.util.select(id);
 		try {
 			KE.g[id].iframeDoc.execCommand(cmd, false, value);
 		} catch(e) {}
@@ -1503,7 +1515,7 @@ KE.util = {
 	addTabEvent : function(id) {
 		KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
 			if (e.keyCode == 9) {
-				KE.util.selection(id);
+				KE.util.setSelection(id);
 				KE.util.insertHtml(id, '　　');
 				if (e.preventDefault) e.preventDefault();
 				if (e.stopPropagation) e.stopPropagation();
@@ -1557,7 +1569,7 @@ KE.util = {
 		if (KE.browser.OPERA) return;
 		KE.event.add(g.iframeDoc, 'keydown', function(e) {
 			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
-			KE.util.selection(id);
+			KE.util.setSelection(id);
 			var parent = g.keRange.getParentElement();
 			// return if parent in MARQUEE element
 			var node = parent;
@@ -2249,10 +2261,17 @@ KE.create = function(id, mode) {
 	KE.util.addContextmenuEvent(id);
 	KE.util.addNewlineEvent(id);
 	KE.util.addTabEvent(id);
+	function setSelectionHandler() {
+		KE.util.setSelection(id);
+	}
+	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
+	KE.event.add(document, 'mouseup', setSelectionHandler);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
 		KE.readonly(id, false);
 		KE.history.add(id, false);
+		KE.util.selection(id);
+		KE.util.select(id);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);
 };

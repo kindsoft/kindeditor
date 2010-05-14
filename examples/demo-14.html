@@ -16,10 +16,7 @@
           cssPath : './index.css'
       });
       function clearEditor(id) {
-          KE.g[id].iframeDoc.open();
-          KE.g[id].iframeDoc.write(KE.util.getFullHtml(id));
-          KE.g[id].iframeDoc.close();
-          KE.g[id].newTextarea.value = '';
+          KE.util.setFullHtml(id, '');
       }
       function insertHtml(id, html) {
           KE.util.focus(id);
