@@ -2263,9 +2263,10 @@ KE.create = function(id, mode) {
 	KE.util.addTabEvent(id);
 	function setSelectionHandler() {
 		KE.util.setSelection(id);
+		console.log(KE.g[id].keRange);
 	}
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
-	KE.event.add(document, 'mouseup', setSelectionHandler);
+	KE.event.add(document, 'mousedown', setSelectionHandler);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
 		KE.readonly(id, false);
