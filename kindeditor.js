@@ -1439,7 +1439,7 @@ KE.util = {
 		if (!g.keRange) {
 			KE.util.focus(id);
 		}
-		if (!KE.browser.IE || keSel.range.parentElement().ownerDocument === g.iframeDoc) {
+		if (!KE.browser.IE || keSel.range.item || keSel.range.parentElement().ownerDocument === g.iframeDoc) {
 			g.keSel = keSel;
 			g.keRange = g.keSel.keRange;
 			g.sel = g.keSel.sel;
@@ -1464,7 +1464,7 @@ KE.util = {
 		if (isStart) html = imgStr + html;
 		else html += imgStr;
 		if (KE.browser.IE) {
-			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
+			if (g.range.item) g.range.item(0).outerHTML = html;
 			else g.range.pasteHTML(html);
 		} else {
 			g.range.deleteContents();
@@ -1483,8 +1483,13 @@ KE.util = {
 		if (!g.wyswygMode) return;
 		if (KE.browser.IE) {
 			this.select(id);
-			if (g.sel.type.toLowerCase() == 'control') g.range.item(0).outerHTML = html;
-			else g.range.pasteHTML(html);
+			if (g.range.item) {
+				try {
+					g.range.item(0).outerHTML = html;
+				} catch(e) {}
+			} else {
+				g.range.pasteHTML(html);
+			}
 		} else if (KE.browser.GECKO && KE.browser.VERSION < 3) {
 			this.execCommand(id, 'inserthtml', html);
 			return;
