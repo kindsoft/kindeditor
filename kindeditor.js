@@ -2059,10 +2059,10 @@ KE.history = {
 		for (var i = 0, len = handlers.length; i < len; i++) {
 			handlers[i]();
 		}
-		var html = KE.util.getSrcData(id);
+		var html = KE.util.getData(id);
 		if (g.undoStack.length > 0) {
 			var prevHtml = g.undoStack[g.undoStack.length - 1];
-			if (html == prevHtml) return;
+			if (html === prevHtml) return;
 			if (minChangeFlag && Math.abs(html.length - prevHtml.length) < g.minChangeSize) return;
 		}
 		g.undoStack.push(html);
@@ -2071,7 +2071,7 @@ KE.history = {
 	undo : function(id) {
 		var g = KE.g[id];
 		if (g.undoStack.length == 0) return;
-		var html = KE.util.getSrcData(id);
+		var html = KE.util.getData(id);
 		g.redoStack.push(html);
 		var prevHtml = g.undoStack.pop();
 		if (html === prevHtml && g.undoStack.length > 0) {
@@ -2083,7 +2083,7 @@ KE.history = {
 	redo : function(id) {
 		var g = KE.g[id];
 		if (g.redoStack.length == 0) return;
-		var html = KE.util.getSrcData(id);
+		var html = KE.util.getData(id);
 		g.undoStack.push(html);
 		var nextHtml = g.redoStack.pop();
 		g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, nextHtml);
@@ -2335,6 +2335,10 @@ KE.plugin['undo'] = {
 			KE.plugin['undo'].click(id);
 			KE.util.focus(id);
 		});
+		KE.event.ctrl(KE.g[id].newTextarea, 'Z', function(e) {
+			KE.plugin['undo'].click(id);
+			KE.util.focus(id);
+		});
 	},
 	click : function(id) {
 		KE.history.undo(id);
@@ -2344,6 +2348,10 @@ KE.plugin['undo'] = {
 KE.plugin['redo'] = {
 	init : function(id) {
 		KE.event.ctrl(KE.g[id].iframeDoc, 'Y', function(e) {
+			KE.plugin['redo'].click(id);
+			KE.util.focus(id);
+		});
+		KE.event.ctrl(KE.g[id].newTextarea, 'Y', function(e) {
 			KE.plugin['redo'].click(id);
 			KE.util.focus(id);
 		});
