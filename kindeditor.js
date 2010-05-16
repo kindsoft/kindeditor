@@ -1447,7 +1447,7 @@ KE.util = {
 		}
 	},
 	select : function(id) {
-		if (KE.browser.IE && KE.g[id].range) KE.g[id].range.select();
+		if (KE.browser.IE && KE.g[id].wyswygMode && KE.g[id].range) KE.g[id].range.select();
 	},
 	execCommand : function(id, cmd, value) {
 		KE.util.focus(id);
@@ -2284,8 +2284,7 @@ KE.create = function(id, mode) {
 		KE.util.setFullHtml(id, srcTextarea.value);
 		KE.readonly(id, false);
 		KE.history.add(id, false);
-		KE.util.selection(id);
-		KE.util.select(id);
+		if (mode > 0) KE.util.focus(id);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);
 };

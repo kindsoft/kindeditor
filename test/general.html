@@ -35,6 +35,7 @@
   <h3>默认模式</h3>
   <form name="example" method="post" action="./../php/demo.php">
 	<div class="editor">
+	  <textarea></textarea>
 	  <textarea id="content1" name="content" style="width:900px;height:250px;visibility:hidden;"><script>alert(1);</script>
 <p><strong>月下独酌</strong> - 李白</p>
 <p>花间一壶酒，独酌无相亲。</p>
@@ -45,7 +46,7 @@
 <p>醒时同交欢，醉后各分散。</p>
 <p>永结无情游，相期邈云汉。</p>
 </textarea>
-<textarea id="content_html" style="width:900px;height:200px;display:none;"></textarea>
+<textarea id="content_html" style="width:900px;height:100px;"></textarea>
 	</div>
 	<input type="button" name="button" value="取得内容" onclick="javascript:alert(KE.util.getData('content1'));" />
 	<input type="button" name="button" value="取得纯文本" onclick="javascript:alert(KE.util.getPureData('content1'));" />
