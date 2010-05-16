@@ -1495,7 +1495,13 @@ KE.util = {
 			if (g.range.item) {
 				try {
 					g.range.item(0).outerHTML = html;
-				} catch(e) {}
+				} catch(e) {
+					var el = g.range.item(0);
+					var parent = el.parentNode;
+					parent.removeChild(el);
+					if (parent.nodeName.toLowerCase() != 'body') parent = parent.parentNode;
+					this.innerHtml(parent, html + parent.innerHTML);
+				}
 			} else {
 				g.range.pasteHTML(html);
 			}
