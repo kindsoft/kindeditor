@@ -102,7 +102,7 @@ KE.setting = {
 	filterMode : false,
 	urlType : '',
 	skinType : 'default',
-	newlineTag : 'br',
+	newlineTag : 'p',
 	dialogAlignType : 'page',
 	cssPath : '',
 	skinsPath : KE.scriptPath + 'skins/',
