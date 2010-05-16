@@ -1384,7 +1384,7 @@ KE.util = {
 	getData : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
-			g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, g.newTextarea.value);
+			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
 		}
 		var html = this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 		html = html.replace(/^\s*<br[^>]*>\s*$/ig, '');
@@ -1398,7 +1398,7 @@ KE.util = {
 	getSrcData : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
-			g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, g.newTextarea.value);
+			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
 		}
 		return this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
 	},
@@ -1458,9 +1458,18 @@ KE.util = {
 		KE.toolbar.updateState(id);
 		KE.history.add(id, false);
 	},
+	innerHtml : function(el, html) {
+		if (KE.browser.IE) {
+			el.innerHTML = '<img id="__ke_temp_tag__" width="0" height="0" />' + html;
+			var temp = KE.$('__ke_temp_tag__', el.ownerDocument);
+			if (temp) temp.parentNode.removeChild(temp);
+		} else {
+			el.innerHTML = html;
+		}
+	},
 	pasteHtml : function(id, html, isStart) {
 		var g = KE.g[id];
-		var imgStr = '<img id="__ke_temp_tag__" style="display:none;" />';
+		var imgStr = '<img id="__ke_temp_tag__" width="0" height="0" />';
 		if (isStart) html = imgStr + html;
 		else html += imgStr;
 		if (KE.browser.IE) {
@@ -1502,7 +1511,7 @@ KE.util = {
 		html = html.replace(/\r\n|\n|\r/g, '');
 		if (!KE.browser.IE && html === '') html = '<br />';
 		var html = KE.util.execSetHtmlHooks(id, html);
-		KE.g[id].iframeDoc.body.innerHTML = html;
+		this.innerHtml(KE.g[id].iframeDoc.body, html);
 		KE.g[id].newTextarea.value = html;
 		KE.g[id].newTextarea.value = KE.util.getData(id);
 	},
@@ -1667,14 +1676,14 @@ KE.menu = function(arg){
 		cDiv.onmouseover = function() { this.className = 'ke-' + self.type + '-selected'; }
 		cDiv.onmouseout = function() { this.className = 'ke-' + self.type + '-noselected'; }
 		cDiv.onclick = event;
-		cDiv.innerHTML = html;
+		KE.util.innerHtml(cDiv, html);
 		this.append(cDiv);
 	};
 	this.append = function(el) {
 		this.div.appendChild(el);
 	};
 	this.insert = function(html) {
-		this.div.innerHTML = html;
+		KE.util.innerHtml(this.div, html);
 	};
 	this.hide = function() {
 		KE.layout.hide(arg.id);
@@ -1899,7 +1908,7 @@ KE.dialog = function(arg){
 			dialogDoc.open();
 			dialogDoc.write(html);
 			dialogDoc.close();
-			dialogDoc.body.innerHTML = arg.html;
+			KE.util.innerHtml(dialogDoc.body, arg.html);
 		} else {
 			if (typeof arg.file == "undefined") {
 				iframe.src = KE.g[id].pluginsPath + arg.cmd + '.html?ver=' + KE.version;
@@ -2077,7 +2086,7 @@ KE.history = {
 		if (html === prevHtml && g.undoStack.length > 0) {
 			prevHtml = g.undoStack.pop();
 		}
-		g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, prevHtml);
+		KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, prevHtml));
 		g.newTextarea.value = KE.util.execGetHtmlHooks(id, prevHtml);
 	},
 	redo : function(id) {
@@ -2086,7 +2095,7 @@ KE.history = {
 		var html = KE.util.getData(id);
 		g.undoStack.push(html);
 		var nextHtml = g.redoStack.pop();
-		g.iframeDoc.body.innerHTML = KE.util.execSetHtmlHooks(id, nextHtml);
+		KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, nextHtml));
 		g.newTextarea.value = KE.util.execGetHtmlHooks(id, nextHtml);
 	}
 };
