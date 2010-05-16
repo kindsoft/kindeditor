@@ -2280,9 +2280,9 @@ KE.create = function(id, mode) {
 	}
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
 	KE.event.add(document, 'mousedown', setSelectionHandler);
+	KE.readonly(id, false);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
-		KE.readonly(id, false);
 		KE.history.add(id, false);
 		if (mode > 0) KE.util.focus(id);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
