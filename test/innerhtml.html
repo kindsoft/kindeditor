@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>innerHTML Test</title>
+		<script charset="utf-8" src="../../kindeditor.js"></script>
+		<script type="text/javascript">
+			KE.event.ready(function() {
+				//KE.$('test01').contentEditable = true;
+				KE.util.innerHtml(KE.$('test01'), '<p><hr></p>');
+				KE.$('result01').appendChild(document.createTextNode(KE.$('test01').innerHTML));
+
+				KE.util.innerHtml(KE.$('test02'), '<script><\/script>');
+				KE.$('result02').appendChild(document.createTextNode(KE.$('test02').innerHTML));
+			});
+		</script>
+	</head>
+	<body>
+		<h3>Test01(&lt;p&gt;&lt;hr&gt;&lt;/p&gt;)</h3>
+		<div id="test01"></div>
+		<h3>Result:</h3>
+		<div id="result01"></div>
+		<h3>Test02(&lt;script&gt;&lt;/script&gt;)</h3>
+		<div id="test02"></div>
+		<h3>Result:</h3>
+		<div id="result02"></div>
+	</body>
+</html>
