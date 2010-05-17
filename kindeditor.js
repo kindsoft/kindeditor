@@ -274,6 +274,7 @@ KE.selection = function(win, doc) {
 	this.sel = null;
 	this.range = null;
 	this.keRange = null;
+	this.isControl = false;
 	this.init = function() {
 		var sel = win.getSelection ? win.getSelection() : doc.selection;
 		var range;
@@ -287,10 +288,12 @@ KE.selection = function(win, doc) {
 		var startNode, startPos, endNode, endPos;
 		if (KE.browser.IE) {
 			if (range.item) {
+				this.isControl = true;
 				var el = range.item(0);
 				startNode = endNode = el;
 				startPos = endPos = 0;
 			} else {
+				this.isControl = false;
 				var getStartEnd = function(isStart) {
 					var pointRange = range.duplicate();
 					pointRange.collapse(isStart);
@@ -362,6 +365,7 @@ KE.selection = function(win, doc) {
 					endPos = (endNode.nodeType == 1) ? 0 : endNode.nodeValue.length;
 				}
 			}
+			this.isControl = (startNode.nodeType == 1 && startNode === endNode && range.startOffset + 1 == range.endOffset);
 			if (startNode.nodeType == 1 && endNode.nodeType == 3 && endPos == 0 && endNode.previousSibling) {
 				var node = endNode.previousSibling;
 				while (node) {
@@ -2891,6 +2895,7 @@ KE.plugin['image'] = {
 		var g = KE.g[id];
 		var startNode = g.keRange.startNode;
 		var endNode = g.keRange.endNode;
+		if (!KE.browser.WEBKIT && !g.keSel.isControl) return;
 		if (startNode.nodeType != 1) return;
 		if (startNode.tagName.toLowerCase() != 'img') return;
 		if (startNode != endNode) return;
