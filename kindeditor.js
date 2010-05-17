@@ -735,6 +735,7 @@ KE.cmd = function(id) {
 		var endNode = keRange.endNode;
 		var endPos = keRange.endPos;
 		var parentNode = keRange.getParentElement();
+		if (KE.util.inMarquee(parentNode)) return;
 		var isStarted = false;
 		KE.eachNode(parentNode, function(node) {
 			if (node == startNode) isStarted = true;
@@ -803,6 +804,7 @@ KE.cmd = function(id) {
 		var endNode = keRange.endNode;
 		var endPos = keRange.endPos;
 		this.keSel.focus();
+		if (KE.util.inMarquee(keRange.getParentElement())) return;
 		if (keRange.getText().replace(/\s+/g, '') === '') return;
 		var tagNames = [];
 		KE.each(tags, function(key, val) {
@@ -1171,13 +1173,16 @@ KE.util = {
 	getNodeType : function(node) {
 		return (node.nodeType == 1 && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
 	},
-	moveToElementText : function (range, el) {
-		var node = el;
-		while (node) {
-			if (node.nodeName.toLowerCase() === 'marquee') return;
-			node = node.parentNode;
+	inMarquee : function(node) {
+		var n = node;
+		while (n) {
+			if (n.nodeName.toLowerCase() === 'marquee') return true;
+			n = n.parentNode;
 		}
-		range.moveToElementText(el);
+		return false;
+	},
+	moveToElementText : function (range, el) {
+		if (!this.inMarquee(el)) range.moveToElementText(el);
 	},
 	getNodeTextLength : function(node) {
 		var type = KE.util.getNodeType(node);
@@ -1591,12 +1596,7 @@ KE.util = {
 			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
 			KE.util.setSelection(id);
 			var parent = g.keRange.getParentElement();
-			// return if parent in MARQUEE element
-			var node = parent;
-			while (node) {
-				if (node.nodeName.toLowerCase() === 'marquee') return;
-				node = node.parentNode;
-			}
+			if (KE.util.inMarquee(parent)) return;
 			var tagName = parent.tagName.toLowerCase();
 			if (g.newlineTag.toLowerCase() == 'br') {
 				if (!KE.util.inArray(tagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'])) {
