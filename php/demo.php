@@ -12,7 +12,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>KindEditor ASP</title>
+	<title>KindEditor PHP</title>
 	<script charset="utf-8" src="../kindeditor.js"></script>
 	<script>
 		KE.show({
