@@ -33,13 +33,12 @@
 </head>
 <body>
   <h3>手动加载编辑器</h3>
-  <form name="example" method="post" action="./../php/demo.php">
+  <form name="example" method="post">
     <div class="editor">
-      <textarea id="content3" name="content" style="width:700px;height:300px;"></textarea>
+      <textarea id="content3" name="content1" style="width:700px;height:300px;"></textarea>
     </div>
     <input type="button" name="button" value="加载编辑器" onclick="javascript:createEditor('content3');" />
     <input type="button" name="button" value="卸载编辑器" onclick="javascript:removeEditor('content3');" />
-    <input type="submit" name="button" value="提交内容" />
   </form>
 </body>
 </html>
