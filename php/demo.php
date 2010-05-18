@@ -37,6 +37,7 @@
 	<?php echo $htmlData; ?>
 	<form name="example" method="post" action="demo.php">
 		<textarea id="content1" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"><?php echo htmlspecialchars($htmlData); ?></textarea>
+		<br />
 		<input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
 	</form>
 </body>
