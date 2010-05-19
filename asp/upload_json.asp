@@ -3,6 +3,7 @@
 <% Response.CodePage=65001 %>
 <% Response.Charset="UTF-8" %>
 <!--#include file="upload_5xsoft.inc"-->
+<!--#include file="JSON_2.0.4.asp"-->
 <%
 
 '本ASP程序属于一个服务器端程序的例子，不正确的使用可能威胁服务器的安全，使用之前请仔细确认相关安全设置。
@@ -74,6 +75,17 @@ Response.End
 
 Function showError(message)
 	Response.AddHeader "Content-Type", "text/html; charset=UTF-8"
+	Dim hash
+	Set hash = jsObject()
+	hash("error") = 1
+	hash("message") = message
+	hash.Flush
+
+member("name") = "Tuğrul"
+member("surname") = "Topuz"
+member("message") = "Hello World"
+
+member.Flush
 	Response.Write "{""error"":1,""message"":""" + message + """}"
 	Response.End
 End Function
