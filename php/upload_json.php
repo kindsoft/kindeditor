@@ -7,6 +7,8 @@
  * 
  */
 
+require_once 'JSON.php';
+
 //文件保存目录路径
 $save_path = '../attached/';
 //文件保存目录URL
@@ -64,13 +66,15 @@ if (empty($_FILES) === false) {
 	$file_url = $save_url . $new_file_name;
 	
 	header('Content-type: text/html; charset=UTF-8');
-	echo json_encode(array('error' => 0, 'url' => $file_url));
+	$json = new Services_JSON();
+	echo $json->encode(array('error' => 0, 'url' => $file_url));
 	exit;
 }
 
 function alert($msg) {
 	header('Content-type: text/html; charset=UTF-8');
-	echo json_encode(array('error' => 1, 'message' => $msg));
+	$json = new Services_JSON();
+	echo $json->encode(array('error' => 1, 'message' => $msg));
 	exit;
 }
 ?>

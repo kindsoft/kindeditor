@@ -7,6 +7,8 @@
  * 
  */
 
+require_once 'JSON.php';
+ 
 $php_path = dirname(__FILE__) . '/';
 $php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
@@ -116,5 +118,6 @@ $result['file_list'] = $file_list;
 
 //输出JSON字符串
 header('Content-type: application/json; charset=UTF-8');
-echo json_encode($result);
+$json = new Services_JSON();
+echo $json->encode($result);
 ?>
