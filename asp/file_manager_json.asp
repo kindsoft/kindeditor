@@ -11,15 +11,19 @@
 ' 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
 '
 
-Dim rootPath, rootUrl, fileTypes
+Dim aspUrl, rootPath, rootUrl, fileTypes
 Dim currentPath, currentUrl, currentDirPath, moveupDirPath
-Dim path, order, fso, folder, dir, file, result, fileList
-Dim fileExt, fileCount
+Dim path, order, fso, folder, dir, file, result
+Dim fileExt, fileCount, orderIndex
+Dim i, j, fileList(), isDir, hasFile, filesize, isPhoto, filetype, filename, datetime
+
+aspUrl = Request.ServerVariables("SCRIPT_NAME")
+aspUrl = left(aspUrl, InStrRev(aspUrl, "/"))
 
 '根目录路径，可以指定绝对路径，比如 /var/www/attached/
 rootPath = "../attached/"
 '根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
-rootUrl = "../../attached/"
+rootUrl = aspUrl & "../attached/"
 '图片扩展名
 fileTypes = "gif,jpg,jpeg,png,bmp"
 
@@ -44,6 +48,11 @@ End If
 
 '排序形式，name or size or type
 order = lcase(Request.QueryString("order"))
+Select Case order
+	Case "type" orderIndex = 4
+	Case "size" orderIndex = 2
+	Case Else  orderIndex = 5
+End Select
 
 '不允许使用..移动到上一级目录
 If RegexIsMatch(path, "\.\.") Then
@@ -63,7 +72,7 @@ End If
 
 Set result = jsObject()
 '相对于根目录的上一级目录
-result("moveupDirPath") = moveupDirPath
+result("moveup_dir_path") = moveupDirPath
 '相对于根目录的当前目录
 result("current_dir_path") = currentDirPath
 '当前目录的URL
@@ -72,34 +81,63 @@ result("current_url") = currentUrl
 Set fso = Server.CreateObject("Scripting.FileSystemObject")
 Set folder = fso.GetFolder(currentPath)
 
-Set result("file_list") = jsArray()
-fileCount = 0
+'文件数
+fileCount = folder.SubFolders.count + folder.Files.count
+result("total_count") = fileCount
+
+ReDim fileList(fileCount)
+i = 0
 For Each dir in folder.SubFolders
-	Set result("file_list")(Null) = jsObject()
-	result("file_list")(Null)("is_dir") = True
-	result("file_list")(Null)("has_file") = (dir.Files.count > 0)
-	result("file_list")(Null)("filesize") = 0
-	result("file_list")(Null)("is_photo") = False
-	result("file_list")(Null)("filetype") = ""
-	result("file_list")(Null)("filename") = dir.name
-	result("file_list")(Null)("datetime") = dir.DateLastModified
-	fileCount = fileCount + 1
+	isDir = True
+	hasFile = (dir.Files.count > 0)
+	filesize = 0
+	isPhoto = False
+	filetype = ""
+	filename = dir.name
+	datetime = dir.DateLastModified
+	fileList(i) = Array(isDir, hasFile, filesize, isPhoto, filetype, filename, datetime)
+	i = i + 1
 Next
 For Each file in folder.Files
 	fileExt = mid(file.name, InStrRev(file.name, ".") + 1)
-	Set result("file_list")(Null) = jsObject()
-	result("file_list")(Null)("is_dir") = False
-	result("file_list")(Null)("has_file") = False
-	result("file_list")(Null)("filesize") = file.size
-	result("file_list")(Null)("is_photo") = (instr(lcase(fileTypes), fileExt) > 0)
-	result("file_list")(Null)("filetype") = fileExt
-	result("file_list")(Null)("filename") = file.name
-	result("file_list")(Null)("datetime") = file.DateLastModified
-	fileCount = fileCount + 1
+	isDir = False
+	hasFile = False
+	filesize = file.size
+	isPhoto = (instr(lcase(fileTypes), fileExt) > 0)
+	filetype = fileExt
+	filename = file.name
+	datetime = file.DateLastModified
+	fileList(i) = Array(isDir, hasFile, filesize, isPhoto, filetype, filename, datetime)
+	i = i + 1
 Next
 
-'文件数
-result("total_count") = fileCount
+'排序
+Dim minidx, temp
+For i = 0 To fileCount - 2
+	minidx = i
+	For j = i + 1 To fileCount - 1
+		If (fileList(minidx)(orderIndex) > fileList(j)(orderIndex)) Then
+			minidx = j
+		End If
+	Next
+	If minidx <> i Then
+		temp = fileList(minidx)
+		fileList(minidx) = fileList(i)
+		fileList(i) = temp
+	End If
+Next
+
+Set result("file_list") = jsArray()
+For i = 0 To fileCount - 1
+	Set result("file_list")(Null) = jsObject()
+	result("file_list")(Null)("is_dir") = fileList(i)(0)
+	result("file_list")(Null)("has_file") = fileList(i)(1)
+	result("file_list")(Null)("filesize") = fileList(i)(2)
+	result("file_list")(Null)("is_photo") = fileList(i)(3)
+	result("file_list")(Null)("filetype") = fileList(i)(4)
+	result("file_list")(Null)("filename") = fileList(i)(5)
+	result("file_list")(Null)("datetime") = fileList(i)(6)
+Next
 
 '输出JSON字符串
 Response.AddHeader "Content-Type", "text/html; charset=UTF-8"
