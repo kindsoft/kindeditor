@@ -20,15 +20,17 @@ namespace KindEditor.NET
 
     public partial class FileManager : System.Web.UI.Page
     {
-        //根目录路径，可以指定绝对路径，比如 /var/www/attached/
-        private String rootPath = "/attached/";
-        //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
-        private String rootUrl = "../../attached/";
-        //图片扩展名
-        private String fileTypes = "gif,jpg,jpeg,png,bmp";
-
         protected void Page_Load(object sender, EventArgs e)
         {
+            String aspxUrl = Request.Path.Substring(0, Request.Path.LastIndexOf("/") + 1);
+            
+            //根目录路径，相对路径
+            String rootPath = "/attached/";
+            //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
+            String rootUrl = aspxUrl + "../attached/";
+            //图片扩展名
+            String fileTypes = "gif,jpg,jpeg,png,bmp";
+            
             String currentPath = "";
             String currentUrl = "";
             String currentDirPath = "";
