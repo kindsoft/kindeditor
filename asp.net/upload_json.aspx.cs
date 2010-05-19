@@ -1,12 +1,17 @@
 ﻿/**
-本ASP.NET程序属于一个服务器端程序的例子，不正确的使用可能威胁服务器的安全，使用之前请仔细确认相关安全设置。
-*/
+ * KindEditor ASP.NET
+ * 
+ * 本ASP.NET程序是演示程序，建议不要直接在实际项目中使用。
+ * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
+ * 
+ */
 
 using System;
 using System.Collections;
 using System.Web;
 using System.IO;
 using System.Globalization;
+using LitJson;
 
 namespace KindEditor.NET
 {
@@ -56,15 +61,21 @@ namespace KindEditor.NET
 
             String fileUrl = saveUrl + newFileName;
 
+            Hashtable hash = new Hashtable();
+            hash["error"] = 0;
+            hash["url"] = fileUrl;
             Response.AddHeader("Content-Type", "text/html; charset=UTF-8");
-            Response.Write("{\"error\":0,\"url\":\"" + fileUrl + "\"}");
+            Response.Write(JsonMapper.ToJson(hash));
             Response.End();
         }
 
         private void showError(string message)
         {
+            Hashtable hash = new Hashtable();
+            hash["error"] = 1;
+            hash["message"] = message;
             Response.AddHeader("Content-Type", "text/html; charset=UTF-8");
-            Response.Write("{\"error\":1,\"message\":\"" + message + "\"}");
+            Response.Write(JsonMapper.ToJson(hash));
             Response.End();
         }
     }

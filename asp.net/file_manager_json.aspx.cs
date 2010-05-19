@@ -1,6 +1,10 @@
 ﻿/**
-本ASP.NET程序属于一个服务器端程序的例子，不正确的使用可能威胁服务器的安全，使用之前请仔细确认相关安全设置。
-*/
+ * KindEditor ASP.NET
+ * 
+ * 本ASP.NET程序是演示程序，建议不要直接在实际项目中使用。
+ * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
+ * 
+ */
 
 using System;
 using System.Web;
@@ -8,6 +12,8 @@ using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
+using LitJson;
+using System.Collections.Generic;
 
 namespace KindEditor.NET
 {
@@ -30,6 +36,7 @@ namespace KindEditor.NET
 
             //根据path参数，设置各路径和URL
             String path = Request.QueryString["path"];
+            path = String.IsNullOrEmpty(path) ? "" : path;
             if (path == "")
             {
                 currentPath = Server.MapPath(rootPath);
@@ -46,16 +53,17 @@ namespace KindEditor.NET
             }
 
             //排序形式，name or size or type
-            String order = Request.QueryString["order"].ToLower();
+            String order = Request.QueryString["order"];
+            order = String.IsNullOrEmpty(order) ? "" : order.ToLower();
 
             //不允许使用..移动到上一级目录
-            if (Regex.IsMatch(currentPath, @"\.\."))
+            if (Regex.IsMatch(path, @"\.\."))
             {
                 Response.Write("Access is not allowed.");
                 Response.End();
             }
             //最后一个字符不是/
-            if (currentPath.EndsWith("/"))
+            if (path != "" && !path.EndsWith("/"))
             {
                 Response.Write("Parameter is not valid.");
                 Response.End();
@@ -70,12 +78,9 @@ namespace KindEditor.NET
             //遍历目录取得文件信息
             string[] dirList = Directory.GetDirectories(currentPath);
             string[] fileList = Directory.GetFiles(currentPath);
+
             switch (order)
             {
-                case "name":
-                    Array.Sort(dirList, new NameSorter());
-                    Array.Sort(fileList, new NameSorter());
-                    break;
                 case "size":
                     Array.Sort(dirList, new NameSorter());
                     Array.Sort(fileList, new SizeSorter());
@@ -84,65 +89,53 @@ namespace KindEditor.NET
                     Array.Sort(dirList, new NameSorter());
                     Array.Sort(fileList, new TypeSorter());
                     break;
-                case "date":
+                case "name":
                 default:
-                    Array.Sort(dirList, new DateSorter());
-                    Array.Sort(fileList, new DateSorter());
+                    Array.Sort(dirList, new NameSorter());
+                    Array.Sort(fileList, new NameSorter());
                     break;
             }
 
-            //组合JSON字符串
-            StringBuilder json = new StringBuilder();
-            json.Append("{");
-            json.Append("\"moveup_dir_path\":\"" + moveupDirPath + "\",");
-            json.Append("\"current_dir_path\":\"" + currentDirPath + "\",");
-            json.Append("\"current_url\":\"" + currentUrl + "\",");
-            json.Append("\"total_count\":" + (dirList.Length + fileList.Length) + ",");
-            json.Append("\"file_list\":");
-            json.Append("[");
-            StringBuilder strList = new StringBuilder();
+            Hashtable result = new Hashtable();
+            result["moveup_dir_path"] = moveupDirPath;
+            result["current_dir_path"] = currentDirPath;
+            result["current_url"] = currentUrl;
+            result["total_count"] = dirList.Length + fileList.Length;
+            List<Hashtable> dirFileList = new List<Hashtable>();
+            result["file_list"] = dirFileList;
             for (int i = 0; i < dirList.Length; i++)
             {
                 DirectoryInfo dir = new DirectoryInfo(dirList[i]);
-                strList.Append(",");
-                strList.Append("{");
-                strList.Append("\"is_dir\":true,");//是否文件夹
-                strList.Append("\"has_file\":" + (dir.GetFileSystemInfos().Length > 0 ? "true" : "false") + ",");//文件夹是否包含文件
-                strList.Append("\"filesize\":0,");//文件大小
-                strList.Append("\"is_photo\":false,");// 是否图片
-                strList.Append("\"filetype\":\"\",");// 文件类别，用扩展名判断
-                strList.Append("\"filename\":\"" + dir.FullName.Substring(dir.FullName.LastIndexOf("\\") + 1) + "\",");//文件名，包含扩展名
-                strList.Append("\"datetime\":\"" + dir.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss") + "\"");//文件最后修改时间
-                strList.Append("}");
+                Hashtable hash = new Hashtable();
+                hash["is_dir"] = true;
+                hash["has_file"] = (dir.GetFileSystemInfos().Length > 0);
+                hash["filesize"] = 0;
+                hash["is_photo"] = false;
+                hash["filetype"] = "";
+                hash["filename"] = dir.Name;
+                hash["datetime"] = dir.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
+                dirFileList.Add(hash);
             }
             for (int i = 0; i < fileList.Length; i++)
             {
                 FileInfo file = new FileInfo(fileList[i]);
-                if (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) == -1) continue;
-                strList.Append(",");
-                strList.Append("{");
-                strList.Append("\"is_dir\":false,");// 是否文件夹
-                strList.Append("\"has_file\":false,");// 文件夹是否包含文件
-                strList.Append("\"filesize\":" + file.Length + ",");//文件大小
-                strList.Append("\"dir_path\":\"\",");
-                strList.Append("\"is_photo\":true,");// 是否图片
-                strList.Append("\"filetype\":\"" + file.Extension.Substring(1) + "\",");//文件类别，用扩展名判断
-                strList.Append("\"filename\":\"" + file.Name + "\",");//文件名，包含扩展名
-                strList.Append("\"datetime\":\"" + file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss") + "\"");//文件最后修改时间
-                strList.Append("}");
+                Hashtable hash = new Hashtable();
+                hash["is_dir"] = false;
+                hash["has_file"] = false;
+                hash["filesize"] = file.Length;
+                hash["is_photo"] = (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0);
+                hash["filetype"] = file.Extension.Substring(1);
+                hash["filename"] = file.Name;
+                hash["datetime"] = file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
+                dirFileList.Add(hash);
             }
-            json.Append(strList.ToString().Substring(1));
-            json.Append("]");
-            json.Append("}");
-            Response.AddHeader("Content-Type", "application/json; charset=UTF-8");
-            Response.Write(json.ToString());
+            //Response.AddHeader("Content-Type", "application/json; charset=UTF-8");
+            Response.AddHeader("Content-Type", "text/html; charset=UTF-8");
+            Response.Write(JsonMapper.ToJson(result));
             Response.End();
         }
 
-        #region 排序
-        /// <summary>
-        /// 按名称排序
-        /// </summary>
+
         public class NameSorter : IComparer
         {
             public int Compare(object x, object y)
@@ -162,13 +155,10 @@ namespace KindEditor.NET
                 FileInfo xInfo = new FileInfo(x.ToString());
                 FileInfo yInfo = new FileInfo(y.ToString());
 
-                return xInfo.FullName.CompareTo(yInfo.FullName);//递增  
-                //return yInfo.FullName.CompareTo(xInfo.FullName);//递减
+                return xInfo.FullName.CompareTo(yInfo.FullName);
             }
         }
-        /// <summary>
-        /// 按文件大小排序
-        /// </summary>
+
         public class SizeSorter : IComparer
         {
             public int Compare(object x, object y)
@@ -188,13 +178,10 @@ namespace KindEditor.NET
                 FileInfo xInfo = new FileInfo(x.ToString());
                 FileInfo yInfo = new FileInfo(y.ToString());
 
-                //return xInfo.Length.CompareTo(yInfo.Length);//递增  
-                return yInfo.Length.CompareTo(xInfo.Length);//递减  
+                return xInfo.Length.CompareTo(yInfo.Length);
             }
         }
-        /// <summary>
-        /// 按文件类型排序
-        /// </summary>
+
         public class TypeSorter : IComparer
         {
             public int Compare(object x, object y)
@@ -214,43 +201,9 @@ namespace KindEditor.NET
                 FileInfo xInfo = new FileInfo(x.ToString());
                 FileInfo yInfo = new FileInfo(y.ToString());
 
-                return xInfo.Extension.CompareTo(yInfo.Extension);//递增  
-                //return yInfo.Extension.CompareTo(xInfo.Extension);//递减  
+                return xInfo.Extension.CompareTo(yInfo.Extension);
             }
         }
-        /// <summary>
-        /// 按修改时间排序
-        /// </summary>
-        public class DateSorter : IComparer
-        {
-            public int Compare(object x, object y)
-            {
-                if (x == null && y == null)
-                {
-                    return 0;
-                }
-                if (x == null)
-                {
-                    return -1;
-                }
-                if (y == null)
-                {
-                    return 1;
-                }
-                FileInfo xInfo = new FileInfo(x.ToString());
-                FileInfo yInfo = new FileInfo(y.ToString());
 
-                //return xInfo.LastWriteTime.CompareTo(yInfo.LastWriteTime);//递增  
-                return yInfo.LastWriteTime.CompareTo(xInfo.LastWriteTime);//递减  
-            }
-        }
-        #endregion 排序
-        public bool IsReusable
-        {
-            get
-            {
-                return false;
-            }
-        }
     }
 }
