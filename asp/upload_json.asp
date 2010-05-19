@@ -6,10 +6,14 @@
 <!--#include file="JSON_2.0.4.asp"-->
 <%
 
-'本ASP程序属于一个服务器端程序的例子，不正确的使用可能威胁服务器的安全，使用之前请仔细确认相关安全设置。
+' KindEditor ASP
+'
+' 本ASP程序是演示程序，建议不要直接在实际项目中使用。
+' 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
+'
 
 Dim savePath, saveUrl, fileTypes, maxSize, fileName, fileExt, newFileName, filePath, fileUrl
-Dim upload, file, fso, ranNum
+Dim upload, file, fso, ranNum, hash
 
 '文件保存目录路径
 savePath = "../attached/"
@@ -57,9 +61,6 @@ End If
 filePath = Server.mappath(savePath & newFileName)
 fileUrl = saveUrl & newFileName
 
-'Response.Write filePath
-'Response.End
-
 file.saveAs filePath
 
 Set upload = nothing
@@ -70,7 +71,10 @@ If Not fso.FileExists(filePath) Then
 End If
 
 Response.AddHeader "Content-Type", "text/html; charset=UTF-8"
-Response.Write "{""error"":0,""url"":""" + fileUrl + """}"
+Set hash = jsObject()
+hash("error") = 0
+hash("url") = fileUrl
+hash.Flush
 Response.End
 
 Function showError(message)
@@ -80,13 +84,6 @@ Function showError(message)
 	hash("error") = 1
 	hash("message") = message
 	hash.Flush
-
-member("name") = "Tuğrul"
-member("surname") = "Topuz"
-member("message") = "Hello World"
-
-member.Flush
-	Response.Write "{""error"":1,""message"":""" + message + """}"
 	Response.End
 End Function
 %>
