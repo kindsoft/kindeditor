@@ -129,8 +129,7 @@ namespace KindEditor.NET
                 hash["datetime"] = file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
                 dirFileList.Add(hash);
             }
-            //Response.AddHeader("Content-Type", "application/json; charset=UTF-8");
-            Response.AddHeader("Content-Type", "text/html; charset=UTF-8");
+            Response.AddHeader("Content-Type", "application/json; charset=UTF-8");
             Response.Write(JsonMapper.ToJson(result));
             Response.End();
         }
