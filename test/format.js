@@ -46,11 +46,11 @@ test("HTML format test", function() {
 	equals(KE.format.getHtml(KE.$("test11").innerHTML, {span:["style"]}), '<span style="color:#ff0000;">test</span>');
 	equals(KE.format.getHtml(KE.$("test11").innerHTML, {span:[]}), '<span>test</span>');
 
-	equals(KE.format.getHtml(KE.$("test12").innerHTML), '123<div style="color:#ff0000;background-color:#00ff00;font-size:18px;font-weight:bold;" class="spanclass">test</div>\r\n123');
+	equals(KE.format.getHtml(KE.$("test12").innerHTML), '123<div style="color:#ff0000;background-color:#00ff00;font-size:18px;font-weight:bold;" class="spanclass">test</div>\n123');
 	equals(KE.format.getHtml(KE.$("test12").innerHTML, {span:[".color"]}), '123test123');
-	equals(KE.format.getHtml(KE.$("test12").innerHTML, {div:[".font-size", "class"]}), '123<div style="font-size:18px;" class="spanclass">test</div>\r\n123');
-	equals(KE.format.getHtml(KE.$("test12").innerHTML, {div:[".color"]}), '123<div style="color:#ff0000;">test</div>\r\n123');
-	equals(KE.format.getHtml(KE.$("test12").innerHTML, {div:[".color", ".font-weight"]}), '123<div style="color:#ff0000;font-weight:bold;">test</div>\r\n123');
+	equals(KE.format.getHtml(KE.$("test12").innerHTML, {div:[".font-size", "class"]}), '123<div style="font-size:18px;" class="spanclass">test</div>\n123');
+	equals(KE.format.getHtml(KE.$("test12").innerHTML, {div:[".color"]}), '123<div style="color:#ff0000;">test</div>\n123');
+	equals(KE.format.getHtml(KE.$("test12").innerHTML, {div:[".color", ".font-weight"]}), '123<div style="color:#ff0000;font-weight:bold;">test</div>\n123');
 
 	equals(KE.format.getHtml(KE.$("test13").innerHTML), '<input type="checkbox" id="chk" value="1" checked="checked" /> <label for="chk"><strong>checkbox</strong></label>');
 	equals(KE.format.getHtml(KE.$("test13").innerHTML, {input:["type", "value"]}), '<input type="checkbox" value="1" /> checkbox');

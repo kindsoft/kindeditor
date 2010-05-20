@@ -135,7 +135,7 @@ KE.setting = {
 	inlineTags : ['b', 'del', 'em', 'font', 'i', 'span', 'strike', 'strong', 'sub', 'sup', 'u'],
 	endlineTags : [
 		'br', 'hr', 'table', 'tbody', 'td', 'tr', 'th', 'div', 'p', 'ol', 'ul',
-		'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+		'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'script', 'style', 'marquee'
 	],
 	htmlTags : {
 		font : ['color', 'size', 'face', '.background-color'],
@@ -949,17 +949,24 @@ KE.format = {
 		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
 		var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
 		var endlineTagHash = KE.util.arrayToHash(KE.setting.endlineTags);
-		html = html.replace(/\r\n|\n|\r/g, '');
-		var re = /<(\/)?([\w-:]+)((?:\s+|(?:\s+[\w-:]+)|(?:\s+[\w-:]+=[^\s"'<>]+)|(?:\s+[\w-:]+="[^"]*")|(?:\s+[\w-:]+='[^']*'))*)(\/)?>/g;
-		html = html.replace(re, function($0, $1, $2, $3, $4) {
-			var startSlash = $1 || '';
-			var tagName = $2.toLowerCase();
-			var attr = $3 || '';
-			var endSlash = $4 ? ' ' + $4 : '';
+		var re = /((?:\r\n|\n|\r)*)<(\/)?([\w-:]+)((?:\s+|(?:\s+[\w-:]+)|(?:\s+[\w-:]+=[^\s"'<>]+)|(?:\s+[\w-:]+="[^"]*")|(?:\s+[\w-:]+='[^']*'))*)(\/)?>((?:\r\n|\n|\r)*)/g;
+		html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
+			var startNewline = $1 || '';
+			var startSlash = $2 || '';
+			var tagName = $3.toLowerCase();
+			var attr = $4 || '';
+			var endSlash = $5 ? ' ' + $5 : '';
+			var endNewline = $6 || '';
 			if (isFilter && typeof htmlTagHash[tagName] == "undefined") return '';
 			if (endSlash === '' && typeof noEndTagHash[tagName] != "undefined") endSlash = ' /';
-			var nl = '';
-			if ((startSlash || endSlash) && typeof endlineTagHash[tagName] != "undefined") nl = "\r\n";
+			if (tagName in endlineTagHash) {
+				if (startSlash || endSlash) endNewline = '\n';
+			} else {
+				if (endNewline) endNewline = ' ';
+			}
+			if (tagName !== 'script' && tagName !== 'style') {
+				startNewline = '';
+			}
 			if (attr !== '') {
 				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
 					var key = $1.toLowerCase();
@@ -1005,9 +1012,9 @@ KE.format = {
 				attr = KE.util.trim(attr);
 				attr = attr.replace(/\s+/g, ' ');
 				if (attr) attr = ' ' + attr;
-				return '<' + startSlash + tagName + attr + endSlash + '>' + nl;
+				return startNewline + '<' + startSlash + tagName + attr + endSlash + '>' + endNewline;
 			} else {
-				return '<' + startSlash + tagName + endSlash + '>' + nl;
+				return startNewline + '<' + startSlash + tagName + endSlash + '>' + endNewline;
 			}
 		});
 		var reg = KE.setting.inlineTags.join('|');
@@ -1155,7 +1162,6 @@ KE.util = {
 		);
 	},
 	parseJson : function (text) {
-		// the parseJson code is from http://www.json.org/
 		var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
 		cx.lastIndex = 0;
 		if (cx.test(text)) {
@@ -1523,7 +1529,6 @@ KE.util = {
 		KE.history.add(id, false);
 	},
 	setFullHtml : function(id, html) {
-		html = html.replace(/\r\n|\n|\r/g, '');
 		if (!KE.browser.IE && html === '') html = '<br />';
 		var html = KE.util.execSetHtmlHooks(id, html);
 		this.innerHtml(KE.g[id].iframeDoc.body, html);

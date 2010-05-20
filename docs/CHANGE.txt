@@ -18,6 +18,7 @@ ver 3.4.3
 * BUG: 修改了在IE上将<img>替换<hr>时有时候报错的问题。
 * BUG: 修改了在IE上编辑marquee元素里的图片和超级链接时报错的问题。
 * BUG: 修改了右键点击图片右边时有时候会弹出图片编辑菜单的问题。
+* BUG: 修改了script和style代码无法保留换行符的问题。
 * 改变: 默认换行方式改成p换行。
 * 改善: 弹出框未指定任何按钮(yesButton, noButton, previewButton)时，不显示底部DIV。
 * 改善: 确定alert框后将焦点设置到输入错误的输入框。
