@@ -22,6 +22,7 @@ ver 3.4.3
 * 改变: 默认换行方式改成p换行。
 * 改善: 弹出框未指定任何按钮(yesButton, noButton, previewButton)时，不显示底部DIV。
 * 改善: 确定alert框后将焦点设置到输入错误的输入框。
+* 改善: 上传图片时如果返回的JSON格式有错误，提示友好信息。
 * 改善: 从Word粘贴功能严格过滤垃圾代码。
 * 增加: 增加了afterDialogCreate属性，设置弹出dialog后执行的回调函数。
 * 增加: 增加了ASP.NET、ASP、JSP演示程序。

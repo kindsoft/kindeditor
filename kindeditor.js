@@ -68,6 +68,7 @@ KE.lang = {
 	invalidBorder : "边框必须为数字。",
 	invalidUrl : "请输入有效的URL地址。",
 	pleaseInput : "请输入内容",
+	invalidJson : '服务器发生故障。',
 	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
 	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
 	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
@@ -2999,9 +3000,14 @@ KE.plugin['image'] = {
 			KE.util.showLoadingPage(id);
 			var onloadFunc = function() {
 				KE.event.remove(uploadIframe, 'load', onloadFunc);
-				var uploadDoc = KE.util.getIframeDoc(uploadIframe);
-				var data = KE.util.parseJson(uploadDoc.body.innerHTML);
 				KE.util.hideLoadingPage(id);
+				var uploadDoc = KE.util.getIframeDoc(uploadIframe);
+				var data = '';
+				try {
+					data = KE.util.parseJson(uploadDoc.body.innerHTML);
+				} catch(e) {
+					alert(KE.lang.invalidJson);
+				}
 				if (typeof data === 'object' && 'error' in data) {
 					if (data.error === 0) {
 						self.insert(id, data.url, title, width, height, 0, align);
