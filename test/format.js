@@ -59,7 +59,6 @@ test("HTML format test", function() {
 
 	equals(KE.format.getHtml(KE.$("test14").innerHTML, null, "relative"), '<img src="../plugins/emoticons/etc_01.gif" /> test');
 
-	equals(KE.format.getHtml(KE.$("test15").innerHTML, null, "absolute"), '<img src="http://www.kindsoft.net/images/logo_180_30.gif" /> test');
 	equals(KE.format.getHtml(KE.$("test16").innerHTML), '<span style="font-family:times new roman;"><strong>test</strong></span>');
 	equals(KE.format.getHtml(KE.$("test17").innerHTML), '<svg:a>test</svg:a>');
 });
