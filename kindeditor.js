@@ -1018,6 +1018,7 @@ KE.format = {
 				return startNewline + '<' + startSlash + tagName + endSlash + '>' + endNewline;
 			}
 		});
+		html = html.replace(/<br\s+\/>\n<\/p>/, '</p>');
 		var reg = KE.setting.inlineTags.join('|');
 		var trimHtml = function(inHtml) {
 			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
