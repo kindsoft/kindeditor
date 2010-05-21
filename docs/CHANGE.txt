@@ -25,8 +25,10 @@ ver 3.4.3
 * 改善: 确定alert框后将焦点设置到输入错误的输入框。
 * 改善: 上传图片时如果返回的JSON格式有错误，提示友好信息。
 * 改善: 从Word粘贴功能严格过滤垃圾代码。
+* 改善: 编辑时同步更新原textarea里的HTML内容，不需要在提交前设置KE.util.setData。
 * 增加: 增加了afterDialogCreate属性，设置弹出dialog后执行的回调函数。
 * 增加: 增加了ASP.NET、ASP、JSP演示程序。
+* 删除: 删除了autoOnsubmit属性。
 
 ver 3.4.2 (2010-04-04)
 * 增加: 添加了KE.util.isEmpty函数，用于判断编辑器是否有可见内容。

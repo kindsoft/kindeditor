@@ -15,7 +15,7 @@
 				id : 'content1',
 				allowFileManager : true,
 				afterCreate : function(id) {
-					KE.event.input(KE.g[id].iframeDoc, function() {
+					KE.onchange(id, function(id) {
 						document.getElementById('content_html').value = KE.util.getData(id);
 					});
 				}
@@ -25,12 +25,7 @@
 	<body>
 		<h3>默认模式</h3>
 		<form name="example" method="post" action="./../php/demo.php">
-			<textarea id="content0" name="content0"></textarea>
 			<textarea id="content1" name="content1" style="width:900px;height:250px;visibility:hidden;">
-<marquee>abcd</marquee>
-<script>
-    alert(1);
-</script>
 <p><strong>月下独酌</strong> - 李白</p>
 <p>花间一壶酒，独酌无相亲。</p>
 <p><span style="font-size:32px;">举杯邀明<u>月，对影成</u>三人。</span></p>
@@ -41,6 +36,7 @@
 <p>永结无情游，相期邈云汉。</p>
 			</textarea>
 			<textarea id="content_html" style="width:900px;height:100px;"></textarea>
+			<br />
 			<input type="button" name="button" value="取得内容" onclick="javascript:alert(KE.util.getData('content1'));" />
 			<input type="button" name="button" value="取得纯文本" onclick="javascript:alert(KE.util.getPureData('content1'));" />
 			<input type="submit" name="button" value="提交内容" />

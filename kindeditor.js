@@ -97,7 +97,6 @@ KE.browser = (function() {
 
 KE.setting = {
 	wyswygMode : true,
-	autoOnsubmitMode : true,
 	loadStyleMode : true,
 	resizeMode : 2,
 	filterMode : false,
@@ -1398,6 +1397,12 @@ KE.util = {
 		}
 		return html;
 	},
+	execOnchangeHandler : function(id) {
+		var handlers = KE.g[id].onchangeHandlerStack;
+		for (var i = 0, len = handlers.length; i < len; i++) {
+			handlers[i]();
+		}
+	},
 	getData : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
@@ -1474,6 +1479,7 @@ KE.util = {
 		} catch(e) {}
 		KE.toolbar.updateState(id);
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 	},
 	innerHtml : function(el, html) {
 		if (KE.browser.IE) {
@@ -1529,6 +1535,7 @@ KE.util = {
 			this.pasteHtml(id, html);
 		}
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 	},
 	setFullHtml : function(id, html) {
 		if (!KE.browser.IE && html === '') html = '<br />';
@@ -1536,6 +1543,8 @@ KE.util = {
 		this.innerHtml(KE.g[id].iframeDoc.body, html);
 		KE.g[id].newTextarea.value = html;
 		KE.g[id].newTextarea.value = KE.util.getData(id);
+		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 	},
 	selectImageWebkit : function(id, e, isSelection) {
 		if (KE.browser.WEBKIT) {
@@ -2081,10 +2090,6 @@ KE.toolbar = {
 KE.history = {
 	add : function(id, minChangeFlag) {
 		var g = KE.g[id];
-		var handlers = KE.g[id].onchangeHandlerStack;
-		for (var i = 0, len = handlers.length; i < len; i++) {
-			handlers[i]();
-		}
 		var html = KE.util.getData(id);
 		if (g.undoStack.length > 0) {
 			var prevHtml = g.undoStack[g.undoStack.length - 1];
@@ -2221,16 +2226,6 @@ KE.create = function(id, mode) {
 		KE.toolbar.disable(id, ['source', 'fullscreen']);
 		KE.toolbar.select(id, 'source');
 	}
-	if (KE.g[id].autoOnsubmitMode) {
-		var node = srcTextarea.parentNode;
-		while (node) {
-			if (node.nodeType == 1 && node.tagName.toLowerCase() == 'form') {
-				KE.event.add(node, 'submit', new Function('KE.util.setData("' + id + '")'));
-				break;
-			}
-			node = node.parentNode;
-		}
-	}
 	var hideMenu = function() {
 		KE.layout.hide(id);
 	};
@@ -2297,10 +2292,12 @@ KE.create = function(id, mode) {
 	}
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
 	KE.event.add(document, 'mousedown', setSelectionHandler);
+	KE.onchange(id, function(id) {
+		KE.util.setData(id);
+	});
 	KE.readonly(id, false);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
-		KE.history.add(id, false);
 		if (mode > 0) KE.util.focus(id);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);
@@ -2589,6 +2586,7 @@ KE.plugin['bgcolor'] = {
 			cmd.wrap('span', [{'.background-color': value}]);
 		}
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
 	}
@@ -2626,6 +2624,7 @@ KE.plugin['fontname'] = {
 		var cmd = new KE.cmd(id);
 		cmd.wrap('span', [{'.font-family': value}]);
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
 	}
@@ -2652,6 +2651,7 @@ KE.plugin['fontsize'] = {
 		var cmd = new KE.cmd(id);
 		cmd.wrap('span', [{'.font-size': value}]);
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
 	}
@@ -2684,6 +2684,7 @@ KE.plugin['removeformat'] = {
 		}
 		cmd.remove(tags);
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		KE.toolbar.updateState(id);
 		KE.util.focus(id);
 	}
@@ -2734,6 +2735,7 @@ KE.plugin['textcolor'] = {
 			cmd.wrap('span', [{'.color': value}]);
 		}
 		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
 	}
@@ -3147,7 +3149,8 @@ KE.plugin['link'] = {
 				g.keSel.addRange(range);
 			}
 		}
-		KE.history.add(id);
+		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		KE.layout.hide(id);
 		KE.util.focus(id);
 	}
