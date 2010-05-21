@@ -19,8 +19,7 @@
   <script type="text/javascript">
 	KE.show({
 		id : 'content5',
-		autoOnsubmitMode : false, //不会自动把KE.util.setData添加到onsubmit事件里。
-		loadStyleMode : false, //不会自动加载CSS文件。
+		loadStyleMode : false, //不会自动加载CSS文件
 		cssPath : './index.css'
 	});
 	function checkForm() {
@@ -28,13 +27,12 @@
 			alert('请输入内容！');
 			return false;
 		}
-		KE.util.setData('content5');
 		return true;
 	}
   </script>
 </head>
 <body>
-  <h3>手动添加Onsubmit事件、手动添加CSS文件</h3>
+  <h3>手动添加CSS文件</h3>
   <form name="example" method="post" action="./../php/demo.php" onsubmit="javascript:return checkForm();">
 	<div class="editor">
 	  <textarea id="content5" name="content1" style="width:700px;height:300px;"></textarea>
