@@ -235,6 +235,14 @@
 	margin:0;
 	border-collapse:separate;
 }
+.ke-toolbar-separator {
+	border-left: 1px solid #938888;
+	border-right: 1px solid #FBFCFD;
+	width: 0;
+	padding: 0;
+	margin: 0 2px;
+	height: 16px;
+}
 .ke-toolbar-table td {
 	border:0;
 	padding: 0;

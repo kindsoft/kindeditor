@@ -111,13 +111,13 @@ KE.setting = {
 	minHeight : 100,
 	minChangeSize : 5,
 	items : [
-		'source', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
-		'plainpaste', 'wordpaste', 'justifyleft', 'justifycenter', 'justifyright',
+		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-		'superscript', 'selectall', '-',
-		'title', 'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold',
-		'italic', 'underline', 'strikethrough', 'removeformat', 'image',
-		'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', 'about'
+		'superscript', '|', 'selectall', '-',
+		'title', 'fontname', 'fontsize', '|', 'textcolor', 'bgcolor', 'bold',
+		'italic', 'underline', 'strikethrough', 'removeformat', '|', 'image',
+		'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about'
 	],
 	colorTable : [
 		["#FFFFFF","#E5E4E4","#D9D8D8","#C0BDBD","#A7A4A4","#8E8A8B","#827E7F","#767173","#5C585A","#000000"],
@@ -2059,6 +2059,12 @@ KE.toolbar = {
 			var cell = row.insertCell(cellNum);
 			cell.hideforcus = true;
 			cellNum++;
+			if (cmd == '|') {
+				var div = KE.$$('div');
+				div.className = 'ke-toolbar-separator';
+				cell.appendChild(div);
+				continue;
+			}
 			var a = KE.$$('a');
 			a.className = 'ke-icon';
 			a.href = 'javascript:;';

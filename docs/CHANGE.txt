@@ -28,6 +28,7 @@ ver 3.4.3
 * 改善: 编辑时同步更新原textarea里的HTML内容，不需要在提交前设置KE.util.setData。
 * 增加: 增加了afterDialogCreate属性，设置弹出dialog后执行的回调函数。
 * 增加: 增加了ASP.NET、ASP、JSP演示程序。
+* 增加: 增加了工具栏分割符号。
 * 删除: 删除了autoOnsubmit属性。
 
 ver 3.4.2 (2010-04-04)
