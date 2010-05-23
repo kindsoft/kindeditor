@@ -2536,7 +2536,6 @@ KE.plugin['fullscreen'] = {
 		}
 		if (this.isSelected) {
 			this.isSelected = false;
-			KE.util.setData(id);
 			KE.remove(id, 1);
 			g.width = this.width;
 			g.height = this.height;
@@ -2547,7 +2546,6 @@ KE.plugin['fullscreen'] = {
 			KE.toolbar.unselect(id, "fullscreen");
 		} else {
 			this.isSelected = true;
-			KE.util.setData(id);
 			this.width = g.container.style.width;
 			this.height = g.container.style.height;
 			KE.remove(id, 2);
