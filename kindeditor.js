@@ -2203,12 +2203,23 @@ KE.create = function(id, mode) {
 	var row = bottom.insertRow(0);
 	var bottomLeft = row.insertCell(0);
 	bottomLeft.className = 'ke-bottom-left';
+	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
+		bottomLeft.style.cursor = 'default';
+	}
 	var bottomRight = row.insertCell(1);
 	bottomRight.className = 'ke-bottom-right';
+	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
+		bottomRight.style.cursor = 'default';
+	} else if (KE.g[id].config.resizeMode == 1) {
+		bottomRight.style.cursor = 's-resize';
+	}
 	bottomRight.align = 'right';
 	bottomRight.vAlign = 'bottom';
 	var span = KE.$$('span');
 	span.className = 'ke-bottom-right-img';
+	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
+		span.style.visibility = 'hidden';
+	}
 	bottomRight.appendChild(span);
 	bottomOuter.appendChild(bottom);
 	var hideDiv = KE.$$('div');
