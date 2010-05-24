@@ -491,9 +491,9 @@
 	border-collapse: separate;
 }
 .ke-picker-td {
-	width: 16px;
+	width: 14px;
 	height: 14px;
-	font-size: 12px;
+	font-size: 0;
 	border: 1px solid #F0F0EE;
 	cursor: pointer;
 	margin:0;

@@ -377,6 +377,12 @@ KE.selection = function(win, doc) {
 					node = node.childNodes[0];
 				}
 			}
+			if (range.collapsed) {
+				var keRange = new KE.range(doc);
+				keRange.setTextStart(startNode, startPos);
+				endNode = keRange.startNode;
+				endPos = keRange.startPos;
+			}
 		}
 		var keRange = new KE.range(doc);
 		keRange.setTextStart(startNode, startPos);
