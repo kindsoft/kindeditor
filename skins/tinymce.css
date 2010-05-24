@@ -322,6 +322,10 @@
 	font-family: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
 	line-height: 1.5;
 	overflow: auto;
+	resize: none;
+}
+.ke-textarea:focus {
+	outline: none;
 }
 .ke-iframe {
 	width: 100%;
