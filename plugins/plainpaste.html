@@ -5,16 +5,20 @@
   <title>PlainPaste</title>
   <style type="text/css" rel="stylesheet">
 	html, body {
-	padding: 0;
-	margin: 0;
-	font-size:12px;
-	background-color:#F0F0EE;
+		padding: 0;
+		margin: 0;
+		font-size:12px;
+		background-color:#F0F0EE;
 	}
 	#textArea {
-	width:390px;
-	height:250px;
-	border:1px solid #000000;
-	overflow: auto;
+		width:390px;
+		height:250px;
+		border:1px solid #000000;
+		overflow: auto;
+		resize: none;
+	}
+	#textArea:focus {
+		outline: none;
 	}
   </style>
   <script type="text/javascript">
