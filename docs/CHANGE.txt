@@ -29,6 +29,7 @@ ver 3.4.3
 * 改善: 从Word粘贴功能严格过滤垃圾代码。
 * 改善: 编辑时同步更新原textarea里的HTML内容，不需要在提交前设置KE.util.setData。
 * 改善: 根据resizeMode配置显示不同的鼠标状态和小图标。
+* 改善: 按TAB键时插入4个&nbsp;。
 * 增加: 增加了afterDialogCreate属性，设置弹出dialog后执行的回调函数。
 * 增加: 增加了ASP.NET、ASP、JSP演示程序。
 * 增加: 增加了工具栏分割符号。

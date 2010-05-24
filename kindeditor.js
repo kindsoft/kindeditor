@@ -1567,7 +1567,7 @@ KE.util = {
 		KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
 			if (e.keyCode == 9) {
 				KE.util.setSelection(id);
-				KE.util.insertHtml(id, '　　');
+				KE.util.insertHtml(id, '&nbsp;&nbsp;&nbsp;&nbsp;');
 				if (e.preventDefault) e.preventDefault();
 				if (e.stopPropagation) e.stopPropagation();
 				return false;
