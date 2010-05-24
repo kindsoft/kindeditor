@@ -3141,7 +3141,7 @@ KE.plugin['link'] = {
 		var isItem = (startNode.nodeType == 1 && startNode === endNode);
 		var isEmpty = !isItem;
 		if (!isItem) isEmpty = KE.browser.IE ? g.range.text === '' : g.range.toString() === '';
-		if (isEmpty) {
+		if (isEmpty || KE.util.isEmpty(id)) {
 			var html = '<a href="' + url + '"';
 			if (target) html += ' target="' + target + '"';
 			html += '>' + url + '</a>';
