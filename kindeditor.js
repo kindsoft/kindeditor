@@ -1315,6 +1315,12 @@ KE.util = {
 			g.iframe.style.height = diff + 'px';
 			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8) || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
 		}
+		if (KE.browser.IE) {
+			if (typeof g.containerWidthMargin == 'undefined') {
+				g.containerWidthMargin = parseInt(width) - (g.iframe.offsetWidth || g.newTextarea.offsetWidth);
+			}
+			g.newTextarea.style.width = (parseInt(width) - g.containerWidthMargin) + 'px';
+		}
 	},
 	hideLoadingPage : function(id) {
 		var stack = KE.g[id].dialogStack;
