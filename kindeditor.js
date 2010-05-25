@@ -2338,9 +2338,9 @@ KE.create = function(id, mode) {
 	KE.onchange(id, function(id) {
 		KE.util.setData(id);
 	});
-	KE.readonly(id, false);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
+		KE.readonly(id, false);
 		if (mode > 0) KE.util.focus(id);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);
