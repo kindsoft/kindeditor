@@ -1348,7 +1348,11 @@ KE.util = {
 		];
 		for (var i = 0; i < items.length; i++) {
 			KE.plugin[items[i]] = {
-				click : new Function('id', 'KE.util.execCommand(id, "' + items[i] + '", null);')
+				click : (function(i) {
+					return function(id) {
+						KE.util.execCommand(id, items[i], null);
+					};
+				})(i)
 			};
 		}
 	},
@@ -1760,7 +1764,11 @@ KE.menu = function(arg){
 				cell.title = colorTable[i][j];
 				cell.onmouseover = function() {this.style.borderColor = '#000000'; };
 				cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; };
-				cell.onclick = new Function('KE.plugin["' + arg.cmd + '"].exec("' + arg.id + '", "' + colorTable[i][j] + '")');
+				cell.onclick = (function(i, j) {
+					return function() {
+						KE.plugin[arg.cmd].exec(arg.id, colorTable[i][j]);
+					};
+				})(i, j);
 				cell.innerHTML = '&nbsp;';
 			}
 		}
@@ -1812,7 +1820,10 @@ KE.dialog = function(arg){
 		var id = arg.id;
 		var stack = KE.g[id].dialogStack;
 		if (stack[stack.length - 1] != this) return;
-		stack.pop();
+		var dialog = stack.pop();
+		var iframe = dialog.iframe;
+		iframe.src = 'javascript:false';
+		iframe.parentNode.removeChild(iframe);
 		KE.g[id].hideDiv.removeChild(this.div);
 		if (stack.length < 1) {
 			KE.g[id].hideDiv.style.display = 'none';
@@ -1875,7 +1886,7 @@ KE.dialog = function(arg){
 		var loadingImg = KE.$$('span');
 		loadingImg.className = 'ke-loading-img';
 		loadingTable.cell.appendChild(loadingImg);
-		var iframe = KE.$$('iframe');
+		var iframe = (KE.g[id].dialogStack.length == 0 && KE.g[id].dialog) ? KE.g[id].dialog : KE.$$('iframe');
 		if (arg.useFrameCSS) {
 			iframe.className = 'ke-dialog-iframe';
 		}
@@ -2151,6 +2162,8 @@ KE.remove = function(id, mode) {
 	if (!KE.g[id].container) return false;
 	mode = (typeof mode == "undefined") ? 0 : mode;
 	var container = KE.g[id].container;
+	KE.g[id].iframeDoc.src = 'javascript:false';
+	KE.g[id].iframe.parentNode.removeChild(KE.g[id].iframe);
 	if (mode == 1) {
 		document.body.removeChild(container);
 	} else {
@@ -2197,7 +2210,7 @@ KE.create = function(id, mode) {
 	else srcTextarea.parentNode.insertBefore(container, srcTextarea);
 	var toolbarTable = KE.toolbar.create(id);
 	toolbarOuter.appendChild(toolbarTable);
-	var iframe = KE.$$('iframe');
+	var iframe = KE.g[id].iframe || KE.$$('iframe');
 	iframe.className = 'ke-iframe';
 	iframe.setAttribute("frameBorder", "0");
 	iframe.style.height = 0;
@@ -2319,6 +2332,7 @@ KE.create = function(id, mode) {
 	function setSelectionHandler() {
 		KE.util.setSelection(id);
 	}
+	KE.event.input(iframeDoc, setSelectionHandler);
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
 	KE.event.add(document, 'mousedown', setSelectionHandler);
 	KE.onchange(id, function(id) {
@@ -2642,7 +2656,7 @@ KE.plugin['fontname'] = {
 		});
 		KE.each(fontName, function(key, value) {
 			var html = '<span style="font-family: ' + key + ';">' + value + '</span>';
-			menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + key + '")'));
+			menu.add(html, function() { KE.plugin[cmd].exec(id, key); });
 		});
 		menu.show();
 		this.menu = menu;
@@ -2669,7 +2683,11 @@ KE.plugin['fontsize'] = {
 		for (var i = 0, len = fontSize.length; i < len; i++) {
 			var value = fontSize[i];
 			var html = '<span style="font-size: ' + value + ';">' + value + '</span>';
-			menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + value + '")'));
+			menu.add(html, (function(value) {
+				return function() {
+					KE.plugin[cmd].exec(id, value);
+				};
+			})(value));
 		}
 		menu.show();
 		this.menu = menu;
@@ -2785,7 +2803,7 @@ KE.plugin['title'] = {
 		});
 		KE.each(title, function(key, value) {
 			var html = '<' + key + ' style="margin:0px;">' + value + '</' + key + '>';
-			menu.add(html, new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "<' + key + '>")'));
+			menu.add(html, function() { KE.plugin[cmd].exec(id, '<' + key + '>'); });
 		});
 		menu.show();
 		this.menu = menu;
@@ -2816,7 +2834,11 @@ KE.plugin['emoticons'] = {
 				cell.className = 'ke-plugin-emoticons-td';
 				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
 				cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; }
-				cell.onclick = new Function('KE.plugin["' + cmd + '"].exec("' + id + '", "' + num + '.gif")');
+				cell.onclick = (function(num) {
+					return function() {
+						KE.plugin[cmd].exec(id, num + '.gif');
+					};
+				})(num);
 				var span = KE.$$('span');
 				span.className = 'ke-plugin-emoticons-span';
 				span.style.backgroundPosition = '-' + (24 * num) + 'px 0px';

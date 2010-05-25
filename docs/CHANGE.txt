@@ -22,6 +22,7 @@ ver 3.4.3
 * BUG: 修改了在非IE浏览器上换行使用p的时候最后一个p结尾还是有一个br的问题。
 * BUG: 修改了Webkit系列浏览器的textarea可拖动调整大小，聚焦时边框变成黄色的问题。
 * BUG: 修改了在IE上代码模式下有时候不会自动换行的问题。
+* BUG: 修改了在IE上new Function和iframe引起内存泄漏的问题。
 * 改变: 默认换行方式改成p换行。
 * 改善: 弹出框未指定任何按钮(yesButton, noButton, previewButton)时，不显示底部DIV。
 * 改善: 确定alert框后将焦点设置到输入错误的输入框。
