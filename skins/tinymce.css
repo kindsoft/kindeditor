@@ -473,13 +473,9 @@
 	background-color: #FFFFFF;
 }
 .ke-button {
-	background-color: #DDDDDD;
-	border-top: 2px solid #DDDDDD;
-	border-left: 2px solid #DDDDDD;
-	border-right: 2px solid #AAAAAA;
-	border-bottom: 2px solid #AAAAAA;
-	cursor: pointer;
 	font-size: 12px;
+	line-height: 1;
+	padding: 2px 10px;
 }
 .ke-text-input {
 	background-color:#FFFFFF;

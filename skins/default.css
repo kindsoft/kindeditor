@@ -229,6 +229,7 @@
 }
 .ke-toolbar-table {
 	font-size: 0;
+	line-height: 0;
 	float: left;
 	clear: both;
 	padding:0;
@@ -268,6 +269,7 @@
 .ke-bottom {
 	width: 100%;
 	font-size: 0;
+	line-height: 0;
 	padding:0;
 	margin:0;
 	border-collapse:separate;
@@ -378,6 +380,7 @@
 	background-color: #F0F0EE;
 	color: #222222;
 	font-size: 12px;
+	line-height: 1.5;
 	text-align: left;
 	padding: 2px;
 	z-index: 19811214;
@@ -403,6 +406,7 @@
 	background-color: #F0F0EE;
 	color: #222222;
 	font-size: 12px;
+	line-height: 1.5;
 	padding: 2px;
 	text-align: left;
 	z-index: 19811214;
@@ -410,14 +414,12 @@
 .ke-contextmenu-noselected {
 	background-color: #F0F0EE;
 	color: #222222;
-	font-size: 12px;
 	padding: 2px 30px 2px 10px;
 	cursor: pointer;
 }
 .ke-contextmenu-selected {
 	background-color: #4086FF;
 	color: #FFFFFF;
-	font-size: 12px;
 	padding: 2px 30px 2px 10px;
 	cursor: pointer;
 }
@@ -437,6 +439,7 @@
 	color: #000000;
 	text-align: left;
 	font-size: 14px;
+	line-height: 1;
 	font-weight: bold;
 	cursor: move;
 }
@@ -448,6 +451,7 @@
 }
 .ke-dialog-bottom {
 	font-size: 12px;
+	line-height: 1;
 }
 .ke-dialog-preview {
 	margin: 5px;
@@ -470,17 +474,14 @@
 	background-color: #FFFFFF;
 }
 .ke-button {
-	background-color: #DDDDDD;
-	border-top: 2px solid #DDDDDD;
-	border-left: 2px solid #DDDDDD;
-	border-right: 2px solid #AAAAAA;
-	border-bottom: 2px solid #AAAAAA;
-	cursor: pointer;
 	font-size: 12px;
+	line-height: 1;
+	padding: 2px 10px;
 }
 .ke-text-input {
 	background-color:#FFFFFF;
 	font-size: 12px;
+	line-height: 1;
 }
 .ke-picker-table {
 	margin:0;
@@ -491,14 +492,16 @@
 	width: 14px;
 	height: 14px;
 	font-size: 0;
+	line-height: 0;
 	border: 1px solid #F0F0EE;
 	cursor: pointer;
 	margin:0;
 	padding:0;
 }
 .ke-picker-td-top {
-	height: 14px;
+	height: 16px;
 	font-size: 12px;
+	line-height: 1.2;
 	border: 1px solid #F0F0EE;
 	cursor: pointer;
 	margin:0;
@@ -515,6 +518,7 @@
 	margin:0;
 	padding:0;
 	font-size: 12px;
+	line-height: 1;
 }
 .ke-loading-img {
 	display: block;
@@ -556,6 +560,7 @@
 }
 .ke-plugin-table-td-bottom {
 	font-size:12px;
+	line-height: 1;
 	text-align:center;
 	height:20px;
 	border:0;

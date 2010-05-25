@@ -1905,7 +1905,7 @@ KE.dialog = function(arg){
 		var previewButton = null;
 		if (arg.noButton) {
 			noButton = KE.$$('input');
-			noButton.className = 'ke-dialog-no';
+			noButton.className = 'ke-button ke-dialog-no';
 			noButton.type = 'button';
 			noButton.name = 'noButton';
 			noButton.value = arg.noButton;
@@ -1917,7 +1917,7 @@ KE.dialog = function(arg){
 		}
 		if (arg.yesButton) {
 			yesButton = KE.$$('input');
-			yesButton.className = 'ke-dialog-yes';
+			yesButton.className = 'ke-button ke-dialog-yes';
 			yesButton.type = 'button';
 			yesButton.name = 'yesButton';
 			yesButton.value = arg.yesButton;
@@ -1931,7 +1931,7 @@ KE.dialog = function(arg){
 		}
 		if (arg.previewButton) {
 			previewButton = KE.$$('input');
-			previewButton.className = 'ke-dialog-preview';
+			previewButton.className = 'ke-button ke-dialog-preview';
 			previewButton.type = 'button';
 			previewButton.name = 'previewButton';
 			previewButton.value = arg.previewButton;
