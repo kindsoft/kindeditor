@@ -1529,6 +1529,7 @@ KE.util = {
 		if (html === '') return;
 		var g = KE.g[id];
 		if (!g.wyswygMode) return;
+		if (!g.range) return;
 		if (KE.browser.IE) {
 			this.select(id);
 			if (g.range.item) {
@@ -2338,9 +2339,10 @@ KE.create = function(id, mode) {
 	KE.onchange(id, function(id) {
 		KE.util.setData(id);
 	});
+	if (KE.browser.IE) KE.readonly(id, false);
 	window.setTimeout(function() {
 		KE.util.setFullHtml(id, srcTextarea.value);
-		KE.readonly(id, false);
+		if (!KE.browser.IE) KE.readonly(id, false);
 		if (mode > 0) KE.util.focus(id);
 		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 	}, 0);
