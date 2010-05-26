@@ -5,12 +5,12 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.4.3
+* @version 3.4.4
 *******************************************************************************/
 
 var KE = {};
 
-KE.version = '3.4.3';
+KE.version = '3.4.4';
 
 KE.lang = {
 	source : 'HTML代码',
