@@ -3184,6 +3184,7 @@ KE.plugin['link'] = {
 					arr[i].href = url;
 					arr[i].setAttribute('kesrc', url);
 					if (target) arr[i].target = target;
+					else arr[i].removeAttribute('target');
 				}
 			}
 			if (KE.browser.WEBKIT && isItem && startNode.tagName.toLowerCase() == 'img') {
@@ -3197,6 +3198,7 @@ KE.plugin['link'] = {
 				parent.href = url;
 				parent.setAttribute('kesrc', url);
 				if (target) parent.target = target;
+				else parent.removeAttribute('target');
 				g.keSel.addRange(range);
 			}
 		}
