@@ -19,10 +19,12 @@
 		<script type="text/javascript">
 			KE.show({
 				id : 'content11',
-				cssPath : './index.css'
-			});
-			KE.onchange('content11', function(id) {
-				KE.$('word_count').innerHTML = KE.util.getData(id).length;
+				cssPath : './index.css',
+				afterCreate : function(id) {
+					KE.onchange(id, function(id) {
+						KE.$('word_count').innerHTML = KE.util.getData(id).length;
+					});
+				}
 			});
 		</script>
 	</head>
