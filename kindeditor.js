@@ -1705,6 +1705,7 @@ KE.menu = function(arg){
 		this.type = (arg.type && arg.type == 'contextmenu') ? arg.type : 'menu';
 		var div = KE.$$('div');
 		div.className = 'ke-' + this.type;
+		div.setAttribute('name', arg.cmd);
 		var pos = this.getPos(0, 0);
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
@@ -2094,7 +2095,12 @@ KE.toolbar = {
 			a.href = 'javascript:;';
 			a.onclick = (function(cmd) {
 				return function() {
-					KE.util.click(id, cmd);
+					var div = KE.g[id].hideDiv.firstChild;
+					if (div && div.getAttribute('name') == cmd) {
+						KE.layout.hide(id);
+					} else {
+						KE.util.click(id, cmd);
+					}
 					return false;
 				};
 			})(cmd);
