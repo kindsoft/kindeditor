@@ -3233,22 +3233,29 @@ KE.plugin['unlink'] = {
 	click : function(id) {
 		var g = KE.g[id];
 		KE.util.selection(id);
-		var linkNode = KE.plugin['link'].getSelectedNode(id);
-		if (!linkNode) return;
 		var range = g.keRange;
-		range.selectTextNode(linkNode);
-		g.keSel.addRange(range);
-		KE.util.select(id);
-		KE.util.execCommand(id, 'unlink', null);
 		var startNode = range.startNode;
 		var endNode = range.endNode;
 		var isItem = (startNode.nodeType == 1 && startNode === endNode);
-		if (KE.browser.WEBKIT && isItem && startNode.tagName.toLowerCase() == 'img') {
-			var parent = startNode.parentNode;
-			if (parent.tagName.toLowerCase() == 'a') {
-				KE.util.removeParent(parent);
-				g.keSel.addRange(range);
+		var isEmpty = !isItem;
+		if (!isItem) isEmpty = KE.browser.IE ? g.range.text === '' : g.range.toString() === '';
+		if (isEmpty) {
+			var linkNode = KE.plugin['link'].getSelectedNode(id);
+			if (!linkNode) return;
+			var range = g.keRange;
+			range.selectTextNode(linkNode);
+			g.keSel.addRange(range);
+			KE.util.select(id);
+			KE.util.execCommand(id, 'unlink', null);
+			if (KE.browser.WEBKIT && startNode.tagName.toLowerCase() == 'img') {
+				var parent = startNode.parentNode;
+				if (parent.tagName.toLowerCase() == 'a') {
+					KE.util.removeParent(parent);
+					g.keSel.addRange(range);
+				}
 			}
+		} else {
+			KE.util.execCommand(id, 'unlink', null);
 		}
 		KE.util.focus(id);
 	}
