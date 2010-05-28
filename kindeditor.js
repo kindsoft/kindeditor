@@ -1033,7 +1033,7 @@ KE.format = {
 			if (inHtml !== outHtml) outHtml = trimHtml(outHtml);
 			return outHtml;
 		};
-		return trimHtml(html);
+		return KE.util.trim(trimHtml(html));
 	}
 };
 
