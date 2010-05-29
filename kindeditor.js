@@ -189,7 +189,7 @@ KE.event = {
 	},
 	input : function(el, func) {
 		this.add(el, 'keyup', function(e) {
-			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116) {
+			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116 && e.keyCode < 136) {
 				func(e);
 				if (e.preventDefault) e.preventDefault();
 				if (e.stopPropagation) e.stopPropagation();
@@ -1463,6 +1463,7 @@ KE.util = {
 		}
 	},
 	click : function(id, cmd) {
+		this.focus(id);
 		KE.layout.hide(id);
 		KE.plugin[cmd].click(id);
 	},
@@ -1474,9 +1475,6 @@ KE.util = {
 	setSelection : function(id) {
 		var g = KE.g[id];
 		var keSel = new KE.selection(g.iframeWin, g.iframeDoc);
-		if (!g.keRange) {
-			KE.util.focus(id);
-		}
 		if (!KE.browser.IE || keSel.range.item || keSel.range.parentElement().ownerDocument === g.iframeDoc) {
 			g.keSel = keSel;
 			g.keRange = g.keSel.keRange;
@@ -2415,6 +2413,7 @@ KE.plugin['undo'] = {
 	},
 	click : function(id) {
 		KE.history.undo(id);
+		KE.util.execOnchangeHandler(id);
 	}
 };
 
@@ -2431,6 +2430,7 @@ KE.plugin['redo'] = {
 	},
 	click : function(id) {
 		KE.history.redo(id);
+		KE.util.execOnchangeHandler(id);
 	}
 };
 
@@ -3232,6 +3232,7 @@ KE.plugin['unlink'] = {
 	},
 	click : function(id) {
 		var g = KE.g[id];
+		var iframeDoc = g.iframeDoc;
 		KE.util.selection(id);
 		var range = g.keRange;
 		var startNode = range.startNode;
@@ -3246,7 +3247,7 @@ KE.plugin['unlink'] = {
 			range.selectTextNode(linkNode);
 			g.keSel.addRange(range);
 			KE.util.select(id);
-			KE.util.execCommand(id, 'unlink', null);
+			iframeDoc.execCommand('unlink', false, null);
 			if (KE.browser.WEBKIT && startNode.tagName.toLowerCase() == 'img') {
 				var parent = startNode.parentNode;
 				if (parent.tagName.toLowerCase() == 'a') {
@@ -3255,8 +3256,11 @@ KE.plugin['unlink'] = {
 				}
 			}
 		} else {
-			KE.util.execCommand(id, 'unlink', null);
+			iframeDoc.execCommand('unlink', false, null);
 		}
+		KE.toolbar.updateState(id);
+		KE.history.add(id, false);
+		KE.util.execOnchangeHandler(id);
 		KE.util.focus(id);
 	}
 };
