@@ -2159,7 +2159,7 @@ KE.history = {
 KE.readonly = function(id, isReadonly) {
 	isReadonly = typeof isReadonly == 'undefined' ? true : false;
 	var g = KE.g[id];
-	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
+	if (KE.browser.IE && KE.browser.VERSION > 6) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
 	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
 };
 
@@ -2263,9 +2263,7 @@ KE.create = function(id, mode) {
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
 	var html = KE.util.getFullHtml(id);
-	iframeDoc.open();
 	iframeDoc.write(html);
-	iframeDoc.close();
 	if (!KE.g[id].wyswygMode) {
 		newTextarea.value = KE.util.execSetHtmlHooks(id, srcTextarea.value);
 		newTextarea.style.display = 'block';
