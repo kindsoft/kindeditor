@@ -1587,7 +1587,7 @@ KE.util = {
 		var g = KE.g[id];
 		if (g.contextmenuItems.length == 0) return;
 		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
-			KE.util.selection(id);
+			KE.util.setSelection(id);
 			KE.util.selectImageWebkit(id, e, false);
 			var showFlag = false;
 			for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
