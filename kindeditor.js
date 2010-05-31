@@ -1317,7 +1317,6 @@ KE.util = {
 		}
 		var diff = parseInt(height) - g.toolbarTable.offsetHeight - g.bottom.offsetHeight;
 		if (diff >= 0) {
-			g.textareaTable.style.height = diff + 'px';
 			g.iframe.style.height = diff + 'px';
 			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8) || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
 		}
