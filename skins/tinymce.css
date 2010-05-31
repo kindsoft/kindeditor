@@ -313,6 +313,7 @@
 }
 .ke-textarea {
 	width: 100%;
+	display: block;
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -329,6 +330,7 @@
 }
 .ke-iframe {
 	width: 100%;
+	display: block;
 	margin: 0;
 	padding: 0;
 	border: 0;
