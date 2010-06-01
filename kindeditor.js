@@ -1412,9 +1412,10 @@ KE.util = {
 			handlers[i]();
 		}
 	},
-	getData : function(id) {
+	getData : function(id, wyswygMode) {
 		var g = KE.g[id];
-		if (!g.wyswygMode) {
+		wyswygMode = (wyswygMode === undefined) ? g.wyswygMode : wyswygMode;
+		if (!wyswygMode) {
 			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
 		}
 		var html = this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
@@ -1549,8 +1550,7 @@ KE.util = {
 		if (!KE.browser.IE && html === '') html = '<br />';
 		var html = KE.util.execSetHtmlHooks(id, html);
 		this.innerHtml(KE.g[id].iframeDoc.body, html);
-		KE.g[id].newTextarea.value = html;
-		KE.g[id].newTextarea.value = KE.util.getData(id);
+		KE.g[id].newTextarea.value = KE.util.getData(id, true);
 		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 	},
