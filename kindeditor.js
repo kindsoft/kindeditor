@@ -1414,7 +1414,7 @@ KE.util = {
 	},
 	getData : function(id, wyswygMode) {
 		var g = KE.g[id];
-		wyswygMode = (wyswygMode === undefined) ? g.wyswygMode : wyswygMode;
+		wyswygMode = (typeof wyswygMode == 'undefined') ? g.wyswygMode : wyswygMode;
 		if (!wyswygMode) {
 			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
 		}
