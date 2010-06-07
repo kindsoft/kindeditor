@@ -2057,8 +2057,6 @@ KE.dialog = function(arg){
 	};
 	this.show = function() {
 		if (this.beforeShow) this.beforeShow(id);
-		var width = arg.width + this.widthMargin;
-		var height = arg.height + this.heightMargin;
 		var self = this;
 		var id = arg.id;
 		var div = KE.$$('div');
@@ -2069,15 +2067,30 @@ KE.dialog = function(arg){
 		}
 		div.style.zIndex = this.zIndex;
 		var pos = this.getPos();
-		div.style.width = width + 'px';
-		div.style.height = height + 'px';
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
+		var table = KE.$$('table');
+		table.className = 'ke-dialog-table';
+		table.cellPadding = 0;
+		table.cellSpacing = 0;
+		table.border = 0;
+		var rowNames = ['t', 'm', 'b'];
+		var colNames = ['l', 'c', 'r'];
+		var contentCell;
+		for (var i = 0, len = 3; i < len; i++) {
+			var row = table.insertRow(i);
+			for (var j = 0, l = 3; j < l; j++) {
+				var cell = row.insertCell(j);
+				cell.className = 'ke-' + rowNames[i] + colNames[j];
+				if (i == 1 && j == 1) contentCell = cell;
+			}
+		}
+		div.appendChild(table);
 		var titleDiv = KE.$$('div');
 		titleDiv.className = 'ke-dialog-title';
 		titleDiv.innerHTML = arg.title;
 		var span = KE.$$('span');
-		span.className = "ke-toolbar-close";
+		span.className = "ke-dialog-close";
 		span.alt = KE.lang['close'];
 		span.title = KE.lang['close'];
 		span.onclick = function () {
@@ -2099,7 +2112,7 @@ KE.dialog = function(arg){
 			div.style.top = top + 'px';
 			div.style.left = left + 'px';
 		});
-		div.appendChild(titleDiv);
+		contentCell.appendChild(titleDiv);
 		var bodyDiv = KE.$$('div');
 		bodyDiv.className = 'ke-dialog-body';
 		var loadingTable = KE.util.createTable();
@@ -2113,32 +2126,36 @@ KE.dialog = function(arg){
 		loadingTable.cell.appendChild(loadingImg);
 		var iframe = (KE.g[id].dialogStack.length == 0 && KE.g[id].dialog) ? KE.g[id].dialog : KE.$$('iframe');
 		if (arg.useFrameCSS) {
+			iframe.className = 'ke-dialog-iframe ke-dialog-iframe-border';
+		} else {
 			iframe.className = 'ke-dialog-iframe';
 		}
-		iframe.width = arg.width + 'px';
-		iframe.height = arg.height + 'px';
 		iframe.setAttribute("frameBorder", "0");
+		iframe.style.width = arg.width + 'px';
+		iframe.style.height = arg.height + 'px';
 		iframe.style.display = 'none';
 		bodyDiv.appendChild(iframe);
 		bodyDiv.appendChild(loadingTable.table);
-		div.appendChild(bodyDiv);
+		contentCell.appendChild(bodyDiv);
 
 		var bottomDiv = KE.$$('div');
 		bottomDiv.className = 'ke-dialog-bottom';
 		var noButton = null;
 		var yesButton = null;
 		var previewButton = null;
-		if (arg.noButton) {
-			noButton = KE.$$('input');
-			noButton.className = 'ke-button ke-dialog-no';
-			noButton.type = 'button';
-			noButton.name = 'noButton';
-			noButton.value = arg.noButton;
-			noButton.onclick = function () {
-				self.hide();
-				KE.util.select(id);
+		if (arg.previewButton) {
+			previewButton = KE.$$('input');
+			previewButton.className = 'ke-button ke-dialog-preview';
+			previewButton.type = 'button';
+			previewButton.name = 'previewButton';
+			previewButton.value = arg.previewButton;
+			previewButton.onclick = function() {
+				var stack = KE.g[id].dialogStack;
+				if (stack[stack.length - 1] == self) {
+					KE.plugin[arg.cmd].preview(id);
+				}
 			};
-			bottomDiv.appendChild(noButton);
+			bottomDiv.appendChild(previewButton);
 		}
 		if (arg.yesButton) {
 			yesButton = KE.$$('input');
@@ -2154,22 +2171,20 @@ KE.dialog = function(arg){
 			};
 			bottomDiv.appendChild(yesButton);
 		}
-		if (arg.previewButton) {
-			previewButton = KE.$$('input');
-			previewButton.className = 'ke-button ke-dialog-preview';
-			previewButton.type = 'button';
-			previewButton.name = 'previewButton';
-			previewButton.value = arg.previewButton;
-			previewButton.onclick = function() {
-				var stack = KE.g[id].dialogStack;
-				if (stack[stack.length - 1] == self) {
-					KE.plugin[arg.cmd].preview(id);
-				}
+		if (arg.noButton) {
+			noButton = KE.$$('input');
+			noButton.className = 'ke-button ke-dialog-no';
+			noButton.type = 'button';
+			noButton.name = 'noButton';
+			noButton.value = arg.noButton;
+			noButton.onclick = function () {
+				self.hide();
+				KE.util.select(id);
 			};
-			bottomDiv.appendChild(previewButton);
+			bottomDiv.appendChild(noButton);
 		}
 		if (arg.yesButton || arg.noButton || arg.previewButton) {
-			div.appendChild(bottomDiv);
+			contentCell.appendChild(bottomDiv);
 		}
 		KE.g[id].hideDiv.style.display = '';
 		KE.g[id].hideDiv.appendChild(div);
@@ -2933,7 +2948,7 @@ KE.plugin['plainpaste'] = {
 			id : id,
 			cmd : 'plainpaste',
 			file : 'plainpaste.html',
-			width : 400,
+			width : 450,
 			height : 300,
 			loadingMode : true,
 			title : KE.lang['plainpaste'],
@@ -2961,7 +2976,7 @@ KE.plugin['wordpaste'] = {
 			id : id,
 			cmd : 'wordpaste',
 			file : 'wordpaste.html',
-			width : 400,
+			width : 450,
 			height : 300,
 			loadingMode : true,
 			title : KE.lang['wordpaste'],
@@ -3533,7 +3548,7 @@ KE.plugin['image'] = {
 			cmd : 'image',
 			file : 'image/image.html',
 			width : 400,
-			height : 230,
+			height : 220,
 			loadingMode : true,
 			title : KE.lang['image'],
 			yesButton : KE.lang['yes'],
@@ -3660,7 +3675,7 @@ KE.plugin['link'] = {
 			cmd : 'link',
 			file : 'link/link.html',
 			width : 400,
-			height : 100,
+			height : 90,
 			loadingMode : true,
 			title : KE.lang['link'],
 			yesButton : KE.lang['yes'],

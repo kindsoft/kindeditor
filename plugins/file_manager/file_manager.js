@@ -125,6 +125,7 @@ KE.event.ready(function() {
 			img.src = './images/' + iconName;
 			img.width = 16;
 			img.height = 16;
+			img.align = 'absmiddle';
 			img.alt = data.filename;
 			cell0.appendChild(img);
 			cell0.appendChild(document.createTextNode(' ' + data.filename));

@@ -4,22 +4,26 @@
 		<meta charset="utf-8" />
 		<title>PlainPaste</title>
 		<style type="text/css" rel="stylesheet">
-			html, body {
-				padding: 0;
+			body {
 				margin: 0;
-				font-family: "sans serif",tahoma,verdana,helvetica;
-				font-size:12px;
+				font:12px/1 "sans serif",tahoma,verdana,helvetica;
 				background-color:#F0F0EE;
+				color:#222222;
+				text-align:center;
 			}
 			#textArea {
-				width:390px;
-				height:250px;
-				border:1px solid #000000;
+				width:98%;
+				height:260px;
+				border:1px solid #222222;
 				overflow: auto;
 				resize: none;
 			}
 			#textArea:focus {
 				outline: none;
+			}
+			.comment {
+				margin-bottom: 10px;
+				text-align: left;
 			}
 		</style>
 		<script type="text/javascript">
@@ -33,7 +37,7 @@
 		</script>
 	</head>
 	<body>
-		<div style="margin-bottom:10px;"><span id="lang.comment"></span></div>
+		<div class="comment"><span id="lang.comment"></span></div>
 		<textarea id="textArea"></textarea>
 	</body>
 </html>

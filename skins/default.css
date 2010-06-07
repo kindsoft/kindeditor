@@ -310,18 +310,6 @@
 	padding: 0;
 	margin:0;
 }
-.ke-toolbar-close {
-	display: block;
-	background-position: 0px -688px;
-	width: 16px;
-	height: 16px;
-	position: absolute;
-	margin: 10px 10px 5px 10px;
-	right: 0;
-	top: 0;
-	cursor: pointer;
-	background-image: url(./default/default.gif);
-}
 .ke-bottom-outer {
 	border: 0;
 	padding: 0;
@@ -589,44 +577,104 @@
 	border-bottom: 1px solid #FFFFFF;
 }
 .ke-dialog {
-	font-family: "sans serif",tahoma,verdana,helvetica;
 	position: absolute;
+}
+.ke-dialog-table {
+	border:0;
+	padding:0;
+	margin:0;
+	border-collapse:separate;
+}
+.ke-mc {
+	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
 	border: 1px solid #A0A0A0;
 	background-color: #F0F0EE;
 	color: #222222;
-	text-align: left;
+	margin:0;
+	padding:0;
+}
+.ke-tl, .ke-tc, .ke-tr, .ke-ml, .ke-mr, .ke-bl, .ke-bc, .ke-br {
+	background-color:#000;
+	filter:alpha(opacity=20);
+	opacity:0.2;
+	overflow:hidden;
+	border:0;
+	margin:0;
+	padding:0;
+}
+.ke-ml, .ke-mr {
+	width:5px;
+}
+.ke-tc, .ke-bc {
+	height:5px;
+}
+.ke-tl, .ke-tr, .ke-bl, .ke-br {
+	width:5px;
+	height:5px;
+}
+.ke-tl {
+	-moz-border-radius:5px 0 0 0;
+	border-radius:5px 0 0 0;
+}
+.ke-tr {
+	-moz-border-radius:0 5px 0 0;
+	border-radius:0 5px 0 0;
+}
+.ke-bl {
+	-moz-border-radius:0 0 0 5px;
+	border-radius:0 0 0 5px;
+}
+.ke-br {
+	-moz-border-radius:0 0 5px 0;
+	border-radius:0 0 5px 0;
 }
 .ke-dialog-title {
 	background-color: #F0F0EE;
-	padding: 10px 10px 5px 10px;
+	padding: 10px;
 	color: #000000;
 	text-align: left;
-	font-size: 14px;
-	line-height: 1;
+	font: 14px/1 "sans serif",tahoma,verdana,helvetica;
 	font-weight: bold;
+	color: #336699;
 	cursor: move;
 }
+.ke-dialog-close {
+	display: block;
+	background-position: 0px -688px;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	margin: 0;
+	right: 15px;
+	top: 15px;
+	cursor: pointer;
+	background-image: url(./default/default.gif);
+}
 .ke-dialog-body {
-	margin: 10px;
+	margin: 10px 10px 0 10px;
 }
 .ke-dialog-iframe {
-	border: 1px solid #AAAAAA;
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+.ke-dialog-iframe-border {
+	border: 1px solid #A0A0A0;
 }
 .ke-dialog-bottom {
-	font-size: 12px;
-	line-height: 1;
+	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
+	text-align: right;
+	padding:0 0 5px 0;
+	margin:0;
 }
 .ke-dialog-preview {
 	margin: 5px;
-	float: right;
 }
 .ke-dialog-yes {
 	margin: 5px;
-	float: right;
 }
 .ke-dialog-no {
 	margin: 5px 10px 5px 5px;
-	float: right;
 }
 .ke-mask {
 	position: absolute;
