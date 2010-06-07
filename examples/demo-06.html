@@ -1,40 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>KindEditor</title>
-  <style type="text/css" rel="stylesheet">
-    form {
-    margin: 0;
-    }
-    .editor {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    }
-  </style>
-  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-  <script type="text/javascript">
-    KE.show({
-        id : 'content6',
-        width : '80%',
-        resizeMode : 1,
-        cssPath : './index.css'
-    });
-    KE.show({
-        id : 'content7',
-        resizeMode : 0,
-        cssPath : './index.css'
-    });
-  </script>
-</head>
-<body>
-  <h3>只能调整高度</h3>
-  <div class="editor">
-    <textarea id="content6" name="content" cols="100" rows="10"></textarea>
-  </div>
-  <h3>禁止拖动调整大小</h3>
-  <div class="editor">
-    <textarea id="content7" name="content" cols="100" rows="10"></textarea>
-  </div>
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor</title>
+		<style>
+			textarea {
+				display: block;
+			}
+		</style>
+		<script charset="utf-8" src="../kindeditor.js"></script>
+		<script>
+			KE.show({
+				id : 'content6',
+				width : '80%',
+				resizeMode : 1,
+				cssPath : './index.css'
+			});
+			KE.show({
+				id : 'content7',
+				resizeMode : 0,
+				cssPath : './index.css'
+			});
+		</script>
+	</head>
+	<body>
+		<h3>只能调整高度</h3>
+		<textarea id="content6" name="content" cols="100" rows="10"></textarea>
+		<h3>禁止拖动调整大小</h3>
+		<textarea id="content7" name="content" cols="100" rows="10"></textarea>
+	</body>
 </html>

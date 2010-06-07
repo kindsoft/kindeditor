@@ -1,68 +1,69 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>About</title>
-  <style type="text/css" rel="stylesheet">
-	body {
-		font-size:12px;
-		line-height: 1.5;
-		font-family: "sans serif",tahoma,verdana,helvetica;
-		margin:0;
-		background-color:#F0F0EE;
-		overflow:hidden;
-	}
-	.main {
-		margin: 10px;
-	}
-	.title {
-		font-size: 18px;
-		font-weight: bold;
-		color: #FB7155;
-		margin-bottom: 10px;
-	}
-	.table {
-		list-style-image:none;
-		list-style-position:outside;
-		list-style-type:none;
-		margin:0;
-		padding:0;
-		display:block;
-	}
-	.table li {
-		padding:0;
-		margin:0;
-		display:list-item;
-	}
-	.table li label {
-		font-weight:bold;
-	}
-	.table li input {
-		vertical-align:middle;
-	}
-	.table li img {
-		vertical-align:middle;
-	}
-  </style>
-  <script type="text/javascript">
-	var KE = parent.KE;
-	location.href.match(/\?id=([\w-]+)/i);
-	var id = RegExp.$1;
-	KE.event.ready(function() {
-		KE.util.hideLoadingPage(id);
-	}, window, document);
-  </script>
-</head>
-<body>
-	<div class="main">
-		<ul class="table">
-			<li>
-				KindEditor <script type="text/javascript">document.write(parent.KE.version);</script> - HTML可视化编辑器
-			</li>
-			<li>
-				Copyright &copy; <a href="http://www.kindsoft.net/" target="_blank">kindsoft.net</a> All rights reserved.
-			</li>
-		</ul>
-	</div>
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>About</title>
+		<style type="text/css" rel="stylesheet">
+			body {
+				font-size:12px;
+				line-height: 1.5;
+				font-family: "sans serif",tahoma,verdana,helvetica;
+				margin:0;
+				background-color:#F0F0EE;
+				overflow:hidden;
+			}
+			.main {
+				margin: 10px;
+			}
+			.title {
+				font-size: 18px;
+				font-weight: bold;
+				color: #FB7155;
+				margin-bottom: 10px;
+			}
+			.table {
+				list-style-image:none;
+				list-style-position:outside;
+				list-style-type:none;
+				margin:0;
+				padding:0;
+				display:block;
+			}
+			.table li {
+				padding:0;
+				margin:0;
+				display:list-item;
+			}
+			.table li label {
+				font-weight:bold;
+			}
+			.table li input {
+				vertical-align:middle;
+			}
+			.table li img {
+				vertical-align:middle;
+			}
+		</style>
+		<script type="text/javascript">
+			var KE = parent.KindEditor;
+			location.href.match(/\?id=([\w-]+)/i);
+			var id = RegExp.$1;
+			KE.event.ready(function() {
+				KE.util.pluginLang('about', document);
+				KE.util.hideLoadingPage(id);
+			}, window, document);
+		</script>
+	</head>
+	<body>
+		<div class="main">
+			<ul class="table">
+				<li>
+					KindEditor <span id="lang.version"></span></span>
+				</li>
+				<li>
+					Copyright &copy; <a href="http://www.kindsoft.net/" target="_blank">kindsoft.net</a> All rights reserved.
+				</li>
+			</ul>
+		</div>
+	</body>
 </html>

@@ -38,3 +38,9 @@ p {
 	width:100px;
 	height:100px;
 }
+table {
+	border-collapse:collapse;
+}
+table.ke-zeroborder td {
+	border:1px dotted #AAAAAA;
+}

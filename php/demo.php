@@ -13,6 +13,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title>KindEditor PHP</title>
+	<link rel="stylesheet" href="../examples/index.css" />
 	<script charset="utf-8" src="../kindeditor.js"></script>
 	<script>
 		KE.show({
@@ -33,7 +34,7 @@
 		});
 	</script>
 </head>
-<body>
+<body class="ke-content">
 	<?php echo $htmlData; ?>
 	<form name="example" method="post" action="demo.php">
 		<textarea id="content1" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"><?php echo htmlspecialchars($htmlData); ?></textarea>

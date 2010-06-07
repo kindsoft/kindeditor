@@ -2,3 +2,6 @@
 	font-size: 12px;
 	background-color: #ffffff;
 }
+.ke-content table {
+	border-collapse:collapse;
+}

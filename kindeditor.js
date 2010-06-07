@@ -5,74 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.4.4
+* @version 3.5 (2010-06-07)
 *******************************************************************************/
+
+(function (undefined) {
 
 var KE = {};
 
-KE.version = '3.4.4';
-
-KE.lang = {
-	source : 'HTML代码',
-	undo : '后退(Ctrl+Z)',
-	redo : '前进(Ctrl+Y)',
-	cut : '剪切(Ctrl+X)',
-	copy : '复制(Ctrl+C)',
-	paste : '粘贴(Ctrl+V)',
-	plainpaste : '粘贴为无格式文本',
-	wordpaste : '从Word粘贴',
-	selectall : '全选',
-	justifyleft : '左对齐',
-	justifycenter : '居中',
-	justifyright : '右对齐',
-	justifyfull : '两端对齐',
-	insertorderedlist : '编号',
-	insertunorderedlist : '项目符号',
-	indent : '增加缩进',
-	outdent : '减少缩进',
-	subscript : '下标',
-	superscript : '上标',
-	title : '标题',
-	fontname : '字体',
-	fontsize : '文字大小',
-	textcolor : '文字颜色',
-	bgcolor : '文字背景',
-	bold : '粗体',
-	italic : '斜体',
-	underline : '下划线',
-	strikethrough : '删除线',
-	removeformat : '删除格式',
-	image : '图片',
-	flash : '插入Flash',
-	media : '插入多媒体',
-	table : '插入表格',
-	hr : '插入横线',
-	emoticons : '插入表情',
-	link : '超级链接',
-	unlink : '取消超级链接',
-	fullscreen : '全屏显示',
-	about : '关于',
-	print : '打印',
-	yes : '确定',
-	no : '取消',
-	close : '关闭',
-	editImage : '图片属性',
-	deleteImage : '删除图片',
-	editLink : '超级链接属性',
-	deleteLink : '取消超级链接',
-	noColor : '无填充颜色',
-	invalidImg : "请输入有效的URL地址。\n只允许jpg,gif,bmp,png格式。",
-	invalidMedia : "请输入有效的URL地址。\n只允许swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。",
-	invalidWidth : "宽度必须为数字。",
-	invalidHeight : "高度必须为数字。",
-	invalidBorder : "边框必须为数字。",
-	invalidUrl : "请输入有效的URL地址。",
-	pleaseInput : "请输入内容",
-	invalidJson : '服务器发生故障。',
-	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
-	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
-	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
-};
+KE.version = '3.5 (2010-06-07)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -81,7 +21,7 @@ KE.scriptPath = (function() {
 			return elements[i].src.substring(0, elements[i].src.lastIndexOf('/') + 1);
 		}
 	}
-	return "";
+	return '';
 })();
 
 KE.browser = (function() {
@@ -100,13 +40,14 @@ KE.setting = {
 	loadStyleMode : true,
 	resizeMode : 2,
 	filterMode : false,
+	autoSetDataMode : true,
 	urlType : '',
 	skinType : 'default',
 	newlineTag : 'p',
 	dialogAlignType : 'page',
 	cssPath : '',
-	skinsPath : KE.scriptPath + 'skins/',
-	pluginsPath : KE.scriptPath + 'plugins/',
+	skinsPath : KE.scriptPath === '' ? '' : KE.scriptPath + 'skins/',
+	pluginsPath : KE.scriptPath === '' ? '' : KE.scriptPath + 'plugins/',
 	minWidth : 200,
 	minHeight : 100,
 	minChangeSize : 5,
@@ -117,19 +58,13 @@ KE.setting = {
 		'superscript', '|', 'selectall', '-',
 		'title', 'fontname', 'fontsize', '|', 'textcolor', 'bgcolor', 'bold',
 		'italic', 'underline', 'strikethrough', 'removeformat', '|', 'image',
-		'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about'
+		'flash', 'media', 'advtable', 'hr', 'emoticons', 'link', 'unlink', '|', 'about'
 	],
 	colorTable : [
-		["#FFFFFF","#E5E4E4","#D9D8D8","#C0BDBD","#A7A4A4","#8E8A8B","#827E7F","#767173","#5C585A","#000000"],
-		["#FEFCDF","#FEF4C4","#FEED9B","#FEE573","#FFED43","#F6CC0B","#E0B800","#C9A601","#AD8E00","#8C7301"],
-		["#FFDED3","#FFC4B0","#FF9D7D","#FF7A4E","#FF6600","#E95D00","#D15502","#BA4B01","#A44201","#8D3901"],
-		["#FFD2D0","#FFBAB7","#FE9A95","#FF7A73","#FF483F","#FE2419","#F10B00","#D40A00","#940000","#6D201B"],
-		["#FFDAED","#FFB7DC","#FFA1D1","#FF84C3","#FF57AC","#FD1289","#EC0078","#D6006D","#BB005F","#9B014F"],
-		["#FCD6FE","#FBBCFF","#F9A1FE","#F784FE","#F564FE","#F546FF","#F328FF","#D801E5","#C001CB","#8F0197"],
-		["#E2F0FE","#C7E2FE","#ADD5FE","#92C7FE","#6EB5FF","#48A2FF","#2690FE","#0162F4","#013ADD","#0021B0"],
-		["#D3FDFF","#ACFAFD","#7CFAFF","#4AF7FE","#1DE6FE","#01DEFF","#00CDEC","#01B6DE","#00A0C2","#0084A0"],
-		["#EDFFCF","#DFFEAA","#D1FD88","#BEFA5A","#A8F32A","#8FD80A","#79C101","#3FA701","#307F00","#156200"],
-		["#D4C89F","#DAAD88","#C49578","#C2877E","#AC8295","#C0A5C4","#969AC2","#92B7D7","#80ADAF","#9CA53B"]
+		['#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500'],
+		['#009900', '#006600', '#99BB00', '#B8D100', '#60D978', '#00D5FF'],
+		['#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE'],
+		['#FFFFFF', '#CCCCCC', '#999999', '#666666', '#333333', '#000000']
 	],
 	noEndTags : ['br', 'hr', 'img', 'area', 'col', 'embed', 'input', 'param'],
 	inlineTags : ['b', 'del', 'em', 'font', 'i', 'span', 'strike', 'strong', 'sub', 'sup', 'u'],
@@ -139,16 +74,35 @@ KE.setting = {
 	],
 	htmlTags : {
 		font : ['color', 'size', 'face', '.background-color'],
-		span : ['style'],
-		div : ['class', 'align', 'style'],
-		table: ['class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'style'],
-		'td,th': ['class', 'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor', 'style'],
-		a : ['class', 'href', 'target', 'name', 'style'],
-		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', 'style', 'align', 'allowscriptaccess', '/'],
-		img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', 'style', '/'],
-		hr : ['class', '/'],
+		span : [
+			'.color', '.background-color', '.font-size', '.font-family', '.background',
+			'.font-weight', '.font-style', '.text-decoration', '.vertical-align'
+		],
+		div : [
+			'align', '.border', '.margin', '.padding', '.text-align', '.color',
+			'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
+			'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
+		],
+		table: [
+			'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
+			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
+			'.width', '.height'
+		],
+		'td,th': [
+			'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
+			'.font-style', '.text-decoration', '.vertical-align', '.background'
+		],
+		a : ['href', 'target', 'name'],
+		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', '/'],
+		img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
+		hr : ['/'],
 		br : ['/'],
-		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : ['align', 'style'],
+		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
+			'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
+		],
 		'tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
 	},
 	mediaTypes : {
@@ -226,7 +180,7 @@ KE.event = {
 			func();
 		};
 		if (doc.addEventListener) {
-			this.add(doc, "domcontentloaded", readyFunc);
+			this.add(doc, "DOMContentLoaded", readyFunc);
 		} else if (doc.attachEvent){
 			this.add(doc, "readystatechange", function() {
 				if (doc.readyState == "complete") readyFunc();
@@ -270,11 +224,12 @@ KE.eachNode = function(node, func) {
 	walkNodes(node);
 };
 
-KE.selection = function(win, doc) {
+KE.selection = function(doc) {
 	this.sel = null;
 	this.range = null;
 	this.keRange = null;
 	this.isControl = false;
+	var win = doc.parentWindow || doc.defaultView;
 	this.init = function() {
 		var sel = win.getSelection ? win.getSelection() : doc.selection;
 		var range;
@@ -434,15 +389,17 @@ KE.selection = function(win, doc) {
 			var range = new KE.range(doc);
 			range.setTextStart(keRange.startNode, keRange.startPos);
 			range.setTextEnd(keRange.endNode, keRange.endPos);
-			if (KE.util.getNodeType(range.startNode) == 88) {
-				this.range.setStart(range.startNode.parentNode, getNodePos(range.startNode));
+			var startNode = range.startNode;
+			var endNode = range.endNode;
+			if (KE.util.getNodeType(startNode) == 88) {
+				this.range.setStart(startNode.parentNode, getNodePos(range.startNode));
 			} else {
-				this.range.setStart(range.startNode, range.startPos);
+				this.range.setStart(startNode, range.startPos);
 			}
-			if (KE.util.getNodeType(range.endNode) == 88) {
-				this.range.setEnd(range.endNode.parentNode, getNodePos(range.endNode) + 1);
+			if (KE.util.getNodeType(endNode) == 88) {
+				this.range.setEnd(endNode.parentNode, getNodePos(range.endNode) + 1);
 			} else {
-				this.range.setEnd(range.endNode, range.endPos);
+				this.range.setEnd(endNode, range.endPos);
 			}
 			this.sel.removeAllRanges();
 			this.sel.addRange(this.range);
@@ -489,7 +446,12 @@ KE.range = function(doc) {
 			if (node == self.startNode) isStarted = true;
 			var range = new KE.range(doc);
 			range.selectTextNode(node);
-			if (range.comparePoints('START_TO_END', self) >= 0) return false;
+			var cmp = range.comparePoints('START_TO_END', self);
+			if (cmp > 0) {
+				return false;
+			} else if (cmp == 0) {
+				if (range.startNode !== range.endNode || range.startPos !== range.endPos) return false;
+			}
 			if (isStarted) nodeList.push(node);
 			return true;
 		});
@@ -683,7 +645,7 @@ KE.cmd = function(id) {
 			KE.each(attr[i], function(key, value) {
 				if (key.charAt(0) == '.') {
 					var jsKey = KE.util.getJsKey(key.substr(1));
-					eval('el.style.' + jsKey + ' = value;');
+					el.style[jsKey] = value;
 				} else {
 					el.setAttribute(key, value);
 				}
@@ -808,6 +770,7 @@ KE.cmd = function(id) {
 		return {left : leftFrag, right : parent};
 	};
 	this.remove = function(tags) {
+		var self = this;
 		var keRange = this.keRange;
 		var startNode = keRange.startNode;
 		var startPos = keRange.startPos;
@@ -815,7 +778,8 @@ KE.cmd = function(id) {
 		var endPos = keRange.endPos;
 		this.keSel.focus();
 		if (KE.util.inMarquee(keRange.getParentElement())) return;
-		if (keRange.getText().replace(/\s+/g, '') === '') return;
+		var isCollapsed = (keRange.getText().replace(/\s+/g, '') === '');
+		if (isCollapsed && !KE.browser.IE) return;
 		var tagNames = [];
 		KE.each(tags, function(key, val) {
 			if (key != '*') tagNames.push(key);
@@ -834,9 +798,17 @@ KE.cmd = function(id) {
 				endNode = range.startNode;
 			}
 		}
-		if (endParent) {
+		if (isCollapsed) {
+			var node = keRange.startNode;
+			if (node.nodeType == 1) {
+				if (node.nodeName.toLowerCase() == 'br') return;
+				keRange.selectNode(node);
+			} else {
+				return;
+			}
+		} else if (endParent) {
 			var endFrags = this.splitNodeParent(endParent, endNode, endPos);
-			this.keRange.setEnd(endFrags.left, 0);
+			keRange.setEnd(endFrags.left, 0);
 			if (startParent == endParent) {
 				keRange.setStart(endFrags.left, 0);
 			}
@@ -844,7 +816,7 @@ KE.cmd = function(id) {
 		var removeAttr = function(node, attr) {
 			if (attr.charAt(0) == '.') {
 				var jsKey = KE.util.getJsKey(attr.substr(1));
-				eval('node.style.' + jsKey + ' = "";');
+				node.style[jsKey] = '';
 			} else {
 				node.removeAttribute(attr);
 			}
@@ -1037,6 +1009,150 @@ KE.format = {
 	}
 };
 
+KE.addClass = function(el, className) {
+	if (typeof el == 'object') {
+		var cls = el.className;
+		if (cls) {
+			if ((' ' + cls + ' ').indexOf(' ' + className + ' ') < 0) {
+				el.className = cls + ' ' + className;
+			}
+		} else {
+			el.className = className;
+		}
+	} else if (typeof el == 'string') {
+		if (/\s+class\s*=/.test(el)) {
+			el = el.replace(/(\s+class=["']?)([^"']*)(["']?[\s>])/, function($0, $1, $2, $3) {
+				if ((' ' + $2 + ' ').indexOf(' ' + className + ' ') < 0) {
+					return $2 === '' ? $1 + className + $3 : $1 + $2 + ' ' + className + $3;
+				} else {
+					return $0;
+				}
+			});
+		} else {
+			el = el.substr(0, el.length - 1) + ' class="' + className + '">';
+		}
+	}
+	return el;
+};
+
+KE.removeClass = function(el, className) {
+	var cls = el.className || '';
+	cls = ' ' + cls + ' ';
+	className = ' ' + className + ' ';
+	if (cls.indexOf(className) >= 0) {
+		cls = KE.util.trim(cls.replace(new RegExp(className, 'ig'), ''));
+		if (cls === '') {
+			var key = el.getAttribute('class') ? 'class' : 'className';
+			el.removeAttribute(key);
+		} else {
+			el.className = cls;
+		}
+	}
+	return el;
+};
+
+KE.getComputedStyle = function(el, key) {
+	var doc = el.ownerDocument,
+		win = doc.parentWindow || doc.defaultView,
+		jsKey = KE.util.getJsKey(key),
+		val = '';
+	if (win.getComputedStyle) {
+		var style = win.getComputedStyle(el, null);
+		val = style[jsKey] || style.getPropertyValue(key) || el.style[jsKey];
+	} else if (el.currentStyle) {
+		val = el.currentStyle[jsKey] || el.style[jsKey];
+	}
+	return val;
+};
+
+KE.getCommonAncestor = function(keSel, tagName) {
+	var range = keSel.range,
+		keRange = keSel.keRange,
+		startNode = keRange.startNode,
+		endNode = keRange.endNode;
+	if (KE.util.inArray(tagName, ['table', 'td', 'tr'])) {
+		if (KE.browser.IE) {
+			if (range.item) {
+				if (range.item(0).nodeName.toLowerCase() === tagName) {
+					startNode = endNode = range.item(0);
+				}
+			} else {
+				var rangeA = range.duplicate();
+				rangeA.collapse(true);
+				var rangeB = range.duplicate();
+				rangeB.collapse(false);
+				startNode = rangeA.parentElement();
+				endNode = rangeB.parentElement();
+			}
+		} else {
+			var rangeA = range.cloneRange();
+			rangeA.collapse(true);
+			var rangeB = range.cloneRange();
+			rangeB.collapse(false);
+			startNode = rangeA.startContainer;
+			endNode = rangeB.startContainer;
+		}
+	}
+	function find(node) {
+		while (node) {
+			if (node.nodeType == 1) {
+				if (node.tagName.toLowerCase() === tagName) return node;
+			}
+			node = node.parentNode;
+		}
+		return null;
+	};
+	var start = find(startNode),
+		end = find(endNode);
+	if (start && end && start === end) {
+		return start;
+	}
+	return null;
+};
+
+KE.queryCommandValue = function(doc, cmd) {
+	cmd = cmd.toLowerCase();
+	function commandValue() {
+		var val = doc.queryCommandValue(cmd);
+		if (typeof val !== 'string') val = '';
+		return val;
+	}
+	var val = '';
+	if (cmd === 'fontname') {
+		val = commandValue();
+		val = val.replace(/['"]/g, '');
+	} else if (cmd === 'formatblock') {
+		val = commandValue();
+		if (val === '') {
+			var keSel = new KE.selection(doc);
+			var el = KE.getCommonAncestor(keSel, 'h1');
+			if (!el) el = KE.getCommonAncestor(keSel, 'h2');
+			if (!el) el = KE.getCommonAncestor(keSel, 'h3');
+			if (!el) el = KE.getCommonAncestor(keSel, 'h4');
+			if (!el) el = KE.getCommonAncestor(keSel, 'p');
+			if (el) val = el.nodeName;
+		}
+		if (val === 'Normal') val = 'p';
+	} else if (cmd === 'fontsize') {
+		var keSel = new KE.selection(doc);
+		var el = KE.getCommonAncestor(keSel, 'span');
+		if (el) val = KE.getComputedStyle(el, 'font-size');
+	} else if (cmd === 'textcolor') {
+		var keSel = new KE.selection(doc);
+		var el = KE.getCommonAncestor(keSel, 'span');
+		if (el) val = KE.getComputedStyle(el, 'color');
+		val = KE.util.rgbToHex(val);
+		if (val === '') val = 'default';
+	} else if (cmd === 'bgcolor') {
+		var keSel = new KE.selection(doc);
+		var el = KE.getCommonAncestor(keSel, 'span');
+		if (el) val = KE.getComputedStyle(el, 'background-color');
+		val = KE.util.rgbToHex(val);
+		if (val === '') val = 'default';
+	}
+	return val.toLowerCase();
+};
+
 KE.util = {
 	getDocumentElement : function(doc) {
 		doc = doc || document;
@@ -1124,10 +1240,9 @@ KE.util = {
 		var x = 0, y = 0;
 		if (el.getBoundingClientRect) {
 			var box = el.getBoundingClientRect();
-			var el = this.getDocumentElement();
 			var pos = this.getScrollPos();
-			x = box.left + pos.x - el.clientLeft;
-			y = box.top + pos.y - el.clientTop;
+			x = box.left + pos.x;
+			y = box.top + pos.y;
 		} else {
             x = el.offsetLeft;
             y = el.offsetTop;
@@ -1247,6 +1362,15 @@ KE.util = {
 		}
 		parent.parentNode.removeChild(parent);
 	},
+	pluginLang : function(pluginName, doc) {
+		KE.each(KE.lang.plugins[pluginName], function (key, val) {
+			var span = KE.$('lang.' + key, doc);
+			if (span) {
+				span.parentNode.insertBefore(doc.createTextNode(val), span);
+				span.parentNode.removeChild(span);
+			}
+		});
+	},
 	drag : function(id, mousedownObj, moveObj, func) {
 		var g = KE.g[id];
 		mousedownObj.onmousedown = function(e) {
@@ -1354,7 +1478,7 @@ KE.util = {
 		html += '<head>';
 		html += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 		html += '<title>KindEditor</title>';
-		html += '<link href="' + KE.g[id].skinsPath + 'common/editor.css?ver=' + KE.version + '" rel="stylesheet" type="text/css" />';
+		html += '<link href="' + KE.g[id].skinsPath + 'common/editor.css?ver=' + escape(KE.version) + '" rel="stylesheet" type="text/css" />';
 		var cssPath = KE.g[id].cssPath;
 		if (typeof cssPath == 'string') cssPath = [cssPath];
 		for (var i = 0, len = cssPath.length; i < len; i++) {
@@ -1412,13 +1536,9 @@ KE.util = {
 			handlers[i]();
 		}
 	},
-	getData : function(id, wyswygMode) {
+	toData : function(id, srcData) {
 		var g = KE.g[id];
-		wyswygMode = (typeof wyswygMode == 'undefined') ? g.wyswygMode : wyswygMode;
-		if (!wyswygMode) {
-			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
-		}
-		var html = this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
+		var html = this.execGetHtmlHooks(id, srcData);
 		html = html.replace(/^\s*<br[^>]*>\s*$/ig, '');
 		html = html.replace(/^\s*<p>\s*&nbsp;\s*<\/p>\s*$/ig, '');
 		if (g.filterMode) {
@@ -1427,12 +1547,20 @@ KE.util = {
 			return KE.format.getHtml(html, null, g.urlType);
 		}
 	},
+	getData : function(id, wyswygMode) {
+		var g = KE.g[id];
+		wyswygMode = (wyswygMode === undefined) ? g.wyswygMode : wyswygMode;
+		if (!wyswygMode) {
+			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
+		}
+		return this.toData(id, g.iframeDoc.body.innerHTML);
+	},
 	getSrcData : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
 			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
 		}
-		return this.execGetHtmlHooks(id, g.iframeDoc.body.innerHTML);
+		return g.iframeDoc.body.innerHTML;
 	},
 	getPureData : function(id) {
 		return this.extractText(this.getData(id));
@@ -1446,7 +1574,8 @@ KE.util = {
 		return this.getPureData(id).replace(/\r\n|\n|\r/, '').replace(/^\s+|\s+$/, '') === '';
 	},
 	setData : function(id) {
-		if (KE.g[id].srcTextarea) KE.g[id].srcTextarea.value = this.getData(id);
+		var g = KE.g[id];
+		if (g.srcTextarea) g.srcTextarea.value = this.getData(id);
 	},
 	focus : function(id) {
 		var g = KE.g[id];
@@ -1468,7 +1597,7 @@ KE.util = {
 	},
 	setSelection : function(id) {
 		var g = KE.g[id];
-		var keSel = new KE.selection(g.iframeWin, g.iframeDoc);
+		var keSel = new KE.selection(g.iframeDoc);
 		if (!KE.browser.IE || keSel.range.item || keSel.range.parentElement().ownerDocument === g.iframeDoc) {
 			g.keSel = keSel;
 			g.keRange = g.keSel.keRange;
@@ -1486,7 +1615,6 @@ KE.util = {
 			KE.g[id].iframeDoc.execCommand(cmd, false, value);
 		} catch(e) {}
 		KE.toolbar.updateState(id);
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 	},
 	innerHtml : function(el, html) {
@@ -1543,15 +1671,14 @@ KE.util = {
 		} else {
 			this.pasteHtml(id, html);
 		}
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 	},
 	setFullHtml : function(id, html) {
+		var g = KE.g[id];
 		if (!KE.browser.IE && html === '') html = '<br />';
 		var html = KE.util.execSetHtmlHooks(id, html);
-		this.innerHtml(KE.g[id].iframeDoc.body, html);
-		KE.g[id].newTextarea.value = KE.util.getData(id, true);
-		KE.history.add(id, false);
+		this.innerHtml(g.iframeDoc.body, html);
+		if (!g.wyswygMode) g.newTextarea.value = KE.util.getData(id, true);
 		KE.util.execOnchangeHandler(id);
 	},
 	selectImageWebkit : function(id, e, isSelection) {
@@ -1580,31 +1707,53 @@ KE.util = {
 		var g = KE.g[id];
 		if (g.contextmenuItems.length == 0) return;
 		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
+			KE.layout.hide(id);
 			KE.util.setSelection(id);
 			KE.util.selectImageWebkit(id, e, false);
-			var showFlag = false;
+			var maxWidth = 0;
+			var items = [];
 			for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
 				var item = g.contextmenuItems[i];
-				if (item.cond(id)) {
-					showFlag = true;
-					break;
+				if (item === '-') {
+					items.push(item);
+				} else if (item.cond && item.cond(id)) {
+					items.push(item);
+					if (item.options) {
+						var width = parseInt(item.options.width) || 0;
+						if (width > maxWidth) maxWidth = width;
+					}
 				}
+				prevItem = item;
 			}
-			if (showFlag) {
+			while (items.length > 0 && items[0] === '-') {
+				items.shift();
+			}
+			while (items.length > 0 && items[items.length - 1] === '-') {
+				items.pop();
+			}
+			var prevItem = null;
+			for (var i = 0, len = items.length; i < len; i++) {
+				if (items[i] === '-' && prevItem === '-') delete items[i];
+				prevItem = items[i] || null;
+			}
+			if (items.length > 0) {
 				var menu = new KE.menu({
 					id : id,
 					event : e,
 					type : 'contextmenu',
-					width : 120
+					width : maxWidth
 				});
-				for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
-					var item = g.contextmenuItems[i];
-					if (item.cond(id)) {
+				for (var i = 0, len = items.length; i < len; i++) {
+					var item = items[i];
+					if (!item) continue;
+					if (item === '-') {
+						if (i < len - 1) menu.addSeparator();
+					} else {
 						menu.add(item.text, (function(item) {
 							return function() {
 								item.click(id, menu);
 							};
-						})(item));
+						})(item), item.options);
 					}
 				}
 				menu.show();
@@ -1668,8 +1817,70 @@ KE.layout = {
 	}
 };
 
+KE.colorpicker = function(arg) {
+	var wrapper;
+	var x = arg.x || 0;
+	var y = arg.y || 0;
+	var z = arg.z || 0;
+	var colors = arg.colors || KE.setting.colorTable;
+	var doc = arg.doc || document;
+	var onclick = arg.onclick;
+	var selectedColor = (arg.selectedColor || '').toLowerCase();
+	function init() {
+		wrapper = KE.$$('div');
+		wrapper.className = 'ke-colorpicker';
+		wrapper.style.top = y + 'px';
+		wrapper.style.left = x + 'px';
+		wrapper.style.zIndex = z;
+	}
+	init.call(this);
+	this.remove = function() {
+		doc.body.removeChild(wrapper);
+	};
+	this.getElement = function() {
+		function addAttr(cell, color, cls) {
+			if (selectedColor === color.toLowerCase()) cls += ' ke-colorpicker-cell-selected';
+			cell.className = cls;
+			cell.title = color || KE.lang['noColor'];
+			cell.onmouseover = function() { this.className = cls + ' ke-colorpicker-cell-on'; };
+			cell.onmouseout = function() { this.className = cls; };
+			cell.onclick = function() { onclick(color); };
+			if (color) {
+				var div = KE.$$('div');
+				div.className = 'ke-colorpicker-cell-color';
+				div.style.backgroundColor = color;
+				cell.appendChild(div);
+			} else {
+				cell.innerHTML = KE.lang['noColor'];
+			}
+		}
+		var table = KE.$$('table');
+		table.className = 'ke-colorpicker-table';
+		table.cellPadding = 0;
+		table.cellSpacing = 0;
+		table.border = 0;
+		var row = table.insertRow(0),
+			cell = row.insertCell(0);
+		cell.colSpan = colors[0].length;
+		addAttr(cell, '', 'ke-colorpicker-cell-top');
+		for (var i = 0; i < colors.length; i++) {
+			var row = table.insertRow(i + 1);
+			for (var j = 0; j < colors[i].length; j++) {
+				var color = colors[i][j],
+					cell = row.insertCell(j);
+				addAttr(cell, color, 'ke-colorpicker-cell');
+			}
+		}
+		return table;
+	};
+	this.create = function() {
+		wrapper.appendChild(this.getElement());
+		doc.body.appendChild(wrapper);
+	};
+};
+
 KE.menu = function(arg){
-	this.getPos = function(width, height) {
+	function getPos(width, height) {
 		var id = arg.id;
 		var x = 0;
 		var y = 0;
@@ -1692,27 +1903,62 @@ KE.menu = function(arg){
 		}
 		return {x : x, y : y};
 	};
-	this.init = function() {
+	function init() {
+		var width = arg.width;
 		this.type = (arg.type && arg.type == 'contextmenu') ? arg.type : 'menu';
 		var div = KE.$$('div');
 		div.className = 'ke-' + this.type;
 		div.setAttribute('name', arg.cmd);
-		var pos = this.getPos(0, 0);
+		var pos = getPos.call(this, 0, 0);
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
-		if (arg.width) div.style.width = arg.width + 'px';
+		if (arg.width) div.style.width = (/^\d+$/.test(width)) ? width + 'px' : width;
 		this.div = div;
 	};
-	this.init();
-	this.add = function(html, event) {
+	init.call(this);
+	this.add = function(html, event, options) {
+		var height, iconHtml, checked = false;
+		if (options !== undefined) {
+			height = options.height;
+			iconHtml = options.iconHtml;
+			checked = options.checked;
+		}
 		var self = this;
 		var cDiv = KE.$$('div');
-		cDiv.className = 'ke-' + this.type + '-noselected';
-		cDiv.onmouseover = function() { this.className = 'ke-' + self.type + '-selected'; }
-		cDiv.onmouseout = function() { this.className = 'ke-' + self.type + '-noselected'; }
+		cDiv.className = 'ke-' + self.type + '-item';
+		if (height) cDiv.style.height = height;
+		var left = KE.$$('div');
+		left.className = 'ke-' + this.type + '-left';
+		var center = KE.$$('div');
+		center.className = 'ke-' + self.type + '-center';
+		if (height) center.style.height = height;
+		var right = KE.$$('div');
+		right.className = 'ke-' + this.type + '-right';
+		if (height) right.style.lineHeight = height;
+		cDiv.onmouseover = function() {
+			this.className = 'ke-' + self.type + '-item ke-' + self.type + '-item-on';
+			center.className = 'ke-' + self.type + '-center ke-' + self.type + '-center-on';
+		};
+		cDiv.onmouseout = function() {
+			this.className = 'ke-' + self.type + '-item';
+			center.className = 'ke-' + self.type + '-center';
+		};
 		cDiv.onclick = event;
-		KE.util.innerHtml(cDiv, html);
+		cDiv.appendChild(left);
+		cDiv.appendChild(center);
+		cDiv.appendChild(right);
+		if (checked) {
+			KE.util.innerHtml(left, '<span class="ke-common-icon ke-common-icon-url ke-icon-checked"></span>');
+		} else {
+			if (iconHtml) KE.util.innerHtml(left, iconHtml);
+		}
+		KE.util.innerHtml(right, html);
 		this.append(cDiv);
+	};
+	this.addSeparator = function() {
+		var div = KE.$$('div');
+		div.className = 'ke-' + this.type + '-separator';
+		this.append(div);
 	};
 	this.append = function(el) {
 		this.div.appendChild(el);
@@ -1728,44 +1974,18 @@ KE.menu = function(arg){
 		var id = arg.id;
 		KE.g[id].hideDiv.style.display = '';
 		KE.g[id].hideDiv.appendChild(this.div);
-		var pos = this.getPos(this.div.clientWidth, this.div.clientHeight);
+		var pos = getPos.call(this, this.div.clientWidth, this.div.clientHeight);
 		this.div.style.top = pos.y + 'px';
 		this.div.style.left = pos.x + 'px';
 	};
-	this.picker = function() {
+	this.picker = function(color) {
 		var colorTable = KE.g[arg.id].colorTable;
-		var table = KE.$$('table');
-		table.className = 'ke-picker-table';
-		table.cellPadding = 0;
-		table.cellSpacing = 0;
-		table.border = 0;
-		var row = table.insertRow(0);
-		var cell = row.insertCell(0);
-		cell.colSpan = colorTable[0].length;
-		cell.className = 'ke-picker-td-top';
-		cell.title = KE.lang['noColor'];
-		cell.onmouseover = function() {this.style.borderColor = '#000000'; };
-		cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; };
-		cell.onclick = function() { KE.plugin[arg.cmd].exec(arg.id, ''); };
-		cell.innerHTML = KE.lang['noColor'];
-		for (var i = 0; i < colorTable.length; i++) {
-			var row = table.insertRow(i + 1);
-			for (var j = 0; j < colorTable[i].length; j++) {
-				var cell = row.insertCell(j);
-				cell.className = 'ke-picker-td';
-				cell.style.backgroundColor = colorTable[i][j];
-				cell.title = colorTable[i][j];
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; };
-				cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; };
-				cell.onclick = (function(i, j) {
-					return function() {
-						KE.plugin[arg.cmd].exec(arg.id, colorTable[i][j]);
-					};
-				})(i, j);
-				cell.innerHTML = '&nbsp;';
-			}
-		}
-		this.append(table);
+		var picker = new KE.colorpicker({
+			colors : colorTable,
+			onclick : function(color) { KE.plugin[arg.cmd].exec(arg.id, color); },
+			selectedColor : color
+		});
+		this.append(picker.getElement());
 		this.show();
 	};
 };
@@ -1775,7 +1995,7 @@ KE.dialog = function(arg){
 	this.heightMargin = 90;
 	this.zIndex = 19811214;
 	var minTop, minLeft, maxTop, maxLeft;
-	var setLimitNumber = function() {
+	function setLimitNumber() {
 		var width = arg.width + this.widthMargin;
 		var height = arg.height + this.heightMargin;
 		var docEl = KE.util.getDocumentElement();
@@ -1784,7 +2004,15 @@ KE.dialog = function(arg){
 		minLeft = pos.x;
 		maxTop = pos.y + docEl.clientHeight - height - 2;
 		maxLeft = pos.x + docEl.clientWidth - width - 2;
-	};
+	}
+	function init() {
+		this.beforeHide = arg.beforeHide;
+		this.afterHide = arg.afterHide;
+		this.beforeShow = arg.beforeShow;
+		this.afterShow = arg.afterShow;
+		this.ondrag = arg.ondrag;
+	}
+	init.call(this);
 	this.getPos = function() {
 		var width = arg.width + this.widthMargin;
 		var height = arg.height + this.heightMargin;
@@ -1809,7 +2037,7 @@ KE.dialog = function(arg){
 		return {x : x, y : y};
 	};
 	this.hide = function() {
-		if (arg.beforeHide) arg.beforeHide(id);
+		if (this.beforeHide) this.beforeHide(id);
 		var id = arg.id;
 		var stack = KE.g[id].dialogStack;
 		if (stack[stack.length - 1] != this) return;
@@ -1824,11 +2052,11 @@ KE.dialog = function(arg){
 		}
 		KE.event.remove(window, 'resize', setLimitNumber);
 		KE.event.remove(window, 'scroll', setLimitNumber);
-		if (arg.afterHide) arg.afterHide(id);
+		if (this.afterHide) this.afterHide(id);
 		KE.util.focus(id);
 	};
 	this.show = function() {
-		if (arg.beforeShow) arg.beforeShow(id);
+		if (this.beforeShow) this.beforeShow(id);
 		var width = arg.width + this.widthMargin;
 		var height = arg.height + this.heightMargin;
 		var self = this;
@@ -1852,12 +2080,16 @@ KE.dialog = function(arg){
 		span.className = "ke-toolbar-close";
 		span.alt = KE.lang['close'];
 		span.title = KE.lang['close'];
-		span.onclick = function () { self.hide(); };
+		span.onclick = function () {
+			self.hide();
+			KE.util.select(id);
+		};
 		titleDiv.appendChild(span);
 		setLimitNumber();
 		KE.event.add(window, 'resize', setLimitNumber);
 		KE.event.add(window, 'scroll', setLimitNumber);
 		KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
+			if (self.ondrag) self.ondrag(id);
 			top = objTop + top;
 			left = objLeft + left;
 			if (top > maxTop) top = maxTop;
@@ -1952,10 +2184,12 @@ KE.dialog = function(arg){
 			dialogDoc.close();
 			KE.util.innerHtml(dialogDoc.body, arg.html);
 		} else {
-			if (typeof arg.file == "undefined") {
-				iframe.src = KE.g[id].pluginsPath + arg.cmd + '.html?ver=' + KE.version;
+			var param = 'id=' + escape(id) + '&ver=' + escape(KE.version);
+			if (arg.file === undefined) {
+				iframe.src = KE.g[id].pluginsPath + arg.cmd + '.html?' + param;
 			} else {
-				iframe.src = KE.g[id].pluginsPath + arg.file;
+				param = (/\?/.test(arg.file) ? '&' : '?') + param;
+				iframe.src = KE.g[id].pluginsPath + arg.file + param;
 			}
 		}
 		KE.g[id].maskDiv.style.width = KE.util.getDocumentWidth() + 'px';
@@ -1973,7 +2207,7 @@ KE.dialog = function(arg){
 		KE.g[id].noButton = noButton;
 		KE.g[id].previewButton = previewButton;
 		if (!arg.loadingMode) KE.util.hideLoadingPage(id);
-		if (arg.afterShow) arg.afterShow(id);
+		if (this.afterShow) this.afterShow(id);
 		if (KE.g[id].afterDialogCreate) KE.g[id].afterDialogCreate(id);
 	};
 };
@@ -2005,7 +2239,7 @@ KE.toolbar = {
 	select : function(id, cmd) {
 		if (KE.g[id].toolbarIcon[cmd]) {
 			var a = KE.g[id].toolbarIcon[cmd][0];
-			a.className = "ke-icon-selected";
+			a.className = 'ke-icon ke-icon-selected';
 			a.onmouseover = null;
 			a.onmouseout = null;
 		}
@@ -2013,9 +2247,9 @@ KE.toolbar = {
 	unselect : function(id, cmd) {
 		if (KE.g[id].toolbarIcon[cmd]) {
 			var a = KE.g[id].toolbarIcon[cmd][0];
-			a.className = "ke-icon";
-			a.onmouseover = function(){ this.className = "ke-icon-on"; };
-			a.onmouseout = function(){ this.className = "ke-icon"; };
+			a.className = 'ke-icon';
+			a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
+			a.onmouseout = function(){ this.className = 'ke-icon'; };
 		}
 	},
 	able : function(id, arr) {
@@ -2031,8 +2265,8 @@ KE.toolbar = {
 						return false;
 					};
 				})(cmd);
-				a.onmouseover = function(){ this.className = "ke-icon-on"; };
-				a.onmouseout = function(){ this.className = "ke-icon"; };
+				a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
+				a.onmouseout = function(){ this.className = 'ke-icon'; };
 			}
 		});
 	},
@@ -2041,7 +2275,7 @@ KE.toolbar = {
 			if (!KE.util.inArray(cmd, arr)) {
 				var a = obj[0];
 				var span = obj[1];
-				a.className = 'ke-icon-disabled';
+				a.className = 'ke-icon ke-icon-disabled';
 				KE.util.setOpacity(span, 50);
 				a.onclick = null;
 				a.onmouseover = null;
@@ -2095,7 +2329,7 @@ KE.toolbar = {
 					return false;
 				};
 			})(cmd);
-			a.onmouseover = function(){ this.className = 'ke-icon-on'; };
+			a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
 			a.onmouseout = function(){ this.className = 'ke-icon'; };
 			a.hidefocus = true;
 			a.title = KE.lang[cmd];
@@ -2115,44 +2349,57 @@ KE.toolbar = {
 };
 
 KE.history = {
-	add : function(id, minChangeFlag) {
+	addStackData : function(stack, data) {
+		var prev = '';
+		if (stack.length > 0) {
+			prev = stack[stack.length - 1];
+		}
+		if (data !== prev) stack.push(data);
+	},
+	add : function(id) {
 		var g = KE.g[id];
-		var html = KE.util.getData(id);
+		var html = KE.util.getSrcData(id);
 		if (g.undoStack.length > 0) {
 			var prevHtml = g.undoStack[g.undoStack.length - 1];
-			if (html === prevHtml) return;
-			if (minChangeFlag && Math.abs(html.length - prevHtml.length) < g.minChangeSize) return;
+			if (Math.abs(html.length - prevHtml.length) < g.minChangeSize) return;
 		}
-		g.undoStack.push(html);
-		g.redoStack = [];
+		this.addStackData(g.undoStack, html);
 	},
 	undo : function(id) {
 		var g = KE.g[id];
 		if (g.undoStack.length == 0) return;
-		var html = KE.util.getData(id);
-		g.redoStack.push(html);
+		var html = KE.util.getSrcData(id);
+		this.addStackData(g.redoStack, html);
 		var prevHtml = g.undoStack.pop();
 		if (html === prevHtml && g.undoStack.length > 0) {
 			prevHtml = g.undoStack.pop();
 		}
-		KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, prevHtml));
-		g.newTextarea.value = KE.util.execGetHtmlHooks(id, prevHtml);
+		prevHtml = KE.util.toData(id, prevHtml);
+		if (g.wyswygMode) {
+			KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, prevHtml));
+		} else {
+			g.newTextarea.value = prevHtml;
+		}
 	},
 	redo : function(id) {
 		var g = KE.g[id];
 		if (g.redoStack.length == 0) return;
-		var html = KE.util.getData(id);
-		g.undoStack.push(html);
+		var html = KE.util.getSrcData(id);
+		this.addStackData(g.undoStack, html);
 		var nextHtml = g.redoStack.pop();
-		KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, nextHtml));
-		g.newTextarea.value = KE.util.execGetHtmlHooks(id, nextHtml);
+		nextHtml = KE.util.toData(id, nextHtml);
+		if (g.wyswygMode) {
+			KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, nextHtml));
+		} else {
+			g.newTextarea.value = nextHtml;
+		}
 	}
 };
 
 KE.readonly = function(id, isReadonly) {
 	isReadonly = typeof isReadonly == 'undefined' ? true : false;
 	var g = KE.g[id];
-	if (KE.browser.IE && KE.browser.VERSION > 6) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
+	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
 	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
 };
 
@@ -2160,6 +2407,7 @@ KE.remove = function(id, mode) {
 	if (!KE.g[id].container) return false;
 	mode = (typeof mode == "undefined") ? 0 : mode;
 	var container = KE.g[id].container;
+	KE.event.remove(document, 'mousedown', this.setSelectionHandler);
 	KE.g[id].iframeDoc.src = 'javascript:false';
 	KE.g[id].iframe.parentNode.removeChild(KE.g[id].iframe);
 	if (mode == 1) {
@@ -2226,24 +2474,29 @@ KE.create = function(id, mode) {
 	var row = bottom.insertRow(0);
 	var bottomLeft = row.insertCell(0);
 	bottomLeft.className = 'ke-bottom-left';
+	bottomLeft.align = 'center';
+	bottomLeft.vAlign = 'middle';
+	var leftImg = KE.$$('span');
+	leftImg.className = 'ke-bottom-left-img';
 	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
 		bottomLeft.style.cursor = 'default';
+		leftImg.style.visibility = 'hidden';
 	}
+	bottomLeft.appendChild(leftImg);
 	var bottomRight = row.insertCell(1);
 	bottomRight.className = 'ke-bottom-right';
-	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
-		bottomRight.style.cursor = 'default';
-	} else if (KE.g[id].config.resizeMode == 1) {
-		bottomRight.style.cursor = 's-resize';
-	}
 	bottomRight.align = 'right';
 	bottomRight.vAlign = 'bottom';
-	var span = KE.$$('span');
-	span.className = 'ke-bottom-right-img';
+	var rightImg = KE.$$('span');
+	rightImg.className = 'ke-bottom-right-img';
 	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
-		span.style.visibility = 'hidden';
+		bottomRight.style.cursor = 'default';
+		rightImg.style.visibility = 'hidden';
+	} else if (KE.g[id].config.resizeMode == 1) {
+		bottomRight.style.cursor = 's-resize';
+		rightImg.style.visibility = 'hidden';
 	}
-	bottomRight.appendChild(span);
+	bottomRight.appendChild(rightImg);
 	bottomOuter.appendChild(bottom);
 	var hideDiv = KE.$$('div');
 	hideDiv.style.display = 'none';
@@ -2255,9 +2508,10 @@ KE.create = function(id, mode) {
 	KE.util.setDefaultPlugin(id);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
-	if (!KE.browser.IE || KE.browser.VERSION < 7) iframeDoc.designMode = 'on';
 	var html = KE.util.getFullHtml(id);
+	iframeDoc.open();
 	iframeDoc.write(html);
+	iframeDoc.close();
 	if (!KE.g[id].wyswygMode) {
 		newTextarea.value = KE.util.execSetHtmlHooks(id, srcTextarea.value);
 		newTextarea.style.display = 'block';
@@ -2271,20 +2525,27 @@ KE.create = function(id, mode) {
 	var updateToolbar = function () {
 		KE.toolbar.updateState(id);
 	};
-	var addHistory = function () {
-		KE.history.add(id, true);
-	};
 	if (KE.browser.WEBKIT) {
 		KE.event.add(iframeDoc, 'click', function(e) {
 			KE.util.selectImageWebkit(id, e, true);
 		});
 	}
+	if (KE.browser.IE) {
+		KE.event.add(iframeDoc, 'keyup', function(e) {
+			if (e.keyCode == 8) {
+				var range = KE.g[id].range;
+				if (range.item) {
+					var item = range.item(0);
+					item.parentNode.removeChild(item);
+					KE.util.execOnchangeHandler(id);
+				}
+			}
+		});
+	}
 	KE.event.add(iframeDoc, 'click', hideMenu);
 	KE.event.add(iframeDoc, 'click', updateToolbar);
-	KE.event.input(iframeDoc, addHistory);
 	KE.event.input(iframeDoc, updateToolbar);
 	KE.event.add(newTextarea, 'click', hideMenu);
-	KE.event.input(newTextarea, addHistory);
 	KE.g[id].container = container;
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;
@@ -2332,15 +2593,18 @@ KE.create = function(id, mode) {
 	KE.event.input(iframeDoc, setSelectionHandler);
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
 	KE.event.add(document, 'mousedown', setSelectionHandler);
+	this.setSelectionHandler = setSelectionHandler;
 	KE.onchange(id, function(id) {
-		KE.util.setData(id);
+		if (KE.g[id].autoSetDataMode) {
+			KE.util.setData(id);
+			if (KE.g[id].afterSetData) KE.g[id].afterSetData(id);
+		}
+		KE.history.add(id);
 	});
-	if (KE.browser.IE && KE.browser.VERSION > 6) KE.readonly(id, false);
-	window.setTimeout(function() {
-		KE.util.setFullHtml(id, srcTextarea.value);
-		if (mode > 0) KE.util.focus(id);
-		if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
-	}, 0);
+	KE.readonly(id, false);
+	KE.util.setFullHtml(id, srcTextarea.value);
+	if (mode > 0) KE.util.focus(id);
+	if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
 };
 
 KE.onchange = function(id, func) {
@@ -2374,13 +2638,214 @@ KE.show = function(args) {
 	KE.event.ready(function() { KE.create(args.id); });
 };
 
+if (window.KE === undefined) window.KE = KE;
+window.KindEditor = KE;
+
+})();
+
+(function (KE, undefined) {
+
+KE.langType = 'zh_CN';
+
+KE.lang = {
+	source : 'HTML代码',
+	undo : '后退(Ctrl+Z)',
+	redo : '前进(Ctrl+Y)',
+	cut : '剪切(Ctrl+X)',
+	copy : '复制(Ctrl+C)',
+	paste : '粘贴(Ctrl+V)',
+	plainpaste : '粘贴为无格式文本',
+	wordpaste : '从Word粘贴',
+	selectall : '全选',
+	justifyleft : '左对齐',
+	justifycenter : '居中',
+	justifyright : '右对齐',
+	justifyfull : '两端对齐',
+	insertorderedlist : '编号',
+	insertunorderedlist : '项目符号',
+	indent : '增加缩进',
+	outdent : '减少缩进',
+	subscript : '下标',
+	superscript : '上标',
+	title : '标题',
+	fontname : '字体',
+	fontsize : '文字大小',
+	textcolor : '文字颜色',
+	bgcolor : '文字背景',
+	bold : '粗体',
+	italic : '斜体',
+	underline : '下划线',
+	strikethrough : '删除线',
+	removeformat : '删除格式',
+	image : '图片',
+	flash : '插入Flash',
+	media : '插入多媒体',
+	table : '插入表格',
+	hr : '插入横线',
+	emoticons : '插入表情',
+	link : '超级链接',
+	unlink : '取消超级链接',
+	fullscreen : '全屏显示',
+	about : '关于',
+	print : '打印',
+	fileManager : '浏览服务器',
+	advtable : '表格',
+	yes : '确定',
+	no : '取消',
+	close : '关闭',
+	editImage : '图片属性',
+	deleteImage : '删除图片',
+	editLink : '超级链接属性',
+	deleteLink : '取消超级链接',
+	tableprop : '表格属性',
+	tabledelete : '删除表格',
+	tablecolinsertleft : '左侧插入列',
+	tablecolinsertright : '右侧插入列',
+	tablerowinsertabove : '上方插入行',
+	tablerowinsertbelow : '下方插入行',
+	tablecoldelete : '删除列',
+	tablerowdelete : '删除行',
+	noColor : '无颜色',
+	invalidImg : "请输入有效的URL地址。\n只允许jpg,gif,bmp,png格式。",
+	invalidMedia : "请输入有效的URL地址。\n只允许swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。",
+	invalidWidth : "宽度必须为数字。",
+	invalidHeight : "高度必须为数字。",
+	invalidBorder : "边框必须为数字。",
+	invalidUrl : "请输入有效的URL地址。",
+	invalidRows : '行数为必选项，只允许输入大于0的数字。',
+	invalidCols : '列数为必选项，只允许输入大于0的数字。',
+	invalidPadding : '边距必须为数字。',
+	invalidSpacing : '间距必须为数字。',
+	invalidBorder : '边框必须为数字。',
+	pleaseInput : "请输入内容。",
+	invalidJson : '服务器发生故障。',
+	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
+	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
+	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
+};
+
+var plugins = KE.lang.plugins = {};
+
+plugins.about = {
+	version : KE.version,
+	title : 'HTML可视化编辑器'
+};
+
+plugins.plainpaste = {
+	comment : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。'
+};
+
+plugins.wordpaste = {
+	comment : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。'
+};
+
+plugins.link = {
+	url : 'URL地址',
+	linkType : '打开类型',
+	newWindow : '新窗口',
+	selfWindow : '当前窗口'
+};
+
+plugins.flash = {
+	url : 'Flash地址',
+	width : '宽度',
+	height : '高度'
+};
+
+plugins.media = {
+	url : '媒体文件地址',
+	width : '宽度',
+	height : '高度',
+	autostart : '自动播放'
+};
+
+plugins.image = {
+	remoteImage : '网络上的图片',
+	localImage : '电脑里的图片',
+	remoteUrl : '图片地址',
+	localUrl : '图片地址',
+	size : '图片大小',
+	width : '宽',
+	height : '高',
+	resetSize : '重置大小',
+	align : '对齐方式',
+	defaultAlign : '默认方式',
+	leftAlign : '左对齐',
+	rightAlign : '右对齐',
+	imgTitle : '图片说明',
+	viewServer : '浏览...'
+};
+
+plugins.file_manager = {
+	emptyFolder : '空文件夹',
+	moveup : '移到上一级文件夹',
+	viewType : '显示方式：',
+	viewImage : '缩略图',
+	listImage : '详细信息',
+	orderType : '排序方式：',
+	fileName : '名称',
+	fileSize : '大小',
+	fileType : '类型'
+};
+
+plugins.advtable = {
+	cells : '单元格数',
+	rows : '行数',
+	cols : '列数',
+	size : '表格大小',
+	width : '宽度',
+	height : '高度',
+	percent : '%',
+	px : 'px',
+	space : '边距间距',
+	padding : '边距',
+	spacing : '间距',
+	align : '对齐方式',
+	alignDefault : '默认',
+	alignLeft : '左对齐',
+	alignCenter : '居中',
+	alignRight : '右对齐',
+	border : '表格边框',
+	borderWidth : '边框',
+	borderColor : '颜色',
+	backgroundColor : '背景颜色'
+};
+
+plugins.title = {
+	h1 : '标题 1',
+	h2 : '标题 2',
+	h3 : '标题 3',
+	h4 : '标题 4',
+	p : '正 文'
+};
+
+plugins.fontname = {
+	fontName : {
+		'SimSun' : '宋体',
+		'SimHei' : '黑体',
+		'FangSong_GB2312' : '仿宋_GB2312',
+		'KaiTi_GB2312' : '楷体_GB2312',
+		'NSimSun' : '新宋体',
+		'Arial' : 'Arial',
+		'Arial Black' : 'Arial Black',
+		'Times New Roman' : 'Times New Roman',
+		'Courier New' : 'Courier New',
+		'Tahoma' : 'Tahoma',
+		'Verdana' : 'Verdana'
+	}
+};
+
+})(KindEditor);
+
+(function (KE, undefined) {
+
 KE.plugin['about'] = {
 	click : function(id) {
 		KE.util.selection(id);
 		var dialog = new KE.dialog({
 			id : id,
 			cmd : 'about',
-			file : 'about.html?id=' + id + '&ver=' + KE.version,
+			file : 'about.html',
 			width : 300,
 			height : 70,
 			loadingMode : true,
@@ -2467,7 +2932,7 @@ KE.plugin['plainpaste'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'plainpaste',
-			file : 'plainpaste.html?id=' + id + '&ver=' + KE.version,
+			file : 'plainpaste.html',
 			width : 400,
 			height : 300,
 			loadingMode : true,
@@ -2484,7 +2949,7 @@ KE.plugin['plainpaste'] = {
 		html = html.replace(/ /g, '&nbsp;');
 		html = html.replace(/\r\n|\n|\r/g, "<br />$&");
 		KE.util.insertHtml(id, html);
-		KE.layout.hide(id);
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
@@ -2495,7 +2960,7 @@ KE.plugin['wordpaste'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'wordpaste',
-			file : 'wordpaste.html?id=' + id + '&ver=' + KE.version,
+			file : 'wordpaste.html',
 			width : 400,
 			height : 300,
 			loadingMode : true,
@@ -2506,38 +2971,6 @@ KE.plugin['wordpaste'] = {
 		this.dialog.show();
 	},
 	exec : function(id) {
-		var htmlTags = {
-			font : ['color', 'size', 'face', '.background-color'],
-			span : [
-				'.color', '.background-color', '.font-size', '.font-family', '.background',
-				'.font-weight', '.font-style', '.text-decoration', '.vertical-align'
-			],
-			div : [
-				'align', '.border', '.margin', '.padding', '.text-align', '.color',
-				'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
-				'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
-			],
-			table: [
-				'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align',
-				'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
-				'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background'
-			],
-			'td,th': [
-				'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
-				'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
-				'.font-style', '.text-decoration', '.vertical-align', '.background'
-			],
-			a : ['href', 'target', 'name'],
-			embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', '/'],
-			img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
-			hr : ['/'],
-			br : ['/'],
-			'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
-				'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
-				'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
-			],
-			'tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
-		};
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
 		var wordIframe = KE.$('wordIframe', dialogDoc);
 		var str = KE.util.getIframeDoc(wordIframe).body.innerHTML;
@@ -2549,9 +2982,9 @@ KE.plugin['wordpaste'] = {
 		str = str.replace(/<xml>(\n|.)*?<\/xml>/ig, "");
 		str = str.replace(/\r\n|\n|\r/ig, "");
 		str = KE.util.execGetHtmlHooks(id, str);
-		str = KE.format.getHtml(str, htmlTags, KE.g[id].urlType);
+		str = KE.format.getHtml(str, KE.g[id].htmlTags, KE.g[id].urlType);
 		KE.util.insertHtml(id, str);
-		KE.layout.hide(id);
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
@@ -2578,6 +3011,7 @@ KE.plugin['fullscreen'] = {
 		}
 		if (this.isSelected) {
 			this.isSelected = false;
+			KE.util.setData(id);
 			KE.remove(id, 1);
 			g.width = this.width;
 			g.height = this.height;
@@ -2590,6 +3024,7 @@ KE.plugin['fullscreen'] = {
 			this.isSelected = true;
 			this.width = g.container.style.width;
 			this.height = g.container.style.height;
+			KE.util.setData(id);
 			KE.remove(id, 2);
 			document.body.parentNode.style.overflow = 'hidden';
 			resetSize();
@@ -2610,11 +3045,12 @@ KE.plugin['fullscreen'] = {
 KE.plugin['bgcolor'] = {
 	click : function(id) {
 		KE.util.selection(id);
+		var color = KE.queryCommandValue(KE.g[id].iframeDoc, 'bgcolor');
 		this.menu = new KE.menu({
 			id : id,
 			cmd : 'bgcolor'
 		});
-		this.menu.picker();
+		this.menu.picker(color);
 	},
 	exec : function(id, value) {
 		var cmd = new KE.cmd(id);
@@ -2625,7 +3061,6 @@ KE.plugin['bgcolor'] = {
 		} else {
 			cmd.wrap('span', [{'.background-color': value}]);
 		}
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -2634,28 +3069,22 @@ KE.plugin['bgcolor'] = {
 
 KE.plugin['fontname'] = {
 	click : function(id) {
-		var fontName = {
-			'SimSun' : '宋体',
-			'SimHei' : '黑体',
-			'FangSong_GB2312' : '仿宋体',
-			'KaiTi_GB2312' : '楷体',
-			'NSimSun' : '新宋体',
-			'Arial' : 'Arial',
-			'Arial Black' : 'Arial Black',
-			'Times New Roman' : 'Times New Roman',
-			'Courier New' : 'Courier New',
-			'Tahoma' : 'Tahoma',
-			'Verdana' : 'Verdana'
-		};
+		var fontName = KE.lang.plugins.fontname.fontName;
 		var cmd = 'fontname';
 		KE.util.selection(id);
 		var menu = new KE.menu({
 			id : id,
-			cmd : cmd
+			cmd : cmd,
+			width : 150
 		});
+		var font = KE.queryCommandValue(KE.g[id].iframeDoc, cmd);
 		KE.each(fontName, function(key, value) {
 			var html = '<span style="font-family: ' + key + ';">' + value + '</span>';
-			menu.add(html, function() { KE.plugin[cmd].exec(id, key); });
+			menu.add(
+				html,
+				function() { KE.plugin[cmd].exec(id, key); },
+				{ checked : (font === key.toLowerCase() || font === value.toLowerCase()) }
+			);
 		});
 		menu.show();
 		this.menu = menu;
@@ -2663,7 +3092,6 @@ KE.plugin['fontname'] = {
 	exec : function(id, value) {
 		var cmd = new KE.cmd(id);
 		cmd.wrap('span', [{'.font-family': value}]);
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -2675,18 +3103,27 @@ KE.plugin['fontsize'] = {
 		var fontSize = ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'];
 		var cmd = 'fontsize';
 		KE.util.selection(id);
+		var size = KE.queryCommandValue(KE.g[id].iframeDoc, 'fontsize');
 		var menu = new KE.menu({
 			id : id,
-			cmd : cmd
+			cmd : cmd,
+			width : 120
 		});
 		for (var i = 0, len = fontSize.length; i < len; i++) {
 			var value = fontSize[i];
 			var html = '<span style="font-size: ' + value + ';">' + value + '</span>';
-			menu.add(html, (function(value) {
-				return function() {
-					KE.plugin[cmd].exec(id, value);
-				};
-			})(value));
+			menu.add(
+				html,
+				(function(value) {
+					return function() {
+						KE.plugin[cmd].exec(id, value);
+					};
+				})(value),
+				{
+					height : (parseInt(value) + 12) + 'px',
+					checked : (size === value)
+				}
+			);
 		}
 		menu.show();
 		this.menu = menu;
@@ -2694,7 +3131,6 @@ KE.plugin['fontsize'] = {
 	exec : function(id, value) {
 		var cmd = new KE.cmd(id);
 		cmd.wrap('span', [{'.font-size': value}]);
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -2727,7 +3163,6 @@ KE.plugin['removeformat'] = {
 			tags[KE.g[id].inlineTags[i]] = ['*'];
 		}
 		cmd.remove(tags);
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 		KE.toolbar.updateState(id);
 		KE.util.focus(id);
@@ -2762,11 +3197,12 @@ KE.plugin['source'] = {
 KE.plugin['textcolor'] = {
 	click : function(id) {
 		KE.util.selection(id);
+		var color = KE.queryCommandValue(KE.g[id].iframeDoc, 'textcolor');
 		this.menu = new KE.menu({
 			id : id,
 			cmd : 'textcolor'
 		});
-		this.menu.picker();
+		this.menu.picker(color);
 	},
 	exec : function(id, value) {
 		var cmd = new KE.cmd(id);
@@ -2778,7 +3214,6 @@ KE.plugin['textcolor'] = {
 		} else {
 			cmd.wrap('span', [{'.color': value}]);
 		}
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -2787,22 +3222,40 @@ KE.plugin['textcolor'] = {
 
 KE.plugin['title'] = {
 	click : function(id) {
+		var lang = KE.lang.plugins.title;
 		var title = {
-			'H1' : '标题 1',
-			'H2' : '标题 2',
-			'H3' : '标题 3',
-			'H4' : '标题 4',
-			'P' : '正 文'
+			'H1' : lang.h1,
+			'H2' : lang.h2,
+			'H3' : lang.h3,
+			'H4' : lang.h4,
+			'P' : lang.p
+		};
+		var sizeHash = {
+			'H1' : 28,
+			'H2' : 24,
+			'H3' : 18,
+			'H4' : 14,
+			'P' : 12
 		};
 		var cmd = 'title';
 		KE.util.selection(id);
+		var block = KE.queryCommandValue(KE.g[id].iframeDoc, 'formatblock');
 		var menu = new KE.menu({
 			id : id,
-			cmd : cmd
+			cmd : cmd,
+			width : (KE.langType == 'en' ? 200 : 150)
 		});
 		KE.each(title, function(key, value) {
-			var html = '<' + key + ' style="margin:0px;">' + value + '</' + key + '>';
-			menu.add(html, function() { KE.plugin[cmd].exec(id, '<' + key + '>'); });
+			var style = 'font-size:' + sizeHash[key] + 'px;'
+			if (key !== 'P') style += 'font-weight:bold;';
+			var html = '<span style="' + style + '">' + value + '</span>';
+			menu.add(html, function() {
+				KE.plugin[cmd].exec(id, '<' + key + '>'); },
+				{
+					height : (sizeHash[key] + 12) + 'px',
+					checked : (block === key.toLowerCase() || block === value.toLowerCase() )
+				}
+			);
 		});
 		menu.show();
 		this.menu = menu;
@@ -2817,45 +3270,124 @@ KE.plugin['title'] = {
 
 KE.plugin['emoticons'] = {
 	click : function(id) {
-		var cmd = 'emoticons';
-		var rows = 9, cells = 15;
+		var self = this,
+			cmd = 'emoticons',
+			rows = 5,
+			cols = 9,
+			total = 135,
+			startNum = 0,
+			cells = rows * cols,
+			pages = Math.ceil(total / cells),
+			colsHalf = Math.floor(cols / 2),
+			g = KE.g[id],
+			path = g.pluginsPath + 'emoticons/',
+			allowPreview = (g.allowPreviewEmoticons === undefined) ? true : g.allowPreviewEmoticons;
 		KE.util.selection(id);
-		var table = KE.$$('table');
-		table.className = 'ke-plugin-emoticons-table';
-		table.cellPadding = 0;
-		table.cellSpacing = 2;
-		table.border = 0;
-		var num = 0;
-		for (var i = 0; i < rows; i++) {
-			var row = table.insertRow(i);
-			for (var j = 0; j < cells; j++) {
-				var cell = row.insertCell(j);
-				cell.className = 'ke-plugin-emoticons-td';
-				cell.onmouseover = function() {this.style.borderColor = '#000000'; }
-				cell.onmouseout = function() {this.style.borderColor = '#F0F0EE'; }
-				cell.onclick = (function(num) {
-					return function() {
-						KE.plugin[cmd].exec(id, num + '.gif');
-					};
-				})(num);
-				var span = KE.$$('span');
-				span.className = 'ke-plugin-emoticons-span';
-				span.style.backgroundPosition = '-' + (24 * num) + 'px 0px';
-				cell.appendChild(span);
-				num++;
+		var wrapperDiv = KE.$$('div');
+		wrapperDiv.className = 'ke-plugin-emoticons-wrapper';
+		var previewDiv, previewImg;
+		if (allowPreview) {
+			previewDiv = KE.$$('div');
+			previewDiv.className = 'ke-plugin-emoticons-preview';
+			previewDiv.style.right = 0;
+			var previewImg = KE.$$('img');
+			previewImg.src = path + '0.gif';
+			previewImg.border = 0;
+			previewDiv.appendChild(previewImg);
+			wrapperDiv.appendChild(previewDiv);
+		}
+		function createEmoticonsTable(pageNum) {
+			var table = KE.$$('table');
+			if (previewDiv) {
+				table.onmouseover = function() { previewDiv.style.display = 'block'; };
+				table.onmouseout = function() { previewDiv.style.display = 'none'; };
+			}
+			table.className = 'ke-plugin-emoticons-table';
+			table.cellPadding = 0;
+			table.cellSpacing = 0;
+			table.border = 0;
+			var num = (pageNum - 1) * cells + startNum;
+			for (var i = 0; i < rows; i++) {
+				var row = table.insertRow(i);
+				for (var j = 0; j < cols; j++) {
+					var cell = row.insertCell(j);
+					cell.className = 'ke-plugin-emoticons-cell';
+					if (previewDiv) {
+						cell.onmouseover = (function(j, num) {
+							return function() {
+								if (j > colsHalf) {
+									previewDiv.style.left = 0;
+									previewDiv.style.right = '';
+								} else {
+									previewDiv.style.left = '';
+									previewDiv.style.right = 0;
+								}
+								previewImg.src = path + num + '.gif';;
+								this.className = 'ke-plugin-emoticons-cell ke-plugin-emoticons-cell-on';
+							};
+						})(j, num);
+					} else {
+						cell.onmouseover = function() {
+							this.className = 'ke-plugin-emoticons-cell ke-plugin-emoticons-cell-on';
+						};
+					}
+					cell.onmouseout = function() { this.className = 'ke-plugin-emoticons-cell'; };
+					cell.onclick = (function(num) {
+						return function() {
+							self.exec(id, num);
+							return false;
+						};
+					})(num);
+					var span = KE.$$('span');
+					span.className = 'ke-plugin-emoticons-img';
+					span.style.backgroundPosition = '-' + (24 * num) + 'px 0px';
+					cell.appendChild(span);
+					num++;
+				}
+			}
+			return table;
+		}
+		var table = createEmoticonsTable(1);
+		wrapperDiv.appendChild(table);
+		var pageDiv = KE.$$('div');
+		pageDiv.className = 'ke-plugin-emoticons-page';
+		wrapperDiv.appendChild(pageDiv);
+		function createPageTable(currentPageNum) {
+			for (var pageNum = 1; pageNum <= pages; pageNum++) {
+				if (currentPageNum !== pageNum) {
+					var a = KE.$$('a');
+					a.href = 'javascript:;';
+					a.innerHTML = '[' + pageNum + ']';
+					a.onclick = (function(pageNum) {
+						return function() {
+							wrapperDiv.removeChild(table);
+							var newTable = createEmoticonsTable(pageNum);
+							wrapperDiv.insertBefore(newTable, pageDiv);
+							table = newTable;
+							pageDiv.innerHTML = '';
+							createPageTable(pageNum);
+							return false;
+						};
+					})(pageNum);
+					pageDiv.appendChild(a);
+				} else {
+					pageDiv.appendChild(document.createTextNode('[' + pageNum + ']'));
+				}
+				pageDiv.appendChild(document.createTextNode(' '));
 			}
 		}
+		createPageTable(1);
 		var menu = new KE.menu({
 			id : id,
 			cmd : cmd
 		});
-		menu.append(table);
+		menu.append(wrapperDiv);
 		menu.show();
 		this.menu = menu;
 	},
-	exec : function(id, value) {
-		var url = KE.g[id].pluginsPath + 'emoticons/' + value;
-		var html = '<img src="' + url + '" kesrc="' + url + '" width="24" height="24" border="0" alt="" />';
+	exec : function(id, num) {
+		var src = KE.g[id].pluginsPath + 'emoticons/' + num + '.gif';
+		var html = '<img src="' + src + '" kesrc="' + src + '" border="0" alt="" />';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -2899,7 +3431,7 @@ KE.plugin['flash'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'flash',
-			file : 'flash.html?id=' + id + '&ver=' + KE.version,
+			file : 'flash.html',
 			width : 400,
 			height : 140,
 			loadingMode : true,
@@ -2942,7 +3474,7 @@ KE.plugin['flash'] = {
 			quality : 'high'
 		});
 		KE.util.insertHtml(id, html);
-		KE.layout.hide(id);
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
@@ -2970,6 +3502,10 @@ KE.plugin['image'] = {
 			},
 			cond : function(id) {
 				return self.getSelectedNode(id);
+			},
+			options : {
+				width : '150px',
+				iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-image"></span>'
 			}
 		});
 		g.contextmenuItems.push({
@@ -2979,18 +3515,23 @@ KE.plugin['image'] = {
 				menu.hide();
 				var img = self.getSelectedNode(id);
 				img.parentNode.removeChild(img);
+				KE.util.execOnchangeHandler(id);
 			},
 			cond : function(id) {
 				return self.getSelectedNode(id);
+			},
+			options : {
+				width : '150px'
 			}
 		});
+		g.contextmenuItems.push('-');
 	},
 	click : function(id) {
 		KE.util.selection(id);
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'image',
-			file : 'image/image.html?id=' + id + '&ver=' + KE.version,
+			file : 'image/image.html',
 			width : 400,
 			height : 230,
 			loadingMode : true,
@@ -3085,35 +3626,14 @@ KE.plugin['image'] = {
 		html += 'alt="' + title + '" ';
 		html += 'border="' + border + '" />';
 		KE.util.insertHtml(id, html);
-		KE.layout.hide(id);
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
 
 KE.plugin['link'] = {
 	getSelectedNode : function(id) {
-		var g = KE.g[id];
-		var range = g.keRange;
-		var startNode = range.startNode;
-		var startPos = range.startPos;
-		var endNode = range.endNode;
-		var endPos = range.endPos;
-		var inlineTagHash = KE.util.arrayToHash(g.inlineTags);
-		var findLinkNode = function(node) {
-			while (node) {
-				if (node.nodeType == 1) {
-					var tagName = node.tagName.toLowerCase();
-					if (tagName == 'a') return node;
-				}
-				node = node.parentNode;
-			}
-			return null;
-		};
-		var startLink = findLinkNode(startNode);
-		var endLink = findLinkNode(endNode);
-		if (startLink && endLink && startLink === endLink) {
-			return startLink;
-		}
+		return KE.getCommonAncestor(KE.g[id].keSel, 'a');
 	},
 	init : function(id) {
 		var self = this;
@@ -3126,6 +3646,10 @@ KE.plugin['link'] = {
 			},
 			cond : function(id) {
 				return self.getSelectedNode(id);
+			},
+			options : {
+				width : '150px',
+				iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-link"></span>'
 			}
 		});
 	},
@@ -3134,7 +3658,7 @@ KE.plugin['link'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'link',
-			file : 'link/link.html?id=' + id + '&ver=' + KE.version,
+			file : 'link/link.html',
 			width : 400,
 			height : 100,
 			loadingMode : true,
@@ -3199,9 +3723,8 @@ KE.plugin['link'] = {
 				g.keSel.addRange(range);
 			}
 		}
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
-		KE.layout.hide(id);
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
@@ -3218,8 +3741,13 @@ KE.plugin['unlink'] = {
 			},
 			cond : function(id) {
 				return KE.plugin['link'].getSelectedNode(id);
+			},
+			options : {
+				width : '150px',
+				iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-unlink"></span>'
 			}
 		});
+		KE.g[id].contextmenuItems.push('-');
 	},
 	click : function(id) {
 		var g = KE.g[id];
@@ -3249,9 +3777,8 @@ KE.plugin['unlink'] = {
 		} else {
 			iframeDoc.execCommand('unlink', false, null);
 		}
-		KE.toolbar.updateState(id);
-		KE.history.add(id, false);
 		KE.util.execOnchangeHandler(id);
+		KE.toolbar.updateState(id);
 		KE.util.focus(id);
 	}
 };
@@ -3298,7 +3825,7 @@ KE.plugin['media'] = {
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : 'media',
-			file : 'media.html?id=' + id + '&ver=' + KE.version,
+			file : 'media.html',
 			width : 400,
 			height : 170,
 			loadingMode : true,
@@ -3343,77 +3870,282 @@ KE.plugin['media'] = {
 			loop : 'true'
 		});
 		KE.util.insertHtml(id, html);
-		KE.layout.hide(id);
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
 
-KE.plugin['table'] = {
-	click : function(id) {
+KE.plugin['advtable'] = {
+	getSelectedTable : function(id) {
+		return KE.getCommonAncestor(KE.g[id].keSel, 'table');
+	},
+	getSelectedRow : function(id) {
+		return KE.getCommonAncestor(KE.g[id].keSel, 'tr');
+	},
+	getSelectedCell : function(id) {
+		return KE.getCommonAncestor(KE.g[id].keSel, 'td');
+	},
+	tableprop : function(id) {
+		this.click(id);
+	},
+	tabledelete : function(id) {
+		var table = this.getSelectedTable(id);
+		table.parentNode.removeChild(table);
+	},
+	tablecolinsert : function(id, offset) {
+		var table = this.getSelectedTable(id);
+		var cell = this.getSelectedCell(id);
+		for (var i = 0, len = table.rows.length; i < len; i++) {
+			var newCell = table.rows[i].insertCell(cell.cellIndex + offset);
+			newCell.innerHTML = '&nbsp;';
+		}
+	},
+	tablecolinsertleft : function(id) {
+		this.tablecolinsert(id, 0);
+	},
+	tablecolinsertright : function(id) {
+		this.tablecolinsert(id, 1);
+	},
+	tablerowinsert : function(id, offset) {
+		var table = this.getSelectedTable(id);
+		var row = this.getSelectedRow(id);
+		var newRow = table.insertRow(row.rowIndex + offset);
+		for (var i = 0, len = row.cells.length; i < len; i++) {
+			var cell = newRow.insertCell(i);
+			cell.innerHTML = '&nbsp;';
+		}
+	},
+	tablerowinsertabove : function(id) {
+		this.tablerowinsert(id, 0);
+	},
+	tablerowinsertbelow : function(id) {
+		this.tablerowinsert(id, 1);
+	},
+	tablecoldelete : function(id) {
+		var table = this.getSelectedTable(id);
+		var cell = this.getSelectedCell(id);
+		for (var i = 0, len = table.rows.length; i < len; i++) {
+			table.rows[i].deleteCell(cell.cellIndex);
+		}
+	},
+	tablerowdelete : function(id) {
+		var table = this.getSelectedTable(id);
+		var row = this.getSelectedRow(id);
+		table.deleteRow(row.rowIndex);
+	},
+	init : function(id) {
 		var self = this;
-		var num = 10;
-		var cmd = 'table';
-		var cellArr = [];
-		KE.util.selection(id);
-		var table = KE.$$('table');
-		table.cellPadding = 0;
-		table.cellSpacing = 0;
-		table.border = 0;
-		table.className = 'ke-plugin-table-table';
-		for (var i = 0; i < num; i++) {
-			var row = table.insertRow(i);
-			cellArr[i] = [];
-			for (var j = 0; j < num; j++) {
-				var value = (i + 1) + ',' + (j + 1);
-				var cell = row.insertCell(j);
-				cell.className = 'ke-plugin-table-td';
-				var div = KE.$$('div');
-				div.className = 'ke-plugin-table-div';
-				cell.appendChild(div);
-				cellArr[i][j] = div;
-				div.onmouseover = (function(x, y) {
-					return function() {
-						self.locationCell.innerHTML = x + ' by ' + y + ' Table';
-						for (var m = 0; m < num; m++) {
-							for (var n = 0; n < num; n++) {
-								var cell = cellArr[m][n];
-								if (m < x && n < y) cell.style.backgroundColor = '#CCCCCC';
-								else cell.style.backgroundColor = '#FFFFFF';
-							}
+		var zeroborder = 'ke-zeroborder';
+		var tableCmds = 'prop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,delete'.split(',');
+		for (var i = 0, len = tableCmds.length; i < len; i++) {
+			var name = 'table' + tableCmds[i];
+			KE.g[id].contextmenuItems.push({
+				text : KE.lang[name],
+				click : (function(name) {
+					return function(id, menu) {
+						KE.util.select(id);
+						menu.hide();
+						if (self[name] !== undefined) self[name](id);
+						if (!/prop/.test(name)) {
+							KE.util.execOnchangeHandler(id);
 						}
 					};
-				})(i + 1, j + 1);
-				div.onclick = (function(value) {
-					return function() { KE.plugin[cmd].exec(id, value); };
-				})(value);
-			}
+				})(name),
+				cond : (function(name) {
+					if (KE.util.inArray(name, ['tableprop', 'tabledelete'])) {
+						return function(id) {
+							return self.getSelectedTable(id);
+						};
+					} else {
+						return function(id) {
+							return self.getSelectedCell(id);
+						};
+					}
+				})(name),
+				options : {
+					width : '170px',
+					iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-' + name + '"></span>'
+				}
+			});
 		}
-		var row = table.insertRow(num);
-		var cell = row.insertCell(0);
-		cell.className = 'ke-plugin-table-td-bottom';
-		cell.colSpan = 10;
-		self.locationCell = cell;
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd
+		KE.g[id].contextmenuItems.push('-');
+		KE.g[id].setHtmlHooks.push(function(html) {
+			return html.replace(/<table([^>]*)>/ig, function($0, $1) {
+				if ($1.match(/\s+border=["']?(\d*)["']?/ig)) {
+					var border = RegExp.$1;
+					if ($1.indexOf(zeroborder) < 0 && (border === '' || border === '0')) {
+						return KE.addClass($0, zeroborder);
+					} else {
+						return $0;
+					}
+				} else {
+					return KE.addClass($0, zeroborder);
+				}
+			});
 		});
-		menu.append(table);
-		menu.show();
-		this.menu = menu;
 	},
-	exec : function(id, value) {
-		var location = value.split(',');
-		var html = '<table border="1">';
-		for (var i = 0; i < location[0]; i++) {
-			html += '<tr>';
-			for (var j = 0; j < location[1]; j++) {
-				html += '<td>&nbsp;</td>';
-			}
-			html += '</tr>';
+	click : function(id) {
+		var cmd = 'advtable';
+		KE.util.selection(id);
+		this.dialog = new KE.dialog({
+			id : id,
+			cmd : cmd,
+			file : 'advtable/advtable.html',
+			width : 420,
+			height : 220,
+			loadingMode : true,
+			title : KE.lang['advtable'],
+			yesButton : KE.lang['yes'],
+			noButton : KE.lang['no']
+		});
+		this.dialog.show();
+	},
+	exec : function(id) {
+		var zeroborder = 'ke-zeroborder';
+		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
+		var rowsBox = KE.$('rows', dialogDoc);
+		var colsBox = KE.$('cols', dialogDoc);
+		var widthBox = KE.$('width', dialogDoc);
+		var heightBox = KE.$('height', dialogDoc);
+		var widthTypeBox = KE.$('widthType', dialogDoc);
+		var heightTypeBox = KE.$('heightType', dialogDoc);
+		var paddingBox = KE.$('padding', dialogDoc);
+		var spacingBox = KE.$('spacing', dialogDoc);
+		var alignBox = KE.$('align', dialogDoc);
+		var borderBox = KE.$('border', dialogDoc);
+		var borderColorBox = KE.$('borderColor', dialogDoc);
+		var backgroundColorBox = KE.$('backgroundColor', dialogDoc);
+		var rows = rowsBox.value;
+		var cols = colsBox.value;
+		var width = widthBox.value;
+		var height = heightBox.value;
+		var widthType = widthTypeBox.value;
+		var heightType = heightTypeBox.value;
+		var padding = paddingBox.value;
+		var spacing = spacingBox.value;
+		var align = alignBox.value;
+		var border = borderBox.value;
+		var borderColor = borderColorBox.innerHTML;
+		var backgroundColor = backgroundColorBox.innerHTML;
+		if (rows == '' || rows == 0 || !rows.match(/^\d*$/)) {
+			alert(KE.lang['invalidRows']);
+			rowsBox.focus();
+			return false;
 		}
-		html += '</table>';
-		KE.util.insertHtml(id, html);
-		this.menu.hide();
+		if (cols == '' || cols == 0 || !cols.match(/^\d*$/)) {
+			alert(KE.lang['invalidCols']);
+			colsBox.focus();
+			return false;
+		}
+		if (!width.match(/^\d*$/)) {
+			alert(KE.lang['invalidWidth']);
+			widthBox.focus();
+			return false;
+		}
+		if (!height.match(/^\d*$/)) {
+			alert(KE.lang['invalidHeight']);
+			heightBox.focus();
+			return false;
+		}
+		if (!padding.match(/^\d*$/)) {
+			alert(KE.lang['invalidPadding']);
+			paddingBox.focus();
+			return false;
+		}
+		if (!spacing.match(/^\d*$/)) {
+			alert(KE.lang['invalidSpacing']);
+			spacingBox.focus();
+			return false;
+		}
+		if (!border.match(/^\d*$/)) {
+			alert(KE.lang['invalidBorder']);
+			borderBox.focus();
+			return false;
+		}
+		var table = this.getSelectedTable(id);
+		if (table) {
+			if (width !== '') {
+				table.style.width = width + widthType;
+			} else if (table.style.width) {
+				table.style.width = '';
+			}
+			if (table.width !== undefined) {
+				table.removeAttribute('width');
+			}
+			if (height !== '') {
+				table.style.height = height + heightType;
+			} else if (table.style.height) {
+				table.style.height = '';
+			}
+			if (table.height !== undefined) {
+				table.removeAttribute('height');
+			}
+			if (backgroundColor !== '') {
+				table.style.backgroundColor = backgroundColor;
+			} else if (table.style.backgroundColor) {
+				table.style.backgroundColor = null;
+			}
+			if (table.bgColor !== undefined) {
+				table.removeAttribute('bgColor');
+			}
+			if (padding !== '') {
+				table.cellPadding = padding;
+			} else {
+				table.removeAttribute('cellPadding');
+			}
+			if (spacing !== '') {
+				table.cellSpacing = spacing;
+			} else {
+				table.removeAttribute('cellSpacing');
+			}
+			if (align !== '') {
+				table.align = align;
+			} else {
+				table.removeAttribute('align');
+			}
+			if (border === '' || border === '0') {
+				KE.addClass(table, zeroborder);
+			} else {
+				KE.removeClass(table, zeroborder);
+			}
+			if (border !== '') {
+				table.setAttribute('border', border);
+			} else {
+				table.removeAttribute('border');
+			}
+			if (borderColor !== '') {
+				table.setAttribute('borderColor', borderColor);
+			} else {
+				table.removeAttribute('borderColor');
+			}
+			KE.util.execOnchangeHandler(id);
+		} else {
+			var style = '';
+			if (width !== '') style += 'width:' + width + widthType + ';';
+			if (height !== '') style += 'height:' + height + heightType + ';';
+			if (backgroundColor !== '') style += 'background-color:' + backgroundColor + ';';
+			var html = '<table';
+			if (style !== '') html += ' style="' + style + '"';
+			if (padding !== '') html += ' cellpadding="' + padding + '"';
+			if (spacing !== '') html += ' cellspacing="' + spacing + '"';
+			if (align !== '') html += ' align="' + align + '"';
+			if (border === '' || border === '0') html += ' class="' + zeroborder + '"';
+			if (border !== '') html += ' border="' + border + '"';
+			if (borderColor !== '') html += ' bordercolor="' + borderColor + '"';
+			html += '>';
+			for (var i = 0; i < rows; i++) {
+				html += '<tr>';
+				for (var j = 0; j < cols; j++) {
+					html += '<td>&nbsp;</td>';
+				}
+				html += '</tr>';
+			}
+			html += '</table>';
+			KE.util.insertHtml(id, html);
+		}
+		this.dialog.hide();
 		KE.util.focus(id);
 	}
 };
+
+})(KindEditor);

@@ -1,18 +1,18 @@
 1. Oxygen icons
 http://www.oxygen-icons.org/
 
-2. CHEditor
-http://www.chcode.com/
-
-3. TinyMCE
+2. TinyMCE
 http://tinymce.moxiecode.com/
 
-4. CKEditor
+3. CKEditor
 http://ckeditor.com/
 
-5. jQuery
+4. jQuery
 http://jquery.com/
 
-6. QQ
+5. QQ
 http://www.qq.com/
+
+6. Google
+http://www.google.com/
 

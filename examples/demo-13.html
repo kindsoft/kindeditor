@@ -1,33 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>KindEditor</title>
-  <style type="text/css" rel="stylesheet">
-    form {
-    margin: 0;
-    }
-    .editor {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    }
-  </style>
-  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-  <script type="text/javascript">
-    KE.show({
-        id : 'content1',
-        width: '75%',
-        cssPath : './index.css',
-        filterMode : true
-    });
-  </script>
-</head>
-<body>
-  <h3>开启过滤模式</h3>
-  <form name="example" method="post">
-    <div class="editor">
-      <textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
-    </div>
-  </form>
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor</title>
+		<style>
+			textarea {
+				display: block;
+			}
+		</style>
+		<script charset="utf-8" src="../kindeditor.js"></script>
+		<script>
+			KE.show({
+				id : 'content1',
+				width: '75%',
+				filterMode : true
+			});
+		</script>
+	</head>
+	<body>
+		<h3>开启过滤模式</h3>
+		<textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
+	</body>
 </html>

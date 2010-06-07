@@ -1,6 +1,7 @@
+<!doctype html>
 <html>
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta charset="utf-8" />
 		<title>Image</title>
 		<style type="text/css" rel="stylesheet">
 			body {
@@ -79,7 +80,7 @@
 			}
 		</style>
 		<script type="text/javascript">
-			var KE = parent.KE;
+			var KE = parent.KindEditor;
 			location.href.match(/\?id=([\w-]+)/i);
 			var id = RegExp.$1;
 			var fileManager = null;
@@ -87,6 +88,7 @@
 			var allowFileManager = (typeof KE.g[id].allowFileManager == 'undefined') ? false : KE.g[id].allowFileManager;
 			var referMethod = (typeof KE.g[id].referMethod == 'undefined') ? '' : KE.g[id].referMethod;
 			var imageUploadJson = (typeof KE.g[id].imageUploadJson == 'undefined') ? '../../php/upload_json.php' : KE.g[id].imageUploadJson;
+			var lang = KE.lang.plugins.image;
 			KE.event.ready(function() {
 				var typeBox = KE.$('type', document);
 				var urlBox = KE.$('url', document);
@@ -97,6 +99,9 @@
 				var titleBox = KE.$('imgTitle', document);
 				var resetBtn = KE.$('resetBtn', document);
 				var tabNavi = KE.$('tabNavi', document);
+				var defaultImg = KE.$('defaultImg', document);
+				var leftImg = KE.$('leftImg', document);
+				var rightImg = KE.$('rightImg', document);
 				var viewServer = KE.$('viewServer', document);
 				var liList = tabNavi.getElementsByTagName('li');
 				var selectTab = function(num) {
@@ -160,8 +165,8 @@
 						width : 500,
 						height : 400,
 						loadingMode : true,
-						title : '浏览服务器',
-						noButton : '取消',
+						title : KE.lang.fileManager,
+						noButton : KE.lang.no,
 						afterHide : function() {
 							fileManager = null;
 						}
@@ -191,6 +196,12 @@
 					heightBox.value = img.height;
 					g.iframeDoc.body.removeChild(img);
 				});
+				KE.util.pluginLang('image', document);
+				viewServer.value = lang.viewServer;
+				resetBtn.alt = resetBtn.title = lang.resetSize;
+				defaultImg.alt = defaultImg.title = lang.defaultAlign;
+				leftImg.alt = leftImg.title = lang.leftAlign;
+				rightImg.alt = rightImg.title = lang.rightAlign;
 				KE.util.hideLoadingPage(id);
 			}, window, document);
 		</script>
@@ -199,8 +210,8 @@
 		<div class="main">
 			<div id="tabNavi" class="tab-navi">
 				<ul>
-					<li>网络上的图片</li>
-					<li>电脑里的图片</li>
+					<li><span id="lang.remoteImage"></span></li>
+					<li><span id="lang.localImage"></span></li>
 				</ul>
 			</div>
 			<iframe name="uploadIframe" id="uploadIframe" style="display:none;"></iframe>
@@ -212,29 +223,29 @@
 				<ul class="table">
 					<li>
 						<div id="tab1" style="display:none;">
-							<label for="url">图片地址</label>
-							<input type="text" id="url" name="url" value="http://" maxlength="255" style="width:250px;" />
-							<input type="button" id="viewServer" name="viewServer" value="浏览..." />
+							<label for="url"><span id="lang.remoteUrl"></span></label>&nbsp;
+							<input type="text" id="url" name="url" value="http://" maxlength="255" style="width:230px;" />
+							<input type="button" id="viewServer" name="viewServer" value="" />
 						</div>
 						<div id="tab2" style="display:none;">
-							<label for="imgFile">图片地址</label>
+							<label for="imgFile"><span id="lang.localUrl"></span></label>&nbsp;
 							<input type="file" id="imgFile" name="imgFile" style="width:300px;" />
 						</div>
 					</li>
 					<li>
-						<label for="imgWidth">图片大小</label>
-						宽 <input type="text" id="imgWidth" name="imgWidth" value="" maxlength="4" style="width:50px;text-align:right;" />
-						高 <input type="text" id="imgHeight" name="imgHeight" value="" maxlength="4" style="width:50px;text-align:right;" />
-						<img src="./images/refresh.gif" width="16" height="16" id="resetBtn" alt="重置大小" title="重置大小" />
+						<label for="imgWidth"><span id="lang.size"></span></label>&nbsp;
+						<span id="lang.width"></span> <input type="text" id="imgWidth" name="imgWidth" value="" maxlength="4" style="width:50px;text-align:right;" />
+						<span id="lang.height"></span> <input type="text" id="imgHeight" name="imgHeight" value="" maxlength="4" style="width:50px;text-align:right;" />
+						<img src="./images/refresh.gif" width="16" height="16" id="resetBtn" alt="" title="" />
 					</li>
 					<li>
-						<label>对齐方式</label>
-						<input type="radio" id="defaultChk" name="align" value="" checked="checked" /> <img id="defaultImg" src="./images/align_top.gif" width="23" height="25" border="0" alt="默认方式" title="默认方式" />
-						<input type="radio" id="leftChk" name="align" value="left" /> <img id="leftImg" src="./images/align_left.gif" width="23" height="25" border="0" alt="左对齐" title="左对齐" />
-						<input type="radio" id="rightChk" name="align" value="right" /> <img id="rightImg" src="./images/align_right.gif" width="23" height="25" border="0" alt="右对齐" title="右对齐" />
+						<label><span id="lang.align"></span></label>&nbsp;
+						<input type="radio" id="defaultChk" name="align" value="" checked="checked" /> <img id="defaultImg" src="./images/align_top.gif" width="23" height="25" border="0" alt="" title="" />
+						<input type="radio" id="leftChk" name="align" value="left" /> <img id="leftImg" src="./images/align_left.gif" width="23" height="25" border="0" alt="" title="" />
+						<input type="radio" id="rightChk" name="align" value="right" /> <img id="rightImg" src="./images/align_right.gif" width="23" height="25" border="0" alt="" title="" />
 					</li>
 					<li>
-						<label for="imgTitle">图片说明</label>
+						<label for="imgTitle"><span id="lang.imgTitle"></span></label>
 						<input type="text" id="imgTitle" name="imgTitle" value="" maxlength="255" style="width:95%;" />
 					</li>
 				</ul>

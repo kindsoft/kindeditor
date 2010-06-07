@@ -1,43 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>KindEditor</title>
-  <style type="text/css" rel="stylesheet">
-	form {
-	margin: 0;
-	}
-	.editor {
-	margin-top: 5px;
-	margin-bottom: 5px;
-	}
-  </style>
-  <!-- 手动添加编辑器的CSS，可放在其它CSS文件后面，防止CSS定义被覆盖。  -->
-  <!-- 注：这时必须把loadStyleMode参数设置为false，否则会重复加载同一个CSS文件。 -->
-  <link rel="stylesheet" type="text/css" href="./../skins/default.css" />
-  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-  <script type="text/javascript">
-	KE.show({
-		id : 'content5',
-		loadStyleMode : false, //不会自动加载CSS文件
-		cssPath : './index.css'
-	});
-	function checkForm() {
-		if (KE.util.isEmpty('content5')) {
-			alert('请输入内容！');
-			return false;
-		}
-		return true;
-	}
-  </script>
-</head>
-<body>
-  <h3>手动添加CSS文件</h3>
-  <form name="example" method="post" action="./../php/demo.php" onsubmit="javascript:return checkForm();">
-	<div class="editor">
-	  <textarea id="content5" name="content1" style="width:700px;height:300px;"></textarea>
-	</div>
-	<input type="submit" name="button" value="提交内容" />
-  </form>
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor</title>
+		<link rel="stylesheet" href="../skins/default.css" />
+		<script charset="utf-8" src="../kindeditor.js"></script>
+		<script>
+			KE.show({
+				id : 'content5',
+				loadStyleMode : false
+			});
+			function checkForm() {
+				if (KE.util.isEmpty('content5')) {
+					alert('请输入内容！');
+					return false;
+				}
+				return true;
+			}
+		</script>
+	</head>
+	<body>
+		<h3>手动添加CSS文件</h3>
+		<textarea id="content5" name="content1" style="width:700px;height:300px;"></textarea>
+	</body>
 </html>

@@ -1,10 +1,12 @@
 var JSON_URL = '../../php/file_manager_json.php';
 
-var KE = parent.KE;
+var KE = parent.KindEditor;
 location.href.match(/\?id=([\w-]+)/i);
 var id = RegExp.$1;
 var fileManagerJson = (typeof KE.g[id].fileManagerJson == 'undefined') ? JSON_URL : KE.g[id].fileManagerJson;
+var lang = KE.lang.plugins.file_manager;
 KE.event.ready(function() {
+	var moveupImg = KE.$('moveupImg', document);
 	var moveupLink = KE.$('moveup', document);
 	var viewType = KE.$('viewType', document);
 	var orderType = KE.$('orderType', document);
@@ -12,6 +14,12 @@ KE.event.ready(function() {
 	var viewTable = KE.$('viewTable', document);
 	var listDiv = KE.$('listDiv', document);
 	var viewDiv = KE.$('viewDiv', document);
+	moveupImg.alt = moveupImg.title = lang.moveup;
+	viewType.options[0] = new Option(lang.viewImage, 'VIEW');
+	viewType.options[1] = new Option(lang.listImage, 'LIST');
+	orderType.options[0] = new Option(lang.fileName, 'NAME');
+	orderType.options[1] = new Option(lang.fileSize, 'SIZE');
+	orderType.options[2] = new Option(lang.fileType, 'TYPE');
 	var changeType = function(type) {
 		if (type == 'VIEW') {
 			listDiv.style.display = 'none';
@@ -126,8 +134,8 @@ KE.event.ready(function() {
 				cell0.title = data.filename;
 				bindEvent(cell0, result, data, createList);
 			} else {
-				img.title = '空文件夹';
-				cell0.title = '空文件夹';
+				img.title = lang.emptyFolder;
+				cell0.title = lang.emptyFolder;
 			}
 			var cell1 = row.insertCell(1);
 			cell1.className = 'size';
@@ -168,8 +176,8 @@ KE.event.ready(function() {
 				bindTitle(table, data);
 				bindEvent(table, result, data, createView);
 			} else {
-				img.title = '空文件夹';
-				table.title = '空文件夹';
+				img.title = lang.emptyFolder;
+				table.title = lang.emptyFolder;
 			}
 			cell.appendChild(img);
 			div.appendChild(table);
@@ -191,6 +199,7 @@ KE.event.ready(function() {
 			if (req.readyState == 4) {
 				if(req.status == 200) {
 					func(req.responseText);
+					KE.util.pluginLang('file_manager', document);
 					KE.util.hideLoadingPage(id);
 				}
 			}

@@ -1,35 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>KindEditor</title>
-	<style type="text/css" rel="stylesheet">
-		.editor {
-			margin-top: 5px;
-			margin-bottom: 5px;
-		}
-	</style>
-	<script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-	<script type="text/javascript">
-		KE.init({
-			id : 'content1',
-			cssPath : './index.css',
-			afterCreate : function(id) {
-				KE.util.focus(id);
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor</title>
+		<style>
+			textarea {
+				display: block;
 			}
-		});
-		KE.event.ready(function() {
-			KE.create('content1');
-			setTimeout(function() {
-				KE.plugin['fullscreen'].click('content1');
-			}, 1);
-		});
-	</script>
-  </head>
-  <body>
-	<h3>全屏模式</h3>
-	<div class="editor">
-	  <textarea id="content1" name="content" style="width:700px;height:300px;visibility:hidden;"></textarea>
-	</div>
-  </body>
+		</style>
+		<script charset="utf-8" src="../kindeditor.js"></script>
+		<script>
+			KE.init({
+				id : 'content1',
+				afterCreate : function(id) {
+					KE.util.focus(id);
+				}
+			});
+			KE.event.ready(function() {
+				KE.create('content1');
+				setTimeout(function() {
+					KE.plugin['fullscreen'].click('content1');
+				}, 1);
+			});
+		</script>
+	</head>
+	<body>
+		<h3>全屏模式</h3>
+		<textarea id="content1" name="content" style="width:700px;height:300px;visibility:hidden;"></textarea>
+	</body>
 </html>

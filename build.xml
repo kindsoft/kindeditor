@@ -1,0 +1,86 @@
+<project name="KindEditor" default="merge_zh_CN" basedir=".">
+
+	<description>
+		KindEditor build file
+	</description>
+
+	<property name="src" location="src"/>
+	<property name="dist" location="dist"/>
+	<property name="version" value="3.5"/>
+	<property name="charset" value="utf-8"/>
+	<property name="filename" value="kindeditor"/>
+
+	<target name="set_en">
+		<property name="lang" value="en"/>
+	</target>
+
+	<target name="set_zh_CN">
+		<property name="lang" value="zh_CN"/>
+	</target>
+
+	<target name="set_prop">
+		<property name="kedir" value="${dist}/${filename}-${version}-${lang}"/>
+		<property name="kezip" value="${kedir}.zip"/>
+	</target>
+
+	<target name="merge">
+		<tstamp>
+			<format property="thisyear" pattern="yyyy"/>
+			<format property="ymd" pattern="yyyy-MM-dd"/>
+		</tstamp>
+		<concat destfile="${filename}.js"
+			encoding="${charset}"
+			outputencoding="${charset}">
+			<fileset file="${src}/header.js"/>
+			<fileset file="${src}/core.js"/>
+			<fileset file="${src}/lang/${lang}.js"/>
+			<fileset file="${src}/plugin.js"/>
+		</concat>
+		<replaceregexp file="${filename}.js"
+			match="\$\{VERSION\}"
+			replace="${version} (${ymd})"
+			encoding="${charset}"
+			byline="true"
+			flags="g"
+		/>
+		<replaceregexp file="${filename}.js"
+			match="\$\{THISYEAR\}"
+			replace="${thisyear}"
+			encoding="${charset}"
+			byline="true"
+			flags="g"
+		/>
+	</target>
+
+	<target name="copy" depends="merge">
+		<mkdir dir="${dist}"/>
+		<delete dir="${kedir}"/>
+		<delete file="${kezip}"/>
+		<exec executable="svn">
+			<arg line="export . ${kedir}"/>
+		</exec>
+	</target>
+
+	<target name="compile" depends="copy">
+		<exec executable="java">
+			<arg line="-jar lib/closure-compiler.jar --js=${kedir}/${filename}.js --js_output_file=${kedir}/${filename}-min.js"/>
+		</exec>
+	</target>
+
+	<target name="zip" depends="compile">
+		<copy file="${kedir}/docs/license.txt" todir="${kedir}"/>
+		<delete dir="${kedir}/test"/>
+		<delete dir="${kedir}/lib"/>
+		<delete dir="${kedir}/src"/>
+		<delete dir="${kedir}/docs"/>
+		<delete file="${kedir}/build.xml"/>
+		<zip destfile="${kedir}.zip"
+			basedir="${kedir}"
+		/>
+	</target>
+
+	<target name="merge_zh_CN" depends="set_zh_CN,merge"/>
+	<target name="en" depends="set_en,set_prop,zip"/>
+	<target name="zh_CN" depends="set_zh_CN,set_prop,zip"/>
+
+</project>

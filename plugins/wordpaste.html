@@ -1,45 +1,47 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>WordPaste</title>
-  <style type="text/css" rel="stylesheet">
-	html, body {
-	padding: 0;
-	margin: 0;
-	font-size:12px;
-	margin: 0px;
-	background-color:#F0F0EE;
-	}
-	#wordIframe {
-	width:390px;
-	height:250px;
-	border:1px solid #000000;
-	}
-  </style>
-  <script type="text/javascript">
-	var KE = parent.KE;
-	location.href.match(/\?id=([\w-]+)/i);
-	var id = RegExp.$1;
-	KE.event.ready(function() {
-		var iframe = KE.$('wordIframe', document);
-		var iframeDoc = KE.util.getIframeDoc(iframe);
-		iframeDoc.open();
-		iframeDoc.write('<html><head><title>WordPaste</title></head>');
-		iframeDoc.write('<body style="background-color:#FFFFFF;font-size:12px;margin:2px;" />');
-		if (!KE.browser.IE) iframeDoc.write('<br />');
-		iframeDoc.write('</body></html>');
-		iframeDoc.close();
-		KE.util.hideLoadingPage(id);
-		window.setTimeout(function() {
-			if (KE.browser.IE) iframeDoc.body.contentEditable = 'true';
-			else iframeDoc.designMode = 'on';
-		}, 0);
-	}, window, document);
-  </script>
-</head>
-<body>
-  <div style="margin-bottom:10px;">请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。</div>
-  <iframe id="wordIframe" name="wordIframe" frameBorder="0"></iframe>
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>WordPaste</title>
+		<style type="text/css" rel="stylesheet">
+			html, body {
+				padding: 0;
+				margin: 0;
+				font-family: "sans serif",tahoma,verdana,helvetica;
+				font-size:12px;
+				margin: 0px;
+				background-color:#F0F0EE;
+			}
+			#wordIframe {
+				width:390px;
+				height:250px;
+				border:1px solid #000000;
+			}
+		</style>
+		<script type="text/javascript">
+			var KE = parent.KindEditor;
+			location.href.match(/\?id=([\w-]+)/i);
+			var id = RegExp.$1;
+			KE.event.ready(function() {
+				var iframe = KE.$('wordIframe', document);
+				var iframeDoc = KE.util.getIframeDoc(iframe);
+				iframeDoc.open();
+				iframeDoc.write('<html><head><title>WordPaste</title></head>');
+				iframeDoc.write('<body style="background-color:#FFFFFF;font-size:12px;margin:2px;" />');
+				if (!KE.browser.IE) iframeDoc.write('<br />');
+				iframeDoc.write('</body></html>');
+				iframeDoc.close();
+				KE.util.pluginLang('wordpaste', document);
+				KE.util.hideLoadingPage(id);
+				window.setTimeout(function() {
+					if (KE.browser.IE) iframeDoc.body.contentEditable = 'true';
+					else iframeDoc.designMode = 'on';
+				}, 0);
+			}, window, document);
+		</script>
+	</head>
+	<body>
+		<div style="margin-bottom:10px;"><span id="lang.comment"></span></div>
+		<iframe id="wordIframe" name="wordIframe" frameBorder="0"></iframe>
+	</body>
 </html>

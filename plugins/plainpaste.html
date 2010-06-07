@@ -1,37 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>PlainPaste</title>
-  <style type="text/css" rel="stylesheet">
-	html, body {
-		padding: 0;
-		margin: 0;
-		font-size:12px;
-		background-color:#F0F0EE;
-	}
-	#textArea {
-		width:390px;
-		height:250px;
-		border:1px solid #000000;
-		overflow: auto;
-		resize: none;
-	}
-	#textArea:focus {
-		outline: none;
-	}
-  </style>
-  <script type="text/javascript">
-	var KE = parent.KE;
-	location.href.match(/\?id=([\w-]+)/i);
-	var id = RegExp.$1;
-	KE.event.ready(function() {
-		KE.util.hideLoadingPage(id);
-	}, window, document);
-  </script>
-</head>
-<body>
-<div style="margin-bottom:10px;">请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。</div>
-<textarea id="textArea"></textarea>
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>PlainPaste</title>
+		<style type="text/css" rel="stylesheet">
+			html, body {
+				padding: 0;
+				margin: 0;
+				font-family: "sans serif",tahoma,verdana,helvetica;
+				font-size:12px;
+				background-color:#F0F0EE;
+			}
+			#textArea {
+				width:390px;
+				height:250px;
+				border:1px solid #000000;
+				overflow: auto;
+				resize: none;
+			}
+			#textArea:focus {
+				outline: none;
+			}
+		</style>
+		<script type="text/javascript">
+			var KE = parent.KindEditor;
+			location.href.match(/\?id=([\w-]+)/i);
+			var id = RegExp.$1;
+			KE.event.ready(function() {
+				KE.util.pluginLang('plainpaste', document);
+				KE.util.hideLoadingPage(id);
+			}, window, document);
+		</script>
+	</head>
+	<body>
+		<div style="margin-bottom:10px;"><span id="lang.comment"></span></div>
+		<textarea id="textArea"></textarea>
+	</body>
 </html>
