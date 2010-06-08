@@ -118,27 +118,37 @@ KE.$$ = function(name, doc){
 };
 
 KE.event = {
-	stack : [],
-	add : function(el, event, listener) {
+	add : function(el, type, fn, id) {
 		if (el.addEventListener){
-			el.addEventListener(event, listener, false);
+			el.addEventListener(type, fn, false);
 		} else if (el.attachEvent){
-			el.attachEvent('on' + event, listener);
+			el.attachEvent('on' + type, fn);
 		}
-		this.stack.push({
-			el : el,
-			type : event,
-			fn : listener
-		});
+		if (id !== undefined) {
+			KE.g[id].eventStack.push({
+				el : el,
+				type : type,
+				fn : fn
+			});
+		}
 	},
-	remove : function(el, event, listener) {
+	remove : function(el, type, fn, id) {
 		if (el.removeEventListener){
-			el.removeEventListener(event, listener, false);
+			el.removeEventListener(type, fn, false);
 		} else if (el.detachEvent){
-			el.detachEvent('on' + event, listener);
+			el.detachEvent('on' + type, fn);
+		}
+		if (id !== undefined) {
+			var stack = KE.g[id].eventStack;
+			for (var i = 0, len = stack.length; i < len; i++) {
+				var item = stack[i];
+				if (item && el === item.el && type === item.type && fn === item.fn) {
+					delete stack[i];
+				}
+			}
 		}
 	},
-	input : function(el, func) {
+	input : function(el, func, id) {
 		this.add(el, 'keyup', function(e) {
 			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116) {
 				func(e);
@@ -146,17 +156,17 @@ KE.event = {
 				if (e.stopPropagation) e.stopPropagation();
 				return false;
 			}
-		});
+		}, id);
 		function handler (e) {
 			window.setTimeout(function() {
 				func(e);
 			}, 1);
 		}
 		var newElement = (el.nodeName == '#document') ? el.body : el;
-		this.add(newElement, 'paste', handler);
-		this.add(newElement, 'cut', handler);
+		this.add(newElement, 'paste', handler, id);
+		this.add(newElement, 'cut', handler, id);
 	},
-	ctrl : function(el, key, func) {
+	ctrl : function(el, key, func, id) {
 		key = key.toString().match(/^\d{2,}$/) ? key : key.toUpperCase().charCodeAt(0);
 		this.add(el, 'keydown', function(e) {
 			if (e.ctrlKey && e.keyCode == key && !e.shiftKey && !e.altKey) {
@@ -165,9 +175,9 @@ KE.event = {
 				if (e.stopPropagation) e.stopPropagation();
 				return false;
 			}
-		});
+		}, id);
 	},
-	ready : function(func, win, doc) {
+	ready : function(func, win, doc, id) {
 		var win = win || window;
 		var doc = doc || document;
 		var loaded = false;
@@ -177,11 +187,11 @@ KE.event = {
 			func();
 		};
 		if (doc.addEventListener) {
-			this.add(doc, "DOMContentLoaded", readyFunc);
+			this.add(doc, "DOMContentLoaded", readyFunc, id);
 		} else if (doc.attachEvent){
 			this.add(doc, "readystatechange", function() {
 				if (doc.readyState == "complete") readyFunc();
-			});
+			}, id);
 			if ( doc.documentElement.doScroll && typeof win.frameElement === "undefined" ) {
 				var ieReadyFunc = function() {
 					if (loaded) return;
@@ -196,7 +206,7 @@ KE.event = {
 				ieReadyFunc();
 			}
 		}
-		this.add(win, 'load', readyFunc);
+		this.add(win, 'load', readyFunc, id);
 	}
 };
 
@@ -1698,7 +1708,7 @@ KE.util = {
 				if (e.stopPropagation) e.stopPropagation();
 				return false;
 			}
-		});
+		}, id);
 	},
 	addContextmenuEvent : function(id) {
 		var g = KE.g[id];
@@ -1759,7 +1769,7 @@ KE.util = {
 				return false;
 			}
 			return true;
-		});
+		}, id);
 	},
 	addNewlineEvent : function(id) {
 		var g = KE.g[id];
@@ -1800,7 +1810,7 @@ KE.util = {
 				}
 			}
 			return true;
-		});
+		}, id);
 	}
 };
 
@@ -2420,16 +2430,11 @@ KE.remove = function(id, mode) {
 	if (!g.container) return false;
 	mode = (typeof mode == "undefined") ? 0 : mode;
 	var container = g.container;
-	KE.event.remove(document, 'mousedown', g.setSelectionHandler);
-	var eventStack = KE.event.stack;
+	var eventStack = g.eventStack;
 	for (var i = 0, len = eventStack.length; i < len; i++) {
 		var item = eventStack[i];
-		var el = item.el;
-		if (el === g.iframeDoc || el === g.iframeDoc.body || el === g.newTextarea) {
-			KE.event.remove(el, item.type, item.fn);
-		}
+		if (item) KE.event.remove(item.el, item.type, item.fn, id);
 	}
-	KE.event.stack = [];
 	g.iframeDoc.src = 'javascript:false';
 	g.iframe.parentNode.removeChild(g.iframe);
 	if (mode == 1) {
@@ -2447,6 +2452,7 @@ KE.remove = function(id, mode) {
 	g.getHtmlHooks = [];
 	g.setHtmlHooks = [];
 	g.onchangeHandlerStack = [];
+	g.eventStack = [];
 };
 
 KE.create = function(id, mode) {
@@ -2550,7 +2556,7 @@ KE.create = function(id, mode) {
 	if (KE.browser.WEBKIT) {
 		KE.event.add(iframeDoc, 'click', function(e) {
 			KE.util.selectImageWebkit(id, e, true);
-		});
+		}, id);
 	}
 	if (KE.browser.IE) {
 		KE.event.add(iframeDoc, 'keyup', function(e) {
@@ -2562,12 +2568,12 @@ KE.create = function(id, mode) {
 					KE.util.execOnchangeHandler(id);
 				}
 			}
-		});
+		}, id);
 	}
-	KE.event.add(iframeDoc, 'click', hideMenu);
-	KE.event.add(iframeDoc, 'click', updateToolbar);
-	KE.event.input(iframeDoc, updateToolbar);
-	KE.event.add(newTextarea, 'click', hideMenu);
+	KE.event.add(iframeDoc, 'click', hideMenu, id);
+	KE.event.add(iframeDoc, 'click', updateToolbar, id);
+	KE.event.input(iframeDoc, updateToolbar, id);
+	KE.event.add(newTextarea, 'click', hideMenu, id);
 	KE.g[id].container = container;
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;
@@ -2612,10 +2618,9 @@ KE.create = function(id, mode) {
 	function setSelectionHandler() {
 		KE.util.setSelection(id);
 	}
-	KE.event.input(iframeDoc, setSelectionHandler);
-	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
-	KE.event.add(document, 'mousedown', setSelectionHandler);
-	KE.g[id].setSelectionHandler = setSelectionHandler;
+	KE.event.input(iframeDoc, setSelectionHandler, id);
+	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler, id);
+	KE.event.add(document, 'mousedown', setSelectionHandler, id);
 	KE.onchange(id, function(id) {
 		if (KE.g[id].autoSetDataMode) {
 			KE.util.setData(id);
@@ -2630,13 +2635,14 @@ KE.create = function(id, mode) {
 };
 
 KE.onchange = function(id, func) {
+	var g = KE.g[id];
 	function handler() {
 		func(id);
 	};
-	KE.g[id].onchangeHandlerStack.push(handler);
-	KE.event.input(KE.g[id].iframeDoc, handler);
-	KE.event.input(KE.g[id].newTextarea, handler);
-	KE.event.add(KE.g[id].iframeDoc, 'mouseup', handler);
+	g.onchangeHandlerStack.push(handler);
+	KE.event.input(g.iframeDoc, handler, id);
+	KE.event.input(g.newTextarea, handler, id);
+	KE.event.add(g.iframeDoc, 'mouseup', handler, id);
 };
 
 KE.init = function(args) {
@@ -2649,6 +2655,7 @@ KE.init = function(args) {
 	g.getHtmlHooks = [];
 	g.setHtmlHooks = [];
 	g.onchangeHandlerStack = [];
+	g.eventStack = [];
 	KE.each(KE.setting, function(key, val) {
 		g[key] = (typeof args[key] == 'undefined') ? val : args[key];
 		g.config[key] = g[key];

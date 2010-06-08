@@ -23,11 +23,11 @@ KE.plugin['undo'] = {
 		KE.event.ctrl(KE.g[id].iframeDoc, 'Z', function(e) {
 			KE.plugin['undo'].click(id);
 			KE.util.focus(id);
-		});
+		}, id);
 		KE.event.ctrl(KE.g[id].newTextarea, 'Z', function(e) {
 			KE.plugin['undo'].click(id);
 			KE.util.focus(id);
-		});
+		}, id);
 	},
 	click : function(id) {
 		KE.history.undo(id);
@@ -40,11 +40,11 @@ KE.plugin['redo'] = {
 		KE.event.ctrl(KE.g[id].iframeDoc, 'Y', function(e) {
 			KE.plugin['redo'].click(id);
 			KE.util.focus(id);
-		});
+		}, id);
 		KE.event.ctrl(KE.g[id].newTextarea, 'Y', function(e) {
 			KE.plugin['redo'].click(id);
 			KE.util.focus(id);
-		});
+		}, id);
 	},
 	click : function(id) {
 		KE.history.redo(id);
