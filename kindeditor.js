@@ -149,7 +149,7 @@ KE.event = {
 	},
 	input : function(el, func) {
 		this.add(el, 'keyup', function(e) {
-			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116 && e.keyCode < 136) {
+			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116) {
 				func(e);
 				if (e.preventDefault) e.preventDefault();
 				if (e.stopPropagation) e.stopPropagation();
@@ -2434,7 +2434,7 @@ KE.remove = function(id, mode) {
 	for (var i = 0, len = eventStack.length; i < len; i++) {
 		var item = eventStack[i];
 		var el = item.el;
-		if (el === g.iframeDoc || el === g.newTextarea) {
+		if (el === g.iframeDoc || el === g.iframeDoc.body || el === g.newTextarea) {
 			KE.event.remove(el, item.type, item.fn);
 		}
 	}

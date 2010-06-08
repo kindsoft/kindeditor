@@ -140,7 +140,7 @@ KE.event = {
 	},
 	input : function(el, func) {
 		this.add(el, 'keyup', function(e) {
-			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116 && e.keyCode < 136) {
+			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116) {
 				func(e);
 				if (e.preventDefault) e.preventDefault();
 				if (e.stopPropagation) e.stopPropagation();
