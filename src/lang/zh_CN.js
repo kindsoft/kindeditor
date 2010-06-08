@@ -116,8 +116,8 @@ plugins.media = {
 };
 
 plugins.image = {
-	remoteImage : '网络上的图片',
-	localImage : '电脑里的图片',
+	remoteImage : '远程图片',
+	localImage : '本地上传',
 	remoteUrl : '图片地址',
 	localUrl : '图片地址',
 	size : '图片大小',

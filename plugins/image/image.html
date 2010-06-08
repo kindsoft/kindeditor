@@ -24,10 +24,19 @@
 			.main {
 				margin: 0 10px;
 			}
+			.clearfix:after {
+				content: ".";
+				display: block;
+				height: 0;
+				clear: both;
+				visibility: hidden;
+			}
 			.tab-navi {
-				width:100%;
-				overflow:hidden;
+				width:98%;
+				border-bottom:1px solid #A0A0A0;
+				padding-left:5px;
 				margin-bottom:10px;
+				
 			}
 			.tab-navi ul  {
 				list-style-image:none;
@@ -35,26 +44,28 @@
 				list-style-type:none;
 				margin:0;
 				padding:0;
-				display:block;
-				float:left;
-				width:100%;
-				border-bottom:1px solid #888888;
 			}
 			.tab-navi li {
-				border: 1px solid #888888;
-				margin:0 -1px -1px 0;
+				position: relative;
+				border: 1px solid #A0A0A0;
+				background-color: #E0E0E0;
+				margin: 0 2px -1px 0;
+				padding: 0 20px;
 				float: left;
-				padding: 5px;
-				background-color: #F0F0EE;
+				line-height: 30px;
 				text-align: center;
-				width: 120px;
-				font-weight: normal;
+				color: #555555;
 				cursor: pointer;
 			}
 			.tab-navi li.selected {
-				background-color: #E0E0E0;
-				font-weight: bold;
+				background-color: #F0F0EE;
+				border-bottom: 1px solid #F0F0EE;
+				color: #000000;
 				cursor: default;
+			}
+			.tab-navi li.on {
+				background-color: #F0F0EE;
+				color: #000000;
 			}
 			.table  {
 				list-style-image:none;
@@ -119,6 +130,8 @@
 						} else {
 							if (allowUpload) {
 								li.className = '';
+								li.onmouseover = function() { KE.addClass(this, 'on'); };
+								li.onmouseout = function() { KE.removeClass(this, 'on'); };
 								li.onclick = (function (i) {
 									return function() {
 										if (!fileManager) selectTab(i);
@@ -209,7 +222,7 @@
 	<body>
 		<div class="main">
 			<div id="tabNavi" class="tab-navi">
-				<ul>
+				<ul class="clearfix">
 					<li><span id="lang.remoteImage"></span></li>
 					<li><span id="lang.localImage"></span></li>
 				</ul>

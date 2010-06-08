@@ -631,11 +631,10 @@
 .ke-dialog-title {
 	background-color: #F0F0EE;
 	padding: 10px;
-	color: #000000;
 	text-align: left;
 	font: 14px/1 "sans serif",tahoma,verdana,helvetica;
 	font-weight: bold;
-	color: #336699;
+	color: #222222;
 	cursor: move;
 }
 .ke-dialog-close {
