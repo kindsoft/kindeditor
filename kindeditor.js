@@ -2651,7 +2651,11 @@ KE.onchange = function(id, func) {
 	g.onchangeHandlerStack.push(handler);
 	KE.event.input(g.iframeDoc, handler, id);
 	KE.event.input(g.newTextarea, handler, id);
-	KE.event.add(g.iframeDoc, 'mouseup', handler, id);
+	KE.event.add(g.iframeDoc, 'mouseup', function(e) {
+		window.setTimeout(function() {
+			func(id);
+		}, 0);
+	}, id);
 };
 
 KE.init = function(args) {
