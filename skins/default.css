@@ -584,14 +584,22 @@
 	padding:0;
 	margin:0;
 	border-collapse:separate;
+	empty-cells:show;
 }
-.ke-mc {
-	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
-	border: 1px solid #A0A0A0;
-	background-color: #F0F0EE;
-	color: #222222;
+.ke-dialog-table td {
+	font-size:0;
 	margin:0;
 	padding:0;
+}
+span.ke-dialog-empty {
+	display:block;
+	width:5px;
+	height:5px;
+}
+.ke-mc {
+	border: 1px solid #F0F0EE;
+	background-color: #F0F0EE;
+	color: #222222;
 }
 .ke-tl, .ke-tc, .ke-tr, .ke-ml, .ke-mr, .ke-bl, .ke-bc, .ke-br {
 	background-color:#000;
@@ -599,8 +607,6 @@
 	opacity:0.2;
 	overflow:hidden;
 	border:0;
-	margin:0;
-	padding:0;
 }
 .ke-ml, .ke-mr {
 	width:5px;

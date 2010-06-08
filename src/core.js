@@ -1998,19 +1998,18 @@ KE.menu = function(arg){
 };
 
 KE.dialog = function(arg){
-	this.widthMargin = 20;
-	this.heightMargin = 90;
+	var self = this;
+	this.widthMargin = 30;
+	this.heightMargin = 100;
 	this.zIndex = 19811214;
-	var minTop, minLeft, maxTop, maxLeft;
+	this.width = arg.width;
+	this.height = arg.height;
+	var minTop, minLeft;
 	function setLimitNumber() {
-		var width = arg.width + this.widthMargin;
-		var height = arg.height + this.heightMargin;
 		var docEl = KE.util.getDocumentElement();
 		var pos = KE.util.getScrollPos();
 		minTop = pos.y;
 		minLeft = pos.x;
-		maxTop = pos.y + docEl.clientHeight - height - 2;
-		maxLeft = pos.x + docEl.clientWidth - width - 2;
 	}
 	function init() {
 		this.beforeHide = arg.beforeHide;
@@ -2020,9 +2019,9 @@ KE.dialog = function(arg){
 		this.ondrag = arg.ondrag;
 	}
 	init.call(this);
-	this.getPos = function() {
-		var width = arg.width + this.widthMargin;
-		var height = arg.height + this.heightMargin;
+	function getPos() {
+		var width = this.width + this.widthMargin;
+		var height = this.height + this.heightMargin;
 		var id = arg.id;
 		var g = KE.g[id];
 		var x = 0, y = 0;
@@ -2042,6 +2041,12 @@ KE.dialog = function(arg){
 		x = x < 0 ? 0 : x;
 		y = y < 0 ? 0 : y;
 		return {x : x, y : y};
+	};
+	this.resize = function(width, height) {
+		if (width) this.width = width;
+		if (height) this.height = height;
+		this.hide();
+		this.show();
 	};
 	this.hide = function() {
 		if (this.beforeHide) this.beforeHide(id);
@@ -2073,7 +2078,7 @@ KE.dialog = function(arg){
 			this.zIndex = stack[stack.length - 1].zIndex + 1;
 		}
 		div.style.zIndex = this.zIndex;
-		var pos = this.getPos();
+		var pos = getPos.call(this);
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
 		var table = KE.$$('table');
@@ -2090,6 +2095,7 @@ KE.dialog = function(arg){
 				var cell = row.insertCell(j);
 				cell.className = 'ke-' + rowNames[i] + colNames[j];
 				if (i == 1 && j == 1) contentCell = cell;
+				else cell.innerHTML = '<span class="ke-dialog-empty"></span>';
 			}
 		}
 		div.appendChild(table);
@@ -2112,8 +2118,6 @@ KE.dialog = function(arg){
 			if (self.ondrag) self.ondrag(id);
 			top = objTop + top;
 			left = objLeft + left;
-			if (top > maxTop) top = maxTop;
-			if (left > maxLeft) left = maxLeft;
 			if (top < minTop) top = minTop;
 			if (left < minLeft) left = minLeft;
 			div.style.top = top + 'px';
@@ -2124,8 +2128,8 @@ KE.dialog = function(arg){
 		bodyDiv.className = 'ke-dialog-body';
 		var loadingTable = KE.util.createTable();
 		loadingTable.table.className = 'ke-loading-table';
-		loadingTable.table.style.width = arg.width + 'px';
-		loadingTable.table.style.height = arg.height + 'px';
+		loadingTable.table.style.width = this.width + 'px';
+		loadingTable.table.style.height = this.height + 'px';
 		loadingTable.cell.align = 'center';
 		loadingTable.cell.vAlign = 'middle';
 		var loadingImg = KE.$$('span');
@@ -2138,8 +2142,8 @@ KE.dialog = function(arg){
 			iframe.className = 'ke-dialog-iframe';
 		}
 		iframe.setAttribute("frameBorder", "0");
-		iframe.style.width = arg.width + 'px';
-		iframe.style.height = arg.height + 'px';
+		iframe.style.width = this.width + 'px';
+		iframe.style.height = this.height + 'px';
 		iframe.style.display = 'none';
 		bodyDiv.appendChild(iframe);
 		bodyDiv.appendChild(loadingTable.table);
@@ -2198,13 +2202,15 @@ KE.dialog = function(arg){
 		window.focus();
 		if (yesButton) yesButton.focus();
 		else if (noButton) noButton.focus();
-		if (typeof arg.html != "undefined") {
+		if (arg.html !== undefined) {
 			var dialogDoc = KE.util.getIframeDoc(iframe);
 			var html = KE.util.getFullHtml(id);
 			dialogDoc.open();
 			dialogDoc.write(html);
 			dialogDoc.close();
 			KE.util.innerHtml(dialogDoc.body, arg.html);
+		} else if (arg.url !== undefined) {
+			iframe.src = arg.url;
 		} else {
 			var param = 'id=' + escape(id) + '&ver=' + escape(KE.version);
 			if (arg.file === undefined) {

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Test</title>
+		<style>
+			textarea {
+				display: block;
+			}
+		</style>
+		<script charset="utf-8" src="../src/core.js"></script>
+		<script charset="utf-8" src="../src/lang/zh_CN.js"></script>
+		<script charset="utf-8" src="../src/plugin.js"></script>
+		<script>
+			KE.show({
+				id : 'content1',
+				skinsPath : '../skins/',
+				pluginsPath : '../plugins/'
+			});
+			function openDialog1(id) {
+				var dialog = new KE.dialog({
+					id : 'content1',
+					html : '<h1>Hello KindEditor!</h1>',
+					width : 450,
+					height : 300,
+					title : '静态HTML',
+					noButton : KE.lang['no']
+				});
+				dialog.show();
+			}
+			function openDialog2(id) {
+				var dialog = new KE.dialog({
+					id : 'content1',
+					cmd : 'plainpaste',
+					file : 'plainpaste.html',
+					width : 450,
+					height : 300,
+					title : '插件模式',
+					yesButton : KE.lang['yes'],
+					noButton : KE.lang['no']
+				});
+				dialog.show();
+			}
+			var dialog;
+			function openDialog3(id) {
+				dialog = new KE.dialog({
+					id : 'content1',
+					url : 'dialog_iframe_document.html',
+					width : 450,
+					height : 300,
+					title : 'URL',
+					yesButton : KE.lang['yes'],
+					noButton : KE.lang['no']
+				});
+				dialog.show();
+			}
+		</script>
+	</head>
+	<body>
+		<textarea id="content1" name="content1" style="width:90%;height:250px;"></textarea>
+		<br />
+		<input type="button" name="button" value="静态HTML" onclick="javascript:openDialog1('content1');" />
+		<input type="button" name="button" value="插件模式" onclick="javascript:openDialog2('content1');" />
+		<input type="button" name="button" value="外部URL" onclick="javascript:openDialog3('content1');" />
+	</body>
+</html>
