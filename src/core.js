@@ -118,12 +118,18 @@ KE.$$ = function(name, doc){
 };
 
 KE.event = {
+	stack : [],
 	add : function(el, event, listener) {
 		if (el.addEventListener){
 			el.addEventListener(event, listener, false);
 		} else if (el.attachEvent){
 			el.attachEvent('on' + event, listener);
 		}
+		this.stack.push({
+			el : el,
+			type : event,
+			fn : listener
+		});
 	},
 	remove : function(el, event, listener) {
 		if (el.removeEventListener){
@@ -2410,27 +2416,37 @@ KE.readonly = function(id, isReadonly) {
 };
 
 KE.remove = function(id, mode) {
-	if (!KE.g[id].container) return false;
+	var g = KE.g[id];
+	if (!g.container) return false;
 	mode = (typeof mode == "undefined") ? 0 : mode;
-	var container = KE.g[id].container;
-	KE.event.remove(document, 'mousedown', this.setSelectionHandler);
-	KE.g[id].iframeDoc.src = 'javascript:false';
-	KE.g[id].iframe.parentNode.removeChild(KE.g[id].iframe);
+	var container = g.container;
+	KE.event.remove(document, 'mousedown', g.setSelectionHandler);
+	var eventStack = KE.event.stack;
+	for (var i = 0, len = eventStack.length; i < len; i++) {
+		var item = eventStack[i];
+		var el = item.el;
+		if (el === g.iframeDoc || el === g.iframeDoc.body || el === g.newTextarea) {
+			KE.event.remove(el, item.type, item.fn);
+		}
+	}
+	KE.event.stack = [];
+	g.iframeDoc.src = 'javascript:false';
+	g.iframe.parentNode.removeChild(g.iframe);
 	if (mode == 1) {
 		document.body.removeChild(container);
 	} else {
-		var srcTextarea = KE.g[id].srcTextarea;
+		var srcTextarea = g.srcTextarea;
 		srcTextarea.parentNode.removeChild(container);
 		if (mode == 0) srcTextarea.style.display = '';
 	}
-	document.body.removeChild(KE.g[id].hideDiv);
-	document.body.removeChild(KE.g[id].maskDiv);
-	KE.g[id].container = null;
-	KE.g[id].dialogStack = [];
-	KE.g[id].contextmenuItems = [];
-	KE.g[id].getHtmlHooks = [];
-	KE.g[id].setHtmlHooks = [];
-	KE.g[id].onchangeHandlerStack = [];
+	document.body.removeChild(g.hideDiv);
+	document.body.removeChild(g.maskDiv);
+	g.container = null;
+	g.dialogStack = [];
+	g.contextmenuItems = [];
+	g.getHtmlHooks = [];
+	g.setHtmlHooks = [];
+	g.onchangeHandlerStack = [];
 };
 
 KE.create = function(id, mode) {
@@ -2599,7 +2615,7 @@ KE.create = function(id, mode) {
 	KE.event.input(iframeDoc, setSelectionHandler);
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler);
 	KE.event.add(document, 'mousedown', setSelectionHandler);
-	this.setSelectionHandler = setSelectionHandler;
+	KE.g[id].setSelectionHandler = setSelectionHandler;
 	KE.onchange(id, function(id) {
 		if (KE.g[id].autoSetDataMode) {
 			KE.util.setData(id);
@@ -2620,6 +2636,7 @@ KE.onchange = function(id, func) {
 	KE.g[id].onchangeHandlerStack.push(handler);
 	KE.event.input(KE.g[id].iframeDoc, handler);
 	KE.event.input(KE.g[id].newTextarea, handler);
+	KE.event.add(KE.g[id].iframeDoc, 'mouseup', handler);
 };
 
 KE.init = function(args) {

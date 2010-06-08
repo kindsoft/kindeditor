@@ -8,28 +8,35 @@
 		<script>
 			firebug.env.css = 'firebug-lite.css';
 			firebug.env.height = 160;
-			var KE = {};
 		</script>
 		<script charset="utf-8" src="../src/core.js"></script>
 		<script charset="utf-8" src="../src/lang/zh_CN.js"></script>
 		<script charset="utf-8" src="../src/plugin.js"></script>
 		<script>
-			KindEditor.show({
+			KE.show({
 				id : 'content1',
 				skinsPath : '../skins/',
 				pluginsPath : '../plugins/',
 				allowFileManager : true,
 				afterSetData : function(id) {
-					document.getElementById('content_html').value = KindEditor.$('content1').value;
+					document.getElementById('content_html').value = KE.$('content1').value;
 				}
 			});
+			function createEditor(id) {
+				KE.create(id);
+			}
+			function removeEditor(id) {
+				KE.util.setData(id);
+				KE.remove(id);
+				KE.$(id).focus();
+			}
 		</script>
 	</head>
 	<body>
 		<a href="#">超级链接</a>
 		<form name="example" method="post" action="./../php/demo.php">
 			<textarea id="test" style="width:90%;height:50px;"></textarea>
-			<textarea id="content1" name="content1" style="width:90%;height:250px;visibility:hidden;">
+			<textarea id="content1" name="content1" style="width:90%;height:250px;">
 啊<a href="wwww1">啊啊</a>啊dddddddddd<span style="color:#e53333;">ddddddddddd</span><br />
 啊<a href="wwww2">啊啊</a>啊<table width="90%" border="1">
 	<tr>
@@ -46,9 +53,9 @@
 <br />
 			<textarea id="content_html" style="width:90%;height:100px;"></textarea>
 			<br />
-			<input type="button" name="button" value="取得内容" onclick="javascript:alert(KindEditor.util.getData('content1'));" />
-			<input type="button" name="button" value="取得纯文本" onclick="javascript:alert(KindEditor.util.getPureData('content1'));" />
-			<input type="submit" name="button" value="提交内容" />
+			<input type="button" name="button" value="Create Editor" onclick="javascript:createEditor('content1');" />
+			<input type="button" name="button" value="Remove Editor" onclick="javascript:removeEditor('content1');" />
+			<input type="submit" name="button" value="Submit" />
 		</form>
 	</body>
 </html>
