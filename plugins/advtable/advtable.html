@@ -63,9 +63,12 @@
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
-			location.href.match(/\?id=([\w-]+)/i);
+			location.href.match(/\&id=([\w-]+)/i);
 			var id = RegExp.$1;
+			location.href.match(/\?mode=([\w-]*)/i);
+			var mode = RegExp.$1;
 			KE.event.ready(function() {
+				var modeBox = KE.$('mode', document);
 				var rowsBox = KE.$('rows', document);
 				var colsBox = KE.$('cols', document);
 				var widthBox = KE.$('width', document);
@@ -100,7 +103,8 @@
 				var borderColor = '#000000';
 				var backgroundColor = '';
 				var table = KE.plugin.advtable.getSelectedTable(id);
-				if (table) {
+				if (mode === 'default' && table) mode = 'update';
+				if (mode === 'update') {
 					rows = table.rows.length;
 					cols = rows > 0 ? table.rows[0].cells.length : 0;
 					rowsBox.disabled = true;
@@ -126,6 +130,7 @@
 					borderColor = KE.util.rgbToHex(borderColor).toUpperCase();
 					backgroundColor = KE.util.rgbToHex(backgroundColor).toUpperCase();
 				}
+				modeBox.value = mode;
 				rowsBox.value = rows;
 				colsBox.value = cols;
 				widthBox.value = width;
@@ -190,6 +195,7 @@
 	</head>
 	<body>
 		<div class="main">
+			<input type="hidden" id="mode" name="mode" value="" /> 
 			<ul class="table">
 				<li>
 					<label for="rows"><span id="lang.cells"></span></label>

@@ -54,6 +54,7 @@ KE.lang = {
 	editLink : '超级链接属性',
 	deleteLink : '取消超级链接',
 	tableprop : '表格属性',
+	tableinsert : '插入表格',
 	tabledelete : '删除表格',
 	tablecolinsertleft : '左侧插入列',
 	tablecolinsertright : '右侧插入列',

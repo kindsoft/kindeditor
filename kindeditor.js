@@ -2793,6 +2793,7 @@ KE.lang = {
 	editLink : '超级链接属性',
 	deleteLink : '取消超级链接',
 	tableprop : '表格属性',
+	tableinsert : '插入表格',
 	tabledelete : '删除表格',
 	tablecolinsertleft : '左侧插入列',
 	tablecolinsertright : '右侧插入列',
@@ -3983,6 +3984,9 @@ KE.plugin['advtable'] = {
 	tableprop : function(id) {
 		this.click(id);
 	},
+	tableinsert : function(id) {
+		this.click(id, 'insert');
+	},
 	tabledelete : function(id) {
 		var table = this.getSelectedTable(id);
 		table.parentNode.removeChild(table);
@@ -4031,7 +4035,7 @@ KE.plugin['advtable'] = {
 	init : function(id) {
 		var self = this;
 		var zeroborder = 'ke-zeroborder';
-		var tableCmds = 'prop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,delete'.split(',');
+		var tableCmds = 'prop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,insert,delete'.split(',');
 		for (var i = 0, len = tableCmds.length; i < len; i++) {
 			var name = 'table' + tableCmds[i];
 			KE.g[id].contextmenuItems.push({
@@ -4079,13 +4083,14 @@ KE.plugin['advtable'] = {
 			});
 		});
 	},
-	click : function(id) {
+	click : function(id, mode) {
+		mode = mode || 'default';
 		var cmd = 'advtable';
 		KE.util.selection(id);
 		this.dialog = new KE.dialog({
 			id : id,
 			cmd : cmd,
-			file : 'advtable/advtable.html',
+			file : 'advtable/advtable.html?mode=' + mode,
 			width : 420,
 			height : 220,
 			loadingMode : true,
@@ -4098,6 +4103,7 @@ KE.plugin['advtable'] = {
 	exec : function(id) {
 		var zeroborder = 'ke-zeroborder';
 		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
+		var modeBox = KE.$('mode', dialogDoc);
 		var rowsBox = KE.$('rows', dialogDoc);
 		var colsBox = KE.$('cols', dialogDoc);
 		var widthBox = KE.$('width', dialogDoc);
@@ -4157,8 +4163,8 @@ KE.plugin['advtable'] = {
 			borderBox.focus();
 			return false;
 		}
-		var table = this.getSelectedTable(id);
-		if (table) {
+		if (modeBox.value === 'update') {
+			var table = this.getSelectedTable(id);
 			if (width !== '') {
 				table.style.width = width + widthType;
 			} else if (table.style.width) {

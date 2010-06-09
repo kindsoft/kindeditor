@@ -54,6 +54,7 @@ KE.lang = {
 	editLink : 'Link properties',
 	deleteLink : 'Unlink',
 	tableprop : 'Table properties',
+	tableinsert : 'Insert table',
 	tabledelete : 'Delete table',
 	tablecolinsertleft : 'Insert column left',
 	tablecolinsertright : 'Insert column right',
