@@ -2280,21 +2280,35 @@ KE.toolbar = {
 			a.onmouseout = function(){ this.className = 'ke-icon'; };
 		}
 	},
+	_setAttr : function(id, a, cmd) {
+		a.className = 'ke-icon';
+		a.href = 'javascript:;';
+		a.onclick = function(e) {
+			e = e || window.event;
+			var div = KE.g[id].hideDiv.firstChild;
+			if (div && div.getAttribute('name') == cmd) {
+				KE.layout.hide(id);
+			} else {
+				KE.util.click(id, cmd);
+			}
+			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
+			if (e.cancelBubble !== undefined) e.cancelBubble = true;
+			return false;
+		};
+		a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
+		a.onmouseout = function(){ this.className = 'ke-icon'; };
+		a.hidefocus = true;
+		a.title = KE.lang[cmd];
+	},
 	able : function(id, arr) {
+		var self = this;
 		KE.each(KE.g[id].toolbarIcon, function(cmd, obj) {
 			if (!KE.util.inArray(cmd, arr)) {
 				var a = obj[0];
 				var span = obj[1];
-				a.className = 'ke-icon';
+				self._setAttr(id, a, cmd);
 				KE.util.setOpacity(span, 100);
-				a.onclick = (function(cmd) {
-					return function() {
-						KE.util.click(id, cmd);
-						return false;
-					};
-				})(cmd);
-				a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
-				a.onmouseout = function(){ this.className = 'ke-icon'; };
 			}
 		});
 	},
@@ -2312,6 +2326,7 @@ KE.toolbar = {
 		});
 	},
 	create : function(id) {
+		var self = this;
 		var defaultItemHash = KE.util.arrayToHash(KE.setting.items);
 		KE.g[id].toolbarIcon = [];
 		var tableObj = KE.util.createTable();
@@ -2344,23 +2359,7 @@ KE.toolbar = {
 				continue;
 			}
 			var a = KE.$$('a');
-			a.className = 'ke-icon';
-			a.href = 'javascript:;';
-			a.onclick = (function(cmd) {
-				return function() {
-					var div = KE.g[id].hideDiv.firstChild;
-					if (div && div.getAttribute('name') == cmd) {
-						KE.layout.hide(id);
-					} else {
-						KE.util.click(id, cmd);
-					}
-					return false;
-				};
-			})(cmd);
-			a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
-			a.onmouseout = function(){ this.className = 'ke-icon'; };
-			a.hidefocus = true;
-			a.title = KE.lang[cmd];
+			self._setAttr(id, a, cmd);
 			var span = KE.$$('span');
 			if (typeof defaultItemHash[cmd] == 'undefined') {
 				span.className = 'ke-common-icon ke-icon-' + cmd;
@@ -2429,6 +2428,33 @@ KE.readonly = function(id, isReadonly) {
 	var g = KE.g[id];
 	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
 	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
+};
+
+KE.html = function(id, val) {
+	if (val === undefined) {
+		return KE.util.getData(id);
+	} else {
+		KE.util.setFullHtml(id, val);
+	}
+};
+
+KE.text = function(id, val) {
+	if (val === undefined) {
+		val = KE.html(id);
+		val = val.replace(/<.*?>/ig, '');
+		val = val.replace(/&nbsp;/ig, ' ');
+		return val;
+	} else {
+		KE.html(id, KE.util.escape(val));
+	}
+};
+
+KE.insertHtml = function(id, val) {
+	KE.util.insertHtml(id, val);
+};
+
+KE.appendHtml = function(id, val) {
+	KE.html(id, KE.html(id) + val);
 };
 
 KE.remove = function(id, mode) {
@@ -2580,6 +2606,7 @@ KE.create = function(id, mode) {
 	KE.event.add(iframeDoc, 'click', updateToolbar, id);
 	KE.event.input(iframeDoc, updateToolbar, id);
 	KE.event.add(newTextarea, 'click', hideMenu, id);
+	KE.event.add(document, 'click', hideMenu, id);
 	KE.g[id].container = container;
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;

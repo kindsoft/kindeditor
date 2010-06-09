@@ -61,6 +61,12 @@
 			<br />
 			<input type="button" name="button" value="Create Editor" onclick="javascript:createEditor('content1');" />
 			<input type="button" name="button" value="Remove Editor" onclick="javascript:removeEditor('content1');" />
+			<input type="button" name="button" value="Get HTML" onclick="javascript:alert(KE.html('content1'));" />
+			<input type="button" name="button" value="Set HTML" onclick="javascript:KE.html('content1', '<h1>Hello</h1>');" />
+			<input type="button" name="button" value="Get Text" onclick="javascript:alert(KE.text('content1'));" />
+			<input type="button" name="button" value="Set Text" onclick="javascript:KE.text('content1', '<h1>Hello</h1>');" />
+			<input type="button" name="button" value="Insert HTML" onclick="javascript:KE.insertHtml('content1', '<h1>Hello</h1>');" />
+			<input type="button" name="button" value="Append HTML" onclick="javascript:KE.appendHtml('content1', '<h1>Hello</h1>');" />
 			<input type="submit" name="button" value="Submit" />
 		</form>
 	</body>
