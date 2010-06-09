@@ -724,6 +724,7 @@ KE.cmd = function(id) {
 		}
 	};
 	this.wrap = function(tagName, attributes) {
+		attributes = attributes || [];
 		var self = this;
 		this.keSel.focus();
 		var element = KE.$$(tagName, this.doc);
@@ -863,10 +864,22 @@ KE.cmd = function(id) {
 							break;
 						} else {
 							removeAttr(node, attr[j]);
-							if (node.attributes.length == 0) {
+							var attrs = [];
+							if (node.outerHTML) {
+								attrHash = KE.util.getAttrList(node.outerHTML);
+								KE.each(attrHash, function(key, val) {
+									attrs.push({
+										name : key,
+										value : val
+									});
+								});
+							} else {
+								attrs = node.attributes;
+							}
+							if (attrs.length == 0) {
 								KE.util.removeParent(node);
 								break;
-							} else if (node.attributes[0].name == 'style' && node.attributes[0].value === '') {
+							} else if (attrs[0].name == 'style' && attrs[0].value === '') {
 								KE.util.removeParent(node);
 								break;
 							}

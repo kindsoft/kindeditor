@@ -106,5 +106,42 @@ KE.event.ready(function () {
 		equals(KE.html(id), '<h3>abc</h3>');
 		KE.html(id, '');
 	});
+
+	test("KE.cmd test", function() {
+		KE.html(id, '<h3 id="test-h3">abc</h3>');
+		equals(KE.html(id), '<h3 id="test-h3">abc</h3>');
+		var doc = KE.g[id].iframeDoc;
+		var h3 = KE.$('test-h3', doc);
+		KE.util.focus(id);
+		KE.util.setSelection(id);
+		var keRange = KE.g[id].keRange;
+		keRange.selectTextNode(h3);
+		var keSel = KE.g[id].keSel;
+		keSel.addRange(keRange);
+		var cmd = new KE.cmd(id);
+		cmd.wrap('span', [{'class' : 'aaa'}]);
+		equals(KE.html(id), '<h3 id="test-h3"><span class="aaa">abc</span></h3>');
+		cmd.wrap('span', [{'class' : 'bbb'}]);
+		equals(KE.html(id), '<h3 id="test-h3"><span class="bbb">abc</span></h3>');
+		cmd.remove({
+			'span' : ['class']
+		});
+		equals(KE.html(id), '<h3 id="test-h3">abc</h3>');
+		cmd.wrap('span', [{'.color' : '#000000'}]);
+		cmd.wrap('span', [{'.background-color' : '#FF0000'}]);
+		cmd.remove({
+			'span' : ['.background-color']
+		});
+		equals(KE.html(id), '<h3 id="test-h3"><span style="color:#000000;">abc</span></h3>');
+		cmd.remove({
+			'span' : ['.color']
+		});
+		equals(KE.html(id), '<h3 id="test-h3">abc</h3>');
+		cmd.wrap('small');
+		equals(KE.html(id), '<h3 id="test-h3"><small>abc</small></h3>');
+		cmd.wrap('span');
+		equals(KE.html(id), '<h3 id="test-h3"><small><span>abc</span></small></h3>');
+		KE.html(id, '');
+	});
 });
 
