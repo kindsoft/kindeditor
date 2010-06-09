@@ -31,7 +31,7 @@
 		<concat destfile="${filename}.js"
 			encoding="${charset}"
 			outputencoding="${charset}">
-			<fileset file="${src}/header.js"/>
+			<fileset file="${src}/copyright.js"/>
 			<fileset file="${src}/core.js"/>
 			<fileset file="${src}/lang/${lang}.js"/>
 			<fileset file="${src}/plugin.js"/>
