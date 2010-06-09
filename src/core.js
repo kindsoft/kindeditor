@@ -2468,6 +2468,10 @@ KE.appendHtml = function(id, val) {
 	KE.html(id, KE.html(id) + val);
 };
 
+KE.isEmpty = function(id) {
+	return KE.util.isEmpty(id);
+};
+
 KE.remove = function(id, mode) {
 	var g = KE.g[id];
 	if (!g.container) return false;

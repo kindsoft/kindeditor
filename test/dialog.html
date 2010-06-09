@@ -12,14 +12,20 @@
 		<script charset="utf-8" src="../src/lang/zh_CN.js"></script>
 		<script charset="utf-8" src="../src/plugin.js"></script>
 		<script>
+			var editor_id = 'content1';
 			KE.show({
-				id : 'content1',
+				id : editor_id,
 				skinsPath : '../skins/',
-				pluginsPath : '../plugins/'
+				pluginsPath : '../plugins/',
+				afterCreate : function(id) {
+					KE.event.bind(KE.$('button1'), 'click', openDialog1);
+					KE.event.bind(KE.$('button2'), 'click', openDialog2);
+					KE.event.bind(KE.$('button3'), 'click', openDialog3);
+				}
 			});
-			function openDialog1(id) {
+			function openDialog1() {
 				var dialog = new KE.dialog({
-					id : 'content1',
+					id : editor_id,
 					html : '<h1>Hello KindEditor!</h1>',
 					width : 450,
 					height : 300,
@@ -28,9 +34,9 @@
 				});
 				dialog.show();
 			}
-			function openDialog2(id) {
+			function openDialog2() {
 				var dialog = new KE.dialog({
-					id : 'content1',
+					id : editor_id,
 					cmd : 'plainpaste',
 					file : 'plainpaste.html',
 					width : 450,
@@ -44,7 +50,7 @@
 			var dialog;
 			function openDialog3(id) {
 				dialog = new KE.dialog({
-					id : 'content1',
+					id : editor_id,
 					url : 'dialog_iframe_document.html',
 					width : 450,
 					height : 300,
@@ -59,8 +65,8 @@
 	<body>
 		<textarea id="content1" name="content1" style="width:90%;height:250px;"></textarea>
 		<br />
-		<input type="button" name="button" value="静态HTML" onclick="javascript:openDialog1('content1');" />
-		<input type="button" name="button" value="插件模式" onclick="javascript:openDialog2('content1');" />
-		<input type="button" name="button" value="外部URL" onclick="javascript:openDialog3('content1');" />
+		<input type="button" name="button" id="button1" value="静态HTML" />
+		<input type="button" name="button" id="button2" value="插件模式" />
+		<input type="button" name="button" id="button3" value="外部URL" />
 	</body>
 </html>
