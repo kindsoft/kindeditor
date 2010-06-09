@@ -2483,6 +2483,8 @@ KE.text = function(id, val) {
 };
 
 KE.insertHtml = function(id, val) {
+	KE.util.focus(id);
+	KE.util.selection(id);
 	KE.util.insertHtml(id, val);
 };
 
@@ -2492,6 +2494,28 @@ KE.appendHtml = function(id, val) {
 
 KE.isEmpty = function(id) {
 	return KE.util.isEmpty(id);
+};
+
+KE.selectedHtml = function(id) {
+	KE.util.focus(id);
+	KE.util.selection(id);
+	var range = KE.g[id].range;
+	var html = '';
+	if (KE.browser.IE) {
+		if (range.item) {
+			html = range.item(0).outerHTML;
+		} else {
+			html = range.htmlText;
+		}
+	} else {
+		var temp = KE.$$('div', KE.g[id].iframeDoc);
+		temp.appendChild(range.cloneContents());
+		html = temp.innerHTML;
+	}
+	if (html !== '') {
+		html = KE.g[id].keRange.cloneContents().innerHTML;
+	}
+	return KE.util.toData(id, html);
 };
 
 KE.remove = function(id, mode) {

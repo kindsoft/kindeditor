@@ -1,4 +1,4 @@
-module("KE");
+module("Editor API");
 
 KE.init({
 	id : 'content1',
@@ -67,7 +67,6 @@ KE.event.ready(function () {
 
 	test("KE.insertHtml test", function() {
 		KE.html(id, '<h3 id="test-h3">abc</h3>');
-		equals(KE.html(id), '<h3 id="test-h3">abc</h3>');
 		var doc = KE.g[id].iframeDoc;
 		var h3 = KE.$('test-h3', doc);
 		KE.util.focus(id);
@@ -78,6 +77,21 @@ KE.event.ready(function () {
 		keSel.addRange(keRange);
 		KE.insertHtml(id, '<b>abc</b>');
 		equals(KE.html(id), '<h3 id="test-h3"><b>abc</b></h3>');
+		KE.html(id, '');
+	});
+
+	test("KE.selectedHtml test", function() {
+		KE.html(id, '<span id="test">abc</span>');
+		var doc = KE.g[id].iframeDoc;
+		var span = KE.$('test', doc);
+		KE.util.focus(id);
+		KE.util.setSelection(id);
+		var keRange = KE.g[id].keRange;
+		keRange.setStart(span.firstChild, 0);
+		keRange.setEnd(span.firstChild, 2);
+		var keSel = KE.g[id].keSel;
+		keSel.addRange(keRange);
+		equals(KE.selectedHtml(id), 'ab');
 		KE.html(id, '');
 	});
 

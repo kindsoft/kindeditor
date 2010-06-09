@@ -1,4 +1,4 @@
-module("KE.format");
+module("Format");
 
 test("URL format test", function() {
 	equals(KE.format.getUrl(KE.$("test01").value, "absolute", 'http://localhost', '/ke/test'), '/ke/images/xxx.gif');
