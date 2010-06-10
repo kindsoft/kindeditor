@@ -595,7 +595,7 @@ KE.range = function(doc) {
 		this.setTextEnd(node, node.nodeType == 1 ? 0 : node.nodeValue.length);
 	};
 	this.extractContents = function(isDelete) {
-		isDelete = (isDelete === false) ? false : true;
+		isDelete = (isDelete === undefined) ? true : isDelete;
 		var thisRange = this;
 		var startNode = this.startNode;
 		var startPos = this.startPos;
@@ -614,6 +614,7 @@ KE.range = function(doc) {
 			}
 			return centerNode;
 		};
+		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
 		var isStarted = false;
 		var isEnd = false;
 		var extractNodes = function(parent, frag) {
@@ -627,7 +628,8 @@ KE.range = function(doc) {
 				if (type == 1) {
 					var range = new KE.range(doc);
 					range.selectNode(node);
-					if (isStarted && range.comparePoints('END_TO_END', thisRange) < 0) {
+					var cmp = range.comparePoints('END_TO_END', thisRange);
+					if (isStarted && (cmp < 0 || (cmp == 0 && noEndTagHash[node.nodeName.toLowerCase()] !== undefined))) {
 						var cloneNode = node.cloneNode(true);
 						frag.appendChild(cloneNode);
 						if (isDelete) {
@@ -635,8 +637,10 @@ KE.range = function(doc) {
 						}
 					} else {
 						var childFlag = node.cloneNode(false);
-						frag.appendChild(childFlag);
-						if (!extractNodes(node, childFlag)) return false;
+						if (noEndTagHash[childFlag.nodeName.toLowerCase()] === undefined) {
+							frag.appendChild(childFlag);
+							if (!extractNodes(node, childFlag)) return false;
+						}
 					}
 				} else if (type == 3) {
 					if (isStarted) {
@@ -660,6 +664,9 @@ KE.range = function(doc) {
 				}
 				node = nextNode;
 				if (isEnd) return false;
+			}
+			if (frag.innerHTML.replace(/<.*?>/g, '') === '' && frag.parentNode) {
+				frag.parentNode.removeChild(frag);
 			}
 			return true;
 		}
