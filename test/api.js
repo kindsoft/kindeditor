@@ -113,6 +113,19 @@ KE.event.ready(function () {
 		KE.html(id, '');
 	});
 
+	test("KE.count test", function() {
+		KE.html(id, '<h3>abc</h3>');
+		ok(KE.count(id, 'html') === 12);
+		ok(KE.count(id, 'text') === 3);
+		KE.html(id, '<h3></h3>');
+		ok(KE.count(id, 'html') === 9);
+		ok(KE.count(id, 'text') === 0);
+		KE.html(id, '<img src="" />');
+		ok(KE.count(id, 'html') === 14);
+		ok(KE.count(id, 'text') === 1);
+		KE.html(id, '');
+	});
+
 	test("KE.remove/KE.create test", function() {
 		KE.html(id, '<h3>abc</h3>');
 		KE.remove(id);

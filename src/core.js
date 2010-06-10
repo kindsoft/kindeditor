@@ -2509,6 +2509,20 @@ KE.selectedHtml = function(id) {
 	return KE.util.toData(id, html);
 };
 
+KE.count = function(id, mode) {
+	mode = (mode || 'html').toLowerCase();
+	if (mode === 'html') {
+		return KE.html(id).length;
+	} else if (mode === 'text') {
+		var data = KE.util.getPureData(id);
+		data = data.replace(/<(?:img|embed).*?>/ig, 'K');
+		data = data.replace(/\r\n|\n|\r/g, '');
+		data = KE.util.trim(data);
+		return data.length;
+	}
+	return 0;
+};
+
 KE.remove = function(id, mode) {
 	var g = KE.g[id];
 	if (!g.container) return false;

@@ -16,7 +16,8 @@
 			KE.show({
 				id : 'content11',
 				afterSetData : function(id) {
-					KE.$('word_count').innerHTML = KE.$('content11').value.length;
+					KE.$('word_count1').innerHTML = KE.count(id);
+					KE.$('word_count2').innerHTML = KE.count(id, 'text');
 				}
 			});
 		</script>
@@ -25,6 +26,7 @@
 		<h3>统计字数</h3>
 		<textarea id="content11" name="content" cols="100" rows="20"></textarea>
 		<br />
-		您当前输入了 <span id="word_count">0</span> 个文字。（字数统计包含HTML代码。）
+		您当前输入了 <span id="word_count1">0</span> 个文字。（字数统计包含HTML代码。）<br />
+		您当前输入了 <span id="word_count2">0</span> 个文字。（字数统计包含纯文本、IMG、EMBED，不包含换行符，IMG和EMBED算一个文字。）
 	</body>
 </html>
