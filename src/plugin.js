@@ -343,7 +343,7 @@ KE.plugin['source'] = {
 			this.isSelected = false;
 			KE.toolbar.unselect(id, "source");
 		} else {
-			KE.layout.hide(id);
+			KE.hideMenu(id);
 			g.newTextarea.value = KE.util.getData(id);
 			g.iframe.style.display = 'none';
 			g.newTextarea.style.display = 'block';

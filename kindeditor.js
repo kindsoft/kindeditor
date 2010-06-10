@@ -1470,13 +1470,15 @@ KE.util = {
 				}
 			};
 			var selectListener = function() { return false; };
-			var upListener = function() {
+			var upListener = function(e) {
 				dragFlag = false;
 				KE.event.remove(document, 'mousemove', moveListener);
 				KE.event.remove(document, 'mouseup', upListener);
 				KE.event.remove(g.iframeDoc, 'mousemove', iframeMoveListener);
 				KE.event.remove(g.iframeDoc, 'mouseup', upListener);
 				KE.event.remove(document, 'selectstart', selectListener);
+				KE.event.stop(e);
+				return false;
 			};
 			KE.event.add(document, 'mousemove', moveListener);
 			KE.event.add(document, 'mouseup', upListener);
@@ -1648,7 +1650,7 @@ KE.util = {
 	},
 	click : function(id, cmd) {
 		this.focus(id);
-		KE.layout.hide(id);
+		KE.hideMenu(id);
 		KE.plugin[cmd].click(id);
 	},
 	selection : function(id) {
@@ -1767,7 +1769,7 @@ KE.util = {
 		var g = KE.g[id];
 		if (g.contextmenuItems.length == 0) return;
 		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
-			KE.layout.hide(id);
+			KE.hideMenu(id);
 			KE.util.setSelection(id);
 			KE.util.selectImageWebkit(id, e, false);
 			var maxWidth = 0;
@@ -1868,11 +1870,16 @@ KE.util = {
 KE.layout = {
 	hide : function(id) {
 		var g = KE.g[id];
+		KE.hideMenu(id);
 		g.dialogStack = [];
-		g.hideDiv.innerHTML = '';
-		g.hideDiv.style.display = 'none';
 		g.maskDiv.style.display = 'none';
 	}
+};
+
+KE.hideMenu = function(id) {
+	var g = KE.g[id];
+	g.hideDiv.innerHTML = '';
+	g.hideDiv.style.display = 'none';
 };
 
 KE.colorpicker = function(arg) {
@@ -1934,6 +1941,7 @@ KE.colorpicker = function(arg) {
 	this.create = function() {
 		wrapper.appendChild(this.getElement());
 		KE.event.bind(wrapper, 'click', function(e){});
+		KE.event.bind(wrapper, 'mousedown', function(e){});
 		doc.body.appendChild(wrapper);
 	};
 };
@@ -1973,6 +1981,7 @@ KE.menu = function(arg){
 		div.style.left = pos.x + 'px';
 		if (arg.width) div.style.width = (/^\d+$/.test(width)) ? width + 'px' : width;
 		KE.event.bind(div, 'click', function(e){}, arg.id);
+		KE.event.bind(div, 'mousedown', function(e){}, arg.id);
 		this.div = div;
 	};
 	init.call(this);
@@ -2027,7 +2036,7 @@ KE.menu = function(arg){
 		KE.util.innerHtml(this.div, html);
 	};
 	this.hide = function() {
-		KE.layout.hide(arg.id);
+		KE.hideMenu(arg.id);
 	};
 	this.show = function() {
 		this.hide();
@@ -2110,9 +2119,8 @@ KE.dialog = function(arg){
 		var iframe = dialog.iframe;
 		iframe.src = 'javascript:false';
 		iframe.parentNode.removeChild(iframe);
-		KE.g[id].hideDiv.removeChild(this.div);
+		document.body.removeChild(this.div);
 		if (stack.length < 1) {
-			KE.g[id].hideDiv.style.display = 'none';
 			KE.g[id].maskDiv.style.display = 'none';
 		}
 		KE.event.remove(window, 'resize', setLimitNumber);
@@ -2126,7 +2134,6 @@ KE.dialog = function(arg){
 		var id = arg.id;
 		var div = KE.$$('div');
 		div.className = 'ke-dialog';
-		KE.event.bind(div, 'click', function(e){}, id);
 		var stack = KE.g[id].dialogStack;
 		if (stack.length > 0) {
 			this.zIndex = stack[stack.length - 1].zIndex + 1;
@@ -2170,6 +2177,7 @@ KE.dialog = function(arg){
 		KE.event.add(window, 'scroll', setLimitNumber);
 		KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
 			if (self.ondrag) self.ondrag(id);
+			setLimitNumber();
 			top = objTop + top;
 			left = objLeft + left;
 			if (top < minTop) top = minTop;
@@ -2251,8 +2259,7 @@ KE.dialog = function(arg){
 		if (arg.yesButton || arg.noButton || arg.previewButton) {
 			contentCell.appendChild(bottomDiv);
 		}
-		KE.g[id].hideDiv.style.display = '';
-		KE.g[id].hideDiv.appendChild(div);
+		document.body.appendChild(div);
 		window.focus();
 		if (yesButton) yesButton.focus();
 		else if (noButton) noButton.focus();
@@ -2341,7 +2348,7 @@ KE.toolbar = {
 			e = e || window.event;
 			var div = KE.g[id].hideDiv.firstChild;
 			if (div && div.getAttribute('name') == cmd) {
-				KE.layout.hide(id);
+				KE.hideMenu(id);
 			} else {
 				KE.util.click(id, cmd);
 			}
@@ -2679,6 +2686,7 @@ KE.create = function(id, mode) {
 	maskDiv.className = 'ke-mask';
 	KE.util.setOpacity(maskDiv, 50);
 	KE.event.bind(maskDiv, 'click', function(e){}, id);
+	KE.event.bind(maskDiv, 'mousedown', function(e){}, id);
 	document.body.appendChild(hideDiv);
 	document.body.appendChild(maskDiv);
 	KE.util.setDefaultPlugin(id);
@@ -2695,12 +2703,12 @@ KE.create = function(id, mode) {
 		KE.toolbar.disable(id, ['source', 'fullscreen']);
 		KE.toolbar.select(id, 'source');
 	}
-	var hideMenu = function() {
-		KE.layout.hide(id);
-	};
-	var updateToolbar = function () {
+	function hideMenu() {
+		KE.hideMenu(id);
+	}
+	function updateToolbar() {
 		KE.toolbar.updateState(id);
-	};
+	}
 	if (KE.browser.WEBKIT) {
 		KE.event.add(iframeDoc, 'click', function(e) {
 			KE.util.selectImageWebkit(id, e, true);
@@ -3368,7 +3376,7 @@ KE.plugin['source'] = {
 			this.isSelected = false;
 			KE.toolbar.unselect(id, "source");
 		} else {
-			KE.layout.hide(id);
+			KE.hideMenu(id);
 			g.newTextarea.value = KE.util.getData(id);
 			g.iframe.style.display = 'none';
 			g.newTextarea.style.display = 'block';
