@@ -390,8 +390,12 @@ KE.selection = function(doc) {
 					this.range.select();
 					node.removeChild(temp);
 				} else {
-					this.range.setEndPoint('StartToStart', getEndRange(true));
-					this.range.setEndPoint('EndToStart', getEndRange(false));
+					if (node.nodeType == 3 && keRange.collapsed()) {
+						this.range = getEndRange(true);
+					} else {
+						this.range.setEndPoint('StartToStart', getEndRange(true));
+						this.range.setEndPoint('EndToStart', getEndRange(false));
+					}
 					this.range.select();
 				}
 			}
@@ -523,6 +527,16 @@ KE.range = function(doc) {
 		if (how == 'START_TO_END') return compareNodes(this.startNode, this.startPos, range.endNode, range.endPos);
 		if (how == 'END_TO_START') return compareNodes(this.endNode, this.endPos, range.startNode, range.startPos);
 		if (how == 'END_TO_END') return compareNodes(this.endNode, this.endPos, range.endNode, range.endPos);
+	};
+	this.collapsed = function() {
+		return (this.startNode === this.endNode && this.startPos === this.endPos);
+	};
+	this.collapse = function(toStart) {
+		if (toStart) {
+			this.setEnd(this.startNode, this.startPos);
+		} else {
+			this.setStart(this.endNode, this.endPos);
+		}
 	};
 	this.setTextStart = function(node, pos) {
 		var textNode = node;
@@ -2454,11 +2468,26 @@ KE.readonly = function(id, isReadonly) {
 	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
 };
 
+KE.focus = function(id, position) {
+	position = (position || '').toLowerCase();
+	KE.util.focus(id);
+	if (position === 'end') {
+		KE.util.setSelection(id);
+		var sel = KE.g[id].keSel,
+			range = KE.g[id].keRange,
+			doc = KE.g[id].iframeDoc;
+		range.selectTextNode(doc.body);
+		range.collapse(false);
+		sel.addRange(range);
+	}
+};
+
 KE.html = function(id, val) {
 	if (val === undefined) {
 		return KE.util.getData(id);
 	} else {
 		KE.util.setFullHtml(id, val);
+		KE.focus(id, 'end');
 	}
 };
 
@@ -2474,13 +2503,18 @@ KE.text = function(id, val) {
 };
 
 KE.insertHtml = function(id, val) {
-	KE.util.focus(id);
-	KE.util.selection(id);
-	KE.util.insertHtml(id, val);
+	var range = KE.g[id].range;
+	if (!range) {
+		KE.appendHtml(id, val);
+	} else {
+		KE.focus(id);
+		KE.util.insertHtml(id, val);
+	}
 };
 
 KE.appendHtml = function(id, val) {
 	KE.html(id, KE.html(id) + val);
+	KE.focus(id, 'end');
 };
 
 KE.isEmpty = function(id) {
@@ -2488,9 +2522,8 @@ KE.isEmpty = function(id) {
 };
 
 KE.selectedHtml = function(id) {
-	KE.util.focus(id);
-	KE.util.selection(id);
 	var range = KE.g[id].range;
+	if (!range) return '';
 	var html = '';
 	if (KE.browser.IE) {
 		if (range.item) {
