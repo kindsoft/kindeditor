@@ -1426,6 +1426,7 @@ KE.util = {
 	drag : function(id, mousedownObj, moveObj, func) {
 		var g = KE.g[id];
 		mousedownObj.onmousedown = function(e) {
+			var self = this;
 			e = e || window.event;
 			var pos = KE.util.getCoords(e);
 			var objTop = parseInt(moveObj.style.top);
@@ -1442,7 +1443,7 @@ KE.util = {
 			var scrollTop = scrollPos.y;
 			var scrollLeft = scrollPos.x;
 			var dragFlag = true;
-			var moveListener = function(e) {
+			function moveListener(e) {
 				if (dragFlag) {
 					var pos = KE.util.getCoords(e);
 					var scrollPos = KE.util.getScrollPos();
@@ -1450,19 +1451,20 @@ KE.util = {
 					var left = parseInt(pos.x - mouseLeft - scrollLeft + scrollPos.x);
 					func(objTop, objLeft, objWidth, objHeight, top, left);
 				}
-			};
+			}
 			var iframePos = KE.util.getElementPos(g.iframe);
-			var iframeMoveListener = function(e) {
+			function iframeMoveListener(e) {
 				if (dragFlag) {
 					var pos = KE.util.getCoords(e, g.iframeDoc);
 					var top = parseInt(iframePos.y + pos.y - mouseTop - scrollTop);
 					var left = parseInt(iframePos.x + pos.x - mouseLeft - scrollLeft);
 					func(objTop, objLeft, objWidth, objHeight, top, left);
 				}
-			};
+			}
 			var selectListener = function() { return false; };
-			var upListener = function(e) {
+			function upListener(e) {
 				dragFlag = false;
+				if (self.releaseCapture) self.releaseCapture();
 				KE.event.remove(document, 'mousemove', moveListener);
 				KE.event.remove(document, 'mouseup', upListener);
 				KE.event.remove(g.iframeDoc, 'mousemove', iframeMoveListener);
@@ -1470,12 +1472,13 @@ KE.util = {
 				KE.event.remove(document, 'selectstart', selectListener);
 				KE.event.stop(e);
 				return false;
-			};
+			}
 			KE.event.add(document, 'mousemove', moveListener);
 			KE.event.add(document, 'mouseup', upListener);
 			KE.event.add(g.iframeDoc, 'mousemove', iframeMoveListener);
 			KE.event.add(g.iframeDoc, 'mouseup', upListener);
 			KE.event.add(document, 'selectstart', selectListener);
+			if (self.setCapture) self.setCapture();
 			KE.event.stop(e);
 			return false;
 		};
