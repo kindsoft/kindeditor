@@ -1875,7 +1875,11 @@ KE.layout = {
 	hide : function(id) {
 		var g = KE.g[id];
 		KE.hideMenu(id);
-		g.dialogStack = [];
+		var stack = g.dialogStack;
+		while (stack.length > 0) {
+			var dialog = stack[stack.length - 1];
+			dialog.hide();
+		}
 		g.maskDiv.style.display = 'none';
 	}
 };
