@@ -41,6 +41,7 @@ KE.setting = {
 	resizeMode : 2,
 	filterMode : false,
 	autoSetDataMode : true,
+	shadowMode : true,
 	urlType : '',
 	skinType : 'default',
 	newlineTag : 'p',
@@ -2147,29 +2148,36 @@ KE.dialog = function(arg){
 		var pos = getPos.call(this);
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
-		var table = KE.$$('table');
-		table.className = 'ke-dialog-table';
-		table.cellPadding = 0;
-		table.cellSpacing = 0;
-		table.border = 0;
-		var rowNames = ['t', 'm', 'b'];
-		var colNames = ['l', 'c', 'r'];
 		var contentCell;
-		for (var i = 0, len = 3; i < len; i++) {
-			var row = table.insertRow(i);
-			for (var j = 0, l = 3; j < l; j++) {
-				var cell = row.insertCell(j);
-				cell.className = 'ke-' + rowNames[i] + colNames[j];
-				if (i == 1 && j == 1) contentCell = cell;
-				else cell.innerHTML = '<span class="ke-dialog-empty"></span>';
+		if (KE.g[id].shadowMode) {
+			var table = KE.$$('table');
+			table.className = 'ke-dialog-table';
+			table.cellPadding = 0;
+			table.cellSpacing = 0;
+			table.border = 0;
+			var rowNames = ['t', 'm', 'b'];
+			var colNames = ['l', 'c', 'r'];
+			for (var i = 0, len = 3; i < len; i++) {
+				var row = table.insertRow(i);
+				for (var j = 0, l = 3; j < l; j++) {
+					var cell = row.insertCell(j);
+					cell.className = 'ke-' + rowNames[i] + colNames[j];
+					if (i == 1 && j == 1) contentCell = cell;
+					else cell.innerHTML = '<span class="ke-dialog-empty"></span>';
+				}
 			}
+			div.appendChild(table);
+		} else {
+			KE.addClass(div, 'ke-dialog-no-shadow');
+			contentCell = div;
 		}
-		div.appendChild(table);
 		var titleDiv = KE.$$('div');
 		titleDiv.className = 'ke-dialog-title';
 		titleDiv.innerHTML = arg.title;
 		var span = KE.$$('span');
-		span.className = "ke-dialog-close";
+		span.className = 'ke-dialog-close';
+		if (KE.g[id].shadowMode) KE.addClass(span, 'ke-dialog-close-shadow');
+		else KE.addClass(span, 'ke-dialog-close-no-shadow');
 		span.alt = KE.lang['close'];
 		span.title = KE.lang['close'];
 		span.onclick = function () {
@@ -2514,6 +2522,7 @@ KE.html = function(id, val) {
 	if (val === undefined) {
 		return KE.util.getData(id);
 	} else {
+		if (!KE.g[id].container) return;
 		KE.util.setFullHtml(id, val);
 		KE.focus(id, 'end');
 	}
@@ -2531,6 +2540,7 @@ KE.text = function(id, val) {
 };
 
 KE.insertHtml = function(id, val) {
+	if (!KE.g[id].container) return;
 	var range = KE.g[id].range;
 	if (!range) {
 		KE.appendHtml(id, val);

@@ -579,6 +579,11 @@
 .ke-dialog {
 	position: absolute;
 }
+.ke-dialog-no-shadow {
+	border: 1px solid #A0A0A0;
+	background-color: #F0F0EE;
+	color: #222222;
+}
 .ke-dialog-table {
 	border:0;
 	padding:0;
@@ -654,6 +659,14 @@ span.ke-dialog-empty {
 	top: 15px;
 	cursor: pointer;
 	background-image: url(./default/default.gif);
+}
+.ke-dialog-close-shadow {
+	right: 15px;
+	top: 15px;
+}
+.ke-dialog-close-no-shadow {
+	right: 10px;
+	top: 10px;
 }
 .ke-dialog-body {
 	margin: 10px 10px 0 10px;
