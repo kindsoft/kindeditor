@@ -2501,6 +2501,7 @@ KE.readonly = function(id, isReadonly) {
 
 KE.focus = function(id, position) {
 	position = (position || '').toLowerCase();
+	if (!KE.g[id].container) return;
 	KE.util.focus(id);
 	if (position === 'end') {
 		KE.util.setSelection(id);
