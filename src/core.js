@@ -919,9 +919,13 @@ KE.format = {
 		mode = mode.toLowerCase();
 		if (!KE.util.inArray(mode, ['absolute', 'relative', 'domain'])) return url;
 		host = host || location.protocol + '//' + location.host;
-		pathname = pathname || (location.pathname.match(/^(\/.*)\//) ? RegExp.$1 : '');
-		if (url.match(/^(\w+:\/\/[^\/]*)/)) {
-			if (RegExp.$1 !== host) return url;
+		if (pathname === undefined) {
+			var m = location.pathname.match(/^(\/.*)\//);
+			pathname = m ? m[1] : '';
+		}
+		var matches = url.match(/^(\w+:\/\/[^\/]*)/);
+		if (matches) {
+			if (matches[1] !== host) return url;
 		} else if (url.match(/^\w+:/)) {
 			return url;
 		}
@@ -955,8 +959,9 @@ KE.format = {
 					if (pathname == '/') prefix += '/';
 					return prefix + url.substr(path.length);
 				} else {
-					if (path.match(/^(.*)\//)) {
-						return getRelativePath(RegExp.$1, ++depth);
+					var m = path.match(/^(.*)\//);
+					if (m) {
+						return getRelativePath(m[1], ++depth);
 					}
 				}
 			};
@@ -1015,7 +1020,7 @@ KE.format = {
 								if (isFilter) {
 									if (typeof htmlTagHash[tagName]['style'] == "undefined" && typeof htmlTagHash[tagName]['.' + k] == "undefined") return '';
 								}
-								var v = KE.util.trim($2.toLowerCase());
+								var v = KE.util.trim($2);
 								v = KE.util.rgbToHex(v);
 								return k + ':' + v + ';';
 							});

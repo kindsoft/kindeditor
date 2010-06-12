@@ -18,6 +18,10 @@
 		<property name="lang" value="zh_CN"/>
 	</target>
 
+	<target name="set_zh_TW">
+		<property name="lang" value="zh_TW"/>
+	</target>
+
 	<target name="set_prop">
 		<property name="kedir" value="${dist}/${filename}-${version}-${lang}"/>
 		<property name="kezip" value="${kedir}.zip"/>
@@ -82,5 +86,6 @@
 	<target name="merge_zh_CN" depends="set_zh_CN,merge"/>
 	<target name="en" depends="set_en,set_prop,zip"/>
 	<target name="zh_CN" depends="set_zh_CN,set_prop,zip"/>
+	<target name="zh_TW" depends="set_zh_TW,set_prop,zip"/>
 
 </project>
