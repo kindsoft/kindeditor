@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5 (2010-06-11)
+* @version 3.5 (2010-06-12)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5 (2010-06-11)';
+KE.version = '3.5 (2010-06-12)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2537,6 +2537,7 @@ KE.text = function(id, val) {
 		val = KE.html(id);
 		val = val.replace(/<.*?>/ig, '');
 		val = val.replace(/&nbsp;/ig, ' ');
+		val = KE.util.trim(val);
 		return val;
 	} else {
 		KE.html(id, KE.util.escape(val));

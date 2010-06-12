@@ -2528,6 +2528,7 @@ KE.text = function(id, val) {
 		val = KE.html(id);
 		val = val.replace(/<.*?>/ig, '');
 		val = val.replace(/&nbsp;/ig, ' ');
+		val = KE.util.trim(val);
 		return val;
 	} else {
 		KE.html(id, KE.util.escape(val));
