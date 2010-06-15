@@ -1067,7 +1067,10 @@ KE.format = {
 				return startNewline + '<' + startSlash + tagName + endSlash + '>' + endNewline;
 			}
 		});
-		html = html.replace(/<br\s+\/>\n<\/p>/ig, '</p>');
+		if (!KE.browser.IE) {
+			html = html.replace(/<p><br\s+\/>\n<\/p>/ig, '<p>&nbsp;</p>');
+			html = html.replace(/<br\s+\/>\n<\/p>/ig, '</p>');
+		}
 		var reg = KE.setting.inlineTags.join('|');
 		var trimHtml = function(inHtml) {
 			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
