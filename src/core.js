@@ -687,6 +687,7 @@ KE.cmd = function(id) {
 					var jsKey = KE.util.getJsKey(key.substr(1));
 					el.style[jsKey] = value;
 				} else {
+					if (KE.browser.IE && KE.browser.VERSION < 8 && key == 'class') key = 'className';
 					el.setAttribute(key, value);
 				}
 			});
@@ -859,6 +860,7 @@ KE.cmd = function(id) {
 				var jsKey = KE.util.getJsKey(attr.substr(1));
 				node.style[jsKey] = '';
 			} else {
+				if (KE.browser.IE && KE.browser.VERSION < 8 && attr == 'class') attr = 'className';
 				node.removeAttribute(attr);
 			}
 		};
@@ -2551,6 +2553,7 @@ KE.insertHtml = function(id, val) {
 		KE.appendHtml(id, val);
 	} else {
 		KE.focus(id);
+		KE.util.selection(id);
 		KE.util.insertHtml(id, val);
 	}
 };

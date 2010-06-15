@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5 (2010-06-12)
+* @version 3.5 (2010-06-15)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5 (2010-06-12)';
+KE.version = '3.5 (2010-06-15)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -696,6 +696,7 @@ KE.cmd = function(id) {
 					var jsKey = KE.util.getJsKey(key.substr(1));
 					el.style[jsKey] = value;
 				} else {
+					if (KE.browser.IE && KE.browser.VERSION < 8 && key == 'class') key = 'className';
 					el.setAttribute(key, value);
 				}
 			});
@@ -868,6 +869,7 @@ KE.cmd = function(id) {
 				var jsKey = KE.util.getJsKey(attr.substr(1));
 				node.style[jsKey] = '';
 			} else {
+				if (KE.browser.IE && KE.browser.VERSION < 8 && attr == 'class') attr = 'className';
 				node.removeAttribute(attr);
 			}
 		};
@@ -984,6 +986,9 @@ KE.format = {
 	},
 	getHtml : function(html, htmlTags, urlType) {
 		var isFilter = htmlTags ? true : false;
+		html = html.replace(/(<pre[^>]*>)([\s\S]*?)(<\/pre>)/ig, function($0, $1, $2, $3){
+			return $1 + $2.replace(/<br[^>]*>/ig, '\n') + $3;
+		});
 		var htmlTagHash = {};
 		if (isFilter) {
 			KE.each(htmlTags, function(key, val) {
@@ -1062,7 +1067,7 @@ KE.format = {
 				return startNewline + '<' + startSlash + tagName + endSlash + '>' + endNewline;
 			}
 		});
-		html = html.replace(/<br\s+\/>\n<\/p>/, '</p>');
+		html = html.replace(/<br\s+\/>\n<\/p>/ig, '</p>');
 		var reg = KE.setting.inlineTags.join('|');
 		var trimHtml = function(inHtml) {
 			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
@@ -2557,6 +2562,7 @@ KE.insertHtml = function(id, val) {
 		KE.appendHtml(id, val);
 	} else {
 		KE.focus(id);
+		KE.util.selection(id);
 		KE.util.insertHtml(id, val);
 	}
 };
