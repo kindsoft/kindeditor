@@ -851,7 +851,12 @@ KE.plugin['link'] = {
 			node = node.parentNode;
 		}
 		node = node.parentNode;
-		var isItem = (startNode.nodeType == 1 && startNode === endNode);
+		var isItem;
+		if (KE.browser.IE) {
+			isItem = !!g.range.item;
+		} else {
+			isItem = (startNode.nodeType == 1 && startNode === endNode && startNode.nodeName.toLowerCase() != 'br');
+		}
 		var isEmpty = !isItem;
 		if (!isItem) isEmpty = KE.browser.IE ? g.range.text === '' : g.range.toString() === '';
 		if (isEmpty || KE.util.isEmpty(id)) {
