@@ -975,6 +975,9 @@ KE.format = {
 	},
 	getHtml : function(html, htmlTags, urlType) {
 		var isFilter = htmlTags ? true : false;
+		html = html.replace(/(<pre[^>]*>)([\s\S]*?)(<\/pre>)/ig, function($0, $1, $2, $3){
+			return $1 + $2.replace(/<br[^>]*>/ig, '\n') + $3;
+		});
 		var htmlTagHash = {};
 		if (isFilter) {
 			KE.each(htmlTags, function(key, val) {
@@ -1053,7 +1056,7 @@ KE.format = {
 				return startNewline + '<' + startSlash + tagName + endSlash + '>' + endNewline;
 			}
 		});
-		html = html.replace(/<br\s+\/>\n<\/p>/, '</p>');
+		html = html.replace(/<br\s+\/>\n<\/p>/ig, '</p>');
 		var reg = KE.setting.inlineTags.join('|');
 		var trimHtml = function(inHtml) {
 			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {

@@ -17,7 +17,7 @@
 				id : 'content1',
 				skinsPath : '../skins/',
 				pluginsPath : '../plugins/',
-				newlineTag : 'br',
+				newlineTag : 'p',
 				allowFileManager : true,
 				afterSetData : function(id) {
 					KE.$('content_html').value = KE.$('content1').value;
@@ -28,6 +28,11 @@
 	<body>
 		<form name="example" method="post" action="./../php/demo.php">
 			<textarea id="content1" name="content1" style="width:90%;height:150px;">
+<pre>
+abcd
+1234
+efgh
+</pre>
 <p><img height="24" alt="" src="../plugins/emoticons/0.gif" width="24" border="0" /><strong>月下独酌</strong> - 李白</p>
 <p>花间一壶酒，独酌无相亲。</p>
 <p>举杯邀明月，对影成三人。</p>
