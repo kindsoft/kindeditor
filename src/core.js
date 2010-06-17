@@ -2606,6 +2606,7 @@ KE.remove = function(id, mode) {
 	var g = KE.g[id];
 	if (!g.container) return false;
 	mode = (typeof mode == "undefined") ? 0 : mode;
+	KE.util.setData(id);
 	var container = g.container;
 	var eventStack = g.eventStack;
 	for (var i = 0, len = eventStack.length; i < len; i++) {
