@@ -2714,6 +2714,7 @@ KE.create = function(id, mode) {
 	bottomRight.appendChild(rightImg);
 	bottomOuter.appendChild(bottom);
 	var hideDiv = KE.$$('div');
+	hideDiv.className = 'ke-reset';
 	hideDiv.style.display = 'none';
 	var maskDiv = KE.$$('div');
 	maskDiv.className = 'ke-mask';
@@ -3308,7 +3309,7 @@ KE.plugin['fontname'] = {
 		});
 		var font = KE.queryCommandValue(KE.g[id].iframeDoc, cmd);
 		KE.each(fontName, function(key, value) {
-			var html = '<span style="font-family: ' + key + ';">' + value + '</span>';
+			var html = '<span class="ke-reset" style="font-family: ' + key + ';">' + value + '</span>';
 			menu.add(
 				html,
 				function() { KE.plugin[cmd].exec(id, key); },
@@ -3340,7 +3341,7 @@ KE.plugin['fontsize'] = {
 		});
 		for (var i = 0, len = fontSize.length; i < len; i++) {
 			var value = fontSize[i];
-			var html = '<span style="font-size: ' + value + ';">' + value + '</span>';
+			var html = '<span class="ke-reset" style="font-size: ' + value + ';">' + value + '</span>';
 			menu.add(
 				html,
 				(function(value) {
@@ -3477,7 +3478,7 @@ KE.plugin['title'] = {
 		KE.each(title, function(key, value) {
 			var style = 'font-size:' + sizeHash[key] + 'px;'
 			if (key !== 'P') style += 'font-weight:bold;';
-			var html = '<span style="' + style + '">' + value + '</span>';
+			var html = '<span class="ke-reset" style="' + style + '">' + value + '</span>';
 			menu.add(html, function() {
 				KE.plugin[cmd].exec(id, '<' + key + '>'); },
 				{
@@ -3520,6 +3521,7 @@ KE.plugin['emoticons'] = {
 			previewDiv.className = 'ke-plugin-emoticons-preview';
 			previewDiv.style.right = 0;
 			var previewImg = KE.$$('img');
+			previewImg.className = 'ke-reset';
 			previewImg.src = path + '0.gif';
 			previewImg.border = 0;
 			previewDiv.appendChild(previewImg);

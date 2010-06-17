@@ -2705,6 +2705,7 @@ KE.create = function(id, mode) {
 	bottomRight.appendChild(rightImg);
 	bottomOuter.appendChild(bottom);
 	var hideDiv = KE.$$('div');
+	hideDiv.className = 'ke-reset';
 	hideDiv.style.display = 'none';
 	var maskDiv = KE.$$('div');
 	maskDiv.className = 'ke-mask';

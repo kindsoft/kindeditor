@@ -279,6 +279,7 @@
 }
 .ke-toolbar {
 	width: 100%;
+	border:0;
 	padding:0;
 	margin:0;
 	border-collapse:separate;
@@ -293,6 +294,7 @@
 	line-height: 0;
 	float: left;
 	clear: both;
+	border:0;
 	padding:0;
 	margin:0;
 	border-collapse:separate;
@@ -300,6 +302,8 @@
 .ke-toolbar-separator {
 	border-left: 1px solid #A0A0A0;
 	border-right: 1px solid #FFFFFF;
+	border-top:0;
+	border-bottom:0;
 	width: 0;
 	padding: 0;
 	margin: 0 2px;
@@ -319,6 +323,7 @@
 	width: 100%;
 	font-size: 0;
 	line-height: 0;
+	border: 0;
 	padding:0;
 	margin:0;
 	height:11px;
@@ -337,6 +342,9 @@
 	width: 15px;
 	height: 11px;
 	background-image: url(./default/default.gif);
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 .ke-bottom-right {
 	cursor: se-resize;
@@ -350,6 +358,9 @@
 	width: 7px;
 	height: 7px;
 	background-image: url(./default/default.gif);
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 .ke-textarea-outer {
 	border: 0;
@@ -362,6 +373,8 @@
 	margin: 0;
 	border-top: 1px solid #CCCCCC;
 	border-bottom: 1px solid #CCCCCC;
+	border-left:0;
+	border-right:0;
 	background-color: #FFFFFF;
 	border-collapse:separate;
 	table-layout: fixed;
@@ -369,6 +382,7 @@
 .ke-textarea-table td {
 	border:0;
 	padding:0;
+	margin:0;
 }
 .ke-textarea {
 	width: 100%;
@@ -396,6 +410,9 @@
 	background-color: #FFFFFF;
 }
 .ke-common-icon {
+	margin: 0;
+	padding: 0;
+	border: 0;
 	background-repeat: no-repeat;
 	overflow: hidden;
 	display: -moz-inline-stack;
@@ -453,6 +470,7 @@
 	background-color: #E9EFF6;
 }
 .ke-menu-left {
+	border: 0;
 	margin: 0;
 	padding: 0;
 	width: 20px;
@@ -468,6 +486,8 @@
 	padding: 0;
 	width: 0;
 	height: 24px;
+	border-top: 0;
+	border-bottom: 0;
 	border-left: 1px solid #F1F1F1;
 	border-right: 1px solid #F1F1F1;
 	display: -moz-inline-stack;
@@ -481,6 +501,7 @@
 	border-right: 1px solid #E9EFF6;
 }
 .ke-menu-right {
+	border: 0;
 	margin: 0;
 	padding: 0;
 	line-height: 24px;
@@ -499,6 +520,8 @@
 	overflow: hidden;
 	border-top: 1px solid #CCCCCC;
 	border-bottom: 1px solid #FFFFFF;
+	border-left: 0;
+	border-right: 0;
 }
 .ke-contextmenu {
 	position: absolute;
@@ -528,6 +551,7 @@
 	background-color: #E9EFF6;
 }
 .ke-contextmenu-left {
+	border: 0;
 	margin: 0;
 	padding: 0;
 	width: 27px;
@@ -546,6 +570,8 @@
 	height: 24px;
 	border-left: 1px solid #E3E3E3;
 	border-right: 1px solid #FFFFFF;
+	border-top: 0;
+	border-bottom: 0;
 	display: -moz-inline-stack;
 	display: inline-block;
 	vertical-align: middle;
@@ -557,6 +583,7 @@
 	border-right: 1px solid #E9EFF6;
 }
 .ke-contextmenu-right {
+	border: 0;
 	margin: 0;
 	padding: 0 0 0 5px;
 	line-height: 24px;
@@ -575,9 +602,14 @@
 	overflow: hidden;
 	border-top: 1px solid #CCCCCC;
 	border-bottom: 1px solid #FFFFFF;
+	border-left: 0;
+	border-right: 0;
 }
 .ke-dialog {
 	position: absolute;
+	border:0;
+	margin:0;
+	padding:0;
 }
 .ke-dialog-no-shadow {
 	border: 1px solid #A0A0A0;
@@ -591,18 +623,19 @@
 	border-collapse:separate;
 	empty-cells:show;
 }
-.ke-dialog-table td {
-	font-size:0;
-	margin:0;
-	padding:0;
-}
 span.ke-dialog-empty {
 	display:block;
 	width:5px;
 	height:5px;
+	line-height:0;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 .ke-mc {
 	border: 1px solid #F0F0EE;
+	margin:0;
+	padding:0;
 	background-color: #F0F0EE;
 	color: #222222;
 }
@@ -610,8 +643,12 @@ span.ke-dialog-empty {
 	background-color:#000;
 	filter:alpha(opacity=20);
 	opacity:0.2;
+	font-size:0;
+	line-height:0;
 	overflow:hidden;
 	border:0;
+	margin:0;
+	padding:0;
 }
 .ke-ml, .ke-mr {
 	width:5px;
@@ -640,6 +677,9 @@ span.ke-dialog-empty {
 	border-radius:0 0 5px 0;
 }
 .ke-dialog-title {
+	border:0;
+	margin:0;
+	padding:0;
 	background-color: #F0F0EE;
 	padding: 10px;
 	text-align: left;
@@ -654,11 +694,14 @@ span.ke-dialog-empty {
 	width: 16px;
 	height: 16px;
 	position: absolute;
+	border: 0;
 	margin: 0;
+	padding: 0;
 	right: 15px;
 	top: 15px;
 	cursor: pointer;
 	background-image: url(./default/default.gif);
+	overflow: hidden;
 }
 .ke-dialog-close-shadow {
 	right: 15px;
@@ -669,6 +712,9 @@ span.ke-dialog-empty {
 	top: 10px;
 }
 .ke-dialog-body {
+	border:0;
+	margin:0;
+	padding:0;
 	margin: 10px 10px 0 10px;
 }
 .ke-dialog-iframe {
@@ -680,10 +726,12 @@ span.ke-dialog-empty {
 	border: 1px solid #A0A0A0;
 }
 .ke-dialog-bottom {
+	border:0;
+	margin:0;
+	padding:0;
 	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
 	text-align: right;
 	padding:0 0 5px 0;
-	margin:0;
 }
 .ke-dialog-preview {
 	margin: 5px;
@@ -695,6 +743,9 @@ span.ke-dialog-empty {
 	margin: 5px 10px 5px 5px;
 }
 .ke-mask {
+	border:0;
+	margin:0;
+	padding:0;
 	position: absolute;
 	z-index: 19811212;
 	top: 0;
@@ -725,6 +776,7 @@ span.ke-dialog-empty {
 	text-align: left;
 }
 .ke-colorpicker-table {
+	border:0;
 	margin:0;
 	padding:0;
 	border-collapse: separate;
@@ -757,8 +809,11 @@ span.ke-dialog-empty {
 	width: 14px;
 	height: 14px;
 	margin: 3px;
+	padding: 0;
+	border: 0;
 }
 .ke-loading-table {
+	border:0;
 	margin:0;
 	padding:0;
 	border-collapse: separate;
@@ -776,9 +831,20 @@ span.ke-dialog-empty {
 	background-image: url(./common/loading.gif);
 	width: 16px;
 	height: 16px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.ke-reset {
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 .ke-plugin-emoticons-wrapper {
 	position: relative;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 .ke-plugin-emoticons-preview {
 	position: absolute;
@@ -791,6 +857,7 @@ span.ke-dialog-empty {
 	display: none;
 }
 .ke-plugin-emoticons-table {
+	border:0;
 	margin:0;
 	padding:0;
 	border-collapse:separate;
@@ -813,10 +880,15 @@ span.ke-dialog-empty {
 	width:24px;
 	height:24px;
 	background-image:url(../plugins/emoticons/qq.gif);
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 .ke-plugin-emoticons-page {
 	text-align: right;
 	margin: 5px;
+	padding: 0;
+	border: 0;
 	font-family: "sans serif",tahoma,verdana,helvetica;
 	font-size:12px;
 	line-height: 1;
