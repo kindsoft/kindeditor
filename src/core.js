@@ -2585,9 +2585,6 @@ KE.selectedHtml = function(id) {
 		temp.appendChild(range.cloneContents());
 		html = temp.innerHTML;
 	}
-	if (html !== '') {
-		html = KE.g[id].keRange.cloneContents().innerHTML;
-	}
 	return KE.util.toData(id, html);
 };
 

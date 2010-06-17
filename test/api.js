@@ -91,7 +91,7 @@ KE.event.ready(function () {
 		keRange.setEnd(span.firstChild, 2);
 		var keSel = KE.g[id].keSel;
 		keSel.addRange(keRange);
-		equals(KE.selectedHtml(id), 'ab');
+		equals(KE.selectedHtml(id).replace(/<.+?>/g, ''), 'ab');
 		KE.html(id, '');
 	});
 
