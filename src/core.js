@@ -2506,9 +2506,9 @@ KE.history = {
 };
 
 KE.readonly = function(id, isReadonly) {
-	isReadonly = typeof isReadonly == 'undefined' ? true : false;
+	isReadonly = isReadonly == undefined ? true : isReadonly;
 	var g = KE.g[id];
-	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
+	if (KE.browser.IE && KE.browser.VERSION > 7) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
 	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
 };
 
@@ -2717,6 +2717,7 @@ KE.create = function(id, mode) {
 	KE.util.setDefaultPlugin(id);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
+	if (!KE.browser.IE || KE.browser.VERSION < 8) iframeDoc.designMode = 'on';
 	var html = KE.util.getFullHtml(id);
 	iframeDoc.open();
 	iframeDoc.write(html);
@@ -2812,7 +2813,7 @@ KE.create = function(id, mode) {
 		}
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
-	KE.readonly(id, false);
+	if (KE.browser.IE && KE.browser.VERSION > 7) KE.readonly(id, false);
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, 0);
 	if (mode > 0) KE.util.focus(id);
