@@ -1534,14 +1534,30 @@ KE.util = {
 			'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 			'superscript', 'bold', 'italic', 'underline', 'strikethrough'
 		];
+		var shortcuts = {
+			bold : 'B',
+			italic : 'I',
+			underline : 'U'
+		};
 		for (var i = 0; i < items.length; i++) {
-			KE.plugin[items[i]] = {
-				click : (function(i) {
+			var item = items[i],
+				plugin = {};
+			if (item in shortcuts) {
+				plugin.init = (function(item) {
 					return function(id) {
-						KE.util.execCommand(id, items[i], null);
+						KE.event.ctrl(KE.g[id].iframeDoc, shortcuts[item], function(e) {
+							KE.plugin[item].click(id);
+							KE.util.focus(id);
+						}, id);
 					};
-				})(i)
-			};
+				})(item);
+			}
+			plugin.click = (function(item) {
+				return function(id) {
+					KE.util.execCommand(id, item, null);
+				};
+			})(item);
+			KE.plugin[item] = plugin;
 		}
 	},
 	getFullHtml : function(id) {

@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5 (2010-06-18)
+* @version 3.5 (2010-06-19)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5 (2010-06-18)';
+KE.version = '3.5 (2010-06-19)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -1543,14 +1543,30 @@ KE.util = {
 			'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 			'superscript', 'bold', 'italic', 'underline', 'strikethrough'
 		];
+		var shortcuts = {
+			bold : 'B',
+			italic : 'I',
+			underline : 'U'
+		};
 		for (var i = 0; i < items.length; i++) {
-			KE.plugin[items[i]] = {
-				click : (function(i) {
+			var item = items[i],
+				plugin = {};
+			if (item in shortcuts) {
+				plugin.init = (function(item) {
 					return function(id) {
-						KE.util.execCommand(id, items[i], null);
+						KE.event.ctrl(KE.g[id].iframeDoc, shortcuts[item], function(e) {
+							KE.plugin[item].click(id);
+							KE.util.focus(id);
+						}, id);
 					};
-				})(i)
-			};
+				})(item);
+			}
+			plugin.click = (function(item) {
+				return function(id) {
+					KE.util.execCommand(id, item, null);
+				};
+			})(item);
+			KE.plugin[item] = plugin;
 		}
 	},
 	getFullHtml : function(id) {
@@ -2901,9 +2917,9 @@ KE.lang = {
 	fontsize : '文字大小',
 	textcolor : '文字颜色',
 	bgcolor : '文字背景',
-	bold : '粗体',
-	italic : '斜体',
-	underline : '下划线',
+	bold : '粗体(Ctrl+B)',
+	italic : '斜体(Ctrl+I)',
+	underline : '下划线(Ctrl+U)',
 	strikethrough : '删除线',
 	removeformat : '删除格式',
 	image : '图片',
