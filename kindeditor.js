@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5 (2010-06-19)
+* @version 3.5 (2010-06-20)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5 (2010-06-19)';
+KE.version = '3.5 (2010-06-20)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -990,6 +990,7 @@ KE.format = {
 			return $1 + $2.replace(/<br[^>]*>/ig, '\n') + $3;
 		});
 		var htmlTagHash = {};
+		var fontSizeHash = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'];
 		if (isFilter) {
 			KE.each(htmlTags, function(key, val) {
 				var arr = key.split(',');
@@ -1016,6 +1017,40 @@ KE.format = {
 			}
 			if (tagName !== 'script' && tagName !== 'style') {
 				startNewline = '';
+			}
+			if (tagName === 'font') {
+				var style = {}, styleStr = '';
+				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
+					var key = $1.toLowerCase();
+					var val = $2 || '';
+					val = val.replace(/^["']|["']$/g, '');
+					if (key === 'color') {
+						style['color'] = val;
+						return ' ';
+					}
+					if (key === 'size') {
+						style['font-size'] = fontSizeHash[parseInt(val) - 1] || '';
+						return ' ';
+					}
+					if (key === 'face') {
+						style['font-family'] = val;
+						return ' ';
+					}
+					if (key === 'style') {
+						styleStr = val;
+						return ' ';
+					}
+					return $0;
+				});
+				if (styleStr && !/;$/.test(styleStr)) styleStr += ';';
+				KE.each(style, function(key, val) {
+					if (val !== '') { 
+						if (/\s/.test(val)) val = "'" + val + "'";
+						styleStr += key + ':' + val + ';';
+					}
+				});
+				if (styleStr) attr += ' style="' + styleStr + '"';
+				tagName = 'span';
 			}
 			if (attr !== '') {
 				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
