@@ -18,8 +18,8 @@ protected void Page_Load(object sender, EventArgs e)
     <script type="text/javascript">
         KE.show({
             id : 'content1',
-            imageUploadJson : '../../asp.net/upload_json.aspx',
-            fileManagerJson : '../../asp.net/file_manager_json.aspx',
+            imageUploadJson : '../../asp.net/upload_json.ashx',
+            fileManagerJson : '../../asp.net/file_manager_json.ashx',
             allowFileManager : true,
 		    afterCreate : function(id) {
 			    KE.event.ctrl(document, 13, function() {
