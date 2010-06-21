@@ -1064,10 +1064,11 @@ KE.plugin['advtable'] = {
 		table.parentNode.removeChild(table);
 	},
 	tablecolinsert : function(id, offset) {
-		var table = this.getSelectedTable(id);
-		var cell = this.getSelectedCell(id);
+		var table = this.getSelectedTable(id),
+			cell = this.getSelectedCell(id),
+			index = cell.cellIndex + offset;
 		for (var i = 0, len = table.rows.length; i < len; i++) {
-			var newCell = table.rows[i].insertCell(cell.cellIndex + offset);
+			var newCell = table.rows[i].insertCell(index);
 			newCell.innerHTML = '&nbsp;';
 		}
 	},
@@ -1078,9 +1079,9 @@ KE.plugin['advtable'] = {
 		this.tablecolinsert(id, 1);
 	},
 	tablerowinsert : function(id, offset) {
-		var table = this.getSelectedTable(id);
-		var row = this.getSelectedRow(id);
-		var newRow = table.insertRow(row.rowIndex + offset);
+		var table = this.getSelectedTable(id),
+			row = this.getSelectedRow(id),
+			newRow = table.insertRow(row.rowIndex + offset);
 		for (var i = 0, len = row.cells.length; i < len; i++) {
 			var cell = newRow.insertCell(i);
 			cell.innerHTML = '&nbsp;';
