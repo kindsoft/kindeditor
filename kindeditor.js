@@ -2726,11 +2726,13 @@ KE.create = function(id, mode) {
 	var iframe = KE.g[id].iframe || KE.$$('iframe');
 	iframe.className = 'ke-iframe';
 	iframe.setAttribute("frameBorder", "0");
-	iframe.style.height = 0;
 	var newTextarea = KE.$$('textarea');
 	newTextarea.className = 'ke-textarea';
 	newTextarea.style.display = 'none';
-	newTextarea.style.height = 0;
+	KE.g[id].container = container;
+	KE.g[id].iframe = iframe;
+	KE.g[id].newTextarea = newTextarea;
+	KE.util.resize(id, width, height);
 	textareaCell.appendChild(iframe);
 	textareaCell.appendChild(newTextarea);
 	var bottom = KE.$$('table');
@@ -2821,11 +2823,8 @@ KE.create = function(id, mode) {
 	KE.event.input(iframeDoc, updateToolbar, id);
 	KE.event.bind(newTextarea, 'click', hideMenu, id);
 	KE.event.add(document, 'click', hideMenu, id);
-	KE.g[id].container = container;
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;
-	KE.g[id].iframe = iframe;
-	KE.g[id].newTextarea = newTextarea;
 	KE.g[id].srcTextarea = srcTextarea;
 	KE.g[id].bottom = bottom;
 	KE.g[id].hideDiv = hideDiv;
@@ -2834,7 +2833,6 @@ KE.create = function(id, mode) {
 	KE.g[id].iframeDoc = iframeDoc;
 	KE.g[id].width = width;
 	KE.g[id].height = height;
-	KE.util.resize(id, width, height);
 	KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
 		if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
 		else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
