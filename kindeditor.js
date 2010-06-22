@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.1 (2010-06-21)
+* @version 3.5.1 (2010-06-22)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.1 (2010-06-21)';
+KE.version = '3.5.1 (2010-06-22)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -52,6 +52,8 @@ KE.setting = {
 	minWidth : 200,
 	minHeight : 100,
 	minChangeSize : 5,
+	toolbarLineHeight : 24,
+	statusbarHeight : 11,
 	items : [
 		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
@@ -1548,13 +1550,7 @@ KE.util = {
 		if (isCheck && (parseInt(width) <= g.minWidth || parseInt(height) <= g.minHeight)) return;
 		if (isResizeWidth) g.container.style.width = width;
 		g.container.style.height = height;
-		if (!g.toolbarTable.offsetHeight) {
-			window.setTimeout(function () {
-				KE.util.resize(id, width, height, isCheck, isResizeWidth);
-			}, 0);
-			return;
-		}
-		var diff = parseInt(height) - g.toolbarTable.offsetHeight - g.bottom.offsetHeight;
+		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
 		if (diff >= 0) {
 			g.iframe.style.height = diff + 'px';
 			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8) || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
@@ -2481,6 +2477,7 @@ KE.toolbar = {
 		var length = KE.g[id].items.length;
 		var cellNum = 0;
 		var row;
+		KE.g[id].toolbarHeight = KE.g[id].toolbarLineHeight;
 		for (var i = 0; i < length; i++) {
 			var cmd = KE.g[id].items[i];
 			if (i == 0 || cmd == '-') {
@@ -2489,7 +2486,10 @@ KE.toolbar = {
 				row = table.insertRow(0);
 				cellNum = 0;
 				toolbarCell.appendChild(table);
-				if (cmd == '-') continue;
+				if (cmd == '-') {
+					KE.g[id].toolbarHeight += KE.g[id].toolbarLineHeight;
+					continue;
+				}
 			}
 			var cell = row.insertCell(cellNum);
 			cell.hideforcus = true;
@@ -2721,6 +2721,7 @@ KE.create = function(id, mode) {
 	if (mode == 1) document.body.appendChild(container);
 	else srcTextarea.parentNode.insertBefore(container, srcTextarea);
 	var toolbarTable = KE.toolbar.create(id);
+	toolbarTable.style.height = KE.g[id].toolbarHeight + 'px';
 	toolbarOuter.appendChild(toolbarTable);
 	var iframe = KE.g[id].iframe || KE.$$('iframe');
 	iframe.className = 'ke-iframe';
@@ -2737,6 +2738,7 @@ KE.create = function(id, mode) {
 	bottom.cellPadding = 0;
 	bottom.cellSpacing = 0;
 	bottom.border = 0;
+	bottom.style.height = KE.g[id].statusbarHeight + 'px';
 	var row = bottom.insertRow(0);
 	var bottomLeft = row.insertCell(0);
 	bottomLeft.className = 'ke-bottom-left';
