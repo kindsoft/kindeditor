@@ -52,7 +52,7 @@ randomize
 ranNum = int(9000000 * rnd) + 10000
 newFileName = year(now) & month(now) & day(now) & hour(now) & minute(now) & second(now) & ranNum & "." & fileExt
 
-If instr(lcase(fileTypes), fileExt) < 1 Then
+If instr(fileTypes, lcase(fileExt)) < 1 Then
 	Set upload = nothing
 	Set file = nothing
 	showError("上传文件扩展名是不允许的扩展名。")
