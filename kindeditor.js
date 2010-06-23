@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.1 (2010-06-22)
+* @version 3.5.1 (2010-06-23)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.1 (2010-06-22)';
+KE.version = '3.5.1 (2010-06-23)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2578,6 +2578,7 @@ KE.focus = function(id, position) {
 	KE.util.focus(id);
 	if (position === 'end') {
 		KE.util.setSelection(id);
+		if (!KE.g[id].sel) return; //issue #120: Sometimes Firefox does not get selection
 		var sel = KE.g[id].keSel,
 			range = KE.g[id].keRange,
 			doc = KE.g[id].iframeDoc;

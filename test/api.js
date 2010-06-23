@@ -52,6 +52,8 @@ KE.event.ready(function () {
 		equals(KE.html(id), '<div class="aaa bbb ccc">abc</div>');
 		KE.html(id, '');
 		equals(KE.html(id), '');
+		KE.html(id, '<div class="aaa bbb ccc">abc</div>');
+		equals(KE.html(id), '<div class="aaa bbb ccc">abc</div>');
 	});
 
 	test("KE.text test", function() {

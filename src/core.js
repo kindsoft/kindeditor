@@ -2569,6 +2569,7 @@ KE.focus = function(id, position) {
 	KE.util.focus(id);
 	if (position === 'end') {
 		KE.util.setSelection(id);
+		if (!KE.g[id].sel) return; //issue #120: Sometimes Firefox does not get selection
 		var sel = KE.g[id].keSel,
 			range = KE.g[id].keRange,
 			doc = KE.g[id].iframeDoc;
