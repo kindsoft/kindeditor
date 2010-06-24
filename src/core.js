@@ -2559,7 +2559,7 @@ KE.history = {
 KE.readonly = function(id, isReadonly) {
 	isReadonly = isReadonly == undefined ? true : isReadonly;
 	var g = KE.g[id];
-	if (KE.browser.IE && KE.browser.VERSION > 7) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
+	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
 	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
 };
 
