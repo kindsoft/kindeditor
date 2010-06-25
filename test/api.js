@@ -77,8 +77,8 @@ KE.event.ready(function () {
 		keRange.selectTextNode(h3);
 		var keSel = KE.g[id].keSel;
 		keSel.addRange(keRange);
-		KE.insertHtml(id, '<b>abc</b>');
-		equals(KE.html(id), '<h3 id="test-h3"><b>abc</b></h3>');
+		KE.insertHtml(id, '<a href="abc">abc</a>');
+		equals(KE.html(id), '<h3 id="test-h3"><a href="abc">abc</a></h3>');
 		KE.html(id, '');
 	});
 
@@ -103,6 +103,8 @@ KE.event.ready(function () {
 		KE.appendHtml(id, '<div class="aaa bbb ccc">abc</div>');
 		equals(KE.html(id), '<h3>abc</h3>\n<div class="aaa bbb ccc">abc</div>');
 		KE.html(id, '');
+		KE.appendHtml(id, '<a href="abc">abc</a>');
+		equals(KE.html(id), '<a href="abc">abc</a>');
 	});
 
 	test("KE.isEmpty test", function() {

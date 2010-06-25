@@ -1768,6 +1768,7 @@ KE.util = {
 		var g = KE.g[id];
 		if (!g.wyswygMode) return;
 		if (!g.range) return;
+		html = this.execSetHtmlHooks(id, html);
 		if (KE.browser.IE) {
 			this.select(id);
 			if (g.range.item) {
