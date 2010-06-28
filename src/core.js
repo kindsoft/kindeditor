@@ -2261,8 +2261,6 @@ KE.dialog = function(arg){
 		loadingTable.table.className = 'ke-loading-table';
 		loadingTable.table.style.width = this.width + 'px';
 		loadingTable.table.style.height = this.height + 'px';
-		loadingTable.cell.align = 'center';
-		loadingTable.cell.vAlign = 'middle';
 		var loadingImg = KE.$$('span');
 		loadingImg.className = 'ke-loading-img';
 		loadingTable.cell.appendChild(loadingImg);
@@ -2737,8 +2735,6 @@ KE.create = function(id, mode) {
 	var row = bottom.insertRow(0);
 	var bottomLeft = row.insertCell(0);
 	bottomLeft.className = 'ke-bottom-left';
-	bottomLeft.align = 'center';
-	bottomLeft.vAlign = 'middle';
 	var leftImg = KE.$$('span');
 	leftImg.className = 'ke-bottom-left-img';
 	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
@@ -2748,8 +2744,6 @@ KE.create = function(id, mode) {
 	bottomLeft.appendChild(leftImg);
 	var bottomRight = row.insertCell(1);
 	bottomRight.className = 'ke-bottom-right';
-	bottomRight.align = 'right';
-	bottomRight.vAlign = 'bottom';
 	var rightImg = KE.$$('span');
 	rightImg.className = 'ke-bottom-right-img';
 	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
