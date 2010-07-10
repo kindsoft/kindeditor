@@ -395,6 +395,7 @@ KE.selection = function(doc) {
 				} else {
 					if (node.nodeType == 3 && keRange.collapsed()) {
 						this.range = getEndRange(true);
+						this.range.collapse(true);
 					} else {
 						this.range.setEndPoint('StartToStart', getEndRange(true));
 						this.range.setEndPoint('EndToStart', getEndRange(false));
