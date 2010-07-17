@@ -7,9 +7,10 @@ body {
 	padding: 5px;
 	background-color: #FFFFFF;
 	color: #000000;
-	font-size: 12px;
-	font-family: "sans serif",tahoma,verdana,helvetica;
-	line-height: 1.5;
+	font: 12px/1.5 "sans serif",tahoma,verdana,helvetica;
+}
+td {
+	font: 12px/1.5 "sans serif",tahoma,verdana,helvetica;
 }
 p {
 	margin: 5px 0;
