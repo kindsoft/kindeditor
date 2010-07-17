@@ -1257,7 +1257,7 @@ KE.plugin['advtable'] = {
 			if (backgroundColor !== '') {
 				table.style.backgroundColor = backgroundColor;
 			} else if (table.style.backgroundColor) {
-				table.style.backgroundColor = null;
+				table.style.backgroundColor = '';
 			}
 			if (table.bgColor !== undefined) {
 				table.removeAttribute('bgColor');

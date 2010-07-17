@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.1 (2010-07-10)
+* @version 3.5.1 (2010-07-17)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.1 (2010-07-10)';
+KE.version = '3.5.1 (2010-07-17)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -4374,7 +4374,7 @@ KE.plugin['advtable'] = {
 			if (backgroundColor !== '') {
 				table.style.backgroundColor = backgroundColor;
 			} else if (table.style.backgroundColor) {
-				table.style.backgroundColor = null;
+				table.style.backgroundColor = '';
 			}
 			if (table.bgColor !== undefined) {
 				table.removeAttribute('bgColor');
