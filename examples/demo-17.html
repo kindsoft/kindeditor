@@ -42,12 +42,17 @@
 					menu.add('红底白字', function() { self.exec(id, 'red'); });
 					menu.add('绿底白字', function() { self.exec(id, 'green'); });
 					menu.add('黄底白字', function() { self.exec(id, 'yellow'); });
+					menu.add('自定义删除线', function() { self.exec(id, 'adv_strikethrough'); });
 					menu.show();
 					this.menu = menu;
 				},
 				exec : function(id, value) {
 					var cmd = new KE.cmd(id);
-					cmd.wrap('span', [{'class': value}]);
+					if (value === 'adv_strikethrough') {
+						cmd.wrap('span', [{'.background-color': '#e53333', '.text-decoration': 'line-through'}]);
+					} else {
+						cmd.wrap('span', [{'class': value}]);
+					}
 					KE.util.execOnchangeHandler(id);
 					this.menu.hide();
 					KE.util.focus(id);
