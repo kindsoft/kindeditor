@@ -1541,6 +1541,10 @@ KE.util = {
 		if (!g.container) return;
 		if (isCheck && (parseInt(width) <= g.minWidth || parseInt(height) <= g.minHeight)) return;
 		if (isResizeWidth) g.container.style.width = width;
+		if (KE.browser.IE) {
+			//improve IE performance (issue #126)
+			g.toolbarTable && g.toolbarTable.offsetHeight;
+		}
 		g.container.style.height = height;
 		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
 		if (diff >= 0) {

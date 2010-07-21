@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.1 (2010-07-18)
+* @version 3.5.1 (2010-07-21)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.1 (2010-07-18)';
+KE.version = '3.5.1 (2010-07-21)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -1550,6 +1550,10 @@ KE.util = {
 		if (!g.container) return;
 		if (isCheck && (parseInt(width) <= g.minWidth || parseInt(height) <= g.minHeight)) return;
 		if (isResizeWidth) g.container.style.width = width;
+		if (KE.browser.IE) {
+			//improve IE performance (issue #126)
+			g.toolbarTable && g.toolbarTable.offsetHeight;
+		}
 		g.container.style.height = height;
 		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
 		if (diff >= 0) {
