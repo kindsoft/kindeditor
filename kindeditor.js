@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.1 (2010-07-21)
+* @version 3.5.1 (2010-07-26)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.1 (2010-07-21)';
+KE.version = '3.5.1 (2010-07-26)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -47,8 +47,8 @@ KE.setting = {
 	newlineTag : 'p',
 	dialogAlignType : 'page',
 	cssPath : '',
-	skinsPath : KE.scriptPath === '' ? '' : KE.scriptPath + 'skins/',
-	pluginsPath : KE.scriptPath === '' ? '' : KE.scriptPath + 'plugins/',
+	skinsPath : KE.scriptPath + 'skins/',
+	pluginsPath : KE.scriptPath + 'plugins/',
 	minWidth : 200,
 	minHeight : 100,
 	minChangeSize : 5,
