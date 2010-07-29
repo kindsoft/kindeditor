@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.2 (2010-07-26)
+* @version 3.5.2 (2010-07-29)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.2 (2010-07-26)';
+KE.version = '3.5.2 (2010-07-29)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -309,7 +309,7 @@ KE.selection = function(doc) {
 							var nodeRange = range.duplicate();
 							KE.util.moveToElementText(nodeRange, node);
 							testRange.setEndPoint('StartToEnd', nodeRange);
-							if (isEnd) startPos += nodeRange.text.length;
+							if (isEnd) startPos += nodeRange.text.replace(/\r\n|\n|\r/g, '').length;
 							else startPos = 0;
 						} else if (node.nodeType == 3) {
 							testRange.moveStart('character', node.nodeValue.length);

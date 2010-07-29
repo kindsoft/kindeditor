@@ -300,7 +300,7 @@ KE.selection = function(doc) {
 							var nodeRange = range.duplicate();
 							KE.util.moveToElementText(nodeRange, node);
 							testRange.setEndPoint('StartToEnd', nodeRange);
-							if (isEnd) startPos += nodeRange.text.length;
+							if (isEnd) startPos += nodeRange.text.replace(/\r\n|\n|\r/g, '').length;
 							else startPos = 0;
 						} else if (node.nodeType == 3) {
 							testRange.moveStart('character', node.nodeValue.length);
