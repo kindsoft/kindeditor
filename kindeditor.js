@@ -312,8 +312,11 @@ KE.selection = function(doc) {
 							if (isEnd) startPos += nodeRange.text.replace(/\r\n|\n|\r/g, '').length;
 							else startPos = 0;
 						} else if (node.nodeType == 3) {
-							testRange.moveStart('character', node.nodeValue.length);
-							startPos += node.nodeValue.length;
+							//fix bug: typeof node.nodeValue can return "unknown" in IE.
+							if (typeof node.nodeValue === 'string') {
+								testRange.moveStart('character', node.nodeValue.length);
+								startPos += node.nodeValue.length;
+							}
 						}
 						if (!isEnd) startNode = node;
 					}
