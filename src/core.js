@@ -1373,7 +1373,7 @@ KE.util = {
 		if (typeof el.style.opacity == "undefined") {
 			el.style.filter = (opacity == 100) ? "" : "alpha(opacity=" + opacity + ")";
 		} else {
-			el.style.opacity = (opacity == 100) ? "" : "0." + opacity.toString();
+			el.style.opacity = (opacity == 100) ? "" : (opacity / 100);
 		}
 	},
 	getIframeDoc : function(iframe) {
