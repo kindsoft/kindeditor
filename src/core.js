@@ -1557,7 +1557,7 @@ KE.util = {
 		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
 		if (diff >= 0) {
 			g.iframe.style.height = diff + 'px';
-			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8) || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
+			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8 || document.compatMode != 'CSS1Compat') && diff >= 2) ? diff - 2 : diff) + 'px';
 		}
 	},
 	hideLoadingPage : function(id) {

@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.2 (2010-11-23)
+* @version 3.5.2 (2010-12-02)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.2 (2010-11-23)';
+KE.version = '3.5.2 (2010-12-02)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -1566,7 +1566,7 @@ KE.util = {
 		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
 		if (diff >= 0) {
 			g.iframe.style.height = diff + 'px';
-			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8) || document.compatMode != 'CSS1Compat') ? diff - 2 : diff) + 'px';
+			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8 || document.compatMode != 'CSS1Compat') && diff >= 2) ? diff - 2 : diff) + 'px';
 		}
 	},
 	hideLoadingPage : function(id) {
