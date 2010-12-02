@@ -1560,7 +1560,7 @@ KE.util = {
 		if (isResizeWidth) g.container.style.width = width;
 		if (KE.browser.IE) {
 			//improve IE performance (issue #126)
-			g.toolbarTable && g.toolbarTable.offsetHeight;
+			var temp = g.toolbarTable && g.toolbarTable.offsetHeight;
 		}
 		g.container.style.height = height;
 		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
