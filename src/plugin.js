@@ -1094,10 +1094,11 @@ KE.plugin['advtable'] = {
 		this.tablerowinsert(id, 1);
 	},
 	tablecoldelete : function(id) {
-		var table = this.getSelectedTable(id);
-		var cell = this.getSelectedCell(id);
+		var table = this.getSelectedTable(id),
+			cell = this.getSelectedCell(id),
+			index = cell.cellIndex;
 		for (var i = 0, len = table.rows.length; i < len; i++) {
-			table.rows[i].deleteCell(cell.cellIndex);
+			table.rows[i].deleteCell(index);
 		}
 	},
 	tablerowdelete : function(id) {

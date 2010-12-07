@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.2 (2010-12-02)
+* @version 3.5.3 (2010-12-07)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.2 (2010-12-02)';
+KE.version = '3.5.3 (2010-12-07)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -4223,10 +4223,11 @@ KE.plugin['advtable'] = {
 		this.tablerowinsert(id, 1);
 	},
 	tablecoldelete : function(id) {
-		var table = this.getSelectedTable(id);
-		var cell = this.getSelectedCell(id);
+		var table = this.getSelectedTable(id),
+			cell = this.getSelectedCell(id),
+			index = cell.cellIndex;
 		for (var i = 0, len = table.rows.length; i < len; i++) {
-			table.rows[i].deleteCell(cell.cellIndex);
+			table.rows[i].deleteCell(index);
 		}
 	},
 	tablerowdelete : function(id) {
