@@ -193,8 +193,10 @@ KE.event.ready(function() {
 		KE.util.showLoadingPage(id);
 		var req = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 		var url = fileManagerJson;
-		url += param;
-		url += (url.match(/\?/) ? "&" : "?") + (new Date()).getTime()
+		if (!url.match(/\?/)) {
+			url += '?';
+		}
+		url += param + '&' + (new Date()).getTime();
 		req.open('GET', url, true);
 		req.onreadystatechange = function () {
 			if (req.readyState == 4) {
@@ -208,7 +210,7 @@ KE.event.ready(function() {
 		req.send(null);
 	};
 	var reloadPage = function (path, order, func) {
-		httpRequest('?path=' + path + '&order=' + order, func);
+		httpRequest('&path=' + path + '&order=' + order, func);
 	};
 	changeType('VIEW');
 	viewType.value = 'VIEW';
