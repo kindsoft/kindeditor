@@ -160,11 +160,17 @@ KE.event = {
 			}
 		}
 	},
-	stop : function(e) {
-		if (e.preventDefault) e.preventDefault();
+	stopPropagation : function(e) {
 		if (e.stopPropagation) e.stopPropagation();
 		if (e.cancelBubble !== undefined) e.cancelBubble = true;
+	},
+	preventDefault : function(e) {
+		if (e.preventDefault) e.preventDefault();
 		if (e.returnValue !== undefined) e.returnValue = false;
+	},
+	stop : function(e) {
+		this.stopPropagation(e);
+		this.preventDefault(e);
 	},
 	bind : function(el, type, fn, id) {
 		this.add(el, type, function(e) {
@@ -2217,7 +2223,6 @@ KE.dialog = function(arg){
 		var div = KE.$$('div');
 		div.className = 'ke-dialog';
 		KE.event.bind(div, 'click', function(e){}, id);
-		KE.event.bind(div, 'mousedown', function(e){}, id);
 		var stack = KE.g[id].dialogStack;
 		if (stack.length > 0) {
 			this.zIndex = stack[stack.length - 1].zIndex + 1;
