@@ -1,18 +1,18 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2010 Longhao Luo
+* Copyright (C) 2006-2011 Longhao Luo
 *
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.3 (2010-12-07)
+* @version 3.5.3 (2011-02-26)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.3 (2010-12-07)';
+KE.version = '3.5.3 (2011-02-26)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -1012,7 +1012,7 @@ KE.format = {
 		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
 		var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
 		var endlineTagHash = KE.util.arrayToHash(KE.setting.endlineTags);
-		var re = /((?:\r\n|\n|\r)*)<(\/)?([\w-:]+)((?:\s+|(?:\s+[\w-:]+)|(?:\s+[\w-:]+=[^\s"'<>]+)|(?:\s+[\w-:]+="[^"]*")|(?:\s+[\w-:]+='[^']*'))*)(\/)?>((?:\r\n|\n|\r)*)/g;
+		var re = /((?:\r\n|\n|\r)*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:]+="[^"]*")|(?:\s+[\w\-:]+='[^']*'))*)(\/)?>((?:\r\n|\n|\r)*)/g;
 		html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
 			var startNewline = $1 || '';
 			var startSlash = $2 || '';
@@ -1032,7 +1032,7 @@ KE.format = {
 			}
 			if (tagName === 'font') {
 				var style = {}, styleStr = '';
-				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
+				attr = attr.replace(/\s*([\w\-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
 					var key = $1.toLowerCase();
 					var val = $2 || '';
 					val = val.replace(/^["']|["']$/g, '');
@@ -1065,7 +1065,7 @@ KE.format = {
 				tagName = 'span';
 			}
 			if (attr !== '') {
-				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
+				attr = attr.replace(/\s*([\w\-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
 					var key = $1.toLowerCase();
 					var val = $2 || '';
 					if (isFilter) {
@@ -1303,7 +1303,7 @@ KE.util = {
 		document.getElementsByTagName("head")[0].appendChild(link);
 	},
 	getAttrList : function(tag) {
-		var re = /\s+(?:([\w-:]+)|(?:([\w-:]+)=([\w-:]+))|(?:([\w-:]+)="([^"]*)")|(?:([\w-:]+)='([^']*)'))(?=(?:\s|\/|>)+)/g;
+		var re = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([\w\-:]+))|(?:([\w\-:]+)="([^"]*)")|(?:([\w\-:]+)='([^']*)'))(?=(?:\s|\/|>)+)/g;
 		var arr, key, val, list = {};
 		while ((arr = re.exec(tag))) {
 			key = arr[1] || arr[2] || arr[4] || arr[6];

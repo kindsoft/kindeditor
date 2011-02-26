@@ -1,7 +1,7 @@
 var JSON_URL = '../../php/file_manager_json.php';
 
 var KE = parent.KindEditor;
-location.href.match(/\?id=([\w-]+)/i);
+location.href.match(/\?id=([\w\-]+)/i);
 var id = RegExp.$1;
 var fileManagerJson = (typeof KE.g[id].fileManagerJson == 'undefined') ? JSON_URL : KE.g[id].fileManagerJson;
 var lang = KE.lang.plugins.file_manager;
