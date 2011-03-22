@@ -2611,7 +2611,7 @@ KE.html = function(id, val) {
 	} else {
 		if (!KE.g[id].container) return;
 		KE.util.setFullHtml(id, val);
-		KE.focus(id, 'end');
+		KE.focus(id);
 	}
 };
 
@@ -2641,7 +2641,6 @@ KE.insertHtml = function(id, val) {
 
 KE.appendHtml = function(id, val) {
 	KE.html(id, KE.html(id) + val);
-	KE.focus(id, 'end');
 };
 
 KE.isEmpty = function(id) {
