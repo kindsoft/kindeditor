@@ -765,7 +765,8 @@ KE.plugin['image'] = {
 				}
 				if (typeof data === 'object' && 'error' in data) {
 					if (data.error === 0) {
-						self.insert(id, data.url, title, width, height, 0, align);
+						var url = KE.format.getUrl(data.url, 'absolute');
+						self.insert(id, url, title, width, height, 0, align);
 					} else {
 						alert(data.message);
 						return false;

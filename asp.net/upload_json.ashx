@@ -17,19 +17,20 @@ using LitJson;
 
 public class Upload : IHttpHandler
 {
-	//文件保存目录路径
-	private String savePath = "../attached/";
-	//文件保存目录URL
-	private String saveUrl = "../attached/";
-	//定义允许上传的文件扩展名
-	private String fileTypes = "gif,jpg,jpeg,png,bmp";
-	//最大文件大小
-	private int maxSize = 1000000;
-
 	private HttpContext context;
 
 	public void ProcessRequest(HttpContext context)
 	{
+		String aspxUrl = context.Request.Path.Substring(0, context.Request.Path.LastIndexOf("/") + 1);
+		
+		//文件保存目录路径
+		String savePath = "../attached/";
+		//文件保存目录URL
+		String saveUrl = aspxUrl + "../attached/";
+		//定义允许上传的文件扩展名
+		String fileTypes = "gif,jpg,jpeg,png,bmp";
+		//最大文件大小
+		int maxSize = 1000000;
 		this.context = context;
 
 		HttpPostedFile imgFile = context.Request.Files["imgFile"];

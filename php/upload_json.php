@@ -9,14 +9,19 @@
 
 require_once 'JSON.php';
 
+$php_path = dirname(__FILE__) . '/';
+$php_url = dirname($_SERVER['PHP_SELF']) . '/';
+
 //文件保存目录路径
-$save_path = '../attached/';
+$save_path = $php_path . '../attached/';
 //文件保存目录URL
-$save_url = '../attached/';
+$save_url = $php_url . '../attached/';
 //定义允许上传的文件扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 //最大文件大小
 $max_size = 1000000;
+
+$save_path = realpath($save_path) . '/';
 
 //有上传文件时
 if (empty($_FILES) === false) {

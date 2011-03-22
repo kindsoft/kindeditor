@@ -12,13 +12,16 @@
 ' 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
 '
 
-Dim savePath, saveUrl, fileTypes, maxSize, fileName, fileExt, newFileName, filePath, fileUrl
+Dim aspUrl, savePath, saveUrl, fileTypes, maxSize, fileName, fileExt, newFileName, filePath, fileUrl
 Dim upload, file, fso, ranNum, hash
+
+aspUrl = Request.ServerVariables("SCRIPT_NAME")
+aspUrl = left(aspUrl, InStrRev(aspUrl, "/"))
 
 '文件保存目录路径
 savePath = "../attached/"
 '文件保存目录URL
-saveUrl = "../attached/"
+saveUrl = aspUrl & "../attached/"
 '定义允许上传的文件扩展名
 fileTypes = "gif,jpg,jpeg,png,bmp"
 '最大文件大小
