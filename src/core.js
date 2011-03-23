@@ -2822,7 +2822,7 @@ KE.create = function(id, mode) {
 			}
 		}, id);
 	}
-	KE.event.add(iframeDoc, 'click', hideMenu, id);
+	KE.event.add(iframeDoc, 'mousedown', hideMenu, id);
 	KE.event.add(iframeDoc, 'click', updateToolbar, id);
 	KE.event.input(iframeDoc, updateToolbar, id);
 	KE.event.bind(newTextarea, 'click', hideMenu, id);
