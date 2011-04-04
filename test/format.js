@@ -66,4 +66,5 @@ test("HTML format test", function() {
 	equals(KE.format.getHtml(KE.$("test19").innerHTML), '<span style="font-size:xx-large;">ddd</span>');
 	equals(KE.format.getHtml(KE.$("test20").innerHTML).toLowerCase(), '<span style="color:#ff0000;">ddd</span>');
 	equals(KE.format.getHtml(KE.$("test21").innerHTML), '<span style="background-color:#d8d8d8;font-family:\'Arial Black\';color:#ff0000;font-size:xx-large;">ddd</span>');
+	equals(KE.format.getHtml(KE.$("test22").innerHTML), '<script>escape("<img src=\'#\' />");</script>');
 });

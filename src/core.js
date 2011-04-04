@@ -1000,6 +1000,7 @@ KE.format = {
 				for (var i = 0, len = arr.length; i < len; i++) htmlTagHash[arr[i]] = KE.util.arrayToHash(val);
 			});
 		}
+		var skipFlag = false;
 		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
 		var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
 		var endlineTagHash = KE.util.arrayToHash(KE.setting.endlineTags);
@@ -1011,6 +1012,9 @@ KE.format = {
 			var attr = $4 || '';
 			var endSlash = $5 ? ' ' + $5 : '';
 			var endNewline = $6 || '';
+			if (tagName === 'script' && startSlash !== '') skipFlag = false;
+			if (skipFlag) return $0;
+			if (tagName === 'script' && startSlash === '') skipFlag = true;
 			if (isFilter && typeof htmlTagHash[tagName] == "undefined") return '';
 			if (endSlash === '' && typeof noEndTagHash[tagName] != "undefined") endSlash = ' /';
 			if (tagName in endlineTagHash) {
