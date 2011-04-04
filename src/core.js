@@ -33,6 +33,7 @@ KE.setting = {
 	filterMode : false,
 	autoSetDataMode : true,
 	shadowMode : true,
+	useContextmenu : true,
 	urlType : '',
 	skinType : 'default',
 	newlineTag : 'p',
@@ -1847,6 +1848,7 @@ KE.util = {
 	addContextmenuEvent : function(id) {
 		var g = KE.g[id];
 		if (g.contextmenuItems.length == 0) return;
+		if (!g.useContextmenu) return;
 		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
 			KE.hideMenu(id);
 			KE.util.setSelection(id);
