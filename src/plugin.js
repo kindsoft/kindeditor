@@ -109,7 +109,11 @@ KE.plugin['plainpaste'] = {
 		var html = KE.$('textArea', dialogDoc).value;
 		html = KE.util.escape(html);
 		html = html.replace(/ /g, '&nbsp;');
-		html = html.replace(/\r\n|\n|\r/g, "<br />$&");
+		if (KE.g[id].newlineTag == 'p') {
+			html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\r\n|\n|\r/g, '</p><p>');
+		} else {
+			html = html.replace(/\r\n|\n|\r/g, '<br />$&');
+		}
 		KE.util.insertHtml(id, html);
 		this.dialog.hide();
 		KE.util.focus(id);

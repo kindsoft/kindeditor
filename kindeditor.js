@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.3 (2011-03-23)
+* @version 3.5.3 (2011-04-04)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.3 (2011-03-23)';
+KE.version = '3.5.3 (2011-04-04)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -3242,7 +3242,11 @@ KE.plugin['plainpaste'] = {
 		var html = KE.$('textArea', dialogDoc).value;
 		html = KE.util.escape(html);
 		html = html.replace(/ /g, '&nbsp;');
-		html = html.replace(/\r\n|\n|\r/g, "<br />$&");
+		if (KE.g[id].newlineTag == 'p') {
+			html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\r\n|\n|\r/g, '</p><p>');
+		} else {
+			html = html.replace(/\r\n|\n|\r/g, '<br />$&');
+		}
 		KE.util.insertHtml(id, html);
 		this.dialog.hide();
 		KE.util.focus(id);
