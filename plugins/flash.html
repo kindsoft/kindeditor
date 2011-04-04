@@ -43,8 +43,7 @@
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
-			location.href.match(/\?id=([\w\-]+)/i);
-			var id = RegExp.$1;
+			var id = KE.util.getParam(location.href, 'id');
 			KE.event.ready(function() {
 				KE.util.pluginLang('flash', document);
 				KE.util.hideLoadingPage(id);

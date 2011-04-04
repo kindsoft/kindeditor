@@ -63,10 +63,8 @@
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
-			location.href.match(/\&id=([\w\-]+)/i);
-			var id = RegExp.$1;
-			location.href.match(/\?mode=([\w\-]*)/i);
-			var mode = RegExp.$1;
+			var id = KE.util.getParam(location.href, 'id');
+			var mode = KE.util.getParam(location.href, 'mode');
 			KE.event.ready(function() {
 				var modeBox = KE.$('mode', document);
 				var rowsBox = KE.$('rows', document);

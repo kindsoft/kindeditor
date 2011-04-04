@@ -1422,6 +1422,9 @@ KE.util = {
 		}
 		throw 'JSON parse error';
 	},
+	getParam : function(url, name) {
+		return url.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? unescape(RegExp.$1) : '';
+	},
 	createRange : function(doc) {
 		return doc.createRange ? doc.createRange() : doc.body.createTextRange();
 	},
