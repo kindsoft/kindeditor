@@ -33,7 +33,7 @@
 				newlineTag : 'br',
 				allowFileManager : true,
 				useContextmenu : true,
-				afterSetData : function(id) {
+				afterChange : function(id) {
 					KE.$('content_html').value = KE.$(id).value;
 				}
 			});
@@ -110,6 +110,7 @@ efgh
 			<input type="button" name="button" value="Get Selected HTML" onclick="javascript:alert(KE.selectedHtml('content1'));" />
 			<input type="button" name="button" value="Insert HTML" onclick="javascript:KE.insertHtml('content1', '<h1>Hello</h1>');" />
 			<input type="button" name="button" value="Append HTML" onclick="javascript:KE.appendHtml('content1', '<h1>Hello</h1>');" />
+			<input type="button" name="button" value="Sync" onclick="javascript:KE.sync('content1');KE.$('content_html').value = KE.$('content1').value;" />
 			<input type="submit" name="button" value="Submit" />
 		</form>
 	</body>

@@ -18,11 +18,11 @@
 				cssPath : './index.css',
 				afterCreate : function(id) {
 					KE.event.ctrl(document, 13, function() {
-						KE.util.setData(id);
+						KE.sync(id);
 						document.forms['example'].submit();
 					});
 					KE.event.ctrl(KE.g[id].iframeDoc, 13, function() {
-						KE.util.setData(id);
+						KE.sync(id);
 						document.forms['example'].submit();
 					});
 				}

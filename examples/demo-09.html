@@ -17,10 +17,11 @@
 				id : 'content1',
 				shadowMode : false,
 				autoSetDataMode: false,
+				syncType : '', //auto: 每次修改时都会同步; form:提交form时同步; 空:不会自动同步;
 				allowPreviewEmoticons : false,
 				afterCreate : function(id) {
 					KE.event.add(KE.$('example'), 'submit', function() {
-						KE.util.setData(id);
+						KE.sync(id);
 					});
 				}
 			});

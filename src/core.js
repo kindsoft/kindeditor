@@ -31,11 +31,12 @@ KE.setting = {
 	loadStyleMode : true,
 	resizeMode : 2,
 	filterMode : false,
-	autoSetDataMode : true,
+	autoSetDataMode : false,
 	shadowMode : true,
 	useContextmenu : true,
 	urlType : '',
 	skinType : 'default',
+	syncType : 'form',
 	newlineTag : 'p',
 	dialogAlignType : 'page',
 	cssPath : '',
@@ -2679,6 +2680,10 @@ KE.count = function(id, mode) {
 	return 0;
 };
 
+KE.sync = function(id) {
+	return KE.util.setData(id);
+};
+
 KE.remove = function(id, mode) {
 	var g = KE.g[id];
 	if (!g.container) return false;
@@ -2806,6 +2811,15 @@ KE.create = function(id, mode) {
 		KE.toolbar.disable(id, ['source', 'fullscreen']);
 		KE.toolbar.select(id, 'source');
 	}
+	if (KE.g[id].syncType == 'form') {
+		var el = srcTextarea;
+		while ((el = el.parentNode)) {
+			if (el.nodeName.toLowerCase() == 'form') {
+				KE.event.add(el, 'submit', function() { KE.sync(id); }, id);
+				break;
+			}
+		}
+	}
 	function hideMenu() {
 		KE.hideMenu(id);
 	}
@@ -2880,10 +2894,11 @@ KE.create = function(id, mode) {
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler, id);
 	KE.event.add(document, 'mousedown', setSelectionHandler, id);
 	KE.onchange(id, function(id) {
-		if (KE.g[id].autoSetDataMode) {
+		if (KE.g[id].autoSetDataMode || KE.g[id].syncType == 'auto') {
 			KE.util.setData(id);
 			if (KE.g[id].afterSetData) KE.g[id].afterSetData(id);
 		}
+		if (KE.g[id].afterChange) KE.g[id].afterChange(id);
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
 	if (KE.browser.IE && KE.browser.VERSION > 7) KE.readonly(id, false);

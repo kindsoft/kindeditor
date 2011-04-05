@@ -15,7 +15,7 @@
 		<script>
 			KE.show({
 				id : 'content11',
-				afterSetData : function(id) {
+				afterChange : function(id) {
 					KE.$('word_count1').innerHTML = KE.count(id);
 					KE.$('word_count2').innerHTML = KE.count(id, 'text');
 				}
