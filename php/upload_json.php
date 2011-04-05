@@ -60,6 +60,13 @@ if (empty($_FILES) === false) {
 	if (in_array($file_ext, $ext_arr) === false) {
 		alert("上传文件扩展名是不允许的扩展名。");
 	}
+	//创建文件夹
+	$ymd = date("Ymd");
+	$save_path .= $ymd . "/";
+	$save_url .= $ymd . "/";
+	if (!file_exists($save_path)) {
+		mkdir($save_path);
+	}
 	//新文件名
 	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;
 	//移动文件

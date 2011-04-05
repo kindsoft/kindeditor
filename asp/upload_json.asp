@@ -13,7 +13,7 @@
 '
 
 Dim aspUrl, savePath, saveUrl, fileTypes, maxSize, fileName, fileExt, newFileName, filePath, fileUrl
-Dim upload, file, fso, ranNum, hash
+Dim upload, file, fso, ranNum, hash, ymd
 
 aspUrl = Request.ServerVariables("SCRIPT_NAME")
 aspUrl = left(aspUrl, InStrRev(aspUrl, "/"))
@@ -47,6 +47,14 @@ If file.fileSize > maxSize Then
 	Set upload = nothing
 	Set file = nothing
 	showError("上传文件大小超过限制。")
+End If
+
+'创建文件夹
+ymd = year(now) & month(now) & day(now)
+savePath = savePath & ymd & "/"
+saveUrl = saveUrl & ymd & "/"
+If Not fso.FolderExists(savePath) Then
+	FsObject.CreateFolder(savePath)
 End If
 
 fileName = file.filename

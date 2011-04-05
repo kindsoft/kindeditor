@@ -41,6 +41,15 @@ if(!uploadDir.canWrite()){
 	out.println(getError("上传目录没有写权限。"));
 	return;
 }
+//创建文件夹
+SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+String ymd = sdf.format(new Date());
+savePath += ymd + "/";
+saveUrl += ymd + "/";
+dirFile = new File(savePath);
+if (!dirFile.exists()) {
+	dirFile.mkdirs();
+}
 
 FileItemFactory factory = new DiskFileItemFactory();
 ServletFileUpload upload = new ServletFileUpload(factory);
@@ -63,6 +72,7 @@ while (itr.hasNext()) {
 			out.println(getError("上传文件扩展名是不允许的扩展名。"));
 			return;
 		}
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 		String newFileName = df.format(new Date()) + "_" + new Random().nextInt(1000) + "." + fileExt;
 		try{

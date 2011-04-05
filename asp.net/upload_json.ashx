@@ -59,6 +59,13 @@ public class Upload : IHttpHandler
 			showError("上传文件扩展名是不允许的扩展名。");
 		}
 
+		String ymd = DateTime.Now.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo);
+		dirPath += ymd + "/";
+		saveUrl += ymd + "/";
+		if (!Directory.Exists(dirPath)) {
+			Directory.CreateDirectory(dirPath);
+		}
+
 		String newFileName = DateTime.Now.ToString("yyyyMMddHHmmss_ffff", DateTimeFormatInfo.InvariantInfo) + fileExt;
 		String filePath = dirPath + newFileName;
 
