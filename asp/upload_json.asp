@@ -53,8 +53,8 @@ End If
 ymd = year(now) & month(now) & day(now)
 savePath = savePath & ymd & "/"
 saveUrl = saveUrl & ymd & "/"
-If Not fso.FolderExists(savePath) Then
-	FsObject.CreateFolder(savePath)
+If Not fso.FolderExists(Server.mappath(savePath)) Then
+	fso.CreateFolder(Server.mappath(savePath))
 End If
 
 fileName = file.filename

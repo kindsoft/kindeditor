@@ -194,6 +194,7 @@ KE.event.ready(function() {
 		var url = fileManagerJson;
 		if (!url.match(/\?/)) {
 			url += '?';
+			param = param.substr(1);
 		}
 		url += param + '&' + (new Date()).getTime();
 		req.open('GET', url, true);

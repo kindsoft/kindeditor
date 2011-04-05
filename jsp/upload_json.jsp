@@ -46,7 +46,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 String ymd = sdf.format(new Date());
 savePath += ymd + "/";
 saveUrl += ymd + "/";
-dirFile = new File(savePath);
+File dirFile = new File(savePath);
 if (!dirFile.exists()) {
 	dirFile.mkdirs();
 }
