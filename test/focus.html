@@ -23,19 +23,22 @@
 					KindEditor.onchange(id, function(id) {
 						document.getElementById('content_html').value = KindEditor.util.getData(id);
 					});
+					KindEditor.blur(id);
 				}
 			});
 			KindEditor.event.ready(function() {
-				//document.getElementById("test01").innerText = 'focus to editor';
-				document.getElementById("test01").innerHTML = 'no focus to editor';
+				document.getElementById("test01").innerText = 'focus to editor';
+				//document.getElementById("test01").innerHTML = 'no focus to editor';
+				//document.getElementById('test').focus();
+				//document.getElementById('test').blur();
 			});
 		</script>
 	</head>
 	<body>
 		<div id="test01"></div>
 		<form name="example" method="post" action="./../php/demo.php">
-			<textarea id="test" style="width:90%;height:50px;"></textarea>
-			<textarea id="content1" name="content1" style="width:90%;height:250px;visibility:hidden;">
+			<textarea id="test" style="width:90%;height:50px;" tabindex="1"></textarea>
+			<textarea id="content1" name="content1" style="width:90%;height:250px;visibility:hidden;" tabindex="2">
 啊<a href="wwww1">啊啊</a>啊<br />
 啊<a href="wwww2">啊啊</a>啊<a href="http://wwwwwwwwwwww" target="_blank"><img height="24" alt="" src="../plugins/emoticons/0.gif" width="24" border="0" /></a><br />
 <table width="90%">
@@ -50,7 +53,7 @@
 	</tr>
 </table>
 </textarea>
-			<textarea id="content_html" style="width:90%;height:100px;"></textarea>
+			<textarea id="content_html" style="width:90%;height:100px;" tabindex="3"></textarea>
 			<br />
 			<input type="button" name="button" value="取得内容" onclick="javascript:alert(KindEditor.util.getData('content1'));" />
 			<input type="button" name="button" value="取得纯文本" onclick="javascript:alert(KindEditor.util.getPureData('content1'));" />

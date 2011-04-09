@@ -12,15 +12,27 @@
 		<script>
 			KE.show({
 				id : 'content1',
-				urlType : 'relative'
+				urlType : 'relative',
+				afterTab : function(id) {
+					KE.focus('content2');
+				},
+				afterCreate : function(id) {
+					KE.focus(id);
+				}
 			});
 			KE.show({
 				id : 'content2',
-				urlType : 'absolute'
+				urlType : 'absolute',
+				afterTab : function(id) {
+					KE.focus('content3');
+				}
 			});
 			KE.show({
 				id : 'content3',
-				urlType : 'domain'
+				urlType : 'domain',
+				afterTab : function(id) {
+					KE.focus('content1');
+				}
 			});
 		</script>
 	</head>

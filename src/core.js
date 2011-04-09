@@ -105,6 +105,10 @@ KE.setting = {
 		rm : 'audio/x-pn-realaudio-plugin',
 		flash : 'application/x-shockwave-flash',
 		media : 'video/x-ms-asf-plugin'
+	},
+	afterTab : function(id) {
+		KE.util.setSelection(id);
+		KE.util.insertHtml(id, '&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
 };
 
@@ -1840,10 +1844,10 @@ KE.util = {
 		}
 	},
 	addTabEvent : function(id) {
-		KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
+		var g = KE.g[id];
+		KE.event.add(g.iframeDoc, 'keydown', function(e) {
 			if (e.keyCode == 9) {
-				KE.util.setSelection(id);
-				KE.util.insertHtml(id, '&nbsp;&nbsp;&nbsp;&nbsp;');
+				if (g.afterTab) g.afterTab(id);
 				KE.event.stop(e);
 				return false;
 			}
@@ -2519,6 +2523,7 @@ KE.toolbar = {
 				continue;
 			}
 			var a = KE.$$('a');
+			a.tabIndex = -1;
 			self._setAttr(id, a, cmd);
 			var span = KE.$$('span');
 			if (typeof defaultItemHash[cmd] == 'undefined') {
@@ -2604,6 +2609,18 @@ KE.focus = function(id, position) {
 		range.collapse(false);
 		sel.addRange(range);
 	}
+};
+
+KE.blur = function(id) {
+	var g = KE.g[id];
+	if (!g.container) return;
+	var a = KE.$$('a');
+	a.href = '#';
+	a.innerHTML = '&nbsp;';
+	document.body.appendChild(a);
+	a.focus();
+	a.blur();
+	document.body.removeChild(a);	
 };
 
 KE.html = function(id, val) {
@@ -2746,6 +2763,7 @@ KE.create = function(id, mode) {
 	toolbarTable.style.height = KE.g[id].toolbarHeight + 'px';
 	toolbarOuter.appendChild(toolbarTable);
 	var iframe = KE.g[id].iframe || KE.$$('iframe');
+	iframe.tabIndex = KE.g[id].tabIndex || srcTextarea.tabIndex;
 	iframe.className = 'ke-iframe';
 	iframe.setAttribute("frameBorder", "0");
 	var newTextarea = KE.$$('textarea');
@@ -2799,7 +2817,7 @@ KE.create = function(id, mode) {
 	KE.util.setDefaultPlugin(id);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
-	if (!KE.browser.IE || KE.browser.VERSION < 8) iframeDoc.designMode = 'on';
+	if (!KE.browser.IE) iframeDoc.designMode = 'on';
 	var html = KE.util.getFullHtml(id);
 	iframeDoc.open();
 	iframeDoc.write(html);
@@ -2901,7 +2919,7 @@ KE.create = function(id, mode) {
 		if (KE.g[id].afterChange) KE.g[id].afterChange(id);
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
-	if (KE.browser.IE && KE.browser.VERSION > 7) KE.readonly(id, false);
+	if (KE.browser.IE) KE.readonly(id, false);
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, 0);
 	if (mode > 0) KE.util.focus(id);
