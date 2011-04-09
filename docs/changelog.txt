@@ -5,12 +5,14 @@
 #######################################################################
 ver 3.5.3
 * 增加: 新增useContextmenu属性，值为true时使用自定义右键菜单，false时屏蔽自定义右键菜单，默认值为true。
-* 增加: 新增afterChange属性(回调函数)，编辑器内容发生变化后执行的函数。
 * 增加: 新增syncType属性，值为"auto"时每次修改时都会同步，"form"时提交form时同步，""时不会自动同步，默认值为"form"。
-* 增加: 新增KE.sync函数，与KE.util.setData函数功能相同。
-* 增加: 新增KE.blur函数，让编辑器失去焦点。
 * 增加: 新增tabIndex属性，可设置编辑器的tabindex。
+* 增加: 新增afterChange属性(回调函数)，编辑器内容发生变化后执行的函数。
 * 增加: 新增afterTab属性(回调函数)，按下TAB键后执行的函数，默认情况下插入4个空格。
+* 增加: 新增afterFocus属性(回调函数)，编辑器获得焦点(onfocus)时执行的函数。
+* 增加: 新增afterBlur属性(回调函数)，编辑器失去焦点(onblur)时执行的函数。
+* 增加: 新增KE.sync函数，将编辑器数据设回到原来的textarea里，与KE.util.setData函数功能相同。
+* 增加: 新增KE.blur函数，让编辑器失去焦点。
 * 改变: 将autoSetDataMode的默认值改成false，默认情况下自动寻找所属form，并将KE.sync绑定到该form的submit事件里。
 * 改善: fileManagerJson支持GET参数。
 * 改善: 动态设置上传图片保存URL(save_url)，在不同深度的页面调用编辑器不会出错。

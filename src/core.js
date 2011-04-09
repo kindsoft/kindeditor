@@ -2767,6 +2767,7 @@ KE.create = function(id, mode) {
 	iframe.className = 'ke-iframe';
 	iframe.setAttribute("frameBorder", "0");
 	var newTextarea = KE.$$('textarea');
+	newTextarea.tabIndex = iframe.tabIndex;
 	newTextarea.className = 'ke-textarea';
 	newTextarea.style.display = 'none';
 	KE.g[id].container = container;
@@ -2863,11 +2864,21 @@ KE.create = function(id, mode) {
 			}
 		}, id);
 	}
+	function afterFocus() {
+		if (KE.g[id].afterFocus) KE.g[id].afterFocus(id);
+	}
+	function afterBlur() {
+		if (KE.g[id].afterBlur) KE.g[id].afterBlur(id);
+	}
 	KE.event.add(iframeDoc, 'mousedown', hideMenu, id);
 	KE.event.add(iframeDoc, 'click', updateToolbar, id);
 	KE.event.input(iframeDoc, updateToolbar, id);
 	KE.event.bind(newTextarea, 'click', hideMenu, id);
 	KE.event.add(document, 'click', hideMenu, id);
+	KE.event.add(iframeWin, 'focus', afterFocus);
+	KE.event.add(newTextarea, 'focus', afterFocus);
+	KE.event.add(iframeWin, 'blur', afterBlur);
+	KE.event.add(newTextarea, 'blur', afterBlur);
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;
 	KE.g[id].srcTextarea = srcTextarea;
