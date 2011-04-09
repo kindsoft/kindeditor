@@ -11,16 +11,6 @@
 				id : 'content1',
 				skinsPath : '../skins/',
 				pluginsPath : '../plugins/',
-				autoSetDataMode : true,
-				afterCreate : function(id) {
-					KE.html(id, KE.$('javaeye-data').value);
-				}
-			});
-			KindEditor.show({
-				id : 'content2',
-				skinsPath : '../skins/',
-				pluginsPath : '../plugins/',
-				autoSetDataMode : false,
 				afterCreate : function(id) {
 					KE.html(id, KE.$('javaeye-data').value);
 				}
@@ -28,11 +18,7 @@
 		</script>
 	</head>
 	<body>
-		<h3>autoSetDataMode : true</h3>
-		<textarea id="content1" name="content1" style="width:90%;height:250px;visibility:hidden;"></textarea>
-		<h3>autoSetDataMode : false</h3>
-		<textarea id="content1" name="content2" style="width:90%;height:250px;visibility:hidden;"></textarea>
-
+		<textarea id="content1" name="content1" style="width:90%;height:600px;visibility:hidden;"></textarea>
 		<textarea id="javaeye-data" name="javaeye-data" style="display:none;">
 
 <div id="recommended_a0"> 

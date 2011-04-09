@@ -2623,13 +2623,16 @@ KE.focus = function(id, position) {
 KE.blur = function(id) {
 	var g = KE.g[id];
 	if (!g.container) return;
-	var a = KE.$$('a');
-	a.href = '#';
-	a.innerHTML = '&nbsp;';
-	document.body.appendChild(a);
-	a.focus();
-	a.blur();
-	document.body.removeChild(a);	
+	if (KE.browser.IE) {
+		var input = KE.$$('input');
+		input.type = 'text';
+		g.container.appendChild(input);
+		input.focus();
+		input.blur();
+		g.container.removeChild(input);
+	} else {
+		g.wyswygMode ? g.iframeWin.blur() : g.newTextarea.blur();
+	}
 };
 
 KE.html = function(id, val) {
