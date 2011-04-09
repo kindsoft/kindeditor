@@ -2920,6 +2920,7 @@ KE.create = function(id, mode) {
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
 	if (KE.browser.IE) KE.readonly(id, false);
+	if (KE.browser.IE && KE.browser.VERSION < 8) KE.blur(id);
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, 0);
 	if (mode > 0) KE.util.focus(id);
