@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.3 (2011-04-09)
+* @version 3.5.3 (2011-04-10)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.3 (2011-04-09)';
+KE.version = '3.5.3 (2011-04-10)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2628,7 +2628,6 @@ KE.blur = function(id) {
 		input.type = 'text';
 		g.container.appendChild(input);
 		input.focus();
-		input.blur();
 		g.container.removeChild(input);
 	} else {
 		g.wyswygMode ? g.iframeWin.blur() : g.newTextarea.blur();

@@ -2619,7 +2619,6 @@ KE.blur = function(id) {
 		input.type = 'text';
 		g.container.appendChild(input);
 		input.focus();
-		input.blur();
 		g.container.removeChild(input);
 	} else {
 		g.wyswygMode ? g.iframeWin.blur() : g.newTextarea.blur();
