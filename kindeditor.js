@@ -273,7 +273,7 @@ KE.selection = function(doc) {
 	this.isControl = false;
 	var win = doc.parentWindow || doc.defaultView;
 	this.init = function() {
-		var sel = win.getSelection ? win.getSelection() : doc.selection;
+		var sel = doc.selection ? doc.selection : win.getSelection();
 		var range;
 		try {
 			if (sel.rangeCount > 0) range = sel.getRangeAt(0);
@@ -1440,7 +1440,7 @@ KE.util = {
 		return url.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? unescape(RegExp.$1) : '';
 	},
 	createRange : function(doc) {
-		return doc.createRange ? doc.createRange() : doc.body.createTextRange();
+		return doc.body.createTextRange ? doc.body.createTextRange() : doc.createRange();
 	},
 	getNodeType : function(node) {
 		return (node.nodeType == 1 && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
