@@ -6,7 +6,7 @@
 
 	<property name="src" location="src"/>
 	<property name="dist" location="dist"/>
-	<property name="version" value="3.5.3"/>
+	<property name="version" value="3.5.4"/>
 	<property name="charset" value="utf-8"/>
 	<property name="filename" value="kindeditor"/>
 

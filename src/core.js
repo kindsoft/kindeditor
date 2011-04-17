@@ -2902,18 +2902,26 @@ KE.create = function(id, mode) {
 		if (plugin.init) plugin.init(id);
 	});
 	KE.g[id].getHtmlHooks.push(function(html) {
-		return html.replace(/(<[^>]*)kesrc="([^"]+)"([^>]*>)/ig, function(full, start, src, end) {
+		html = html.replace(/(<[^>]*)kesrc="([^"]+)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]+(")/i, '$1' + src + '$2');
 			full = full.replace(/\s+kesrc="[^"]+"/i, '');
 			return full;
 		});
+		html = html.replace(/(<[^>]+\s)ke-(on\w+="[^"]+"[^>]*>)/ig, function(full, start, end) {
+			return start + end;
+		});
+		return html;
 	});
 	KE.g[id].setHtmlHooks.push(function(html) {
-		return html.replace(/(<[^>]*)(href|src)="([^"]+)"([^>]*>)/ig, function(full, start, key, src, end) {
+		html = html.replace(/(<[^>]*)(href|src)="([^"]+)"([^>]*>)/ig, function(full, start, key, src, end) {
 			if (full.match(/\skesrc="[^"]+"/i)) return full;
 			full = start + key + '="' + src + '"' + ' kesrc="' + src + '"' + end;
 			return full;
 		});
+		html = html.replace(/(<[^>]+\s)(on\w+="[^"]+"[^>]*>)/ig, function(full, start, end) {
+			return start + 'ke-' + end;
+		});
+		return html;
 	});
 	KE.util.addContextmenuEvent(id);
 	KE.util.addNewlineEvent(id);
