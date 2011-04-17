@@ -5,14 +5,14 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.4 (2011-04-17)
+* @version 3.5.4 (2011-04-18)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.4 (2011-04-17)';
+KE.version = '3.5.4 (2011-04-18)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2949,8 +2949,11 @@ KE.create = function(id, mode) {
 		if (KE.g[id].afterChange) KE.g[id].afterChange(id);
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
-	if (KE.browser.IE) KE.readonly(id, false);
-	if (KE.browser.IE && KE.browser.VERSION < 8) KE.blur(id);
+	if (KE.browser.IE) {
+		iframeDoc.body.disabled = true;
+		KE.readonly(id, false);
+		iframeDoc.body.removeAttribute('disabled');
+	}
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, 0);
 	if (mode > 0) KE.util.focus(id);

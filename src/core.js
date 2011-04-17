@@ -2940,8 +2940,11 @@ KE.create = function(id, mode) {
 		if (KE.g[id].afterChange) KE.g[id].afterChange(id);
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
-	if (KE.browser.IE) KE.readonly(id, false);
-	if (KE.browser.IE && KE.browser.VERSION < 8) KE.blur(id);
+	if (KE.browser.IE) {
+		iframeDoc.body.disabled = true;
+		KE.readonly(id, false);
+		iframeDoc.body.removeAttribute('disabled');
+	}
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, 0);
 	if (mode > 0) KE.util.focus(id);
