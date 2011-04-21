@@ -1437,9 +1437,10 @@ KE.util = {
 		return (node.nodeType == 1 && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
 	},
 	inMarquee : function(node) {
-		var n = node;
+		var n = node, nodeName;
 		while (n) {
-			if (n.nodeName.toLowerCase() === 'marquee') return true;
+			nodeName = n.nodeName.toLowerCase();
+			if (nodeName == 'marquee' || nodeName == 'select') return true;
 			n = n.parentNode;
 		}
 		return false;
