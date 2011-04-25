@@ -4,15 +4,15 @@
 *
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
-* @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.4 (2011-04-21)
+* @licence LGPL(http://www.kindsoft.net/lgpl_license.html)
+* @version 3.5.4 (2011-04-25)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.4 (2011-04-21)';
+KE.version = '3.5.4 (2011-04-25)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -1128,6 +1128,7 @@ KE.format = {
 			html = html.replace(/<p><br\s+\/>\n<\/p>/ig, '<p>&nbsp;</p>');
 			html = html.replace(/<br\s+\/>\n<\/p>/ig, '</p>');
 		}
+		html = html.replace(/\u200B/g, '');
 		var reg = KE.setting.inlineTags.join('|');
 		var trimHtml = function(inHtml) {
 			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
@@ -1449,7 +1450,7 @@ KE.util = {
 		var n = node, nodeName;
 		while (n) {
 			nodeName = n.nodeName.toLowerCase();
-			if (nodeName === 'marquee' || nodeName === 'select') return true;
+			if (nodeName == 'marquee' || nodeName == 'select') return true;
 			n = n.parentNode;
 		}
 		return false;
@@ -1793,7 +1794,7 @@ KE.util = {
 		else html += imgStr;
 		if (KE.browser.IE) {
 			if (g.range.item) g.range.item(0).outerHTML = html;
-			else g.range.pasteHTML(html);
+			else g.range.pasteHTML('\u200B' + html);
 		} else {
 			g.range.deleteContents();
 			var frag = g.range.createContextualFragment(html);
@@ -1824,7 +1825,7 @@ KE.util = {
 					this.innerHtml(parent, html + parent.innerHTML);
 				}
 			} else {
-				g.range.pasteHTML(html);
+				g.range.pasteHTML('\u200B' + html);
 			}
 		} else if (KE.browser.GECKO && KE.browser.VERSION < 3) {
 			this.execCommand(id, 'inserthtml', html);
