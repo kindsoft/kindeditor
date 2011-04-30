@@ -4,15 +4,15 @@
 *
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
-* @licence LGPL(http://www.kindsoft.net/lgpl_license.html)
-* @version 3.5.4 (2011-04-25)
+* @licence http://www.kindsoft.net/license.php
+* @version 3.5.4 (2011-04-30)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.4 (2011-04-25)';
+KE.version = '3.5.4 (2011-04-30)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2977,6 +2977,8 @@ KE.onchange = function(id, func) {
 	}, id);
 };
 
+var _needStyle = true;
+
 KE.init = function(args) {
 	var g = KE.g[args.id] = args;
 	g.config = {};
@@ -2992,7 +2994,10 @@ KE.init = function(args) {
 		g[key] = (typeof args[key] == 'undefined') ? val : args[key];
 		g.config[key] = g[key];
 	});
-	if (g.loadStyleMode) KE.util.loadStyle(g.skinsPath + g.skinType + '.css');
+	if (g.loadStyleMode && _needStyle) {
+		KE.util.loadStyle(g.skinsPath + g.skinType + '.css');
+		_needStyle = false;
+	}
 }
 
 KE.show = function(args) {
