@@ -2517,7 +2517,10 @@ KE.toolbar = {
 		for (var i = 0; i < length; i++) {
 			var cmd = KE.g[id].items[i];
 			if (i == 0 || cmd == '-') {
-				var table = KE.util.createTable().table;
+				var table = KE.$$('table');
+				table.cellPadding = 0;
+				table.cellSpacing = 0;
+				table.border = 0;
 				table.className = 'ke-toolbar-table';
 				row = table.insertRow(0);
 				cellNum = 0;
