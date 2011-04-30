@@ -9,6 +9,7 @@ ver 3.5.4
 * BUG: 修改了在IE上编辑区域里的选中select控件时出现JS错误的问题。
 * BUG: 修改了在IE上通过KE.insertHtml函数输入<mp3>URL</mp3>时丢失标签的问题。
 * BUG: 修改了在一个页面调用多个编辑器时重复加载相同CSS的问题。
+* BUG: 修改了在一个页面包含多个kindeditor.js时无法打开dialog的问题。
 
 ver 3.5.3 (2011-04-09)
 * 增加: 新增useContextmenu属性，值为true时使用自定义右键菜单，false时屏蔽自定义右键菜单，默认值为true。

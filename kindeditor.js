@@ -10,6 +10,8 @@
 
 (function (undefined) {
 
+if (window.KindEditor !== undefined) return;
+
 var KE = {};
 
 KE.version = '3.5.4 (2011-04-30)';
@@ -17,8 +19,9 @@ KE.version = '3.5.4 (2011-04-30)';
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
 	for (var i = 0, len = elements.length; i < len; i++) {
-		if (elements[i].src && elements[i].src.match(/kindeditor[\w\-\.]*\.js/)) {
-			return elements[i].src.substring(0, elements[i].src.lastIndexOf('/') + 1);
+		var src = elements[i].src;
+		if (src && src.match(/kindeditor[\w\-\.]*\.js/)) {
+			return src.substring(0, src.lastIndexOf('/') + 1);
 		}
 	}
 	return '';
