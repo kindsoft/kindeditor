@@ -1,1 +1,5 @@
+Open Source License:
 http://www.kindsoft.net/lgpl_license.html
+
+Commercial License
+http://www.kindsoft.net/kindeditor_commercial_license.html

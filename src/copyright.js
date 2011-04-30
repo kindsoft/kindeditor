@@ -4,6 +4,6 @@
 *
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
-* @licence LGPL(http://www.kindsoft.net/lgpl_license.html)
+* @licence http://www.kindsoft.net/license.php
 * @version ${VERSION}
 *******************************************************************************/
