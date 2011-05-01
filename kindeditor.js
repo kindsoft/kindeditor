@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.4 (2011-04-30)
+* @version 3.5.4 (2011-05-01)
 *******************************************************************************/
 
 (function (undefined) {
@@ -14,7 +14,7 @@ if (window.KindEditor !== undefined) return;
 
 var KE = {};
 
-KE.version = '3.5.4 (2011-04-30)';
+KE.version = '3.5.4 (2011-05-01)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
