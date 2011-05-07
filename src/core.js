@@ -2364,6 +2364,7 @@ KE.dialog = function(arg){
 			contentCell.appendChild(bottomDiv);
 		}
 		document.body.appendChild(div);
+		KE.event.bind(div, 'mousedown', function(e){}, id);
 		window.focus();
 		if (yesButton) yesButton.focus();
 		else if (noButton) noButton.focus();

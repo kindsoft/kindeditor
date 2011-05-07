@@ -126,6 +126,10 @@
 						if (i === num) {
 							li.className = 'selected';
 							li.onclick = null;
+							if (KE.browser.IE) {
+								KE.util.focus(id);
+								KE.util.select(id);
+							}
 						} else {
 							if (allowUpload) {
 								li.className = '';
