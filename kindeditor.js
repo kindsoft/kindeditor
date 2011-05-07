@@ -1797,7 +1797,7 @@ KE.util = {
 		else html += imgStr;
 		if (KE.browser.IE) {
 			if (g.range.item) g.range.item(0).outerHTML = html;
-			else g.range.pasteHTML('\u200B' + html);
+			else g.range.pasteHTML(html);
 		} else {
 			g.range.deleteContents();
 			var frag = g.range.createContextualFragment(html);
@@ -1830,7 +1830,7 @@ KE.util = {
 			} else {
 				g.range.pasteHTML('\u200B' + html);
 			}
-		} else if (KE.browser.GECKO && KE.browser.VERSION < 3) {
+		} else if (KE.browser.GECKO) {
 			this.execCommand(id, 'inserthtml', html);
 			return;
 		} else {
