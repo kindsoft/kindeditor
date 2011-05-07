@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.4 (2011-05-01)
+* @version 3.5.4 (2011-05-07)
 *******************************************************************************/
 
 (function (undefined) {
@@ -14,7 +14,7 @@ if (window.KindEditor !== undefined) return;
 
 var KE = {};
 
-KE.version = '3.5.4 (2011-05-01)';
+KE.version = '3.5.4 (2011-05-07)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -3767,7 +3767,7 @@ KE.plugin['emoticons'] = {
 	},
 	exec : function(id, num) {
 		var src = KE.g[id].pluginsPath + 'emoticons/' + num + '.gif';
-		var html = '<img src="' + src + '" kesrc="' + src + '" border="0" alt="" />';
+		var html = '<img src="' + src + '" kesrc="' + src + '" alt="" />';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -4005,7 +4005,8 @@ KE.plugin['image'] = {
 		if (title) html += 'title="' + title + '" ';
 		if (align) html += 'align="' + align + '" ';
 		html += 'alt="' + title + '" ';
-		html += 'border="' + border + '" />';
+		if (border) html += 'border="' + border + '" ';
+		html += '/>';
 		KE.util.insertHtml(id, html);
 		this.dialog.hide();
 		KE.util.focus(id);

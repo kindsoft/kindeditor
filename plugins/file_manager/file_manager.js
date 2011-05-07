@@ -43,7 +43,7 @@ KE.event.ready(function() {
 	}
 	var insertImage = function(url, title) {
 		if (!insertLink(url)) {
-			KE.util.insertHtml(id, '<img src="' + url + '" alt="' + title + '" border="0" />');
+			KE.util.insertHtml(id, '<img src="' + url + '" alt="' + title + '" />');
 		}
 	};
 	var insertFile = function(url, title) {

@@ -554,7 +554,7 @@ KE.plugin['emoticons'] = {
 	},
 	exec : function(id, num) {
 		var src = KE.g[id].pluginsPath + 'emoticons/' + num + '.gif';
-		var html = '<img src="' + src + '" kesrc="' + src + '" border="0" alt="" />';
+		var html = '<img src="' + src + '" kesrc="' + src + '" alt="" />';
 		KE.util.insertHtml(id, html);
 		this.menu.hide();
 		KE.util.focus(id);
@@ -792,7 +792,8 @@ KE.plugin['image'] = {
 		if (title) html += 'title="' + title + '" ';
 		if (align) html += 'align="' + align + '" ';
 		html += 'alt="' + title + '" ';
-		html += 'border="' + border + '" />';
+		if (border) html += 'border="' + border + '" ';
+		html += '/>';
 		KE.util.insertHtml(id, html);
 		this.dialog.hide();
 		KE.util.focus(id);
