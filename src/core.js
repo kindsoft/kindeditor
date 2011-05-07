@@ -1819,7 +1819,9 @@ KE.util = {
 					this.innerHtml(parent, html + parent.innerHTML);
 				}
 			} else {
-				g.range.pasteHTML('\u200B' + html);
+				g.range.pasteHTML('<span id="__ke_temp_tag__">\u200B</span>' + html);
+				var node = KE.$('__ke_temp_tag__', g.iframeDoc);
+				node.parentNode.removeChild(node);
 			}
 		} else if (KE.browser.GECKO) {
 			this.execCommand(id, 'inserthtml', html);
