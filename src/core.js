@@ -614,7 +614,8 @@ KE.range = function(doc) {
 		var startPos = this.startPos;
 		var endNode = this.endNode;
 		var endPos = this.endPos;
-		var extractTextNode = function(node, startPos, endPos) {
+		var removedNodes = [];
+		function extractTextNode(node, startPos, endPos) {
 			var length = node.nodeValue.length;
 			var cloneNode = node.cloneNode(true);
 			var centerNode = cloneNode.splitText(startPos);
@@ -623,14 +624,14 @@ KE.range = function(doc) {
 				var center = node;
 				if (startPos > 0) center = node.splitText(startPos);
 				if (endPos < length) center.splitText(endPos - startPos);
-				center.parentNode.removeChild(center);
+				removedNodes.push(center);
 			}
 			return centerNode;
 		};
 		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
 		var isStarted = false;
 		var isEnd = false;
-		var extractNodes = function(parent, frag) {
+		function extractNodes(parent, frag) {
 			if (KE.util.getNodeType(parent) != 1) return true;
 			var node = parent.firstChild;
 			while (node) {
@@ -686,6 +687,11 @@ KE.range = function(doc) {
 		var parentNode = this.getParentElement();
 		var docFrag = parentNode.cloneNode(false);
 		extractNodes(parentNode, docFrag);
+		KE.each(removedNodes, function(key, val) {
+			if (val.nodeType != 3 || val.nodeValue.length > 0) {
+				val.parentNode.removeChild(val);
+			}
+		});
 		return docFrag;
 	};
 	this.cloneContents = function() {

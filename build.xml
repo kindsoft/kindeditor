@@ -56,6 +56,12 @@
 		/>
 	</target>
 
+	<target name="min" depends="merge">
+		<exec executable="java">
+			<arg line="-jar lib/closure-compiler.jar --js=${filename}.js --js_output_file=${filename}-min.js"/>
+		</exec>
+	</target>
+
 	<target name="copy" depends="merge">
 		<mkdir dir="${dist}"/>
 		<delete dir="${kedir}"/>
@@ -83,7 +89,7 @@
 		/>
 	</target>
 
-	<target name="merge_zh_CN" depends="set_zh_CN,merge"/>
+	<target name="merge_zh_CN" depends="set_zh_CN,min"/>
 	<target name="en" depends="set_en,set_prop,zip"/>
 	<target name="zh_CN" depends="set_zh_CN,set_prop,zip"/>
 	<target name="zh_TW" depends="set_zh_TW,set_prop,zip"/>
