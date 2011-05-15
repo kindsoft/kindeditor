@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Media</title>
+		<link href="../skins/default.css" rel="stylesheet" />
 		<style type="text/css" rel="stylesheet">
 			body {
 				margin: 0;
@@ -34,12 +35,6 @@
 			.table li label {
 				font-weight:bold;
 			}
-			.table li input {
-				vertical-align:middle;
-			}
-			.table li img {
-				vertical-align:middle;
-			}
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
@@ -54,19 +49,19 @@
 		<div class="main">
 			<ul class="table">
 				<li>
-					<label for="url"><span id="lang.url"></span></label>
-					<input type="text" id="url" name="url" value="http://" maxlength="255" style="width:90%;" />
+					<label for="url" class="ke-inline-block"><span id="lang.url"></span></label>
+					<input type="text" id="url" name="url" value="http://" maxlength="255" class="ke-inline-block ke-text-input" style="width:90%;" />
 				</li>
 				<li>
-					<label for="width"><span id="lang.width"></span></label>&nbsp;
-					<input type="text" id="width" name="width" value="550" maxlength="4" style="width:50px;text-align:right;" /> px
+					<label for="width" class="ke-inline-block"><span id="lang.width"></span></label>&nbsp;
+					<input type="text" id="width" name="width" value="550" maxlength="4" class="ke-inline-block ke-text-input" style="width:50px;text-align:right;" /> px
 				</li>
 				<li>
-					<label for="height"><span id="lang.height"></span></label>&nbsp;
-					<input type="text" id="height" name="height" value="400" maxlength="4" style="width:50px;text-align:right;" /> px
+					<label for="height" class="ke-inline-block"><span id="lang.height"></span></label>&nbsp;
+					<input type="text" id="height" name="height" value="400" maxlength="4" class="ke-inline-block ke-text-input" style="width:50px;text-align:right;" /> px
 				</li>
 				<li>
-					<label for="autostart"><span id="lang.autostart"></span></label>&nbsp;
+					<label for="autostart" class="ke-inline-block"><span id="lang.autostart"></span></label>&nbsp;
 					<input type="checkbox" id="autostart" name="autostart" value="1" />
 				</li>
 			</ul>

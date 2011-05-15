@@ -2174,6 +2174,23 @@ KE.menu = function(arg){
 	};
 };
 
+KE.button = function(arg) {
+	arg = arg || {};
+	doc = arg.doc || document;
+	var span = KE.$$('span', doc);
+	span.className = 'ke-button-common ke-button-outer ' + (arg.className || '');
+	span.title = arg.text;
+	btn = KE.$$('input', doc);
+	btn.className = 'ke-button-common ke-button';
+	btn.type = 'button';
+	btn.value = arg.text || '';
+	if (arg.clickFn) {
+		btn.onclick = arg.clickFn;
+	}
+	span.appendChild(btn);
+	return {span : span, btn : btn};
+}
+
 KE.dialog = function(arg){
 	var self = this;
 	this.widthMargin = 30;
@@ -2338,44 +2355,44 @@ KE.dialog = function(arg){
 		var yesButton = null;
 		var previewButton = null;
 		if (arg.previewButton) {
-			previewButton = KE.$$('input');
-			previewButton.className = 'ke-button ke-dialog-preview';
-			previewButton.type = 'button';
-			previewButton.name = 'previewButton';
-			previewButton.value = arg.previewButton;
-			previewButton.onclick = function() {
-				var stack = KE.g[id].dialogStack;
-				if (stack[stack.length - 1] == self) {
-					KE.plugin[arg.cmd].preview(id);
+			var btn = KE.button({
+				className : 'ke-dialog-preview',
+				text : arg.previewButton,
+				clickFn : function() {
+					var stack = KE.g[id].dialogStack;
+					if (stack[stack.length - 1] == self) {
+						KE.plugin[arg.cmd].preview(id);
+					}
 				}
-			};
-			bottomDiv.appendChild(previewButton);
+			});
+			previewButton = btn.btn;
+			bottomDiv.appendChild(btn.span);
 		}
 		if (arg.yesButton) {
-			yesButton = KE.$$('input');
-			yesButton.className = 'ke-button ke-dialog-yes';
-			yesButton.type = 'button';
-			yesButton.name = 'yesButton';
-			yesButton.value = arg.yesButton;
-			yesButton.onclick = function() {
-				var stack = KE.g[id].dialogStack;
-				if (stack[stack.length - 1] == self) {
-					KE.plugin[arg.cmd].exec(id);
+			var btn = KE.button({
+				className : 'ke-dialog-yes',
+				text : arg.yesButton,
+				clickFn : function() {
+					var stack = KE.g[id].dialogStack;
+					if (stack[stack.length - 1] == self) {
+						KE.plugin[arg.cmd].exec(id);
+					}
 				}
-			};
-			bottomDiv.appendChild(yesButton);
+			});
+			yesButton = btn.btn;
+			bottomDiv.appendChild(btn.span);
 		}
 		if (arg.noButton) {
-			noButton = KE.$$('input');
-			noButton.className = 'ke-button ke-dialog-no';
-			noButton.type = 'button';
-			noButton.name = 'noButton';
-			noButton.value = arg.noButton;
-			noButton.onclick = function () {
-				self.hide();
-				KE.util.select(id);
-			};
-			bottomDiv.appendChild(noButton);
+			var btn = KE.button({
+				className : 'ke-dialog-no',
+				text : arg.noButton,
+				clickFn : function() {
+					self.hide();
+					KE.util.select(id);
+				}
+			});
+			noButton = btn.btn;
+			bottomDiv.appendChild(btn.span);
 		}
 		if (arg.yesButton || arg.noButton || arg.previewButton) {
 			contentCell.appendChild(bottomDiv);

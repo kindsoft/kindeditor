@@ -3,12 +3,13 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Table</title>
+		<link href="../../skins/default.css" rel="stylesheet" />
 		<style type="text/css" rel="stylesheet">
 			body {
 				margin: 0;
 				font:12px/1.5 "sans serif",tahoma,verdana,helvetica;
 				background-color:#F0F0EE;
-				color:#222222;
+				color:#333;
 				overflow:hidden;
 			}
 			label {
@@ -53,11 +54,6 @@
 				line-height: 20px;
 				padding-left: 5px;
 				overflow: hidden;
-				display: -moz-inline-stack;
-				display: inline-block;
-				vertical-align: middle;
-				zoom: 1;
-				*display: inline;
 				cursor: pointer;
 			}
 		</style>
@@ -196,34 +192,34 @@
 			<input type="hidden" id="mode" name="mode" value="" /> 
 			<ul class="table">
 				<li>
-					<label for="rows"><span id="lang.cells"></span></label>
-					<span id="lang.rows"></span>&nbsp;<input type="text" id="rows" name="rows" value="" maxlength="4" class="text margin-right-10" />
-					<span id="lang.cols"></span>&nbsp;<input type="text" id="cols" name="cols" value="" maxlength="4" class="text" />
+					<label for="rows" class="ke-inline-block"><span id="lang.cells"></span></label>
+					<span id="lang.rows"></span>&nbsp;<input type="text" id="rows" name="rows" value="" maxlength="4" class="ke-inline-block ke-text-input text margin-right-10" />
+					<span id="lang.cols"></span>&nbsp;<input type="text" id="cols" name="cols" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
 				</li>
 				<li>
-					<label for="width"><span id="lang.size"></span></label>
-					<span id="lang.width"></span>&nbsp;<input type="text" id="width" name="width" value="" maxlength="4" class="text" align="absmiddle" />
-					<select id="widthType" name="widthType" align="absmiddle" class="margin-right-10"></select>
-					<span id="lang.height"></span>&nbsp;<input type="text" id="height" name="height" value="" maxlength="4" class="text" align="absmiddle" />
-					<select id="heightType" name="heightType" align="absmiddle" class="margin-right-10"></select>
+					<label for="width" class="ke-inline-block"><span id="lang.size"></span></label>
+					<span id="lang.width"></span>&nbsp;<input type="text" id="width" name="width" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
+					<select id="widthType" name="widthType" align="absmiddle" class="ke-inline-block margin-right-10"></select>
+					<span id="lang.height"></span>&nbsp;<input type="text" id="height" name="height" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
+					<select id="heightType" name="heightType" align="absmiddle" class="ke-inline-block margin-right-10"></select>
 				</li>
 				<li>
-					<label for="padding"><span id="lang.space"></span></label>
-					<span id="lang.padding"></span>&nbsp;<input type="text" id="padding" name="padding" value="" maxlength="4" class="text margin-right-10" />
-					<span id="lang.spacing"></span>&nbsp;<input type="text" id="spacing" name="spacing" value="" maxlength="4" class="text" />
+					<label for="padding" class="ke-inline-block"><span id="lang.space"></span></label>
+					<span id="lang.padding"></span>&nbsp;<input type="text" id="padding" name="padding" value="" maxlength="4" class="ke-inline-block ke-text-input text margin-right-10" />
+					<span id="lang.spacing"></span>&nbsp;<input type="text" id="spacing" name="spacing" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
 				</li>
 				<li>
-					<label for="align"><span id="lang.align"></span></label>
-					<select id="align" name="align"></select>
+					<label for="align" class="ke-inline-block"><span id="lang.align"></span></label>
+					<select id="align" name="align" class="ke-inline-block"></select>
 				</li>
 				<li>
-					<label for="border"><span id="lang.border"></span></label>
-					<span id="lang.borderWidth"></span>&nbsp;<input type="text" id="border" name="border" value="" maxlength="4" class="text margin-right-10" />
-					<span id="lang.borderColor"></span>&nbsp;<span id="borderColor" class="color-picker"></span>
+					<label for="border" class="ke-inline-block"><span id="lang.border"></span></label>
+					<span id="lang.borderWidth"></span>&nbsp;<input type="text" id="border" name="border" value="" maxlength="4" class="ke-inline-block ke-text-input text margin-right-10" />
+					<span id="lang.borderColor"></span>&nbsp;<span id="borderColor" class="ke-inline-block color-picker"></span>
 				</li>
 				<li>
-					<label for="backgroundColor"><span id="lang.backgroundColor"></span></label>
-					<span id="backgroundColor" class="color-picker"></span>
+					<label for="backgroundColor" class="ke-inline-block"><span id="lang.backgroundColor"></span></label>
+					<span id="backgroundColor" class="ke-inline-block color-picker"></span>
 				</li>
 			</ul>
 		</div>

@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Image</title>
+		<link href="../../skins/default.css" rel="stylesheet" />
 		<style type="text/css" rel="stylesheet">
 			body {
 				margin: 0;
@@ -22,7 +23,7 @@
 				cursor:pointer;
 			}
 			.main {
-				margin: 0 10px;
+				padding: 0 10px;
 			}
 			.clearfix:after {
 				content: ".";
@@ -77,17 +78,12 @@
 			}
 			.table li {
 				padding:0;
+				margin:0;
 				margin-bottom:10px;
 				display:list-item;
 			}
 			.table li label {
 				font-weight:bold;
-			}
-			.table li input {
-				vertical-align:middle;
-			}
-			.table li img {
-				vertical-align:middle;
 			}
 		</style>
 		<script type="text/javascript">
@@ -112,7 +108,6 @@
 				var defaultImg = KE.$('defaultImg', document);
 				var leftImg = KE.$('leftImg', document);
 				var rightImg = KE.$('rightImg', document);
-				var viewServer = KE.$('viewServer', document);
 				var liList = tabNavi.getElementsByTagName('li');
 				var selectTab = function(num) {
 					if (num == 1) resetBtn.style.display = 'none';
@@ -149,10 +144,6 @@
 					typeBox.value = num + 1;
 					KE.$('tab' + (num + 1), document).style.display = '';
 				}
-				if (!allowFileManager) {
-					viewServer.parentNode.removeChild(viewServer);
-					urlBox.style.width = '300px';
-				}
 				selectTab(0);
 				var imgNode = KE.plugin['image'].getSelectedNode(id);
 				if (imgNode) {
@@ -172,23 +163,32 @@
 						}
 					}
 				}
-				KE.event.add(viewServer, 'click', function () {
-					if (fileManager) return false;
-					fileManager = new KE.dialog({
-						id : id,
-						cmd : 'file_manager',
-						file : 'file_manager/file_manager.html?id=' + id + '&ver=' + KE.version,
-						width : 500,
-						height : 400,
-						loadingMode : true,
-						title : KE.lang.fileManager,
-						noButton : KE.lang.no,
-						afterHide : function() {
-							fileManager = null;
-						}
+				if (allowFileManager) {
+					var btn = KE.button({
+						doc : document,
+						text : lang.viewServer
 					});
-					fileManager.show();
-				});
+					urlBox.parentNode.appendChild(btn.span);
+					KE.event.add(btn.btn, 'click', function () {
+						if (fileManager) return false;
+						fileManager = new KE.dialog({
+							id : id,
+							cmd : 'file_manager',
+							file : 'file_manager/file_manager.html?id=' + id + '&ver=' + KE.version,
+							width : 500,
+							height : 400,
+							loadingMode : true,
+							title : KE.lang.fileManager,
+							noButton : KE.lang.no,
+							afterHide : function() {
+								fileManager = null;
+							}
+						});
+						fileManager.show();
+					});
+				} else {
+					urlBox.style.width = '300px';
+				}
 				KE.$('uploadForm', document).action = imageUploadJson;
 				KE.$('referMethod', document).value = referMethod;
 				var alignIds = ['default', 'left', 'right'];
@@ -213,7 +213,6 @@
 					g.iframeDoc.body.removeChild(img);
 				});
 				KE.util.pluginLang('image', document);
-				viewServer.value = lang.viewServer;
 				resetBtn.alt = resetBtn.title = lang.resetSize;
 				defaultImg.alt = defaultImg.title = lang.defaultAlign;
 				leftImg.alt = leftImg.title = lang.leftAlign;
@@ -239,30 +238,29 @@
 				<ul class="table">
 					<li>
 						<div id="tab1" style="display:none;">
-							<label for="url"><span id="lang.remoteUrl"></span></label>&nbsp;
-							<input type="text" id="url" name="url" value="http://" maxlength="255" style="width:230px;" />
-							<input type="button" id="viewServer" name="viewServer" value="" />
+							<label for="url" class="ke-inline-block"><span id="lang.remoteUrl"></span></label>&nbsp;
+							<input type="text" id="url" name="url" value="http://" maxlength="255" class="ke-inline-block ke-text-input" style="width:200px;" />
 						</div>
 						<div id="tab2" style="display:none;">
-							<label for="imgFile"><span id="lang.localUrl"></span></label>&nbsp;
-							<input type="file" id="imgFile" name="imgFile" style="width:300px;" />
+							<label for="imgFile" class="ke-inline-block"><span id="lang.localUrl"></span></label>&nbsp;
+							<input type="file" id="imgFile" name="imgFile" class="ke-inline-block" style="width:300px;" />
 						</div>
 					</li>
 					<li>
-						<label for="imgWidth"><span id="lang.size"></span></label>&nbsp;
-						<span id="lang.width"></span> <input type="text" id="imgWidth" name="imgWidth" value="" maxlength="4" style="width:50px;text-align:right;" />
-						<span id="lang.height"></span> <input type="text" id="imgHeight" name="imgHeight" value="" maxlength="4" style="width:50px;text-align:right;" />
-						<img src="./images/refresh.gif" width="16" height="16" id="resetBtn" alt="" title="" />
+						<label for="imgWidth" class="ke-inline-block"><span id="lang.size"></span></label>&nbsp;
+						<span id="lang.width"></span>&nbsp;<input type="text" id="imgWidth" name="imgWidth" value="" maxlength="4" class="ke-inline-block ke-text-input" style="width:50px;text-align:right;" />
+						<span id="lang.height"></span>&nbsp;<input type="text" id="imgHeight" name="imgHeight" value="" maxlength="4" class="ke-inline-block ke-text-input" style="width:50px;text-align:right;" />
+						<img class="ke-inline-block" src="./images/refresh.gif" width="16" height="16" id="resetBtn" alt="" />
 					</li>
 					<li>
-						<label><span id="lang.align"></span></label>&nbsp;
-						<input type="radio" id="defaultChk" name="align" value="" checked="checked" /> <img id="defaultImg" src="./images/align_top.gif" width="23" height="25" border="0" alt="" title="" />
-						<input type="radio" id="leftChk" name="align" value="left" /> <img id="leftImg" src="./images/align_left.gif" width="23" height="25" border="0" alt="" title="" />
-						<input type="radio" id="rightChk" name="align" value="right" /> <img id="rightImg" src="./images/align_right.gif" width="23" height="25" border="0" alt="" title="" />
+						<label class="ke-inline-block"><span id="lang.align"></span></label>&nbsp;
+						<input class="ke-inline-block" type="radio" id="defaultChk" name="align" value="" checked="checked" /> <img class="ke-inline-block" id="defaultImg" src="./images/align_top.gif" width="23" height="25" border="0" alt="" />
+						<input class="ke-inline-block" type="radio" id="leftChk" name="align" value="left" /> <img class="ke-inline-block" id="leftImg" src="./images/align_left.gif" width="23" height="25" border="0" alt="" />
+						<input class="ke-inline-block" type="radio" id="rightChk" name="align" value="right" /> <img class="ke-inline-block" id="rightImg" src="./images/align_right.gif" width="23" height="25" border="0" alt="" />
 					</li>
 					<li>
-						<label for="imgTitle"><span id="lang.imgTitle"></span></label>
-						<input type="text" id="imgTitle" name="imgTitle" value="" maxlength="255" style="width:95%;" />
+						<label for="imgTitle" class="ke-inline-block"><span id="lang.imgTitle"></span></label>
+						<input type="text" id="imgTitle" name="imgTitle" value="" maxlength="255" class="ke-inline-block ke-text-input" style="width:95%;" />
 					</li>
 				</ul>
 			</form>

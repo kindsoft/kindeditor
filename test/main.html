@@ -7,14 +7,6 @@
 			body {
 				line-height:18px;
 			}
-			th,td {
-				padding:5px;
-				text-align: left;
-				vertical-align: top;
-			}
-			table{
-				margin-bottom:1em;
-			}
 		</style>
 		<!-- <script src="https://getfirebug.com/firebug-lite.js"></script> -->
 		<script charset="utf-8" src="../src/core.js"></script>
@@ -32,12 +24,12 @@
 					KE.$('content_html').value = KE.$(id).value;
 				},
 				afterFocus : function(id) {
-					KE.g[id].iframeDoc.body.style.backgroundColor = '#ddd';
-					KE.g[id].newTextarea.style.backgroundColor = '#ddd';
+					//KE.g[id].iframeDoc.body.style.backgroundColor = '#ddd';
+					//KE.g[id].newTextarea.style.backgroundColor = '#ddd';
 				},
 				afterBlur : function(id) {
-					KE.g[id].iframeDoc.body.style.backgroundColor = '#fff';
-					KE.g[id].newTextarea.style.backgroundColor = '#fff';
+					//KE.g[id].iframeDoc.body.style.backgroundColor = '#fff';
+					//KE.g[id].newTextarea.style.backgroundColor = '#fff';
 				}
 			});
 		</script>

@@ -1,3 +1,22 @@
+.ke-inline-block {
+	display: -moz-inline-stack;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	*display: inline;
+}
+.ke-clearfix {
+	zoom: 1;
+}
+.ke-clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0;
+	visibility: hidden;
+}
 .ke-text {
 	font-size: 12px;
 	font-family: "sans serif",tahoma,verdana,helvetica;
@@ -765,17 +784,50 @@ span.ke-dialog-empty {
 	display: none;
 	background-color: #FFFFFF;
 }
+.ke-button-common {
+	background: url(./default/bg.gif) no-repeat scroll 0 0 transparent;
+	cursor: pointer;
+	height: 25px;
+	line-height: 25px;
+	overflow: visible;
+	display: inline-block;
+	vertical-align: top;
+}
+.ke-button-outer {
+	background-position: 0 0;
+	padding: 0;
+	position: relative;
+	display: -moz-inline-stack;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	*display: inline;
+}
 .ke-button {
+	background-position: right 0;
+	padding: 0 12px;
+	margin: 0;
 	font-family: "sans serif",tahoma,verdana,helvetica;
+	border: 0 none;
+	color: #333;
 	font-size: 12px;
-	line-height: 1;
-	padding: 2px 10px;
+	font-weight: bold;
+	left: 2px;
+	text-decoration: none;
+}
+.ke-button:focus {
+	outline: none;
 }
 .ke-text-input {
 	background-color:#FFFFFF;
 	font-family: "sans serif",tahoma,verdana,helvetica;
 	font-size: 12px;
-	line-height: 1;
+	line-height: 17px;
+	height: 17px;
+	padding: 2px 4px;
+	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
+	border-style: solid;
+	border-width: 1px;
 }
 .ke-colorpicker {
 	position: absolute;
