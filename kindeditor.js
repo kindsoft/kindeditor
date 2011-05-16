@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.5 (2011-05-16)
+* @version 3.5.5 (2011-05-17)
 *******************************************************************************/
 
 (function (undefined) {
@@ -14,7 +14,7 @@ if (window.KindEditor !== undefined) return;
 
 var KE = {};
 
-KE.version = '3.5.5 (2011-05-16)';
+KE.version = '3.5.5 (2011-05-17)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2275,36 +2275,16 @@ KE.dialog = function(arg){
 		var pos = getPos.call(this);
 		div.style.top = pos.y + 'px';
 		div.style.left = pos.x + 'px';
-		var contentCell;
 		if (KE.g[id].shadowMode) {
-			var table = KE.$$('table');
-			table.className = 'ke-dialog-table';
-			table.cellPadding = 0;
-			table.cellSpacing = 0;
-			table.border = 0;
-			var rowNames = ['t', 'm', 'b'];
-			var colNames = ['l', 'c', 'r'];
-			for (var i = 0, len = 3; i < len; i++) {
-				var row = table.insertRow(i);
-				for (var j = 0, l = 3; j < l; j++) {
-					var cell = row.insertCell(j);
-					cell.className = 'ke-' + rowNames[i] + colNames[j];
-					if (i == 1 && j == 1) contentCell = cell;
-					else cell.innerHTML = '<span class="ke-dialog-empty"></span>';
-				}
-			}
-			div.appendChild(table);
+			KE.addClass(div, 'ke-dialog-shadow');
 		} else {
 			KE.addClass(div, 'ke-dialog-no-shadow');
-			contentCell = div;
 		}
 		var titleDiv = KE.$$('div');
 		titleDiv.className = 'ke-dialog-title';
 		titleDiv.innerHTML = arg.title;
 		var span = KE.$$('span');
 		span.className = 'ke-dialog-close';
-		if (KE.g[id].shadowMode) KE.addClass(span, 'ke-dialog-close-shadow');
-		else KE.addClass(span, 'ke-dialog-close-no-shadow');
 		span.alt = KE.lang['close'];
 		span.title = KE.lang['close'];
 		span.onclick = function () {
@@ -2325,7 +2305,7 @@ KE.dialog = function(arg){
 			div.style.top = top + 'px';
 			div.style.left = left + 'px';
 		});
-		contentCell.appendChild(titleDiv);
+		div.appendChild(titleDiv);
 		var bodyDiv = KE.$$('div');
 		bodyDiv.className = 'ke-dialog-body';
 		var loadingTable = KE.util.createTable();
@@ -2347,8 +2327,7 @@ KE.dialog = function(arg){
 		iframe.style.display = 'none';
 		bodyDiv.appendChild(iframe);
 		bodyDiv.appendChild(loadingTable.table);
-		contentCell.appendChild(bodyDiv);
-
+		div.appendChild(bodyDiv);
 		var bottomDiv = KE.$$('div');
 		bottomDiv.className = 'ke-dialog-bottom';
 		var noButton = null;
@@ -2395,7 +2374,7 @@ KE.dialog = function(arg){
 			bottomDiv.appendChild(btn.span);
 		}
 		if (arg.yesButton || arg.noButton || arg.previewButton) {
-			contentCell.appendChild(bottomDiv);
+			div.appendChild(bottomDiv);
 		}
 		document.body.appendChild(div);
 		KE.event.bind(div, 'mousedown', function(e){}, id);
