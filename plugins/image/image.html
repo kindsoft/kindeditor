@@ -85,6 +85,23 @@
 			.table li label {
 				font-weight:bold;
 			}
+			.upload {
+				position: relative;
+				width: 280px;
+				overflow: hidden;
+			}
+			input.url {
+				width: 200px;
+			}
+			#imgFile {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 70px;
+				z-index: 19811212;
+				filter:alpha(opacity=0);
+				opacity:0;
+			}
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
@@ -98,6 +115,9 @@
 			KE.event.ready(function() {
 				var typeBox = KE.$('type', document);
 				var urlBox = KE.$('url', document);
+				var localUrlBox = KE.$('localUrl', document);
+				var viewServerBox = KE.$('viewServer', document);
+				var viewLocalBox = KE.$('viewLocal', document);
 				var alignElements = document.getElementsByName('align');
 				var fileBox = KE.$('imgFile', document);
 				var widthBox = KE.$('imgWidth', document);
@@ -164,12 +184,7 @@
 					}
 				}
 				if (allowFileManager) {
-					var btn = KE.button({
-						doc : document,
-						text : lang.viewServer
-					});
-					urlBox.parentNode.appendChild(btn.span);
-					KE.event.add(btn.btn, 'click', function () {
+					KE.event.add(viewServerBox, 'click', function () {
 						if (fileManager) return false;
 						fileManager = new KE.dialog({
 							id : id,
@@ -187,8 +202,12 @@
 						fileManager.show();
 					});
 				} else {
+					viewServerBox.style.display = 'none';
 					urlBox.style.width = '300px';
 				}
+				KE.event.add(fileBox, 'change', function() {
+					localUrlBox.value = fileBox.value;
+				});
 				KE.$('uploadForm', document).action = imageUploadJson;
 				KE.$('referMethod', document).value = referMethod;
 				var alignIds = ['default', 'left', 'right'];
@@ -217,6 +236,8 @@
 				defaultImg.alt = defaultImg.title = lang.defaultAlign;
 				leftImg.alt = leftImg.title = lang.leftAlign;
 				rightImg.alt = rightImg.title = lang.rightAlign;
+				viewServerBox.value = lang.viewServer;
+				viewLocalBox.value = lang.viewServer;
 				KE.util.hideLoadingPage(id);
 			}, window, document);
 		</script>
@@ -239,11 +260,20 @@
 					<li>
 						<div id="tab1" style="display:none;">
 							<label for="url" class="ke-inline-block"><span id="lang.remoteUrl"></span></label>&nbsp;
-							<input type="text" id="url" name="url" value="http://" maxlength="255" class="ke-inline-block ke-text-input" style="width:200px;" />
+							<input type="text" id="url" name="url" value="http://" maxlength="255" class="ke-inline-block ke-text-input url" />
+							<span class="ke-button-common ke-button-outer btn">
+								<input type="button" class="ke-button-common ke-button" id="viewServer" value="" />
+							</span>
 						</div>
 						<div id="tab2" style="display:none;">
 							<label for="imgFile" class="ke-inline-block"><span id="lang.localUrl"></span></label>&nbsp;
-							<input type="file" id="imgFile" name="imgFile" class="ke-inline-block" style="width:300px;" />
+							<span class="ke-inline-block upload">
+								<input type="text" id="localUrl" length="255" class="ke-inline-block ke-text-input url" tabindex="-1" readonly="true" />
+								<span class="ke-button-common ke-button-outer btn">
+									<input type="button" class="ke-button-common ke-button" id="viewLocal" value="" tabindex="-1" />
+								</span>
+								<input type="file" id="imgFile" name="imgFile" />
+							</span>
 						</div>
 					</li>
 					<li>
