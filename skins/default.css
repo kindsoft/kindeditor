@@ -815,9 +815,6 @@ span.ke-dialog-empty {
 	left: 2px;
 	text-decoration: none;
 }
-.ke-button:focus {
-	outline: none;
-}
 .ke-text-input {
 	background-color:#FFFFFF;
 	font-family: "sans serif",tahoma,verdana,helvetica;

@@ -38,6 +38,7 @@
 				window.setTimeout(function() {
 					if (KE.browser.IE) iframeDoc.body.contentEditable = 'true';
 					else iframeDoc.designMode = 'on';
+					iframe.contentWindow.focus();
 				}, 0);
 			}, window, document);
 		</script>

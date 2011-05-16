@@ -30,8 +30,10 @@
 			var KE = parent.KindEditor;
 			var id = KE.util.getParam(location.href, 'id');
 			KE.event.ready(function() {
+				var textarea = KE.$('textArea', document);
 				KE.util.pluginLang('plainpaste', document);
 				KE.util.hideLoadingPage(id);
+				textarea.focus();
 			}, window, document);
 		</script>
 	</head>

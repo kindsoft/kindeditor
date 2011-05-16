@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.5 (2011-05-15)
+* @version 3.5.5 (2011-05-16)
 *******************************************************************************/
 
 (function (undefined) {
@@ -14,7 +14,7 @@ if (window.KindEditor !== undefined) return;
 
 var KE = {};
 
-KE.version = '3.5.5 (2011-05-15)';
+KE.version = '3.5.5 (2011-05-16)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2400,8 +2400,6 @@ KE.dialog = function(arg){
 		document.body.appendChild(div);
 		KE.event.bind(div, 'mousedown', function(e){}, id);
 		window.focus();
-		if (yesButton) yesButton.focus();
-		else if (noButton) noButton.focus();
 		if (arg.html !== undefined) {
 			var dialogDoc = KE.util.getIframeDoc(iframe);
 			var html = KE.util.getFullHtml(id);

@@ -98,9 +98,11 @@
 				top: 0;
 				right: 0;
 				width: 70px;
-				z-index: 19811212;
-				filter:alpha(opacity=0);
+				height: 25px;
+				z-index: 811212;
+				border: 0 none;
 				opacity:0;
+				filter:alpha(opacity=0);
 			}
 		</style>
 		<script type="text/javascript">
@@ -111,6 +113,7 @@
 			var allowFileManager = (typeof KE.g[id].allowFileManager == 'undefined') ? false : KE.g[id].allowFileManager;
 			var referMethod = (typeof KE.g[id].referMethod == 'undefined') ? '' : KE.g[id].referMethod;
 			var imageUploadJson = (typeof KE.g[id].imageUploadJson == 'undefined') ? '../../php/upload_json.php' : KE.g[id].imageUploadJson;
+			var imageTabDefault = 0;
 			var lang = KE.lang.plugins.image;
 			KE.event.ready(function() {
 				var typeBox = KE.$('type', document);
@@ -164,7 +167,7 @@
 					typeBox.value = num + 1;
 					KE.$('tab' + (num + 1), document).style.display = '';
 				}
-				selectTab(0);
+				selectTab(imageTabDefault);
 				var imgNode = KE.plugin['image'].getSelectedNode(id);
 				if (imgNode) {
 					var tempDiv = KE.$$('div', KE.g[id].iframeDoc);
@@ -239,6 +242,10 @@
 				viewServerBox.value = lang.viewServer;
 				viewLocalBox.value = lang.viewServer;
 				KE.util.hideLoadingPage(id);
+				if (imageTabDefault == 0) {
+					urlBox.focus();
+					urlBox.select();
+				}
 			}, window, document);
 		</script>
 	</head>

@@ -40,8 +40,11 @@
 			var KE = parent.KindEditor;
 			var id = KE.util.getParam(location.href, 'id');
 			KE.event.ready(function() {
+				var urlBox = KE.$('url', document);
 				KE.util.pluginLang('media', document);
 				KE.util.hideLoadingPage(id);
+				urlBox.focus();
+				urlBox.select();
 			}, window, document);
 		</script>
 	</head>

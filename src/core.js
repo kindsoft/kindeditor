@@ -2391,8 +2391,6 @@ KE.dialog = function(arg){
 		document.body.appendChild(div);
 		KE.event.bind(div, 'mousedown', function(e){}, id);
 		window.focus();
-		if (yesButton) yesButton.focus();
-		else if (noButton) noButton.focus();
 		if (arg.html !== undefined) {
 			var dialogDoc = KE.util.getIframeDoc(iframe);
 			var html = KE.util.getFullHtml(id);
