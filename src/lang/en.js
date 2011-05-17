@@ -5,6 +5,7 @@ KE.langType = 'en';
 
 KE.lang = {
 	source : 'Source',
+	newdoc : 'New Document',
 	preview : 'Preview',
 	undo : 'Undo(Ctrl+Z)',
 	redo : 'Redo(Ctrl+Y)',
@@ -80,6 +81,7 @@ KE.lang = {
 	cutError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+X) instead.',
 	copyError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+C) instead.',
 	pasteError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+V) instead.'
+	newDocumentWarning : 'The action will be clear content, are you sure continue?'
 };
 
 var plugins = KE.lang.plugins = {};

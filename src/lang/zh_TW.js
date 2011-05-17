@@ -5,6 +5,7 @@ KE.langType = 'zh_TW';
 
 KE.lang = {
 	source : '原始碼',
+	newdoc : '開新檔案',
 	preview : '預覽',
 	undo : '復原(Ctrl+Z)',
 	redo : '重複(Ctrl+Y)',
@@ -80,6 +81,7 @@ KE.lang = {
 	cutError : '您的瀏覽器安全設置不允許使用剪下操作，請使用快捷鍵(Ctrl+X)完成。',
 	copyError : '您的瀏覽器安全設置不允許使用剪下操作，請使用快捷鍵(Ctrl+C)完成。',
 	pasteError : '您的瀏覽器安全設置不允許使用剪下操作，請使用快捷鍵(Ctrl+V)完成。'
+	newDocumentWarning : '此操作將清空編輯器內容，真的要繼續嗎？'
 };
 
 var plugins = KE.lang.plugins = {};

@@ -18,6 +18,14 @@ KE.plugin.about = {
 	}
 };
 
+KE.plugin.newdoc = {
+	click : function(id) {
+		if (confirm(KE.lang.newDocumentWarning)) {
+			KE.html(id, '');
+		}
+	}
+};
+
 KE.plugin.preview = {
 	click : function(id) {
 		var dialog = new KE.dialog({

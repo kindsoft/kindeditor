@@ -286,6 +286,11 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-icon-newdoc {
+	background-position: 0px -960px;
+	width: 16px;
+	height: 16px;
+}
 .ke-container {
 	font-family: "sans serif",tahoma,verdana,helvetica;
 	border: 1px solid #CCCCCC;
