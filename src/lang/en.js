@@ -80,7 +80,7 @@ KE.lang = {
 	invalidJson : 'Invalid JSON string.',
 	cutError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+X) instead.',
 	copyError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+C) instead.',
-	pasteError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+V) instead.'
+	pasteError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+V) instead.',
 	newDocumentWarning : 'The action will be clear content, are you sure continue?'
 };
 
@@ -122,9 +122,9 @@ plugins.media = {
 plugins.image = {
 	remoteImage : 'Insert URL',
 	localImage : 'Upload',
-	remoteUrl : 'Image URL',
-	localUrl : 'Image File',
-	size : 'Dimensions',
+	remoteUrl : 'URL',
+	localUrl : 'File',
+	size : 'Size',
 	width : 'Width',
 	height : 'Height',
 	resetSize : 'Reset dimensions',
@@ -152,7 +152,7 @@ plugins.advtable = {
 	cells : 'Cells',
 	rows : 'Rows',
 	cols : 'Columns',
-	size : 'Dimensions',
+	size : 'Size',
 	width : 'Width',
 	height : 'Height',
 	percent : '%',
