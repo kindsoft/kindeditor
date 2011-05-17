@@ -5,6 +5,7 @@ KE.langType = 'en';
 
 KE.lang = {
 	source : 'Source',
+	preview : 'Preview',
 	undo : 'Undo(Ctrl+Z)',
 	redo : 'Redo(Ctrl+Y)',
 	cut : 'Cut(Ctrl+X)',

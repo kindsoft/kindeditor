@@ -26,6 +26,11 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-icon-preview {
+	background-position: 0px -16px;
+	width: 16px;
+	height: 16px;
+}
 .ke-icon-print {
 	background-position: 0px -32px;
 	width: 16px;
@@ -691,6 +696,7 @@
 }
 .ke-dialog-iframe-border {
 	border: 1px solid #A0A0A0;
+	margin-bottom: 5px;
 }
 .ke-dialog-bottom {
 	border:0;

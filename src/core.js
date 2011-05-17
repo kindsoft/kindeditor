@@ -51,7 +51,7 @@ KE.setting = {
 	toolbarLineHeight : 24,
 	statusbarHeight : 11,
 	items : [
-		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'source', '|', 'preview', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', '|', 'selectall', '-',

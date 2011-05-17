@@ -60,7 +60,7 @@ KE.setting = {
 	toolbarLineHeight : 24,
 	statusbarHeight : 11,
 	items : [
-		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'source', '|', 'preview', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', '|', 'selectall', '-',
@@ -3025,6 +3025,7 @@ KE.langType = 'zh_CN';
 
 KE.lang = {
 	source : 'HTML代码',
+	preview : '预览',
 	undo : '后退(Ctrl+Z)',
 	redo : '前进(Ctrl+Y)',
 	cut : '剪切(Ctrl+X)',
@@ -3217,7 +3218,7 @@ plugins.fontname = {
 
 (function (KE, undefined) {
 
-KE.plugin['about'] = {
+KE.plugin.about = {
 	click : function(id) {
 		KE.util.selection(id);
 		var dialog = new KE.dialog({
@@ -3234,7 +3235,23 @@ KE.plugin['about'] = {
 	}
 };
 
-KE.plugin['undo'] = {
+KE.plugin.preview = {
+	click : function(id) {
+		var dialog = new KE.dialog({
+			id : id,
+			cmd : 'preview',
+			html : KE.html(id),
+			width : 700,
+			height : 400,
+			useFrameCSS : true,
+			title : KE.lang['preview'],
+			noButton : KE.lang['close']
+		});
+		dialog.show();
+	}
+};
+
+KE.plugin.undo = {
 	init : function(id) {
 		KE.event.ctrl(KE.g[id].iframeDoc, 'Z', function(e) {
 			KE.plugin['undo'].click(id);
@@ -3251,7 +3268,7 @@ KE.plugin['undo'] = {
 	}
 };
 
-KE.plugin['redo'] = {
+KE.plugin.redo = {
 	init : function(id) {
 		KE.event.ctrl(KE.g[id].iframeDoc, 'Y', function(e) {
 			KE.plugin['redo'].click(id);
@@ -3268,7 +3285,7 @@ KE.plugin['redo'] = {
 	}
 };
 
-KE.plugin['cut'] = {
+KE.plugin.cut = {
 	click : function(id) {
 		try {
 			if (!KE.g[id].iframeDoc.queryCommandSupported('cut')) throw 'e';
@@ -3280,7 +3297,7 @@ KE.plugin['cut'] = {
 	}
 };
 
-KE.plugin['copy'] = {
+KE.plugin.copy = {
 	click : function(id) {
 		try {
 			if (!KE.g[id].iframeDoc.queryCommandSupported('copy')) throw 'e';
@@ -3292,7 +3309,7 @@ KE.plugin['copy'] = {
 	}
 };
 
-KE.plugin['paste'] = {
+KE.plugin.paste = {
 	click : function(id) {
 		try {
 			if (!KE.g[id].iframeDoc.queryCommandSupported('paste')) throw 'e';
@@ -3304,7 +3321,7 @@ KE.plugin['paste'] = {
 	}
 };
 
-KE.plugin['plainpaste'] = {
+KE.plugin.plainpaste = {
 	click : function(id) {
 		KE.util.selection(id);
 		this.dialog = new KE.dialog({
@@ -3336,7 +3353,7 @@ KE.plugin['plainpaste'] = {
 	}
 };
 
-KE.plugin['wordpaste'] = {
+KE.plugin.wordpaste = {
 	click : function(id) {
 		KE.util.selection(id);
 		this.dialog = new KE.dialog({
@@ -3371,7 +3388,7 @@ KE.plugin['wordpaste'] = {
 	}
 };
 
-KE.plugin['fullscreen'] = {
+KE.plugin.fullscreen = {
 	click : function(id) {
 		var g = KE.g[id];
 		var self = this;
@@ -3424,7 +3441,7 @@ KE.plugin['fullscreen'] = {
 	}
 };
 
-KE.plugin['bgcolor'] = {
+KE.plugin.bgcolor = {
 	click : function(id) {
 		KE.util.selection(id);
 		var color = KE.queryCommandValue(KE.g[id].iframeDoc, 'bgcolor');
@@ -3449,7 +3466,7 @@ KE.plugin['bgcolor'] = {
 	}
 };
 
-KE.plugin['fontname'] = {
+KE.plugin.fontname = {
 	click : function(id) {
 		var fontName = KE.lang.plugins.fontname.fontName;
 		var cmd = 'fontname';
@@ -3480,7 +3497,7 @@ KE.plugin['fontname'] = {
 	}
 };
 
-KE.plugin['fontsize'] = {
+KE.plugin.fontsize = {
 	click : function(id) {
 		var fontSize = ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'];
 		var cmd = 'fontsize';
@@ -3519,7 +3536,7 @@ KE.plugin['fontsize'] = {
 	}
 };
 
-KE.plugin['hr'] = {
+KE.plugin.hr = {
 	click : function(id) {
 		KE.util.selection(id);
 		KE.util.insertHtml(id, '<hr />');
@@ -3527,14 +3544,14 @@ KE.plugin['hr'] = {
 	}
 };
 
-KE.plugin['print'] = {
+KE.plugin.print = {
 	click : function(id) {
 		KE.util.selection(id);
 		KE.g[id].iframeWin.print();
 	}
 };
 
-KE.plugin['removeformat'] = {
+KE.plugin.removeformat = {
 	click : function(id) {
 		KE.util.selection(id);
 		var cmd = new KE.cmd(id);
@@ -3551,7 +3568,7 @@ KE.plugin['removeformat'] = {
 	}
 };
 
-KE.plugin['source'] = {
+KE.plugin.source = {
 	click : function(id) {
 		var g = KE.g[id];
 		if (!g.wyswygMode) {
@@ -3576,7 +3593,7 @@ KE.plugin['source'] = {
 	}
 };
 
-KE.plugin['textcolor'] = {
+KE.plugin.textcolor = {
 	click : function(id) {
 		KE.util.selection(id);
 		var color = KE.queryCommandValue(KE.g[id].iframeDoc, 'textcolor');
@@ -3602,7 +3619,7 @@ KE.plugin['textcolor'] = {
 	}
 };
 
-KE.plugin['title'] = {
+KE.plugin.title = {
 	click : function(id) {
 		var lang = KE.lang.plugins.title;
 		var title = {
@@ -3650,7 +3667,7 @@ KE.plugin['title'] = {
 	}
 };
 
-KE.plugin['emoticons'] = {
+KE.plugin.emoticons = {
 	click : function(id) {
 		var self = this,
 			cmd = 'emoticons',
@@ -3777,7 +3794,7 @@ KE.plugin['emoticons'] = {
 	}
 };
 
-KE.plugin['flash'] = {
+KE.plugin.flash = {
 	init : function(id) {
 		var self = this;
 		KE.g[id].getHtmlHooks.push(function(html) {
@@ -3862,7 +3879,7 @@ KE.plugin['flash'] = {
 	}
 };
 
-KE.plugin['image'] = {
+KE.plugin.image = {
 	getSelectedNode : function(id) {
 		var g = KE.g[id];
 		var startNode = g.keRange.startNode;
@@ -4016,7 +4033,7 @@ KE.plugin['image'] = {
 	}
 };
 
-KE.plugin['link'] = {
+KE.plugin.link = {
 	getSelectedNode : function(id) {
 		return KE.getCommonAncestor(KE.g[id].keSel, 'a');
 	},
@@ -4119,7 +4136,7 @@ KE.plugin['link'] = {
 	}
 };
 
-KE.plugin['unlink'] = {
+KE.plugin.unlink = {
 	init : function(id) {
 		var self = this;
 		KE.g[id].contextmenuItems.push({
@@ -4173,7 +4190,7 @@ KE.plugin['unlink'] = {
 	}
 };
 
-KE.plugin['media'] = {
+KE.plugin.media = {
 	init : function(id) {
 		var self = this;
 		var typeHash = {};
@@ -4265,7 +4282,7 @@ KE.plugin['media'] = {
 	}
 };
 
-KE.plugin['advtable'] = {
+KE.plugin.advtable = {
 	getSelectedTable : function(id) {
 		return KE.getCommonAncestor(KE.g[id].keSel, 'table');
 	},
