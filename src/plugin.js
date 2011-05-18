@@ -1086,6 +1086,98 @@ KE.plugin.advtable = {
 	tableprop : function(id) {
 		this.click(id);
 	},
+	tablecellprop : function(id) {
+		var self = this;
+		KE.util.selection(id);
+		var dialog = new KE.dialog({
+			id : id,
+			cmd : 'advtable',
+			file : 'advtable/cell.html',
+			width : 420,
+			height : 150,
+			loadingMode : true,
+			title : KE.lang['tablecell'],
+			yesButton : KE.lang['yes'],
+			noButton : KE.lang['no'],
+			yesClickFn : function(id) {
+				//<td style="width: 100px; height: 100px; text-align: left; vertical-align: top; border-color: rgb(255, 0, 0); background-color: rgb(204, 255, 255); border-style: solid;">
+				var dialogDoc = KE.util.getIframeDoc(dialog.iframe);
+				var widthBox = KE.$('width', dialogDoc);
+				var heightBox = KE.$('height', dialogDoc);
+				var widthTypeBox = KE.$('widthType', dialogDoc);
+				var heightTypeBox = KE.$('heightType', dialogDoc);
+				var textAlignBox = KE.$('textAlign', dialogDoc);
+				var verticalAlignBox = KE.$('verticalAlign', dialogDoc);
+				var borderBox = KE.$('border', dialogDoc);
+				var borderColorBox = KE.$('borderColor', dialogDoc);
+				var backgroundColorBox = KE.$('backgroundColor', dialogDoc);
+				var width = widthBox.value;
+				var height = heightBox.value;
+				var widthType = widthTypeBox.value;
+				var heightType = heightTypeBox.value;
+				var textAlign = textAlignBox.value;
+				var verticalAlign = verticalAlignBox.value;
+				var border = borderBox.value;
+				var borderColor = borderColorBox.innerHTML;
+				var backgroundColor = backgroundColorBox.innerHTML;
+				if (!width.match(/^\d*$/)) {
+					alert(KE.lang['invalidWidth']);
+					widthBox.focus();
+					return false;
+				}
+				if (!height.match(/^\d*$/)) {
+					alert(KE.lang['invalidHeight']);
+					heightBox.focus();
+					return false;
+				}
+				if (!border.match(/^\d*$/)) {
+					alert(KE.lang['invalidBorder']);
+					borderBox.focus();
+					return false;
+				}
+				var cell = self.getSelectedCell(id);
+				if (width !== '') {
+					cell.style.width = width + widthType;
+				} else {
+					cell.style.width = '';
+				}
+				if (height !== '') {
+					cell.style.height = height + heightType;
+				} else {
+					cell.style.height = '';
+				}
+				if (backgroundColor !== '') {
+					cell.style.backgroundColor = backgroundColor;
+				} else {
+					cell.style.backgroundColor = '';
+				}
+				if (textAlign !== '') {
+					cell.style.textAlign = textAlign;
+				} else {
+					cell.style.textAlign = '';
+				}
+				if (verticalAlign !== '') {
+					cell.style.verticalAlign = verticalAlign;
+				} else {
+					cell.style.verticalAlign = '';
+				}
+				if (border !== '') {
+					cell.style.borderWidth = border;
+				} else {
+					cell.style.borderWidth = '';
+				}
+				if (borderColor !== '') {
+					cell.style.borderColor = borderColor;
+				} else {
+					cell.style.borderColor = '';
+				}
+				KE.util.execOnchangeHandler(id);
+				dialog.hide();
+				KE.util.focus(id);
+			}
+		});
+		dialog.show();
+	},
 	tableinsert : function(id) {
 		this.click(id, 'insert');
 	},
@@ -1139,7 +1231,7 @@ KE.plugin.advtable = {
 	init : function(id) {
 		var self = this;
 		var zeroborder = 'ke-zeroborder';
-		var tableCmds = 'prop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,insert,delete'.split(',');
+		var tableCmds = 'prop,cellprop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,insert,delete'.split(',');
 		for (var i = 0, len = tableCmds.length; i < len; i++) {
 			var name = 'table' + tableCmds[i];
 			KE.g[id].contextmenuItems.push({

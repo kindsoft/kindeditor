@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Table</title>
+		<title>Cell</title>
 		<link href="../../skins/default.css" rel="stylesheet" />
 		<style type="text/css" rel="stylesheet">
 			body {
@@ -62,16 +62,12 @@
 			var id = KE.util.getParam(location.href, 'id');
 			var mode = KE.util.getParam(location.href, 'mode');
 			KE.event.ready(function() {
-				var modeBox = KE.$('mode', document);
-				var rowsBox = KE.$('rows', document);
-				var colsBox = KE.$('cols', document);
 				var widthBox = KE.$('width', document);
 				var heightBox = KE.$('height', document);
 				var widthTypeBox = KE.$('widthType', document);
 				var heightTypeBox = KE.$('heightType', document);
-				var paddingBox = KE.$('padding', document);
-				var spacingBox = KE.$('spacing', document);
-				var alignBox = KE.$('align', document);
+				var textAlignBox = KE.$('textAlign', document);
+				var verticalAlignBox = KE.$('verticalAlign', document);
 				var borderBox = KE.$('border', document);
 				var borderColorBox = KE.$('borderColor', document);
 				var backgroundColorBox = KE.$('backgroundColor', document);
@@ -80,60 +76,45 @@
 				widthTypeBox.options[1] = new Option(lang.px, 'px');
 				heightTypeBox.options[0] = new Option(lang.percent, '%');
 				heightTypeBox.options[1] = new Option(lang.px, 'px');
-				alignBox.options[0] = new Option(lang.alignDefault, '');
-				alignBox.options[1] = new Option(lang.alignLeft, 'left');
-				alignBox.options[2] = new Option(lang.alignCenter, 'center');
-				alignBox.options[3] = new Option(lang.alignRight, 'right');
-				var rows = 3;
-				var cols = 2;
-				var width = 100;
+				textAlignBox.options[0] = new Option(lang.alignDefault, '');
+				textAlignBox.options[1] = new Option(lang.alignLeft, 'left');
+				textAlignBox.options[2] = new Option(lang.alignCenter, 'center');
+				textAlignBox.options[3] = new Option(lang.alignRight, 'right');
+				verticalAlignBox.options[0] = new Option(lang.alignDefault, '');
+				verticalAlignBox.options[1] = new Option(lang.alignTop, 'top');
+				verticalAlignBox.options[2] = new Option(lang.alignMiddle, 'middle');
+				verticalAlignBox.options[3] = new Option(lang.alignBottom, 'bottom');
+				verticalAlignBox.options[4] = new Option(lang.alignBaseline, 'baseline');
+				var width = '';
 				var height = '';
-				var widthType = '%';
-				var heightType = '%';
-				var padding = 2;
-				var spacing = 0;
-				var align = '';
-				var border = 1;
-				var borderColor = '#000000';
-				var backgroundColor = '';
-				var table = KE.plugin.advtable.getSelectedTable(id);
-				if (mode === 'default' && table) mode = 'update';
-				if (mode === 'update') {
-					rows = table.rows.length;
-					cols = rows > 0 ? table.rows[0].cells.length : 0;
-					rowsBox.disabled = true;
-					colsBox.disabled = true;
-					var tableWidth = table.style.width || table.width;
-					var tableHeight = table.style.height || table.height;
-					if (tableWidth !== undefined && tableWidth.match(/^(\d+)((?:px|%)*)$/)) {
-						width = RegExp.$1;
-						widthType = RegExp.$2;
-					} else {
-						width = '';
-					}
-					if (tableHeight !== undefined && tableHeight.match(/^(\d+)((?:px|%)*)$/)) {
-						height = RegExp.$1;
-						heightType = RegExp.$2;
-					}
-					padding = table.cellPadding || '';
-					spacing = table.cellSpacing || '';
-					align = table.align || '';
-					border = (table.border === undefined) ? '' : table.border;
-					borderColor = table.getAttribute('borderColor') || '';
-					backgroundColor = table.style.backgroundColor || table.bgColor || '';
-					borderColor = KE.util.rgbToHex(borderColor).toUpperCase();
-					backgroundColor = KE.util.rgbToHex(backgroundColor).toUpperCase();
+				var widthType = 'px';
+				var heightType = 'px';
+				var cell = KE.plugin.advtable.getSelectedCell(id);
+				var cellWidth = cell.style.width || cell.width;
+				var cellHeight = cell.style.height || cell.height;
+				var match;
+				if (cellWidth !== undefined && (match = /^(\d+)((?:px|%)*)$/.exec(cellWidth))) {
+					width = match[1];
+					widthType = match[2];
 				}
-				modeBox.value = mode;
-				rowsBox.value = rows;
-				colsBox.value = cols;
+				if (cellHeight !== undefined && (match = /^(\d+)((?:px|%)*)$/.exec(cellHeight))) {
+					height = match[1];
+					heightType = match[2];
+				}
+				textAlign = cell.style.textAlign || '';
+				verticalAlign = cell.style.verticalAlign || '';
+				border = cell.style.borderWidth || '';
+				if (border) border = parseInt(border);
+				borderColor = cell.style.borderColor || '';
+				backgroundColor = cell.style.backgroundColor || '';
+				borderColor = KE.util.rgbToHex(borderColor).toUpperCase();
+				backgroundColor = KE.util.rgbToHex(backgroundColor).toUpperCase();
 				widthBox.value = width;
 				heightBox.value = height;
 				widthTypeBox.value = widthType;
 				heightTypeBox.value = heightType;
-				paddingBox.value = padding;
-				spacingBox.value = spacing;
-				alignBox.value = align;
+				textAlignBox.value = textAlign;
+				verticalAlignBox.value = verticalAlign;
 				borderBox.value = border;
 				function setColor(el, color) {
 					el.style.backgroundColor = color;
@@ -184,35 +165,25 @@
 				};
 				KE.util.pluginLang('advtable', document);
 				KE.util.hideLoadingPage(id);
-				rowsBox.focus();
-				rowsBox.select();
+				widthBox.focus();
+				widthBox.select();
 			}, window, document);
 		</script>
 	</head>
 	<body>
 		<div class="main">
-			<input type="hidden" id="mode" name="mode" value="" /> 
 			<ul class="table">
-				<li>
-					<label for="rows" class="ke-inline-block"><span id="lang.cells"></span></label>
-					<span id="lang.rows"></span>&nbsp;<input type="text" id="rows" name="rows" value="" maxlength="4" class="ke-inline-block ke-text-input text margin-right-10" />
-					<span id="lang.cols"></span>&nbsp;<input type="text" id="cols" name="cols" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
-				</li>
 				<li>
 					<label for="width" class="ke-inline-block"><span id="lang.size"></span></label>
 					<span id="lang.width"></span>&nbsp;<input type="text" id="width" name="width" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
-					<select id="widthType" name="widthType" class="ke-inline-block margin-right-10"></select>
+					<select id="widthType" name="widthType" align="absmiddle" class="ke-inline-block margin-right-10"></select>
 					<span id="lang.height"></span>&nbsp;<input type="text" id="height" name="height" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
-					<select id="heightType" name="heightType" class="ke-inline-block margin-right-10"></select>
-				</li>
-				<li>
-					<label for="padding" class="ke-inline-block"><span id="lang.space"></span></label>
-					<span id="lang.padding"></span>&nbsp;<input type="text" id="padding" name="padding" value="" maxlength="4" class="ke-inline-block ke-text-input text margin-right-10" />
-					<span id="lang.spacing"></span>&nbsp;<input type="text" id="spacing" name="spacing" value="" maxlength="4" class="ke-inline-block ke-text-input text" />
+					<select id="heightType" name="heightType" align="absmiddle" class="ke-inline-block margin-right-10"></select>
 				</li>
 				<li>
 					<label for="align" class="ke-inline-block"><span id="lang.align"></span></label>
-					<select id="align" name="align" class="ke-inline-block"></select>
+					<span id="lang.textAlign"></span>&nbsp;<select id="textAlign" name="textAlign" class="ke-inline-block margin-right-10"></select>
+					<span id="lang.verticalAlign"></span>&nbsp;<select id="verticalAlign" name="verticalAlign" class="ke-inline-block"></select>
 				</li>
 				<li>
 					<label for="border" class="ke-inline-block"><span id="lang.border"></span></label>

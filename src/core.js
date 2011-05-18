@@ -51,7 +51,7 @@ KE.setting = {
 	toolbarLineHeight : 24,
 	statusbarHeight : 11,
 	items : [
-		'source', '|', 'preview', 'newdoc', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', '|', 'selectall', '-',
@@ -2331,7 +2331,11 @@ KE.dialog = function(arg){
 				clickFn : function() {
 					var stack = KE.g[id].dialogStack;
 					if (stack[stack.length - 1] == self) {
-						KE.plugin[arg.cmd].preview(id);
+						if (arg.previewClickFn) {
+							arg.previewClickFn(id);
+						} else {
+							KE.plugin[arg.cmd].preview(id);
+						}
 					}
 				}
 			});
@@ -2345,7 +2349,11 @@ KE.dialog = function(arg){
 				clickFn : function() {
 					var stack = KE.g[id].dialogStack;
 					if (stack[stack.length - 1] == self) {
-						KE.plugin[arg.cmd].exec(id);
+						if (arg.yesClickFn) {
+							arg.yesClickFn(id);
+						} else {
+							KE.plugin[arg.cmd].exec(id);
+						}
 					}
 				}
 			});
