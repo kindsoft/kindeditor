@@ -184,8 +184,13 @@
 				};
 				KE.util.pluginLang('advtable', document);
 				KE.util.hideLoadingPage(id);
-				rowsBox.focus();
-				rowsBox.select();
+				if (mode === 'update') {
+					widthBox.focus();
+					widthBox.select();
+				} else {
+					rowsBox.focus();
+					rowsBox.select();
+				}
 			}, window, document);
 		</script>
 	</head>
