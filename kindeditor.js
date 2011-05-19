@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.5 (2011-05-17)
+* @version 3.5.5 (2011-05-19)
 *******************************************************************************/
 
 (function (undefined) {
@@ -14,7 +14,7 @@ if (window.KindEditor !== undefined) return;
 
 var KE = {};
 
-KE.version = '3.5.5 (2011-05-17)';
+KE.version = '3.5.5 (2011-05-19)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -60,7 +60,7 @@ KE.setting = {
 	toolbarLineHeight : 24,
 	statusbarHeight : 11,
 	items : [
-		'source', '|', 'preview', 'newdoc', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', '|', 'selectall', '-',
@@ -1149,6 +1149,13 @@ KE.format = {
 		};
 		return KE.util.trim(trimHtml(html));
 	}
+};
+
+KE.attr = function(el, key, val) {
+	if (KE.browser.IE && KE.browser.VERSION < 8 && key.toLowerCase() == 'class') key = 'className';
+	val = '' + val;
+	el.setAttribute(key, val);
+	if (val === '') el.removeAttribute(key);
 };
 
 KE.addClass = function(el, className) {
@@ -2340,7 +2347,11 @@ KE.dialog = function(arg){
 				clickFn : function() {
 					var stack = KE.g[id].dialogStack;
 					if (stack[stack.length - 1] == self) {
-						KE.plugin[arg.cmd].preview(id);
+						if (arg.previewClickFn) {
+							arg.previewClickFn(id);
+						} else {
+							KE.plugin[arg.cmd].preview(id);
+						}
 					}
 				}
 			});
@@ -2354,7 +2365,11 @@ KE.dialog = function(arg){
 				clickFn : function() {
 					var stack = KE.g[id].dialogStack;
 					if (stack[stack.length - 1] == self) {
-						KE.plugin[arg.cmd].exec(id);
+						if (arg.yesClickFn) {
+							arg.yesClickFn(id);
+						} else {
+							KE.plugin[arg.cmd].exec(id);
+						}
 					}
 				}
 			});
@@ -3068,6 +3083,7 @@ KE.lang = {
 	print : '打印',
 	fileManager : '浏览服务器',
 	advtable : '表格',
+	tablecell : '单元格',
 	yes : '确定',
 	no : '取消',
 	close : '关闭',
@@ -3076,6 +3092,7 @@ KE.lang = {
 	editLink : '超级链接属性',
 	deleteLink : '取消超级链接',
 	tableprop : '表格属性',
+	tablecellprop : '单元格属性',
 	tableinsert : '插入表格',
 	tabledelete : '删除表格',
 	tablecolinsertleft : '左侧插入列',
@@ -3172,7 +3189,7 @@ plugins.advtable = {
 	cells : '单元格数',
 	rows : '行数',
 	cols : '列数',
-	size : '表格大小',
+	size : '大小',
 	width : '宽度',
 	height : '高度',
 	percent : '%',
@@ -3181,11 +3198,17 @@ plugins.advtable = {
 	padding : '边距',
 	spacing : '间距',
 	align : '对齐方式',
+	textAlign : '水平对齐',
+	verticalAlign : '垂直对齐',
 	alignDefault : '默认',
 	alignLeft : '左对齐',
 	alignCenter : '居中',
 	alignRight : '右对齐',
-	border : '表格边框',
+	alignTop : '顶部',
+	alignMiddle : '中部',
+	alignBottom : '底部',
+	alignBaseline : '基线',
+	border : '边框',
 	borderWidth : '边框',
 	borderColor : '颜色',
 	backgroundColor : '背景颜色'
@@ -4305,6 +4328,70 @@ KE.plugin.advtable = {
 	tableprop : function(id) {
 		this.click(id);
 	},
+	tablecellprop : function(id) {
+		var self = this;
+		KE.util.selection(id);
+		var dialog = new KE.dialog({
+			id : id,
+			cmd : 'advtable',
+			file : 'advtable/cell.html',
+			width : 420,
+			height : 150,
+			loadingMode : true,
+			title : KE.lang['tablecell'],
+			yesButton : KE.lang['yes'],
+			noButton : KE.lang['no'],
+			yesClickFn : function(id) {
+				var dialogDoc = KE.util.getIframeDoc(dialog.iframe),
+					widthBox = KE.$('width', dialogDoc),
+					heightBox = KE.$('height', dialogDoc),
+					widthTypeBox = KE.$('widthType', dialogDoc),
+					heightTypeBox = KE.$('heightType', dialogDoc),
+					textAlignBox = KE.$('textAlign', dialogDoc),
+					verticalAlignBox = KE.$('verticalAlign', dialogDoc),
+					borderBox = KE.$('border', dialogDoc),
+					borderColorBox = KE.$('borderColor', dialogDoc),
+					backgroundColorBox = KE.$('backgroundColor', dialogDoc),
+					width = widthBox.value,
+					height = heightBox.value,
+					widthType = widthTypeBox.value,
+					heightType = heightTypeBox.value,
+					textAlign = textAlignBox.value,
+					verticalAlign = verticalAlignBox.value,
+					border = borderBox.value,
+					borderColor = borderColorBox.innerHTML,
+					backgroundColor = backgroundColorBox.innerHTML;
+				if (!width.match(/^\d*$/)) {
+					alert(KE.lang['invalidWidth']);
+					widthBox.focus();
+					return false;
+				}
+				if (!height.match(/^\d*$/)) {
+					alert(KE.lang['invalidHeight']);
+					heightBox.focus();
+					return false;
+				}
+				if (!border.match(/^\d*$/)) {
+					alert(KE.lang['invalidBorder']);
+					borderBox.focus();
+					return false;
+				}
+				var cell = self.getSelectedCell(id);
+				cell.style.width = width !== '' ? (width + widthType) : '';
+				cell.style.height = height !== '' ? (height + heightType) : '';
+				cell.style.backgroundColor = backgroundColor;
+				cell.style.textAlign = textAlign;
+				cell.style.verticalAlign = verticalAlign;
+				cell.style.borderWidth = border;
+				cell.style.borderStyle = border !== '' ? 'solid' : '';
+				cell.style.borderColor = borderColor;
+				KE.util.execOnchangeHandler(id);
+				dialog.hide();
+				KE.util.focus(id);
+			}
+		});
+		dialog.show();
+	},
 	tableinsert : function(id) {
 		this.click(id, 'insert');
 	},
@@ -4358,7 +4445,7 @@ KE.plugin.advtable = {
 	init : function(id) {
 		var self = this;
 		var zeroborder = 'ke-zeroborder';
-		var tableCmds = 'prop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,insert,delete'.split(',');
+		var tableCmds = 'prop,cellprop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,insert,delete'.split(',');
 		for (var i = 0, len = tableCmds.length; i < len; i++) {
 			var name = 'table' + tableCmds[i];
 			KE.g[id].contextmenuItems.push({
@@ -4424,33 +4511,33 @@ KE.plugin.advtable = {
 		this.dialog.show();
 	},
 	exec : function(id) {
-		var zeroborder = 'ke-zeroborder';
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var modeBox = KE.$('mode', dialogDoc);
-		var rowsBox = KE.$('rows', dialogDoc);
-		var colsBox = KE.$('cols', dialogDoc);
-		var widthBox = KE.$('width', dialogDoc);
-		var heightBox = KE.$('height', dialogDoc);
-		var widthTypeBox = KE.$('widthType', dialogDoc);
-		var heightTypeBox = KE.$('heightType', dialogDoc);
-		var paddingBox = KE.$('padding', dialogDoc);
-		var spacingBox = KE.$('spacing', dialogDoc);
-		var alignBox = KE.$('align', dialogDoc);
-		var borderBox = KE.$('border', dialogDoc);
-		var borderColorBox = KE.$('borderColor', dialogDoc);
-		var backgroundColorBox = KE.$('backgroundColor', dialogDoc);
-		var rows = rowsBox.value;
-		var cols = colsBox.value;
-		var width = widthBox.value;
-		var height = heightBox.value;
-		var widthType = widthTypeBox.value;
-		var heightType = heightTypeBox.value;
-		var padding = paddingBox.value;
-		var spacing = spacingBox.value;
-		var align = alignBox.value;
-		var border = borderBox.value;
-		var borderColor = borderColorBox.innerHTML;
-		var backgroundColor = backgroundColorBox.innerHTML;
+		var zeroborder = 'ke-zeroborder',
+			dialogDoc = KE.util.getIframeDoc(this.dialog.iframe),
+			modeBox = KE.$('mode', dialogDoc),
+			rowsBox = KE.$('rows', dialogDoc),
+			colsBox = KE.$('cols', dialogDoc),
+			widthBox = KE.$('width', dialogDoc),
+			heightBox = KE.$('height', dialogDoc),
+			widthTypeBox = KE.$('widthType', dialogDoc),
+			heightTypeBox = KE.$('heightType', dialogDoc),
+			paddingBox = KE.$('padding', dialogDoc),
+			spacingBox = KE.$('spacing', dialogDoc),
+			alignBox = KE.$('align', dialogDoc),
+			borderBox = KE.$('border', dialogDoc),
+			borderColorBox = KE.$('borderColor', dialogDoc),
+			backgroundColorBox = KE.$('backgroundColor', dialogDoc),
+			rows = rowsBox.value,
+			cols = colsBox.value,
+			width = widthBox.value,
+			height = heightBox.value,
+			widthType = widthTypeBox.value,
+			heightType = heightTypeBox.value,
+			padding = paddingBox.value,
+			spacing = spacingBox.value,
+			align = alignBox.value,
+			border = borderBox.value,
+			borderColor = borderColorBox.innerHTML,
+			backgroundColor = backgroundColorBox.innerHTML;
 		if (rows == '' || rows == 0 || !rows.match(/^\d*$/)) {
 			alert(KE.lang['invalidRows']);
 			rowsBox.focus();
@@ -4488,60 +4575,22 @@ KE.plugin.advtable = {
 		}
 		if (modeBox.value === 'update') {
 			var table = this.getSelectedTable(id);
-			if (width !== '') {
-				table.style.width = width + widthType;
-			} else if (table.style.width) {
-				table.style.width = '';
-			}
-			if (table.width !== undefined) {
-				table.removeAttribute('width');
-			}
-			if (height !== '') {
-				table.style.height = height + heightType;
-			} else if (table.style.height) {
-				table.style.height = '';
-			}
-			if (table.height !== undefined) {
-				table.removeAttribute('height');
-			}
-			if (backgroundColor !== '') {
-				table.style.backgroundColor = backgroundColor;
-			} else if (table.style.backgroundColor) {
-				table.style.backgroundColor = '';
-			}
-			if (table.bgColor !== undefined) {
-				table.removeAttribute('bgColor');
-			}
-			if (padding !== '') {
-				table.cellPadding = padding;
-			} else {
-				table.removeAttribute('cellPadding');
-			}
-			if (spacing !== '') {
-				table.cellSpacing = spacing;
-			} else {
-				table.removeAttribute('cellSpacing');
-			}
-			if (align !== '') {
-				table.align = align;
-			} else {
-				table.removeAttribute('align');
-			}
+			table.style.width = width !== '' ? (width + widthType) : '';
+			table.style.height = height !== '' ? (height + heightType) : '';
+			table.style.backgroundColor = backgroundColor;
+			KE.attr(table, 'width', '');
+			KE.attr(table, 'height', '');
+			KE.attr(table, 'bgColor', '');
+			KE.attr(table, 'cellPadding', padding);
+			KE.attr(table, 'cellSpacing', spacing);
+			KE.attr(table, 'align', align);
 			if (border === '' || border === '0') {
 				KE.addClass(table, zeroborder);
 			} else {
 				KE.removeClass(table, zeroborder);
 			}
-			if (border !== '') {
-				table.setAttribute('border', border);
-			} else {
-				table.removeAttribute('border');
-			}
-			if (borderColor !== '') {
-				table.setAttribute('borderColor', borderColor);
-			} else {
-				table.removeAttribute('borderColor');
-			}
+			KE.attr(table, 'border', border);
+			KE.attr(table, 'borderColor', borderColor);
 			KE.util.execOnchangeHandler(id);
 		} else {
 			var style = '';

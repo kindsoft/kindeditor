@@ -1100,26 +1100,25 @@ KE.plugin.advtable = {
 			yesButton : KE.lang['yes'],
 			noButton : KE.lang['no'],
 			yesClickFn : function(id) {
-				//<td style="width: 100px; height: 100px; text-align: left; vertical-align: top; border-color: rgb(255, 0, 0); background-color: rgb(204, 255, 255); border-style: solid;">
-				var dialogDoc = KE.util.getIframeDoc(dialog.iframe);
-				var widthBox = KE.$('width', dialogDoc);
-				var heightBox = KE.$('height', dialogDoc);
-				var widthTypeBox = KE.$('widthType', dialogDoc);
-				var heightTypeBox = KE.$('heightType', dialogDoc);
-				var textAlignBox = KE.$('textAlign', dialogDoc);
-				var verticalAlignBox = KE.$('verticalAlign', dialogDoc);
-				var borderBox = KE.$('border', dialogDoc);
-				var borderColorBox = KE.$('borderColor', dialogDoc);
-				var backgroundColorBox = KE.$('backgroundColor', dialogDoc);
-				var width = widthBox.value;
-				var height = heightBox.value;
-				var widthType = widthTypeBox.value;
-				var heightType = heightTypeBox.value;
-				var textAlign = textAlignBox.value;
-				var verticalAlign = verticalAlignBox.value;
-				var border = borderBox.value;
-				var borderColor = borderColorBox.innerHTML;
-				var backgroundColor = backgroundColorBox.innerHTML;
+				var dialogDoc = KE.util.getIframeDoc(dialog.iframe),
+					widthBox = KE.$('width', dialogDoc),
+					heightBox = KE.$('height', dialogDoc),
+					widthTypeBox = KE.$('widthType', dialogDoc),
+					heightTypeBox = KE.$('heightType', dialogDoc),
+					textAlignBox = KE.$('textAlign', dialogDoc),
+					verticalAlignBox = KE.$('verticalAlign', dialogDoc),
+					borderBox = KE.$('border', dialogDoc),
+					borderColorBox = KE.$('borderColor', dialogDoc),
+					backgroundColorBox = KE.$('backgroundColor', dialogDoc),
+					width = widthBox.value,
+					height = heightBox.value,
+					widthType = widthTypeBox.value,
+					heightType = heightTypeBox.value,
+					textAlign = textAlignBox.value,
+					verticalAlign = verticalAlignBox.value,
+					border = borderBox.value,
+					borderColor = borderColorBox.innerHTML,
+					backgroundColor = backgroundColorBox.innerHTML;
 				if (!width.match(/^\d*$/)) {
 					alert(KE.lang['invalidWidth']);
 					widthBox.focus();
@@ -1136,41 +1135,14 @@ KE.plugin.advtable = {
 					return false;
 				}
 				var cell = self.getSelectedCell(id);
-				if (width !== '') {
-					cell.style.width = width + widthType;
-				} else {
-					cell.style.width = '';
-				}
-				if (height !== '') {
-					cell.style.height = height + heightType;
-				} else {
-					cell.style.height = '';
-				}
-				if (backgroundColor !== '') {
-					cell.style.backgroundColor = backgroundColor;
-				} else {
-					cell.style.backgroundColor = '';
-				}
-				if (textAlign !== '') {
-					cell.style.textAlign = textAlign;
-				} else {
-					cell.style.textAlign = '';
-				}
-				if (verticalAlign !== '') {
-					cell.style.verticalAlign = verticalAlign;
-				} else {
-					cell.style.verticalAlign = '';
-				}
-				if (border !== '') {
-					cell.style.borderWidth = border;
-				} else {
-					cell.style.borderWidth = '';
-				}
-				if (borderColor !== '') {
-					cell.style.borderColor = borderColor;
-				} else {
-					cell.style.borderColor = '';
-				}
+				cell.style.width = width !== '' ? (width + widthType) : '';
+				cell.style.height = height !== '' ? (height + heightType) : '';
+				cell.style.backgroundColor = backgroundColor;
+				cell.style.textAlign = textAlign;
+				cell.style.verticalAlign = verticalAlign;
+				cell.style.borderWidth = border;
+				cell.style.borderStyle = border !== '' ? 'solid' : '';
+				cell.style.borderColor = borderColor;
 				KE.util.execOnchangeHandler(id);
 				dialog.hide();
 				KE.util.focus(id);
@@ -1297,33 +1269,33 @@ KE.plugin.advtable = {
 		this.dialog.show();
 	},
 	exec : function(id) {
-		var zeroborder = 'ke-zeroborder';
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var modeBox = KE.$('mode', dialogDoc);
-		var rowsBox = KE.$('rows', dialogDoc);
-		var colsBox = KE.$('cols', dialogDoc);
-		var widthBox = KE.$('width', dialogDoc);
-		var heightBox = KE.$('height', dialogDoc);
-		var widthTypeBox = KE.$('widthType', dialogDoc);
-		var heightTypeBox = KE.$('heightType', dialogDoc);
-		var paddingBox = KE.$('padding', dialogDoc);
-		var spacingBox = KE.$('spacing', dialogDoc);
-		var alignBox = KE.$('align', dialogDoc);
-		var borderBox = KE.$('border', dialogDoc);
-		var borderColorBox = KE.$('borderColor', dialogDoc);
-		var backgroundColorBox = KE.$('backgroundColor', dialogDoc);
-		var rows = rowsBox.value;
-		var cols = colsBox.value;
-		var width = widthBox.value;
-		var height = heightBox.value;
-		var widthType = widthTypeBox.value;
-		var heightType = heightTypeBox.value;
-		var padding = paddingBox.value;
-		var spacing = spacingBox.value;
-		var align = alignBox.value;
-		var border = borderBox.value;
-		var borderColor = borderColorBox.innerHTML;
-		var backgroundColor = backgroundColorBox.innerHTML;
+		var zeroborder = 'ke-zeroborder',
+			dialogDoc = KE.util.getIframeDoc(this.dialog.iframe),
+			modeBox = KE.$('mode', dialogDoc),
+			rowsBox = KE.$('rows', dialogDoc),
+			colsBox = KE.$('cols', dialogDoc),
+			widthBox = KE.$('width', dialogDoc),
+			heightBox = KE.$('height', dialogDoc),
+			widthTypeBox = KE.$('widthType', dialogDoc),
+			heightTypeBox = KE.$('heightType', dialogDoc),
+			paddingBox = KE.$('padding', dialogDoc),
+			spacingBox = KE.$('spacing', dialogDoc),
+			alignBox = KE.$('align', dialogDoc),
+			borderBox = KE.$('border', dialogDoc),
+			borderColorBox = KE.$('borderColor', dialogDoc),
+			backgroundColorBox = KE.$('backgroundColor', dialogDoc),
+			rows = rowsBox.value,
+			cols = colsBox.value,
+			width = widthBox.value,
+			height = heightBox.value,
+			widthType = widthTypeBox.value,
+			heightType = heightTypeBox.value,
+			padding = paddingBox.value,
+			spacing = spacingBox.value,
+			align = alignBox.value,
+			border = borderBox.value,
+			borderColor = borderColorBox.innerHTML,
+			backgroundColor = backgroundColorBox.innerHTML;
 		if (rows == '' || rows == 0 || !rows.match(/^\d*$/)) {
 			alert(KE.lang['invalidRows']);
 			rowsBox.focus();
@@ -1361,60 +1333,22 @@ KE.plugin.advtable = {
 		}
 		if (modeBox.value === 'update') {
 			var table = this.getSelectedTable(id);
-			if (width !== '') {
-				table.style.width = width + widthType;
-			} else if (table.style.width) {
-				table.style.width = '';
-			}
-			if (table.width !== undefined) {
-				table.removeAttribute('width');
-			}
-			if (height !== '') {
-				table.style.height = height + heightType;
-			} else if (table.style.height) {
-				table.style.height = '';
-			}
-			if (table.height !== undefined) {
-				table.removeAttribute('height');
-			}
-			if (backgroundColor !== '') {
-				table.style.backgroundColor = backgroundColor;
-			} else if (table.style.backgroundColor) {
-				table.style.backgroundColor = '';
-			}
-			if (table.bgColor !== undefined) {
-				table.removeAttribute('bgColor');
-			}
-			if (padding !== '') {
-				table.cellPadding = padding;
-			} else {
-				table.removeAttribute('cellPadding');
-			}
-			if (spacing !== '') {
-				table.cellSpacing = spacing;
-			} else {
-				table.removeAttribute('cellSpacing');
-			}
-			if (align !== '') {
-				table.align = align;
-			} else {
-				table.removeAttribute('align');
-			}
+			table.style.width = width !== '' ? (width + widthType) : '';
+			table.style.height = height !== '' ? (height + heightType) : '';
+			table.style.backgroundColor = backgroundColor;
+			KE.attr(table, 'width', '');
+			KE.attr(table, 'height', '');
+			KE.attr(table, 'bgColor', '');
+			KE.attr(table, 'cellPadding', padding);
+			KE.attr(table, 'cellSpacing', spacing);
+			KE.attr(table, 'align', align);
 			if (border === '' || border === '0') {
 				KE.addClass(table, zeroborder);
 			} else {
 				KE.removeClass(table, zeroborder);
 			}
-			if (border !== '') {
-				table.setAttribute('border', border);
-			} else {
-				table.removeAttribute('border');
-			}
-			if (borderColor !== '') {
-				table.setAttribute('borderColor', borderColor);
-			} else {
-				table.removeAttribute('borderColor');
-			}
+			KE.attr(table, 'border', border);
+			KE.attr(table, 'borderColor', borderColor);
 			KE.util.execOnchangeHandler(id);
 		} else {
 			var style = '';

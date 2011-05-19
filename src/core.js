@@ -1142,6 +1142,13 @@ KE.format = {
 	}
 };
 
+KE.attr = function(el, key, val) {
+	if (KE.browser.IE && KE.browser.VERSION < 8 && key.toLowerCase() == 'class') key = 'className';
+	val = '' + val;
+	el.setAttribute(key, val);
+	if (val === '') el.removeAttribute(key);
+};
+
 KE.addClass = function(el, className) {
 	if (typeof el == 'object') {
 		var cls = el.className;
