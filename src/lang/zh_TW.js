@@ -5,8 +5,6 @@ KE.langType = 'zh_TW';
 
 KE.lang = {
 	source : '原始碼',
-	newdoc : '開新檔案',
-	preview : '預覽',
 	undo : '復原(Ctrl+Z)',
 	redo : '重複(Ctrl+Y)',
 	cut : '剪下(Ctrl+X)',

@@ -18,30 +18,6 @@ KE.plugin.about = {
 	}
 };
 
-KE.plugin.newdoc = {
-	click : function(id) {
-		if (confirm(KE.lang.newDocumentWarning)) {
-			KE.html(id, '');
-		}
-	}
-};
-
-KE.plugin.preview = {
-	click : function(id) {
-		var dialog = new KE.dialog({
-			id : id,
-			cmd : 'preview',
-			html : KE.html(id),
-			width : 700,
-			height : 400,
-			useFrameCSS : true,
-			title : KE.lang['preview'],
-			noButton : KE.lang['close']
-		});
-		dialog.show();
-	}
-};
-
 KE.plugin.undo = {
 	init : function(id) {
 		KE.event.ctrl(KE.g[id].iframeDoc, 'Z', function(e) {

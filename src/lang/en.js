@@ -5,8 +5,6 @@ KE.langType = 'en';
 
 KE.lang = {
 	source : 'Source',
-	newdoc : 'New Document',
-	preview : 'Preview',
 	undo : 'Undo(Ctrl+Z)',
 	redo : 'Redo(Ctrl+Y)',
 	cut : 'Cut(Ctrl+X)',

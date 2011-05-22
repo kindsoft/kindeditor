@@ -5,8 +5,6 @@ KE.langType = 'zh_CN';
 
 KE.lang = {
 	source : 'HTML代码',
-	newdoc : '新建',
-	preview : '预览',
 	undo : '后退(Ctrl+Z)',
 	redo : '前进(Ctrl+Y)',
 	cut : '剪切(Ctrl+X)',

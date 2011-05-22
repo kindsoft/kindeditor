@@ -26,11 +26,6 @@
 	width: 16px;
 	height: 16px;
 }
-.ke-icon-preview {
-	background-position: 0px -16px;
-	width: 16px;
-	height: 16px;
-}
 .ke-icon-print {
 	background-position: 0px -32px;
 	width: 16px;
@@ -283,11 +278,6 @@
 }
 .ke-icon-checked {
 	background-position: 0px -944px;
-	width: 16px;
-	height: 16px;
-}
-.ke-icon-newdoc {
-	background-position: 0px -960px;
 	width: 16px;
 	height: 16px;
 }
