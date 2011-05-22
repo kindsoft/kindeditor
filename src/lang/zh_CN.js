@@ -80,8 +80,7 @@ KE.lang = {
 	invalidJson : '服务器发生故障。',
 	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
 	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
-	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。',
-	newDocumentWarning : '此操作将清空编辑器内容，真的要继续吗？'
+	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
 };
 
 var plugins = KE.lang.plugins = {};
