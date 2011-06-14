@@ -162,7 +162,7 @@ KE.plugin.fullscreen = {
 		var resetSize = function() {
 			var el = KE.util.getDocumentElement();
 			g.width = el.clientWidth + 'px';
-			g.height = (el.clientHeight - 6) + 'px';
+			g.height = (el.clientHeight - (KE.util.inArray('-', g.items) ? 4 : 6)) + 'px';
 		};
 		var windowSize = '';
 		var resizeListener = function() {
