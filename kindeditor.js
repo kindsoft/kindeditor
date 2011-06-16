@@ -4028,6 +4028,7 @@ KE.plugin.image = {
 					if (data.error === 0) {
 						var url = KE.format.getUrl(data.url, 'absolute');
 						self.insert(id, url, title, width, height, 0, align);
+						if (KE.g[id].afterUpload) KE.g[id].afterUpload(id, url);
 					} else {
 						alert(data.message);
 						return false;
