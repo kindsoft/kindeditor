@@ -291,6 +291,10 @@
 	padding:0;
 	margin:0;
 }
+.ke-container a:hover {
+	text-decoration: none;
+	background: transparent none repeat scroll 0% 0%;
+}
 .ke-toolbar-outer {
 	border: 0;
 	padding: 0;
