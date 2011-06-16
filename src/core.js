@@ -2918,11 +2918,20 @@ KE.create = function(id, mode) {
 	KE.g[id].width = width;
 	KE.g[id].height = height;
 	KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-		if (KE.g[id].resizeMode == 2) KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
-		else if (KE.g[id].resizeMode == 1) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+		if (KE.g[id].resizeMode == 2) {
+			KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
+		} else if (KE.g[id].resizeMode == 1) {
+			KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+		}
+		if (KE.g[id].resizeMode > 0) {
+			if (KE.g[id].afterDrag) KE.g[id].afterDrag(id);
+		}
 	});
 	KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-		if (KE.g[id].resizeMode > 0) KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+		if (KE.g[id].resizeMode > 0) {
+			KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+			if (KE.g[id].afterDrag) KE.g[id].afterDrag(id);
+		}
 	});
 	KE.each(KE.plugin, function(cmd, plugin) {
 		if (plugin.init) plugin.init(id);
