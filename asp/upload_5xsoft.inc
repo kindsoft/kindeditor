@@ -57,7 +57,7 @@ Private Sub Class_Initialize
 	Data_5xsoft.CopyTo tStream,iInfoEnd-iFormStart
 	tStream.Position = 0
 	tStream.Type = 2
-	tStream.Charset ="gb2312"
+	tStream.Charset ="UTF-8"
 	sInfo = tStream.ReadText
 	tStream.Close
 	'取得表单项目名称
@@ -94,7 +94,7 @@ Private Sub Class_Initialize
 		Data_5xsoft.CopyTo tStream,iFormStart-iInfoEnd-3
 		tStream.Position = 0
 		tStream.Type = 2
-		tStream.Charset ="gb2312"
+		tStream.Charset ="UTF-8"
 	        sFormValue = tStream.ReadText 
 	        tStream.Close
 		if objForm.Exists(sFormName) then
