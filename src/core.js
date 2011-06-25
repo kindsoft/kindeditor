@@ -418,7 +418,10 @@ KE.selection = function(doc) {
 						this.range.setEndPoint('StartToStart', getEndRange(true));
 						this.range.setEndPoint('EndToStart', getEndRange(false));
 					}
-					this.range.select();
+					// IE9发生错误
+					try {
+						this.range.select();
+					} catch(e) {}
 				}
 			}
 		} else {
@@ -450,7 +453,10 @@ KE.selection = function(doc) {
 		}
 	};
 	this.focus = function() {
-		if (KE.browser.IE && this.range != null) this.range.select();
+		// IE9发生错误
+		try {
+			if (KE.browser.IE && this.range != null) this.range.select();
+		} catch(e) {}
 	}
 };
 
@@ -618,8 +624,9 @@ KE.range = function(doc) {
 		function extractTextNode(node, startPos, endPos) {
 			var length = node.nodeValue.length;
 			var cloneNode = node.cloneNode(true);
-			var centerNode = cloneNode.splitText(startPos);
-			centerNode.splitText(endPos - startPos);
+			var centerNode = cloneNode;
+			if (startPos > 0) centerNode = cloneNode.splitText(startPos);
+			if (endPos < length) centerNode.splitText(endPos - startPos);
 			if (isDelete) {
 				var center = node;
 				if (startPos > 0) center = node.splitText(startPos);

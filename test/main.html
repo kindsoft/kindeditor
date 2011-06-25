@@ -21,9 +21,9 @@
 				id : 'content1',
 				skinsPath : '../skins/',
 				pluginsPath : '../plugins/',
-				newlineTag : 'br',
 				allowFileManager : true,
 				useContextmenu : true,
+				syncType : 'auto',
 				afterChange : function(id) {
 					KE.$('content_html').value = KE.$(id).value;
 				},
