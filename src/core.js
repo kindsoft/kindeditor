@@ -2248,8 +2248,8 @@ KE.dialog = function(arg){
 		this.show();
 	};
 	this.hide = function() {
-		if (this.beforeHide) this.beforeHide(id);
 		var id = arg.id;
+		if (this.beforeHide) this.beforeHide(id);
 		var stack = KE.g[id].dialogStack;
 		if (stack[stack.length - 1] != this) return;
 		var dialog = stack.pop();

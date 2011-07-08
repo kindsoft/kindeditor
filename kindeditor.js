@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.5 (2011-06-25)
+* @version 3.5.5 (2011-07-08)
 *******************************************************************************/
 
 (function (undefined) {
@@ -14,7 +14,7 @@ if (window.KindEditor !== undefined) return;
 
 var KE = {};
 
-KE.version = '3.5.5 (2011-06-25)';
+KE.version = '3.5.5 (2011-07-08)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -2257,8 +2257,8 @@ KE.dialog = function(arg){
 		this.show();
 	};
 	this.hide = function() {
-		if (this.beforeHide) this.beforeHide(id);
 		var id = arg.id;
+		if (this.beforeHide) this.beforeHide(id);
 		var stack = KE.g[id].dialogStack;
 		if (stack[stack.length - 1] != this) return;
 		var dialog = stack.pop();
