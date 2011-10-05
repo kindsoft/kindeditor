@@ -2981,7 +2981,7 @@ _extend(KCmd, {
 	},
 	removeformat : function() {
 		var map = {
-			'*' : '.font-weight,.font-style,.text-decoration,.color,.background-color,.font-size,.font-family'
+			'*' : '.font-weight,.font-style,.text-decoration,.color,.background-color,.font-size,.font-family,.text-indent'
 		},
 		tags = _STYLE_TAG_MAP;
 		_each(tags, function(key, val) {
