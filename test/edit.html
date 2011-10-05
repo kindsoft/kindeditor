@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Edit Test</title>
+		<link rel="stylesheet" href="../lib/qunit/qunit.css" />
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<style>
+			textarea {
+				display: block;
+				width: 600px;
+				height: 200px;
+			}
+			.ke-edit-iframe {
+				border: 1px solid #A0A0A0;
+			}
+		</style>
+		<!-- <script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script> -->
+		<script src="../lib/qunit/qunit.js"></script>
+		<script src="../lib/jquery.js"></script>
+		<!-- include src files -->
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/range.js"></script>
+		<script src="../src/cmd.js"></script>
+		<script src="../src/widget.js"></script>
+		<script src="../src/edit.js"></script>
+	</head>
+	<body>
+		<h1>KindEditor Edit Test</h1>
+		<div id="edit"></div>
+		<textarea name="content" cols="100" rows="20">
+<p>测试</p>
+<p><span style="font-size:32px;"><strong><strong>测试abc</strong>e</strong>fg</span></p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+<p><span style="font-weight:bold;">测试</span></p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+<p>测试</p>
+</textarea>
+		<br />
+		<div id="cmdArea"></div>
+		<br />
+		<br />
+		<input type="button" id="create" value="Create" />
+		<input type="button" id="remove" value="Remove" />
+		<input type="button" id="design" value="Design Mode" />
+		<input type="button" id="source" value="Source Mode" />
+		<input type="button" id="toggle" value="Toggle Mode" />
+		<script src="edit.js"></script>
+	</body>
+</html>

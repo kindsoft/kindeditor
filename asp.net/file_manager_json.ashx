@@ -34,19 +34,33 @@ public class FileManager : IHttpHandler
 		String currentDirPath = "";
 		String moveupDirPath = "";
 
+		String dirPath = context.Server.MapPath(rootPath);
+		String dirName = context.Request.QueryString["dir"];
+		if (!String.IsNullOrEmpty(dirName)) {
+			if (Array.IndexOf("image,flash,media,file".Split(','), dirName) == -1) {
+				context.Response.Write("Invalid Directory name.");
+				context.Response.End();
+			}
+			dirPath += dirName + "/";
+			rootUrl += dirName + "/";
+			if (!Directory.Exists(dirPath)) {
+				Directory.CreateDirectory(dirPath);
+			}
+		}
+
 		//根据path参数，设置各路径和URL
 		String path = context.Request.QueryString["path"];
 		path = String.IsNullOrEmpty(path) ? "" : path;
 		if (path == "")
 		{
-			currentPath = context.Server.MapPath(rootPath);
+			currentPath = dirPath;
 			currentUrl = rootUrl;
 			currentDirPath = "";
 			moveupDirPath = "";
 		}
 		else
 		{
-			currentPath = context.Server.MapPath(rootPath) + path;
+			currentPath = dirPath + path;
 			currentUrl = rootUrl + path;
 			currentDirPath = path;
 			moveupDirPath = Regex.Replace(currentDirPath, @"(.*?)[^\/]+\/$", "$1");

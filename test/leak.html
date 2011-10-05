@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Memory Leak Test</title>
+		<script src="../lib/jquery.js"></script>
+		<!-- include src files -->
+		<script src="../src/core.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/main.js"></script>
+	</head>
+	<body>
+		<input type="button" id="create" name="create" value="Create" />
+		<input type="button" id="remove" name="remove" value="Remove" />
+		<script>
+			var knode, jnode, node;
+			$('#create').bind('click', function(e) {
+				//knode = K.node('<div>abc</div>');
+				node = document.createElement('div');
+				//document.body.appendChild(node);
+				node.innerHTML = 'abc';
+				//jnode = $('<div>abc</div>').appendTo(document.body);
+			});
+			$('#remove').bind('click', function(e) {
+				//knode.remove();
+				//node.innerHTML = '';
+				//document.body.removeChild(node);
+				node.innerHTML = '';
+				node = null;
+				//jnode.remove();
+			});
+		</script>
+	</body>
+</html>

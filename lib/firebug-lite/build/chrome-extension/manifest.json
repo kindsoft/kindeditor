@@ -1,0 +1,34 @@
+{
+  "name": "Firebug Lite for Google Chrome",
+  "version": "1.3.2.9760",
+  "description": "Firebug Lite for Google Chrome, supported by the Firebug Working Group.",
+  "background_page": "background.html",
+  "browser_action":
+  {
+    "default_icon": "firebug24_disabled.png",
+    "default_title": "Firebug Lite 1.3.2"
+  },
+  "icons":
+  {
+    "128": "firebug128.png",
+    "16": "firebug16.png",
+    "32": "firebug32.png",
+    "48": "firebug48.png"
+  },
+  "content_scripts":
+  [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["contentScript.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions":
+  [
+    "tabs", 
+    "http://*/*", 
+    "https://*/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ]
+}

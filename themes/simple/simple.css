@@ -1,0 +1,148 @@
+/* container */
+.ke-container-simple {
+	display: block;
+	border: 1px solid #CCC;
+	background-color: #FFF;
+	overflow: hidden;
+}
+/* toolbar */
+.ke-container-simple .ke-toolbar {
+	border-bottom: 1px solid #CCC;
+	background-color: #FFF;
+	padding: 2px 5px;
+	overflow: hidden;
+}
+.ke-container-simple .ke-toolbar .ke-outline {
+	border: 1px solid #FFF;
+	background-color: transparent;
+	margin: 1px;
+	padding: 1px 2px;
+	font-size: 0;
+	line-height: 0;
+	overflow: hidden;
+	cursor: pointer;
+}
+.ke-container-simple .ke-toolbar .ke-on {
+	border: 1px solid #5690D2;
+}
+.ke-container-simple .ke-toolbar .ke-selected {
+	border: 1px solid #5690D2;
+	background-color: #E9EFF6;
+}
+.ke-container-simple .ke-toolbar  .ke-disabled {
+	cursor: default;
+}
+/* statusbar */
+.ke-container-simple .ke-statusbar {
+	position: relative;
+	background-color: #FFF;
+	border-top: 1px solid #CCCCCC;
+	font-size: 0;
+	line-height: 0;
+	*height: 12px;
+	overflow: hidden;
+	text-align: center;
+	cursor: s-resize;
+}
+/* menu */
+.ke-menu-simple {
+	border: 1px solid #A0A0A0;
+	background-color: #FFF;
+	color: #222222;
+	padding: 2px;
+	font-family: "sans serif",tahoma,verdana,helvetica;
+	font-size: 12px;
+	text-align: left;
+	overflow: hidden;
+}
+.ke-menu-simple .ke-menu-item {
+	border: 1px solid #FFF;
+	background-color: #FFF;
+	color: #222222;
+	height: 24px;
+	overflow: hidden;
+	cursor: pointer;
+}
+.ke-menu-simple .ke-menu-item-on {
+	border: 1px solid #5690D2;
+	background-color: #FFF;
+}
+/* colorpicker */
+.ke-colorpicker-simple {
+	border: 1px solid #A0A0A0;
+	background-color: #FEFEFE;
+	color: #222222;
+	padding: 2px;
+}
+.ke-colorpicker-simple .ke-colorpicker-cell {
+	font-size: 0;
+	line-height: 0;
+	border: 1px solid #FEFEFE;
+	cursor: pointer;
+	margin:3px;
+	padding:0;
+}
+.ke-colorpicker-simple .ke-colorpicker-cell-top {
+	font-family: "sans serif",tahoma,verdana,helvetica;
+	font-size: 12px;
+	line-height: 24px;
+	border: 1px solid #FEFEFE;
+	cursor: pointer;
+	margin:0;
+	padding:0;
+	text-align: center;
+}
+.ke-colorpicker-simple .ke-colorpicker-cell-on {
+	border: 1px solid #5690D2;
+}
+.ke-colorpicker-simple .ke-colorpicker-cell-selected {
+	border: 1px solid #2446AB;
+}
+/* dialog */
+.ke-dialog-simple {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	color: #333;
+	background-color: #FFF;
+}
+.ke-dialog-simple .ke-dialog-header {
+	border:0;
+	margin:0;
+	background-color: #FFF;
+	padding: 10px;
+	text-align: left;
+	font: 14px/1 "sans serif",tahoma,verdana,helvetica;
+	font-weight: bold;
+	color: #222222;
+	cursor: move;
+}
+/* tabs */
+.ke-dialog-simple .ke-tabs {
+	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
+	border-bottom:1px solid #A0A0A0;
+	padding-left:5px;
+	margin-bottom:10px;
+}
+.ke-dialog-simple .ke-tabs-li {
+	position: relative;
+	border: 1px solid #A0A0A0;
+	background-color: #F0F0EE;
+	margin: 0 2px -1px 0;
+	padding: 0 20px;
+	float: left;
+	line-height: 25px;
+	text-align: center;
+	color: #555;
+	cursor: pointer;
+}
+.ke-dialog-simple .ke-tabs-li-selected {
+	background-color: #FFF;
+	border-bottom: 1px solid #FFF;
+	color: #000;
+	cursor: default;
+}
+.ke-dialog-simple .ke-tabs-li-on {
+	background-color: #FFF;
+	color: #000;
+}

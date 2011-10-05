@@ -25,10 +25,17 @@ public class Upload : IHttpHandler
 		
 		//文件保存目录路径
 		String savePath = "../attached/";
+
 		//文件保存目录URL
 		String saveUrl = aspxUrl + "../attached/";
+
 		//定义允许上传的文件扩展名
-		String fileTypes = "gif,jpg,jpeg,png,bmp";
+		Hashtable extTable = new Hashtable();
+		extTable.Add("image", "gif,jpg,jpeg,png,bmp");
+		extTable.Add("flash", "swf,flv");
+		extTable.Add("media", "swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
+		extTable.Add("file", "doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2");
+
 		//最大文件大小
 		int maxSize = 1000000;
 		this.context = context;
@@ -45,20 +52,33 @@ public class Upload : IHttpHandler
 			showError("上传目录不存在。");
 		}
 
+		String dirName = context.Request.QueryString["dir"];
+		if (String.IsNullOrEmpty(dirName)) {
+			dirName = "image";
+		}
+		if (!extTable.ContainsKey(dirName)) {
+			showError("目录名不正确。");
+		}
+
 		String fileName = imgFile.FileName;
 		String fileExt = Path.GetExtension(fileName).ToLower();
-		ArrayList fileTypeList = ArrayList.Adapter(fileTypes.Split(','));
 
 		if (imgFile.InputStream == null || imgFile.InputStream.Length > maxSize)
 		{
 			showError("上传文件大小超过限制。");
 		}
 
-		if (String.IsNullOrEmpty(fileExt) || Array.IndexOf(fileTypes.Split(','), fileExt.Substring(1).ToLower()) == -1)
+		if (String.IsNullOrEmpty(fileExt) || Array.IndexOf(((String)extTable[dirName]).Split(','), fileExt.Substring(1).ToLower()) == -1)
 		{
-			showError("上传文件扩展名是不允许的扩展名。");
+			showError("上传文件扩展名是不允许的扩展名。\n只允许" + ((String)extTable[dirName]) + "格式。");
 		}
 
+		//创建文件夹
+		dirPath += dirName + "/";
+		saveUrl += dirName + "/";
+		if (!Directory.Exists(dirPath)) {
+			Directory.CreateDirectory(dirPath);
+		}
 		String ymd = DateTime.Now.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo);
 		dirPath += ymd + "/";
 		saveUrl += ymd + "/";

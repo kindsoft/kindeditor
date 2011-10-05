@@ -1,27 +1,61 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>event test</title>
-  <script type="text/javascript" charset="utf-8" src="./../kindeditor.js"></script>
-  <script type="text/javascript">
-	KE.event.ready(function() {
-		var keyStr = '1,2,3,4,5,6,7,8,9,13,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z';
-		var keys = keyStr.split(',');
-		for (var i = 0, len = keys.length; i < len; i++) {
-			var key = keys[i];
-			KE.event.ctrl(document, key, (function(key) {
-				return function(e) {
-					var name = (key == 13) ? 'Enter' : key.toUpperCase();
-					KE.$('output').value = 'Ctrl+' + name;
-				}
-			})(key));
-		}
-	});
-  </script>
-</head>
-<body>
-	<h3>event test</h3>
-	<input type="text" id="output" value="" style="width:300px;" />
-</body>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Event Test</title>
+		<link rel="stylesheet" href="../lib/qunit/qunit.css" />
+		<style>
+			textarea {
+				display: block;
+				width: 600px;
+				height: 200px;
+			}
+			.ke-iframe {
+				border: 1px solid #A0A0A0;
+			}
+		</style>
+		<script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script>
+		<script src="../lib/qunit/qunit.js"></script>
+		<!-- include src files -->
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+	</head>
+	<body>
+		<h1 id="qunit-header">KindEditor Event Test</h1>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<br />
+		outer event: <select id="outerEvent">
+			<option value="none" selected="selected">none</option>
+			<option value="click">click</option>
+			<option value="mousedown">mousedown</option>
+			<option value="mouseover">mouseover</option>
+			<option value="mouseout">mouseout</option>
+			<option value="contextmenu">contextmenu</option>
+		</select>
+		inner event: <select id="innerEvent">
+			<option value="none" selected="selected">none</option>
+			<option value="click">click</option>
+			<option value="mousedown">mousedown</option>
+			<option value="mouseover">mouseover</option>
+			<option value="mouseout">mouseout</option>
+			<option value="contextmenu">contextmenu</option>
+			<option value="keyup">keyup</option>
+		</select>
+		event method: <select id="eventMethod">
+			<option value="none" selected="selected">none</option>
+			<option value="stopPropagation">stopPropagation</option>
+			<option value="preventDefault">preventDefault</option>
+			<option value="stop">stop</option>
+		</select>
+		<div id="outerDiv" style="margin:10px;padding:10px;border:1px solid #000;width:400px;">
+			<textarea id="innerDiv" style="display:block;margin:10px;padding:10px;width:80%;height:100px;border:1px solid #000;"></textarea>
+		</div>
+		<div id="test-data-01" style="display:none;"></div>
+		<script src="event.js"></script>
+	</body>
 </html>

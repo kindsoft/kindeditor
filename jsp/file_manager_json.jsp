@@ -19,6 +19,19 @@ String rootUrl  = request.getContextPath() + "/attached/";
 //图片扩展名
 String[] fileTypes = new String[]{"gif", "jpg", "jpeg", "png", "bmp"};
 
+String dirName = request.getParameter("dir");
+if (dirName != null) {
+	if(!Arrays.<String>asList(new String[]{"image", "flash", "media", "file"}).contains(dirName)){
+		out.println("Invalid Directory name.");
+		return;
+	}
+	rootPath += dirName + "/";
+	rootUrl += dirName + "/";
+	File saveDirFile = new File(rootPath);
+	if (!saveDirFile.exists()) {
+		saveDirFile.mkdirs();
+	}
+}
 //根据path参数，设置各路径和URL
 String path = request.getParameter("path") != null ? request.getParameter("path") : "";
 String currentPath = rootPath + path;

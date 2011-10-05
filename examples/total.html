@@ -1,0 +1,545 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Examples</title>
+		<style>
+			.ke-tabs-example li {
+				padding: 0 5px;
+			}
+			.ke-icon-example1 {
+				background-image: url(../skins/default/default.gif);
+				background-position: 0px -672px;
+				width: 16px;
+				height: 16px;
+			}
+			.ke-icon-example2 {
+				background-image: url(../skins/default/default.gif);
+				background-position: 0px -672px;
+				width: 16px;
+				height: 16px;
+			}
+		</style>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<link rel="stylesheet" href="../themes/simple/simple.css" />
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			// 自定义插件 #1
+			KindEditor.lang({
+				example1 : '插入HTML'
+			});
+			KindEditor.plugin('example1', function(K) {
+				var self = this, name = 'example1';
+				self.clickToolbar(name, function() {
+					self.insertHtml('<strong>测试内容</strong>');
+				});
+			});
+			// 自定义插件 #2
+			KindEditor.lang({
+				example2 : 'CLASS样式'
+			});
+			KindEditor.plugin('example2', function(K) {
+				var self = this, name = 'example2';
+				function click(value) {
+					var cmd = self.cmd;
+					if (value === 'adv_strikethrough') {
+						cmd.wrap('<span style="background-color:#e53333;text-decoration:line-through;"></span>');
+					} else {
+						cmd.wrap('<span class="' + value + '"></span>');
+					}
+					cmd.select();
+					self.hideMenu();
+				}
+				self.clickToolbar(name, function() {
+					var menu = self.createMenu({
+						name : name,
+						width : 150
+					});
+					menu.addItem({
+						title : '红底白字',
+						click : function() {
+							click('red');
+						}
+					});
+					menu.addItem({
+						title : '绿底白字',
+						click : function() {
+							click('green');
+						}
+					});
+					menu.addItem({
+						title : '黄底白字',
+						click : function() {
+							click('yellow');
+						}
+					});
+					menu.addItem({
+						title : '自定义删除线',
+						click : function() {
+							click('adv_strikethrough');
+						}
+					});
+				});
+			});
+			function getParam(url, name) {
+				return url.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? unescape(RegExp.$1) : '';
+			}
+			KindEditor.ready(function(K) {
+				var tabTitleList = ['默认模式', '简单模式', '异步加载', '多语言', '只读模式', '回车换行设置', '统计字数', 'HTML过滤', 'URL设置', '自定义风格', '自定义插件'];
+				var optionMap = {
+					'content0' : {
+						cssPath : '../plugins/code/prettify.css',
+						allowFileManager : true
+					},
+					'content1' : {
+						cssPath : '../plugins/code/prettify.css',
+						resizeType : 1,
+						allowPreviewEmoticons : false,
+						allowImageUpload : false,
+						items : [
+							'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+							'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+							'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+					},
+					'content2' : {
+						cssPath : '../plugins/code/prettify.css',
+						basePath : '../'
+					},
+					'content3' : {
+						cssPath : '../plugins/code/prettify.css',
+						langType : 'en'
+					},
+					'content4' : {
+						cssPath : '../plugins/code/prettify.css',
+						readonlyMode : true
+					},
+					'content5' : {
+						cssPath : '../plugins/code/prettify.css',
+						newlineTag : 'br'
+					},
+					'content6' : {
+						cssPath : '../plugins/code/prettify.css',
+						afterChange : function() {
+							K('#tab6 .word_count1').html(this.count());
+							K('#tab6 .word_count2').html(this.count('text'));
+						}
+					},
+					'content7' : {
+						cssPath : '../plugins/code/prettify.css',
+						filterMode : true
+					},
+					'content8' : {
+						cssPath : '../plugins/code/prettify.css',
+						urlType : ''
+					},
+					'content9' : {
+						cssPath : '../plugins/code/prettify.css',
+						themeType : 'simple'
+					},
+					'content10' : {
+						cssPath : ['../plugins/code/prettify.css', 'index.css'],
+						items : ['source', 'removeformat', 'example1', 'example2']
+					}
+				};
+				var editor = null;
+				var tabs = K.tabs({
+					src : K('#tabs'),
+					cls : 'ke-tabs-example',
+					afterSelect : function(i) {
+						if (editor) {
+							editor.remove();
+							editor = null;
+						}
+						if (i == 2) {
+							return;
+						}
+						editor = K.create('#tab' + i + ' textarea[name=content]', optionMap['content' + i]);
+					}
+				});
+				K.each(tabTitleList, function(i, title) {
+					tabs.add({
+						title : title,
+						panel : K('#tab' + i)
+					});
+				})
+				var index = parseInt(getParam(location.href, 'tab') || 0, 10);
+				tabs.select(index);
+				K('#tab' + index).show();
+				
+				K('#tab0 input[name=getHtml]').click(function(e) {
+					alert(editor.html());
+				});
+				K('#tab0 input[name=isEmpty]').click(function(e) {
+					alert(editor.isEmpty());
+				});
+				K('#tab0 input[name=getText]').click(function(e) {
+					alert(editor.text());
+				});
+				K('#tab0 input[name=selectedHtml]').click(function(e) {
+					alert(editor.selectedHtml());
+				});
+				K('#tab0 input[name=setHtml]').click(function(e) {
+					editor.html('<h3>Hello KindEditor</h3>');
+				});
+				K('#tab0 input[name=setText]').click(function(e) {
+					editor.text('<h3>Hello KindEditor</h3>');
+				});
+				K('#tab0 input[name=insertHtml]').click(function(e) {
+					editor.insertHtml('<strong>插入HTML</strong>');
+				});
+				K('#tab0 input[name=appendHtml]').click(function(e) {
+					editor.appendHtml('<strong>添加HTML</strong>');
+				});
+				K('#tab0 input[name=clear]').click(function(e) {
+					editor.html('');
+				});
+
+				K('#tab2 input[name=load]').click(function() {
+					K.loadScript('../kindeditor.js', function() {
+						editor = K.create('#tab2 textarea', optionMap.content2);
+					});
+				});
+				K('#tab2 input[name=remove]').click(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+				});
+
+				K('#tab3 select[name=lang]').change(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+					optionMap.content3.langType = this.value;
+					editor = K.create('#tab3 textarea', optionMap.content3);
+				});
+
+				K('#tab4 input[name=readonly]').click(function() {
+					editor.readonly();
+				});
+				K('#tab4 input[name=cancel]').click(function() {
+					editor.readonly(false);
+				});
+				
+				K('#tab5 select[name=newlineTag]').change(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+					optionMap.content5.newlineTag = this.value;
+					editor = K.create('#tab5 textarea', optionMap.content5);
+				});
+
+				K('#tab8 select[name=urlType]').change(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+					optionMap.content8.urlType = this.value;
+					editor = K.create('#tab8 textarea', optionMap.content8);
+				});
+
+				K('#tab9 select[name=themeType]').change(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+					optionMap.content9.themeType = this.value;
+					editor = K.create('#tab9 textarea', optionMap.content9);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="tabs"></div>
+
+		<!-- 默认模式 -->
+		<div id="tab0" style="display:none;">
+			<form>
+			<textarea name="content" style="width:800px;height:400px;visibility:hidden;">
+<p>
+	引入文件:
+</p>
+<pre class="prettyprint">
+&amp;lt;link rel="stylesheet" href="../themes/default/default.css" /&amp;gt;
+&amp;lt;script charset="utf-8" src="../kindeditor.js"&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script charset="utf-8" src="../lang/zh_CN.js"&amp;gt;&amp;lt;/script&amp;gt;
+</pre>
+<p>
+	JavaScript代码:
+</p>
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	K.create('textarea[name="content"]', {
+		allowFileManager : true
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+			<p>
+				<input type="button" name="getHtml" value="取得HTML" />
+				<input type="button" name="isEmpty" value="判断是否为空" />
+				<input type="button" name="getText" value="取得文本(包含img,embed)" />
+				<input type="button" name="selectedHtml" value="取得选中HTML" />
+				<br />
+				<br />
+				<input type="button" name="setHtml" value="设置HTML" />
+				<input type="button" name="setText" value="设置文本" />
+				<input type="button" name="insertHtml" value="插入HTML" />
+				<input type="button" name="appendHtml" value="添加HTML" />
+				<input type="button" name="clear" value="清空内容" />
+				<input type="reset" name="reset" value="Reset" />
+			</p>
+			</form>
+		</div>
+
+		<!-- 简单模式 -->
+		<div id="tab1" style="display:none;">
+			<textarea name="content" style="width:700px;height:300px;visibility:hidden;">
+<p>
+	引入文件:
+</p>
+<pre class="prettyprint">
+&amp;lt;link rel="stylesheet" href="../themes/default/default.css" /&amp;gt;
+&amp;lt;script charset="utf-8" src="../kindeditor.js"&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script charset="utf-8" src="../lang/zh_CN.js"&amp;gt;&amp;lt;/script&amp;gt;
+</pre>
+<p>
+	JavaScript代码:
+</p>
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	K.create('textarea[name="content"]', {
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : false,
+		items : [
+			'fontname', 'fontsize', '|', 'textcolor', 'bgcolor', 'bold', 'italic', 'underline',
+			'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+			'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+		</div>
+
+		<!-- 异步加载 -->
+		<div id="tab2" style="display:none;">
+			<textarea name="content" style="width:800px;height:400px;">
+引入文件:
+<pre class="prettyprint">
+&amp;lt;link rel="stylesheet" href="../themes/default/default.css" /&amp;gt;
+</pre>
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.loadScript('../kindeditor.js', function() {
+	KindEditor.create('#tab2 textarea');
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+			<p>
+				<input type="button" name="load" value="加载JS并创建编辑器" />
+				<input type="button" name="remove" value="删除编辑器" />
+			</p>
+		</div>
+
+		<!-- 多语言 -->
+		<div id="tab3" style="display:none;">
+			<p>
+			<select name="lang">
+				<option value="en">English</option>
+				<option value="zh_CN">简体中文</option>
+				<option value="zh_TW">繁體中文</option>
+			</select>
+			</p>
+			<textarea name="content" style="width:800px;height:400px;">
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	// English: langType : 'en'
+	// 简体中文: langType : 'zh_CN'
+	// 繁體中文: langType : 'zh_TW'
+	K.create('textarea[name="content"]', {
+		langType : 'en'
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+		</div>
+
+		<!-- 只读模式 -->
+		<div id="tab4" style="display:none;">
+			<textarea name="content" style="width:800px;height:400px;">
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content"]', {
+		readonlyMode : true
+	});
+	// 设置成只读状态
+	K('#tab4 input[name=readonly]').click(function() {
+		editor.readonly();
+	});
+	// 取消只读状态
+	K('#tab4 input[name=cancel]').click(function() {
+		editor.readonly(false);
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+			<p>
+				<input type="button" name="readonly" value="设置成只读状态" />
+				<input type="button" name="cancel" value="取消只读状态" />
+			</p>
+		</div>
+
+		<!-- 回车换行设置 -->
+		<div id="tab5" style="display:none;">
+			<p>
+			<select name="newlineTag">
+				<option value="br">BR换行</option>
+				<option value="p">P换行</option>
+			</select>
+			</p>
+			<textarea name="content" style="width:800px;height:400px;">
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	// P换行: newlineTag : 'p'
+	// BR换行: newlineTag : 'br'
+	K.create('textarea[name="content"]', {
+		newlineTag : 'br'
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+		</div>
+		
+		<!-- 统计字数 -->
+		<div id="tab6" style="display:none;">
+			<textarea name="content" style="width:800px;height:400px;">
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	K.create('textarea[name="content"]', {
+		afterChange : function() {
+			K('#tab6 .word_count1').html(this.count());
+			K('#tab6 .word_count2').html(this.count('text'));
+		}
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+			<br />
+			您当前输入了 <span class="word_count1">0</span> 个文字。（字数统计包含HTML代码。）<br />
+			您当前输入了 <span class="word_count2">0</span> 个文字。（字数统计包含纯文本、IMG、EMBED，不包含换行符，IMG和EMBED算一个文字。）
+		</div>
+		
+		<!-- HTML过滤 -->
+		<div id="tab7" style="display:none;">
+			<textarea name="content" style="width:800px;height:400px;">
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	K.create('textarea[name="content"]', {
+		filterMode : true
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+		</div>
+		
+		
+		<!-- URL设置 -->
+		<div id="tab8" style="display:none;">
+			<p>
+			<select name="urlType">
+				<option value="">URL保持不变</option>
+				<option value="relative">相对URL</option>
+				<option value="absolute">不带域名的绝对URL</option>
+				<option value="domain">带域名的绝对URL</option>
+			</select>
+			</p>
+			<textarea name="content" style="width:800px;height:400px;">
+<p>
+内部连接：<img border="0" src="../plugins/emoticons/images/0.gif" /><br />
+外部连接：<img border="0" alt="" src="http://img1.cache.netease.com/img09/logo/logo.gif" /><br />
+内部超级连接：<a href="demo-19.html" target="_blank">点击这里</a><br />
+外部超级连接：<a href="http://www.163.com/" target="_blank">点击这里</a><br />
+</p>
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	// URL保持不变: urlType : ''
+	// 相对URL: urlType : 'relative'
+	// 不带域名的绝对URL: urlType : 'absolute'
+	// 带域名的绝对URL: urlType : 'domain'
+	K.create('textarea[name="content"]', {
+		urlType : ''
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+		</div>
+		
+		<!-- 自定义风格 -->
+		<div id="tab9" style="display:none;">
+			<p>
+			<select name="themeType">
+				<option value="simple">简单风格</option>
+				<option value="default">默认风格</option>
+			</select>
+			</p>
+			<textarea name="content" style="width:800px;height:400px;">
+JavaScript代码:
+<pre class="prettyprint">
+KindEditor.ready(function(K) {
+	// 简单风格: themeType : 'simple'
+	// 默认风格: themeType : 'default'
+	K.create('textarea[name="content"]', {
+		themeType : 'simple'
+	});
+});
+</pre>
+<p>
+	&nbsp;
+</p>
+			</textarea>
+		</div>
+		
+		<!-- 自定义插件 -->
+		<div id="tab10" style="display:none;">
+			<textarea name="content" style="width:800px;height:400px;"></textarea>
+		</div>
+
+	</body>
+</html>

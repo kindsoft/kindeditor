@@ -19,6 +19,20 @@ $root_url = $php_url . '../attached/';
 //图片扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 
+//目录名
+$dir_name = empty($_GET['dir']) ? '' : trim($_GET['dir']);
+if (!in_array($dir_name, array('', 'image', 'flash', 'media', 'file'))) {
+	echo "Invalid Directory name.";
+	exit;
+}
+if ($dir_name !== '') {
+	$root_path .= $dir_name . "/";
+	$root_url .= $dir_name . "/";
+	if (!file_exists($root_path)) {
+		mkdir($root_path);
+	}
+}
+
 //根据path参数，设置各路径和URL
 if (empty($_GET['path'])) {
 	$current_path = realpath($root_path) . '/';
@@ -31,6 +45,7 @@ if (empty($_GET['path'])) {
 	$current_dir_path = $_GET['path'];
 	$moveup_dir_path = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
 }
+echo realpath($root_path);
 //排序形式，name or size or type
 $order = empty($_GET['order']) ? 'name' : strtolower($_GET['order']);
 

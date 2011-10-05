@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Tabs Test</title>
+		<link rel="stylesheet" href="../lib/qunit/qunit.css" />
+		<script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script>
+		<script src="../lib/qunit/qunit.js"></script>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script src="../src/core.js"></script>
+		<script src="../src/ajax.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+	</head>
+	<body>
+		<h1>KindEditor Unittest</h1>
+		<input type="button" id="load" value="Load widget.js" />
+		<script>
+			K('#load').click(function() {
+				K.loadScript('../src/widget.js', function() {
+					console.log(K.isFunction(K.widget));
+				});
+			});
+		</script>
+	</body>
+</html>

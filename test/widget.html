@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Widget Test</title>
+		<link rel="stylesheet" href="../lib/qunit/qunit.css" />
+		<style>
+			textarea {
+				display: block;
+				width: 600px;
+				height: 200px;
+			}
+			iframe {
+				border: 1px solid #A0A0A0;
+				width : 1200px;
+				height : 1200px;
+			}
+		</style>
+		<!-- <script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script> -->
+		<script src="../lib/qunit/qunit.js"></script>
+		<script src="../lib/jquery.js"></script>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/range.js"></script>
+		<script src="../src/cmd.js"></script>
+		<script src="../src/widget.js"></script>
+	</head>
+	<body>
+		<h1>KindEditor Widget Test</h1>
+		<input type="button" id="create" value="Create" />
+		<input type="button" id="remove" value="Remove" />
+		<br />
+		<br />
+		<iframe></iframe>
+		<script>
+			var widget = null;
+			K('#create').click(function() {
+				if (!widget) {
+					widget = K.widget({
+						z : 100,
+						width : 200,
+						height : 100,
+						html : '<strong>abc</strong>123<strong>abc</strong><strong>abc</strong>',
+						css : {
+							border : '1px solid #A0A0A0',
+							background : '#F0F0F0'
+						}
+					}).draggable();
+				}
+			});
+			K('#remove').click(function() {
+				if (widget) {
+					widget.remove();
+					widget = null;
+				}
+			});
+		</script>
+	</body>
+</html>

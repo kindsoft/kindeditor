@@ -1,90 +1,270 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2011 Longhao Luo
+* Copyright (C) 2006-2011 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
-* @site http://www.kindsoft.net/
+* @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 3.5.5 (2011-07-08)
+* @version 4.0.1 (2011-10-03)
 *******************************************************************************/
-
-(function (undefined) {
-
-if (window.KindEditor !== undefined) return;
-
-var KE = {};
-
-KE.version = '3.5.5 (2011-07-08)';
-
-KE.scriptPath = (function() {
-	var elements = document.getElementsByTagName('script');
-	for (var i = 0, len = elements.length; i < len; i++) {
-		var src = elements[i].src;
-		if (src && src.match(/kindeditor[\w\-\.]*\.js/)) {
+(function (window, undefined) {
+	if (window.KindEditor) {
+		return;
+	}
+var _VERSION = '4.0.1 (2011-10-03)',
+	_ua = navigator.userAgent.toLowerCase(),
+	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
+	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
+	_WEBKIT = _ua.indexOf('applewebkit') > -1,
+	_OPERA = _ua.indexOf('opera') > -1,
+	_MOBILE = _ua.indexOf('mobile') > -1,
+	_QUIRKS = document.compatMode != 'CSS1Compat',
+	_matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua),
+	_V = _matches ? _matches[1] : '0',
+	_TIME = new Date().getTime();
+function _isArray(val) {
+	if (!val) {
+		return false;
+	}
+	return Object.prototype.toString.call(val) === '[object Array]';
+}
+function _isFunction(val) {
+	if (!val) {
+		return false;
+	}
+	return Object.prototype.toString.call(val) === '[object Function]';
+}
+function _inArray(val, arr) {
+	for (var i = 0, len = arr.length; i < len; i++) {
+		if (val === arr[i]) {
+			return i;
+		}
+	}
+	return -1;
+}
+function _each(obj, fn) {
+	if (_isArray(obj)) {
+		for (var i = 0, len = obj.length; i < len; i++) {
+			if (fn.call(obj[i], i, obj[i]) === false) {
+				break;
+			}
+		}
+	} else {
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				if (fn.call(obj[key], key, obj[key]) === false) {
+					break;
+				}
+			}
+		}
+	}
+}
+function _trim(str) {
+	return str.replace(/(?:^[ \t\n\r]+)|(?:[ \t\n\r]+$)/g, '');
+}
+function _inString(val, str, delimiter) {
+	delimiter = delimiter === undefined ? ',' : delimiter;
+	return (delimiter + str + delimiter).indexOf(delimiter + val + delimiter) >= 0;
+}
+function _addUnit(val, unit) {
+	unit = unit || 'px';
+	return val && /^\d+$/.test(val) ? val + 'px' : val;
+}
+function _removeUnit(val) {
+	var match;
+	return val && (match = /(\d+)/.exec(val)) ? parseInt(match[1], 10) : 0;
+}
+function _escape(val) {
+	return val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function _unescape(val) {
+	return val.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+}
+function _toCamel(str) {
+	var arr = str.split('-');
+	str = '';
+	_each(arr, function(key, val) {
+		str += (key > 0) ? val.charAt(0).toUpperCase() + val.substr(1) : val;
+	});
+	return str;
+}
+function _toHex(val) {
+	function hex(d) {
+		var s = parseInt(d, 10).toString(16).toUpperCase();
+		return s.length > 1 ? s : '0' + s;
+	}
+	return val.replace(/rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/ig,
+		function($0, $1, $2, $3) {
+			return '#' + hex($1) + hex($2) + hex($3);
+		}
+	);
+}
+function _toMap(val, delimiter) {
+	delimiter = delimiter === undefined ? ',' : delimiter;
+	var map = {}, arr = _isArray(val) ? val : val.split(delimiter), match;
+	_each(arr, function(key, val) {
+		if ((match = /^(\d+)\.\.(\d+)$/.exec(val))) {
+			for (var i = parseInt(match[1], 10); i <= parseInt(match[2], 10); i++) {
+				map[i.toString()] = true;
+			}
+		} else {
+			map[val] = true;
+		}
+	});
+	return map;
+}
+function _toArray(obj, offset) {
+	return Array.prototype.slice.call(obj, offset || 0);
+}
+function _undef(val, defaultVal) {
+	return val === undefined ? defaultVal : val;
+}
+function _invalidUrl(url) {
+	return !url || /[<>"]/.test(url);
+}
+function _addParam(url, param) {
+	return url.indexOf('?') >= 0 ? url + '&' + param : url + '?' + param;
+}
+function _extend(child, parent, proto) {
+	if (!proto) {
+		proto = parent;
+		parent = null;
+	}
+	var childProto;
+	if (parent) {
+		var fn = function () {};
+		fn.prototype = parent.prototype;
+		childProto = new fn();
+		_each(proto, function(key, val) {
+			childProto[key] = val;
+		});
+	} else {
+		childProto = proto;
+	}
+	childProto.constructor = child;
+	child.prototype = childProto;
+	child.parent = parent ? parent.prototype : null;
+}
+function _json(text) {
+	var match;
+	if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
+		text = match[0];
+	}
+	var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	cx.lastIndex = 0;
+	if (cx.test(text)) {
+		text = text.replace(cx, function (a) {
+			return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+		});
+	}
+	if (/^[\],:{}\s]*$/.
+	test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+	replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+	replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+		return eval('(' + text + ')');
+	}
+	throw 'JSON parse error';
+}
+var _round = Math.round;
+var K = {
+	DEBUG : false,
+	VERSION : _VERSION,
+	IE : _IE,
+	GECKO : _GECKO,
+	WEBKIT : _WEBKIT,
+	OPERA : _OPERA,
+	V : _V,
+	TIME : _TIME,
+	each : _each,
+	isArray : _isArray,
+	isFunction : _isFunction,
+	inArray : _inArray,
+	inString : _inString,
+	trim : _trim,
+	addUnit : _addUnit,
+	removeUnit : _removeUnit,
+	escape : _escape,
+	unescape : _unescape,
+	toCamel : _toCamel,
+	toHex : _toHex,
+	toMap : _toMap,
+	toArray : _toArray,
+	undef : _undef,
+	invalidUrl : _invalidUrl,
+	addParam : _addParam,
+	extend : _extend,
+	json : _json
+};
+var _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,img,input,ins,kbd,label,map,q,s,samp,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'),
+	_BLOCK_TAG_MAP = _toMap('address,applet,blockquote,body,center,dd,del,dir,div,dl,dt,fieldset,form,frameset,h1,h2,h3,h4,h5,h6,head,hr,html,iframe,ins,isindex,li,map,menu,meta,noframes,noscript,object,ol,p,pre,script,style,table,tbody,td,tfoot,th,thead,title,tr,ul'),
+	_SINGLE_TAG_MAP = _toMap('area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed'),
+	_STYLE_TAG_MAP = _toMap('b,basefont,big,del,em,font,i,s,small,span,strike,strong,sub,sup,u'),
+	_CONTROL_TAG_MAP = _toMap('img,table,input,textarea,button'),
+	_PRE_TAG_MAP = _toMap('pre,style,script'),
+	_NOSPLIT_TAG_MAP = _toMap('html,head,body,td,tr,table,ol,ul,li'),
+	_AUTOCLOSE_TAG_MAP = _toMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr'),
+	_FILL_ATTR_MAP = _toMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'),
+	_VALUE_TAG_MAP = _toMap('input,button,textarea,select');
+function _getBasePath() {
+	var els = document.getElementsByTagName('script'), src;
+	for (var i = 0, len = els.length; i < len; i++) {
+		src = els[i].src || '';
+		if (/kindeditor[\w\-\.]*\.js/.test(src)) {
 			return src.substring(0, src.lastIndexOf('/') + 1);
 		}
 	}
 	return '';
-})();
-
-KE.browser = (function() {
-	var ua = navigator.userAgent.toLowerCase();
-	return {
-		VERSION: ua.match(/(msie|firefox|webkit|opera)[\/:\s](\d+)/) ? RegExp.$2 : '0',
-		IE: (ua.indexOf('msie') > -1 && ua.indexOf('opera') == -1),
-		GECKO: (ua.indexOf('gecko') > -1 && ua.indexOf('khtml') == -1),
-		WEBKIT: (ua.indexOf('applewebkit') > -1),
-		OPERA: (ua.indexOf('opera') > -1)
-	};
-})();
-
-KE.setting = {
-	wyswygMode : true,
-	loadStyleMode : true,
-	resizeMode : 2,
+}
+K.basePath = _getBasePath();
+K.options = {
+	designMode : true,
+	fullscreenMode : false,
 	filterMode : false,
-	autoSetDataMode : false,
+	wellFormatMode : true,
 	shadowMode : true,
-	useContextmenu : true,
+	loadStyleMode : true,
+	basePath : K.basePath,
+	themesPath : K.basePath + 'themes/',
+	langPath : K.basePath + 'lang/',
+	pluginsPath : K.basePath + 'plugins/',
+	themeType : 'default',
+	langType : 'zh_CN',
 	urlType : '',
-	skinType : 'default',
-	syncType : 'form',
 	newlineTag : 'p',
+	resizeType : 2,
+	syncType : 'form',
+	pasteType : 2,
 	dialogAlignType : 'page',
+	useContextmenu : true,
+	bodyClass : 'ke-content',
+	indentChar : '\t',
 	cssPath : '',
-	skinsPath : KE.scriptPath + 'skins/',
-	pluginsPath : KE.scriptPath + 'plugins/',
-	minWidth : 200,
+	cssData : '',
+	minWidth : 650,
 	minHeight : 100,
 	minChangeSize : 5,
-	toolbarLineHeight : 24,
-	statusbarHeight : 11,
 	items : [
-		'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-		'superscript', '|', 'selectall', '-',
-		'title', 'fontname', 'fontsize', '|', 'textcolor', 'bgcolor', 'bold',
-		'italic', 'underline', 'strikethrough', 'removeformat', '|', 'image',
-		'flash', 'media', 'advtable', 'hr', 'emoticons', 'link', 'unlink', '|', 'about'
+		'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+		'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
+		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'map', 'code', 'pagebreak', 'anchor', 'link', 'unlink', '|', 'about'
 	],
+	noDisableItems : ['source', 'fullscreen'],
 	colorTable : [
 		['#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500'],
 		['#009900', '#006600', '#99BB00', '#B8D100', '#60D978', '#00D5FF'],
 		['#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE'],
 		['#FFFFFF', '#CCCCCC', '#999999', '#666666', '#333333', '#000000']
 	],
-	noEndTags : ['br', 'hr', 'img', 'area', 'col', 'embed', 'input', 'param'],
-	inlineTags : ['b', 'del', 'em', 'font', 'i', 'span', 'strike', 'strong', 'sub', 'sup', 'u'],
-	endlineTags : [
-		'br', 'hr', 'table', 'tbody', 'td', 'tr', 'th', 'div', 'p', 'ol', 'ul',
-		'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'script', 'style', 'marquee'
-	],
+	fontSizeTable : ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'],
 	htmlTags : {
 		font : ['color', 'size', 'face', '.background-color'],
 		span : [
 			'.color', '.background-color', '.font-size', '.font-family', '.background',
-			'.font-weight', '.font-style', '.text-decoration', '.vertical-align'
+			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
 		],
 		div : [
 			'align', '.border', '.margin', '.padding', '.text-align', '.color',
@@ -95,4529 +275,5245 @@ KE.setting = {
 			'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
 			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
 			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
-			'.width', '.height'
+			'.width', '.height', '.border-collapse'
 		],
 		'td,th': [
 			'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
 			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
-			'.font-style', '.text-decoration', '.vertical-align', '.background'
+			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
 		a : ['href', 'target', 'name'],
-		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', '/'],
-		img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height', '/'],
-		hr : ['/'],
-		br : ['/'],
+		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+		img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
 		],
-		'tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
+		pre : ['class'],
+		'hr,br,tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
 	},
-	mediaTypes : {
-		rm : 'audio/x-pn-realaudio-plugin',
-		flash : 'application/x-shockwave-flash',
-		media : 'video/x-ms-asf-plugin'
-	},
-	afterTab : function(id) {
-		KE.util.setSelection(id);
-		KE.util.insertHtml(id, '&nbsp;&nbsp;&nbsp;&nbsp;');
+	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
+};
+var _useCapture = false;
+var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
+var _CURSORMOVE_KEY_MAP = _toMap('33..40');
+var _CHANGE_KEY_MAP = {};
+_each(_INPUT_KEY_MAP, function(key, val) {
+	_CHANGE_KEY_MAP[key] = val;
+});
+_each(_CURSORMOVE_KEY_MAP, function(key, val) {
+	_CHANGE_KEY_MAP[key] = val;
+});
+function _bindEvent(el, type, fn) {
+	if (el.addEventListener){
+		el.addEventListener(type, fn, _useCapture);
+	} else if (el.attachEvent){
+		el.attachEvent('on' + type, fn);
 	}
-};
-
-KE.g = {};
-
-KE.plugin = {};
-
-KE.$ = function(id, doc){
-	var doc = doc || document;
-	return doc.getElementById(id);
-};
-
-KE.$$ = function(name, doc){
-	var doc = doc || document;
-	return doc.createElement(name);
-};
-
-KE.event = {
-	add : function(el, type, fn, id) {
-		if (el.addEventListener){
-			el.addEventListener(type, fn, false);
-		} else if (el.attachEvent){
-			el.attachEvent('on' + type, fn);
+}
+function _unbindEvent(el, type, fn) {
+	if (el.removeEventListener){
+		el.removeEventListener(type, fn, _useCapture);
+	} else if (el.detachEvent){
+		el.detachEvent('on' + type, fn);
+	}
+}
+var _EVENT_PROPS = ('altKey,attrChange,attrName,bubbles,button,cancelable,charCode,clientX,clientY,ctrlKey,currentTarget,' +
+	'data,detail,eventPhase,fromElement,handler,keyCode,layerX,layerY,metaKey,newValue,offsetX,offsetY,originalTarget,pageX,' +
+	'pageY,prevValue,relatedNode,relatedTarget,screenX,screenY,shiftKey,srcElement,target,toElement,view,wheelDelta,which').split(',');
+function KEvent(el, event) {
+	this.init(el, event);
+}
+_extend(KEvent, {
+	init : function(el, event) {
+		var self = this, doc = el.ownerDocument || el.document || el;
+		self.event = event;
+		_each(_EVENT_PROPS, function(key, val) {
+			self[val] = event[val];
+		});
+		if (!self.target) {
+			self.target = self.srcElement || doc;
 		}
-		if (id !== undefined) {
-			KE.g[id].eventStack.push({
-				el : el,
-				type : type,
-				fn : fn
-			});
+		if (self.target.nodeType === 3) {
+			self.target = self.target.parentNode;
+		}
+		if (!self.relatedTarget && self.fromElement) {
+			self.relatedTarget = self.fromElement === self.target ? self.toElement : self.fromElement;
+		}
+		if (self.pageX == null && self.clientX != null) {
+			var d = doc.documentElement, body = doc.body;
+			self.pageX = self.clientX + (d && d.scrollLeft || body && body.scrollLeft || 0) - (d && d.clientLeft || body && body.clientLeft || 0);
+			self.pageY = self.clientY + (d && d.scrollTop  || body && body.scrollTop  || 0) - (d && d.clientTop  || body && body.clientTop  || 0);
+		}
+		if (!self.which && ((self.charCode || self.charCode === 0) ? self.charCode : self.keyCode)) {
+			self.which = self.charCode || self.keyCode;
+		}
+		if (!self.metaKey && self.ctrlKey) {
+			self.metaKey = self.ctrlKey;
+		}
+		if (!self.which && self.button !== undefined) {
+			self.which = (self.button & 1 ? 1 : (self.button & 2 ? 3 : (self.button & 4 ? 2 : 0)));
+		}
+		switch (self.which) {
+		case 186 :
+			self.which = 59;
+			break;
+		case 187 :
+		case 107 :
+		case 43 :
+			self.which = 61;
+			break;
+		case 189 :
+		case 45 :
+			self.which = 109;
+			break;
+		case 42 :
+			self.which = 106;
+			break;
+		case 47 :
+			self.which = 111;
+			break;
+		case 78 :
+			self.which = 110;
+			break;
+		}
+		if (self.which >= 96 && self.which <= 105) {
+			self.which -= 48;
 		}
 	},
-	remove : function(el, type, fn, id) {
-		if (el.removeEventListener){
-			el.removeEventListener(type, fn, false);
-		} else if (el.detachEvent){
-			el.detachEvent('on' + type, fn);
+	preventDefault : function() {
+		var ev = this.event;
+		if (ev.preventDefault) {
+			ev.preventDefault();
 		}
-		if (id !== undefined) {
-			var stack = KE.g[id].eventStack;
-			for (var i = 0, len = stack.length; i < len; i++) {
-				var item = stack[i];
-				if (item && el === item.el && type === item.type && fn === item.fn) {
-					delete stack[i];
+		ev.returnValue = false;
+	},
+	stopPropagation : function() {
+		var ev = this.event;
+		if (ev.stopPropagation) {
+			ev.stopPropagation();
+		}
+		ev.cancelBubble = true;
+	},
+	stop : function() {
+		this.preventDefault();
+		this.stopPropagation();
+	}
+});
+var _eventExpendo = 'kindeditor_' + _TIME, _eventId = 0, _eventData = {};
+function _getId(el) {
+	return el[_eventExpendo] || null;
+}
+function _setId(el) {
+	el[_eventExpendo] = ++_eventId;
+	return _eventId;
+}
+function _removeId(el) {
+	try {
+		delete el[_eventExpendo];
+	} catch(e) {
+		if (el.removeAttribute) {
+			el.removeAttribute(_eventExpendo);
+		}
+	}
+}
+function _bind(el, type, fn) {
+	if (type.indexOf(',') >= 0) {
+		_each(type.split(','), function() {
+			_bind(el, this, fn);
+		});
+		return;
+	}
+	var id = _getId(el);
+	if (!id) {
+		id = _setId(el);
+	}
+	if (_eventData[id] === undefined) {
+		_eventData[id] = {};
+	}
+	var events = _eventData[id][type];
+	if (events && events.length > 0) {
+		_unbindEvent(el, type, events[0]);
+	} else {
+		_eventData[id][type] = [];
+		_eventData[id].el = el;
+	}
+	events = _eventData[id][type];
+	if (events.length === 0) {
+		events[0] = function(e) {
+			var kevent = e ? new KEvent(el, e) : undefined;
+			_each(events, function(i, event) {
+				if (i > 0 && event) {
+					event.call(el, kevent);
 				}
+			});
+		};
+	}
+	if (_inArray(fn, events) < 0) {
+		events.push(fn);
+	}
+	_bindEvent(el, type, events[0]);
+}
+function _unbind(el, type, fn) {
+	if (type && type.indexOf(',') >= 0) {
+		_each(type.split(','), function() {
+			_unbind(el, this, fn);
+		});
+		return;
+	}
+	var id = _getId(el);
+	if (!id) {
+		return;
+	}
+	if (type === undefined) {
+		if (id in _eventData) {
+			_each(_eventData[id], function(key, events) {
+				if (key != 'el' && events.length > 0) {
+					_unbindEvent(el, key, events[0]);
+				}
+			});
+			delete _eventData[id];
+			_removeId(el);
+		}
+		return;
+	}
+	if (!_eventData[id]) {
+		return;
+	}
+	var events = _eventData[id][type];
+	if (events && events.length > 0) {
+		if (fn === undefined) {
+			_unbindEvent(el, type, events[0]);
+			delete _eventData[id][type];
+		} else {
+			_each(events, function(i, event) {
+				if (i > 0 && event === fn) {
+					events.splice(i, 1);
+				}
+			});
+			if (events.length == 1) {
+				_unbindEvent(el, type, events[0]);
+				delete _eventData[id][type];
 			}
 		}
-	},
-	stopPropagation : function(e) {
-		if (e.stopPropagation) e.stopPropagation();
-		if (e.cancelBubble !== undefined) e.cancelBubble = true;
-	},
-	preventDefault : function(e) {
-		if (e.preventDefault) e.preventDefault();
-		if (e.returnValue !== undefined) e.returnValue = false;
-	},
-	stop : function(e) {
-		this.stopPropagation(e);
-		this.preventDefault(e);
-	},
-	bind : function(el, type, fn, id) {
-		this.add(el, type, function(e) {
-			fn(e);
-			KE.event.stop(e);
-			return false;
-		}, id);
-	},
-	input : function(el, func, id) {
-		this.add(el, 'keyup', function(e) {
-			if (!e.ctrlKey && !e.altKey && (e.keyCode < 16 || e.keyCode > 18) && e.keyCode != 116) {
-				func(e);
-				KE.event.stop(e);
-				return false;
-			}
-		}, id);
-		function handler (e) {
-			window.setTimeout(function() {
-				func(e);
-			}, 1);
+		var count = 0;
+		_each(_eventData[id], function() {
+			count++;
+		});
+		if (count < 2) {
+			delete _eventData[id];
+			_removeId(el);
 		}
-		var newElement = (el.nodeName == '#document') ? el.body : el;
-		this.add(newElement, 'paste', handler, id);
-		this.add(newElement, 'cut', handler, id);
-	},
-	ctrl : function(el, key, func, id) {
-		key = key.toString().match(/^\d{2,}$/) ? key : key.toUpperCase().charCodeAt(0);
-		this.add(el, 'keydown', function(e) {
-			if (e.ctrlKey && e.keyCode == key && !e.shiftKey && !e.altKey) {
-				func(e);
-				KE.event.stop(e);
-				return false;
-			}
-		}, id);
-	},
-	ready : function(func, win, doc, id) {
-		var win = win || window;
-		var doc = doc || document;
-		var loaded = false;
-		var readyFunc = function() {
-			if (loaded) return;
+	}
+}
+function _fire(el, type) {
+	if (type.indexOf(',') >= 0) {
+		_each(type.split(','), function() {
+			_fire(el, this);
+		});
+		return;
+	}
+	var id = _getId(el);
+	if (!id) {
+		return;
+	}
+	var events = _eventData[id][type];
+	if (_eventData[id] && events && events.length > 0) {
+		events[0]();
+	}
+}
+function _ctrl(el, key, fn) {
+	var self = this;
+	key = /^\d{2,}$/.test(key) ? key : key.toUpperCase().charCodeAt(0);
+	_bind(el, 'keydown', function(e) {
+		if (e.ctrlKey && e.which == key && !e.shiftKey && !e.altKey) {
+			fn.call(el);
+			e.stop();
+		}
+	});
+}
+function _ready(fn) {
+	var loaded = false;
+	function readyFunc() {
+		if (!loaded) {
 			loaded = true;
-			func();
-		};
-		if (doc.addEventListener) {
-			this.add(doc, "DOMContentLoaded", readyFunc, id);
-		} else if (doc.attachEvent){
-			this.add(doc, "readystatechange", function() {
-				if (doc.readyState == "complete") readyFunc();
-			}, id);
-			if ( doc.documentElement.doScroll && typeof win.frameElement === "undefined" ) {
-				var ieReadyFunc = function() {
-					if (loaded) return;
-					try {
-						doc.documentElement.doScroll("left");
-					} catch(e) {
-						window.setTimeout(ieReadyFunc, 0);
-						return;
-					}
-					readyFunc();
-				};
-				ieReadyFunc();
+			fn(KindEditor);
+			if (document.addEventListener) {
+				_unbind(document, 'DOMContentLoaded', readyFunc);
+			} else if (document.attachEvent) {
+				_unbind(document, 'readystatechange', ieReadyStateFunc);
 			}
+			_unbind(window, 'load', readyFunc);
 		}
-		this.add(win, 'load', readyFunc, id);
 	}
-};
-
-KE.each = function(obj, func) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) func(key, obj[key]);
-	}
-};
-
-KE.eachNode = function(node, func) {
-	var walkNodes = function(parent) {
-		if (KE.util.getNodeType(parent) != 1) return true;
-		var n = parent.firstChild;
-		while (n) {
-			var next = n.nextSibling;
-			if (!func(n)) return false;
-			if (!walkNodes(n)) return false;
-			n = next;
-		}
-		return true;
-	};
-	walkNodes(node);
-};
-
-KE.selection = function(doc) {
-	this.sel = null;
-	this.range = null;
-	this.keRange = null;
-	this.isControl = false;
-	var win = doc.parentWindow || doc.defaultView;
-	this.init = function() {
-		var sel = doc.selection ? doc.selection : win.getSelection();
-		var range;
-		try {
-			if (sel.rangeCount > 0) range = sel.getRangeAt(0);
-			else range = sel.createRange();
-		} catch(e) {}
-		if (!range) range = KE.util.createRange(doc);
-		this.sel = sel;
-		this.range = range;
-		var startNode, startPos, endNode, endPos;
-		if (KE.browser.IE) {
-			if (range.item) {
-				this.isControl = true;
-				var el = range.item(0);
-				startNode = endNode = el;
-				startPos = endPos = 0;
-			} else {
-				this.isControl = false;
-				var getStartEnd = function(isStart) {
-					var pointRange = range.duplicate();
-					pointRange.collapse(isStart);
-					var parentNode = pointRange.parentElement();
-					var nodes = parentNode.childNodes;
-					if (nodes.length == 0) return {node: parentNode, pos: 0};
-					var startNode;
-					var endElement;
-					var startPos = 0;
-					var isEnd = false;
-					var testRange = range.duplicate();
-					KE.util.moveToElementText(testRange, parentNode);
-					for (var i = 0, len = nodes.length; i < len; i++) {
-						var node = nodes[i];
-						var cmp = testRange.compareEndPoints('StartToStart', pointRange);
-						if (cmp > 0) {
-							isEnd = true;
-						} else if (cmp == 0) {
-							if (node.nodeType == 1) {
-								var keRange = new KE.range(doc);
-								keRange.selectTextNode(node);
-								return {node: keRange.startNode, pos: 0};
-							} else {
-								return {node: node, pos: 0};
-							}
-						}
-						if (node.nodeType == 1) {
-							var nodeRange = range.duplicate();
-							KE.util.moveToElementText(nodeRange, node);
-							testRange.setEndPoint('StartToEnd', nodeRange);
-							if (isEnd) startPos += nodeRange.text.replace(/\r\n|\n|\r/g, '').length;
-							else startPos = 0;
-						} else if (node.nodeType == 3) {
-							//fix bug: typeof node.nodeValue can return "unknown" in IE.
-							if (typeof node.nodeValue === 'string') {
-								testRange.moveStart('character', node.nodeValue.length);
-								startPos += node.nodeValue.length;
-							}
-						}
-						if (!isEnd) startNode = node;
-					}
-					if (!isEnd && startNode.nodeType == 1) {
-						var startNode = parentNode.lastChild;
-						return {node: startNode, pos: startNode.nodeType == 1 ? 1 : startNode.nodeValue.length};
-					}
-					testRange = range.duplicate();
-					KE.util.moveToElementText(testRange, parentNode);
-					testRange.setEndPoint('StartToEnd', pointRange);
-					startPos -= testRange.text.replace(/\r\n|\n|\r/g, '').length;
-					return {node: startNode, pos: startPos};
-				};
-				var start = getStartEnd(true);
-				var end = getStartEnd(false);
-				startNode = start.node;
-				startPos = start.pos;
-				endNode = end.node;
-				endPos = end.pos;
-			}
-		} else {
-			startNode = range.startContainer;
-			startPos = range.startOffset;
-			endNode = range.endContainer;
-			endPos = range.endOffset;
-			if (startNode.nodeType == 1 && typeof startNode.childNodes[startPos] != 'undefined') {
-				startNode = startNode.childNodes[startPos];
-				startPos = 0;
-			}
-			if (endNode.nodeType == 1) {
-				endPos = endPos == 0 ? 1 : endPos;
-				if (typeof endNode.childNodes[endPos - 1] != 'undefined') {
-					endNode = endNode.childNodes[endPos - 1];
-					endPos = (endNode.nodeType == 1) ? 0 : endNode.nodeValue.length;
-				}
-			}
-			this.isControl = (startNode.nodeType == 1 && startNode === endNode && range.startOffset + 1 == range.endOffset);
-			if (startNode.nodeType == 1 && endNode.nodeType == 3 && endPos == 0 && endNode.previousSibling) {
-				var node = endNode.previousSibling;
-				while (node) {
-					if (node === startNode) {
-						endNode = startNode;
-						break;
-					}
-					if (node.childNodes.length != 1) break;
-					node = node.childNodes[0];
-				}
-			}
-			if (range.collapsed) {
-				var keRange = new KE.range(doc);
-				keRange.setTextStart(startNode, startPos);
-				endNode = keRange.startNode;
-				endPos = keRange.startPos;
-			}
-		}
-		var keRange = new KE.range(doc);
-		keRange.setTextStart(startNode, startPos);
-		keRange.setTextEnd(endNode, endPos);
-		this.keRange = keRange;
-	};
-	this.init();
-	this.addRange = function(keRange) {
-		if (KE.browser.GECKO && KE.browser.VERSION < 3) return;
-		this.keRange = keRange;
-		if (KE.browser.IE) {
-			var getEndRange = function(isStart) {
-				var range = KE.util.createRange(doc);
-				var node = isStart ? keRange.startNode : keRange.endNode;
-				if (node.nodeType == 1) {
-					KE.util.moveToElementText(range, node);
-					range.collapse(isStart);
-				} else if (node.nodeType == 3) {
-					range = KE.util.getNodeStartRange(doc, node);
-					var pos = isStart ? keRange.startPos : keRange.endPos;
-					range.moveStart('character', pos);
-				}
-				return range;
-			}
-			if (!this.range.item) {
-				var node = keRange.startNode;
-				if (node == keRange.endNode && KE.util.getNodeType(node) == 1 && KE.util.getNodeTextLength(node) == 0) {
-					var temp = doc.createTextNode(" ");
-					node.appendChild(temp);
-					KE.util.moveToElementText(this.range, node);
-					this.range.collapse(false);
-					this.range.select();
-					node.removeChild(temp);
-				} else {
-					if (node.nodeType == 3 && keRange.collapsed()) {
-						this.range = getEndRange(true);
-						this.range.collapse(true);
-					} else {
-						this.range.setEndPoint('StartToStart', getEndRange(true));
-						this.range.setEndPoint('EndToStart', getEndRange(false));
-					}
-					// IE9发生错误
-					try {
-						this.range.select();
-					} catch(e) {}
-				}
-			}
-		} else {
-			var getNodePos = function(node) {
-				var pos = 0;
-				while (node) {
-					node = node.previousSibling;
-					pos++;
-				}
-				return --pos;
-			};
-			var range = new KE.range(doc);
-			range.setTextStart(keRange.startNode, keRange.startPos);
-			range.setTextEnd(keRange.endNode, keRange.endPos);
-			var startNode = range.startNode;
-			var endNode = range.endNode;
-			if (KE.util.getNodeType(startNode) == 88) {
-				this.range.setStart(startNode.parentNode, getNodePos(range.startNode));
-			} else {
-				this.range.setStart(startNode, range.startPos);
-			}
-			if (KE.util.getNodeType(endNode) == 88) {
-				this.range.setEnd(endNode.parentNode, getNodePos(range.endNode) + 1);
-			} else {
-				this.range.setEnd(endNode, range.endPos);
-			}
-			this.sel.removeAllRanges();
-			this.sel.addRange(this.range);
-		}
-	};
-	this.focus = function() {
-		// IE9发生错误
-		try {
-			if (KE.browser.IE && this.range != null) this.range.select();
-		} catch(e) {}
-	}
-};
-
-KE.range = function(doc) {
-	this.startNode = null;
-	this.startPos = null;
-	this.endNode = null;
-	this.endPos = null;
-	this.getParentElement = function() {
-		var scanParent = function(node, func) {
-			while (node && (!node.tagName || node.tagName.toLowerCase() != 'body')) {
-				node = node.parentNode;
-				if (func(node)) return;
-			}
-		}
-		var nodeList = [];
-		scanParent(this.startNode, function(node) {
-			nodeList.push(node);
-		});
-		var parentNode;
-		scanParent(this.endNode, function(node) {
-			if (KE.util.inArray(node, nodeList)) {
-				parentNode = node;
-				return true;
-			}
-		});
-		return parentNode ? parentNode : doc.body;
-	};
-	this.getNodeList = function() {
-		var self = this;
-		var parentNode = this.getParentElement();
-		var nodeList = [];
-		var isStarted = false;
-		if (parentNode == self.startNode) isStarted = true;
-		if (isStarted) nodeList.push(parentNode);
-		KE.eachNode(parentNode, function(node) {
-			if (node == self.startNode) isStarted = true;
-			var range = new KE.range(doc);
-			range.selectTextNode(node);
-			var cmp = range.comparePoints('START_TO_END', self);
-			if (cmp > 0) {
-				return false;
-			} else if (cmp == 0) {
-				if (range.startNode !== range.endNode || range.startPos !== range.endPos) return false;
-			}
-			if (isStarted) nodeList.push(node);
-			return true;
-		});
-		return nodeList;
-	};
-	this.comparePoints = function(how, range) {
-		var compareNodes = function(nodeA, posA, nodeB, posB) {
-			var cmp;
-			if (KE.browser.IE) {
-				var getStartRange = function(node, pos, isStart) {
-					var range = KE.util.createRange(doc);
-					var type = KE.util.getNodeType(node);
-					if (type == 1) {
-						KE.util.moveToElementText(range, node);
-						range.collapse(isStart);
-					} else if (type == 3) {
-						range = KE.util.getNodeStartRange(doc, node);
-						range.moveStart('character', pos);
-						range.collapse(true);
-					}
-					return range;
-				}
-				var rangeA, rangeB;
-				if (how == 'START_TO_START' || how == 'START_TO_END') rangeA = getStartRange(nodeA, posA, true);
-				else rangeA = getStartRange(nodeA, posA, false);
-				if (how == 'START_TO_START' || how == 'END_TO_START') rangeB = getStartRange(nodeB, posB, true);
-				else rangeB = getStartRange(nodeB, posB, false);
-				return rangeA.compareEndPoints('StartToStart', rangeB);
-			} else {
-				var rangeA = KE.util.createRange(doc);
-				rangeA.selectNode(nodeA);
-				if (how == 'START_TO_START' || how == 'START_TO_END') rangeA.collapse(true);
-				else rangeA.collapse(false);
-				var rangeB = KE.util.createRange(doc);
-				rangeB.selectNode(nodeB);
-				if (how == 'START_TO_START' || how == 'END_TO_START') rangeB.collapse(true);
-				else rangeB.collapse(false);
-				if (rangeA.compareBoundaryPoints(Range.START_TO_START, rangeB) > 0) {
-					cmp = 1;
-				} else if (rangeA.compareBoundaryPoints(Range.START_TO_START, rangeB) == 0) {
-					if (posA > posB) cmp = 1;
-					else if (posA == posB) cmp = 0;
-					else cmp = -1;
-				} else {
-					cmp = -1;
-				}
-			}
-			return cmp;
-		}
-		if (how == 'START_TO_START') return compareNodes(this.startNode, this.startPos, range.startNode, range.startPos);
-		if (how == 'START_TO_END') return compareNodes(this.startNode, this.startPos, range.endNode, range.endPos);
-		if (how == 'END_TO_START') return compareNodes(this.endNode, this.endPos, range.startNode, range.startPos);
-		if (how == 'END_TO_END') return compareNodes(this.endNode, this.endPos, range.endNode, range.endPos);
-	};
-	this.collapsed = function() {
-		return (this.startNode === this.endNode && this.startPos === this.endPos);
-	};
-	this.collapse = function(toStart) {
-		if (toStart) {
-			this.setEnd(this.startNode, this.startPos);
-		} else {
-			this.setStart(this.endNode, this.endPos);
-		}
-	};
-	this.setTextStart = function(node, pos) {
-		var textNode = node;
-		KE.eachNode(node, function(n) {
-			if (KE.util.getNodeType(n) == 3 && n.nodeValue.length > 0 || KE.util.getNodeType(n) == 88) {
-				textNode = n;
-				pos = 0;
-				return false;
-			}
-			return true;
-		});
-		this.setStart(textNode, pos);
-	};
-	this.setStart = function(node, pos) {
-		this.startNode = node;
-		this.startPos = pos;
-		if (this.endNode === null) {
-			this.endNode = node;
-			this.endPos = pos;
-		}
-	};
-	this.setTextEnd = function(node, pos) {
-		var textNode = node;
-		KE.eachNode(node, function(n) {
-			if (KE.util.getNodeType(n) == 3 && n.nodeValue.length > 0 || KE.util.getNodeType(n) == 88) {
-				textNode = n;
-				pos = KE.util.getNodeType(n) == 3 ? n.nodeValue.length : 0;
-			}
-			return true;
-		});
-		this.setEnd(textNode, pos);
-	};
-	this.setEnd = function(node, pos) {
-		this.endNode = node;
-		this.endPos = pos;
-		if (this.startNode === null) {
-			this.startNode = node;
-			this.startPos = pos;
-		}
-	};
-	this.selectNode = function(node) {
-		this.setStart(node, 0);
-		this.setEnd(node, node.nodeType == 1 ? 0 : node.nodeValue.length);
-	};
-	this.selectTextNode = function(node) {
-		this.setTextStart(node, 0);
-		this.setTextEnd(node, node.nodeType == 1 ? 0 : node.nodeValue.length);
-	};
-	this.extractContents = function(isDelete) {
-		isDelete = (isDelete === undefined) ? true : isDelete;
-		var thisRange = this;
-		var startNode = this.startNode;
-		var startPos = this.startPos;
-		var endNode = this.endNode;
-		var endPos = this.endPos;
-		var removedNodes = [];
-		function extractTextNode(node, startPos, endPos) {
-			var length = node.nodeValue.length;
-			var cloneNode = node.cloneNode(true);
-			var centerNode = cloneNode;
-			if (startPos > 0) centerNode = cloneNode.splitText(startPos);
-			if (endPos < length) centerNode.splitText(endPos - startPos);
-			if (isDelete) {
-				var center = node;
-				if (startPos > 0) center = node.splitText(startPos);
-				if (endPos < length) center.splitText(endPos - startPos);
-				removedNodes.push(center);
-			}
-			return centerNode;
-		};
-		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
-		var isStarted = false;
-		var isEnd = false;
-		function extractNodes(parent, frag) {
-			if (KE.util.getNodeType(parent) != 1) return true;
-			var node = parent.firstChild;
-			while (node) {
-				if (node == startNode) isStarted = true;
-				if (node == endNode) isEnd = true;
-				var nextNode = node.nextSibling;
-				var type = node.nodeType;
-				if (type == 1) {
-					var range = new KE.range(doc);
-					range.selectNode(node);
-					var cmp = range.comparePoints('END_TO_END', thisRange);
-					if (isStarted && (cmp < 0 || (cmp == 0 && noEndTagHash[node.nodeName.toLowerCase()] !== undefined))) {
-						var cloneNode = node.cloneNode(true);
-						frag.appendChild(cloneNode);
-						if (isDelete) {
-							node.parentNode.removeChild(node);
-						}
-					} else {
-						var childFlag = node.cloneNode(false);
-						if (noEndTagHash[childFlag.nodeName.toLowerCase()] === undefined) {
-							frag.appendChild(childFlag);
-							if (!extractNodes(node, childFlag)) return false;
-						}
-					}
-				} else if (type == 3) {
-					if (isStarted) {
-						var textNode;
-						if (node == startNode && node == endNode) {
-							textNode = extractTextNode(node, startPos, endPos);
-							frag.appendChild(textNode);
-							return false;
-						} else if (node == startNode) {
-							textNode = extractTextNode(node, startPos, node.nodeValue.length);
-							frag.appendChild(textNode);
-						} else if (node == endNode) {
-							textNode = extractTextNode(node, 0, endPos);
-							frag.appendChild(textNode);
-							return false;
-						} else {
-							textNode = extractTextNode(node, 0, node.nodeValue.length);
-							frag.appendChild(textNode);
-						}
-					}
-				}
-				node = nextNode;
-				if (isEnd) return false;
-			}
-			if (frag.innerHTML.replace(/<.*?>/g, '') === '' && frag.parentNode) {
-				frag.parentNode.removeChild(frag);
-			}
-			return true;
-		}
-		var parentNode = this.getParentElement();
-		var docFrag = parentNode.cloneNode(false);
-		extractNodes(parentNode, docFrag);
-		KE.each(removedNodes, function(key, val) {
-			if (val.nodeType != 3 || val.nodeValue.length > 0) {
-				val.parentNode.removeChild(val);
-			}
-		});
-		return docFrag;
-	};
-	this.cloneContents = function() {
-		return this.extractContents(false);
-	};
-	this.getText = function() {
-		var html = this.cloneContents().innerHTML;
-		return html.replace(/<.*?>/g, "");
-	};
-};
-
-KE.cmd = function(id) {
-	this.doc = KE.g[id].iframeDoc;
-	this.keSel = KE.g[id].keSel;
-	this.keRange = KE.g[id].keRange;
-	this.mergeAttributes = function(el, attr) {
-		for (var i = 0, len = attr.length; i < len; i++) {
-			KE.each(attr[i], function(key, value) {
-				if (key.charAt(0) == '.') {
-					var jsKey = KE.util.getJsKey(key.substr(1));
-					el.style[jsKey] = value;
-				} else {
-					if (KE.browser.IE && KE.browser.VERSION < 8 && key == 'class') key = 'className';
-					el.setAttribute(key, value);
-				}
-			});
-		}
-		return el;
-	};
-	this.wrapTextNode = function(node, startPos, endPos, element, attributes) {
-		var length = node.nodeValue.length;
-		var isFull = (startPos == 0 && endPos == length);
-		var range = new KE.range(this.doc);
-		range.selectTextNode(node.parentNode);
-		if (isFull &&
-			node.parentNode.tagName == element.tagName &&
-			range.comparePoints('END_TO_END', this.keRange) <= 0 &&
-			range.comparePoints('START_TO_START', this.keRange) >= 0) {
-			this.mergeAttributes(node.parentNode, attributes);
-			return node;
-		} else {
-			var el = element.cloneNode(true);
-			if (isFull) {
-				var cloneNode = node.cloneNode(true);
-				el.appendChild(cloneNode);
-				node.parentNode.replaceChild(el, node);
-				return cloneNode;
-			} else {
-				var centerNode = node;
-				if (startPos < endPos) {
-					if (startPos > 0) centerNode = node.splitText(startPos);
-					if (endPos < length) centerNode.splitText(endPos - startPos);
-					var cloneNode = centerNode.cloneNode(true);
-					el.appendChild(cloneNode);
-					centerNode.parentNode.replaceChild(el, centerNode);
-					return cloneNode;
-				} else {
-					if (startPos < length) {
-						centerNode = node.splitText(startPos);
-						centerNode.parentNode.insertBefore(el, centerNode);
-					} else {
-						if (centerNode.nextSibling) {
-							centerNode.parentNode.insertBefore(el, centerNode.nextSibling);
-						} else {
-							centerNode.parentNode.appendChild(el);
-						}
-					}
-					return el;
-				}
-			}
-		}
-	};
-	this.wrap = function(tagName, attributes) {
-		attributes = attributes || [];
-		var self = this;
-		this.keSel.focus();
-		var element = KE.$$(tagName, this.doc);
-		this.mergeAttributes(element, attributes);
-		var keRange = this.keRange;
-		var startNode = keRange.startNode;
-		var startPos = keRange.startPos;
-		var endNode = keRange.endNode;
-		var endPos = keRange.endPos;
-		var parentNode = keRange.getParentElement();
-		if (KE.util.inMarquee(parentNode)) return;
-		var isStarted = false;
-		KE.eachNode(parentNode, function(node) {
-			if (node == startNode) isStarted = true;
-			if (node.nodeType == 1) {
-				if (node == startNode && node == endNode) {
-					if (KE.util.inArray(node.tagName.toLowerCase(), KE.g[id].noEndTags)) {
-						if (startPos > 0) node.parentNode.appendChild(element);
-						else node.parentNode.insertBefore(element, node);
-					} else {
-						node.appendChild(element);
-					}
-					keRange.selectNode(element);
-					return false;
-				} else if (node == startNode) {
-					keRange.setStart(node, 0);
-				} else if (node == endNode) {
-					keRange.setEnd(node, 0);
-					return false;
-				}
-			} else if (node.nodeType == 3) {
-				if (isStarted) {
-					if (node == startNode && node == endNode) {
-						var rangeNode = self.wrapTextNode(node, startPos, endPos, element, attributes);
-						keRange.selectNode(rangeNode);
-						return false;
-					} else if (node == startNode) {
-						var rangeNode = self.wrapTextNode(node, startPos, node.nodeValue.length, element, attributes);
-						keRange.setStart(rangeNode, 0);
-					} else if (node == endNode) {
-						var rangeNode = self.wrapTextNode(node, 0, endPos, element, attributes);
-						keRange.setEnd(rangeNode, rangeNode.nodeType == 1 ? 0 : rangeNode.nodeValue.length);
-						return false;
-					} else {
-						self.wrapTextNode(node, 0, node.nodeValue.length, element, attributes);
-					}
-				}
-			}
-			return true;
-		});
-		this.keSel.addRange(keRange);
-	};
-	this.getTopParent = function(tagNames, node) {
-		var parent = null;
-		while (node) {
-			node = node.parentNode;
-			if (KE.util.inArray(node.tagName.toLowerCase(), tagNames)) {
-				parent = node;
-			} else {
-				break;
-			}
-		}
-		return parent;
-	};
-	this.splitNodeParent = function(parent, node, pos) {
-		var leftRange = new KE.range(this.doc);
-		leftRange.selectNode(parent.firstChild);
-		leftRange.setEnd(node, pos);
-		var leftFrag = leftRange.extractContents();
-		parent.parentNode.insertBefore(leftFrag, parent);
-		return {left : leftFrag, right : parent};
-	};
-	this.remove = function(tags) {
-		var self = this;
-		var keRange = this.keRange;
-		var startNode = keRange.startNode;
-		var startPos = keRange.startPos;
-		var endNode = keRange.endNode;
-		var endPos = keRange.endPos;
-		this.keSel.focus();
-		if (KE.util.inMarquee(keRange.getParentElement())) return;
-		var isCollapsed = (keRange.getText().replace(/\s+/g, '') === '');
-		if (isCollapsed && !KE.browser.IE) return;
-		var tagNames = [];
-		KE.each(tags, function(key, val) {
-			if (key != '*') tagNames.push(key);
-		});
-		var startParent = this.getTopParent(tagNames, startNode);
-		var endParent = this.getTopParent(tagNames, endNode);
-		if (startParent) {
-			var startFrags = this.splitNodeParent(startParent, startNode, startPos);
-			keRange.setStart(startFrags.right, 0);
-			if (startNode == endNode && KE.util.getNodeTextLength(startFrags.right) > 0) {
-				keRange.selectNode(startFrags.right);
-				var range = new KE.range(this.doc);
-				range.selectTextNode(startFrags.left);
-				if (startPos > 0) endPos -= range.endNode.nodeValue.length;
-				range.selectTextNode(startFrags.right);
-				endNode = range.startNode;
-			}
-		}
-		if (isCollapsed) {
-			var node = keRange.startNode;
-			if (node.nodeType == 1) {
-				if (node.nodeName.toLowerCase() == 'br') return;
-				keRange.selectNode(node);
-			} else {
+	function ieReadyFunc() {
+		if (!loaded) {
+			try {
+				document.documentElement.doScroll('left');
+			} catch(e) {
+				setTimeout(ieReadyFunc, 0);
 				return;
 			}
-		} else if (endParent) {
-			var endFrags = this.splitNodeParent(endParent, endNode, endPos);
-			keRange.setEnd(endFrags.left, 0);
-			if (startParent == endParent) {
-				keRange.setStart(endFrags.left, 0);
-			}
+			readyFunc();
 		}
-		var removeAttr = function(node, attr) {
-			if (attr.charAt(0) == '.') {
-				var jsKey = KE.util.getJsKey(attr.substr(1));
-				node.style[jsKey] = '';
+	}
+	function ieReadyStateFunc() {
+		if (document.readyState === 'complete') {
+			readyFunc();
+		}
+	}
+	if (document.addEventListener) {
+		_bind(document, 'DOMContentLoaded', readyFunc);
+	} else if (document.attachEvent) {
+		_bind(document, 'readystatechange', ieReadyStateFunc);
+		if (document.documentElement.doScroll && window.frameElement === undefined) {
+			ieReadyFunc();
+		}
+	}
+	_bind(window, 'load', readyFunc);
+}
+if (_IE) {
+	window.attachEvent('onunload', function() {
+		_each(_eventData, function(key, events) {
+			if (events.el) {
+				_unbind(events.el);
+			}
+		});
+	});
+}
+K.ctrl = _ctrl;
+K.ready = _ready;
+function _getCssList(css) {
+	var list = {},
+		reg = /\s*([\w\-]+)\s*:([^;]*)(;|$)/g,
+		match;
+	while ((match = reg.exec(css))) {
+		var key = _trim(match[1].toLowerCase()),
+			val = _trim(_toHex(match[2]));
+		list[key] = val;
+	}
+	return list;
+}
+function _getAttrList(tag) {
+	var list = {},
+		reg = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([^\s"'<>]+))|(?:([\w\-:"]+)="([^"]*)")|(?:([\w\-:"]+)='([^']*)'))(?=(?:\s|\/|>)+)/g,
+		match;
+	while ((match = reg.exec(tag))) {
+		var key = (match[1] || match[2] || match[4] || match[6]).toLowerCase(),
+			val = (match[2] ? match[3] : (match[4] ? match[5] : match[7])) || '';
+		list[key] = val;
+	}
+	return list;
+}
+function _addClassToTag(tag, className) {
+	if (/\s+class\s*=/.test(tag)) {
+		tag = tag.replace(/(\s+class=["']?)([^"']*)(["']?[\s>])/, function($0, $1, $2, $3) {
+			if ((' ' + $2 + ' ').indexOf(' ' + className + ' ') < 0) {
+				return $2 === '' ? $1 + className + $3 : $1 + $2 + ' ' + className + $3;
 			} else {
-				if (KE.browser.IE && KE.browser.VERSION < 8 && attr == 'class') attr = 'className';
-				node.removeAttribute(attr);
+				return $0;
 			}
-		};
-		var nodeList = keRange.getNodeList();
-		keRange.setTextStart(keRange.startNode, keRange.startPos);
-		keRange.setTextEnd(keRange.endNode, keRange.endPos);
-		for (var i = 0, length = nodeList.length; i < length; i++) {
-			var node = nodeList[i];
-			if (node.nodeType == 1) {
-				var tagName = node.tagName.toLowerCase();
-				if (tags[tagName]) {
-					var attr = tags[tagName];
-					for (var j = 0, len = attr.length; j < len; j++) {
-						if (attr[j] == '*') {
-							KE.util.removeParent(node);
-							break;
-						} else {
-							removeAttr(node, attr[j]);
-							var attrs = [];
-							if (node.outerHTML) {
-								attrHash = KE.util.getAttrList(node.outerHTML);
-								KE.each(attrHash, function(key, val) {
-									attrs.push({
-										name : key,
-										value : val
-									});
-								});
-							} else {
-								attrs = node.attributes;
-							}
-							if (attrs.length == 0) {
-								KE.util.removeParent(node);
-								break;
-							} else if (attrs[0].name == 'style' && attrs[0].value === '') {
-								KE.util.removeParent(node);
-								break;
-							}
-						}
-					}
-				}
-				if (tags['*']) {
-					var attr = tags['*'];
-					for (var j = 0, len = attr.length; j < len; j++) {
-						removeAttr(node, attr[j]);
-					}
-				}
-			}
-		}
-		try {
-			this.keSel.addRange(keRange);
-		} catch(e) {}
-	};
-};
-
-KE.format = {
-	getUrl : function(url, mode, host, pathname) {
-		if (!mode) return url;
-		mode = mode.toLowerCase();
-		if (!KE.util.inArray(mode, ['absolute', 'relative', 'domain'])) return url;
-		host = host || location.protocol + '//' + location.host;
-		if (pathname === undefined) {
-			var m = location.pathname.match(/^(\/.*)\//);
-			pathname = m ? m[1] : '';
-		}
-		var matches = url.match(/^(\w+:\/\/[^\/]*)/);
-		if (matches) {
-			if (matches[1] !== host) return url;
-		} else if (url.match(/^\w+:/)) {
+		});
+	} else {
+		tag = tag.substr(0, tag.length - 1) + ' class="' + className + '">';
+	}
+	return tag;
+}
+function _formatCss(css) {
+	var str = '';
+	_each(_getCssList(css), function(key, val) {
+		str += key + ':' + val + ';';
+	});
+	return str;
+}
+function _formatUrl(url, mode, host, pathname) {
+	mode = _undef(mode, '').toLowerCase();
+	if (_inArray(mode, ['absolute', 'relative', 'domain']) < 0) {
+		return url;
+	}
+	host = host || location.protocol + '//' + location.host;
+	if (pathname === undefined) {
+		var m = location.pathname.match(/^(\/.*)\//);
+		pathname = m ? m[1] : '';
+	}
+	var match;
+	if ((match = /^(\w+:\/\/[^\/]*)/.exec(url))) {
+		if (match[1] !== host) {
 			return url;
 		}
-		var getRealPath = function(path) {
-			var parts = path.split('/');
-			paths = [];
-			for (var i = 0, len = parts.length; i < len; i++) {
-				var part = parts[i];
-				if (part == '..') {
-					if (paths.length > 0) paths.pop();
-				} else if (part !== '' && part != '.') {
-					paths.push(part);
-				}
-			}
-			return '/' + paths.join('/');
-		};
-		if (url.match(/^\//)) {
-			url = host + getRealPath(url.substr(1));
-		} else if (!url.match(/^\w+:\/\//)) {
-			url = host + getRealPath(pathname + '/' + url);
-		}
-		if (mode == 'relative') {
-			var getRelativePath = function(path, depth) {
-				if (url.substr(0, path.length) === path) {
-					var arr = [];
-					for (var i = 0; i < depth; i++) {
-						arr.push('..');
-					}
-					var prefix = '.';
-					if (arr.length > 0) prefix += '/' + arr.join('/');
-					if (pathname == '/') prefix += '/';
-					return prefix + url.substr(path.length);
-				} else {
-					var m = path.match(/^(.*)\//);
-					if (m) {
-						return getRelativePath(m[1], ++depth);
-					}
-				}
-			};
-			url = getRelativePath(host + pathname, 0).substr(2);
-		} else if (mode == 'absolute') {
-			if (url.substr(0, host.length) === host) {
-				url = url.substr(host.length);
-			}
-		}
+	} else if (/^\w+:/.test(url)) {
 		return url;
-	},
-	getHtml : function(html, htmlTags, urlType) {
-		var isFilter = htmlTags ? true : false;
-		html = html.replace(/(<pre[^>]*>)([\s\S]*?)(<\/pre>)/ig, function($0, $1, $2, $3){
-			return $1 + $2.replace(/<br[^>]*>/ig, '\n') + $3;
-		});
-		var htmlTagHash = {};
-		var fontSizeHash = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'];
-		if (isFilter) {
-			KE.each(htmlTags, function(key, val) {
-				var arr = key.split(',');
-				for (var i = 0, len = arr.length; i < len; i++) htmlTagHash[arr[i]] = KE.util.arrayToHash(val);
-			});
+	}
+	function getRealPath(path) {
+		var parts = path.split('/'), paths = [];
+		for (var i = 0, len = parts.length; i < len; i++) {
+			var part = parts[i];
+			if (part == '..') {
+				if (paths.length > 0) {
+					paths.pop();
+				}
+			} else if (part !== '' && part != '.') {
+				paths.push(part);
+			}
 		}
-		var skipFlag = false;
-		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
-		var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
-		var endlineTagHash = KE.util.arrayToHash(KE.setting.endlineTags);
-		var re = /((?:\r\n|\n|\r)*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:]+="[^"]*")|(?:\s+[\w\-:]+='[^']*'))*)(\/)?>((?:\r\n|\n|\r)*)/g;
-		html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
-			var startNewline = $1 || '';
-			var startSlash = $2 || '';
-			var tagName = $3.toLowerCase();
-			var attr = $4 || '';
-			var endSlash = $5 ? ' ' + $5 : '';
-			var endNewline = $6 || '';
-			if (tagName === 'script' && startSlash !== '') skipFlag = false;
-			if (skipFlag) return $0;
-			if (tagName === 'script' && startSlash === '') skipFlag = true;
-			if (isFilter && typeof htmlTagHash[tagName] == "undefined") return '';
-			if (endSlash === '' && typeof noEndTagHash[tagName] != "undefined") endSlash = ' /';
-			if (tagName in endlineTagHash) {
-				if (startSlash || endSlash) endNewline = '\n';
+		return '/' + paths.join('/');
+	}
+	if (/^\//.test(url)) {
+		url = host + getRealPath(url.substr(1));
+	} else if (!/^\w+:\/\//.test(url)) {
+		url = host + getRealPath(pathname + '/' + url);
+	}
+	function getRelativePath(path, depth) {
+		if (url.substr(0, path.length) === path) {
+			var arr = [];
+			for (var i = 0; i < depth; i++) {
+				arr.push('..');
+			}
+			var prefix = '.';
+			if (arr.length > 0) {
+				prefix += '/' + arr.join('/');
+			}
+			if (pathname == '/') {
+				prefix += '/';
+			}
+			return prefix + url.substr(path.length);
+		} else {
+			if ((match = /^(.*)\//.exec(path))) {
+				return getRelativePath(match[1], ++depth);
+			}
+		}
+	}
+	if (mode === 'relative') {
+		url = getRelativePath(host + pathname, 0).substr(2);
+	} else if (mode === 'absolute') {
+		if (url.substr(0, host.length) === host) {
+			url = url.substr(host.length);
+		}
+	}
+	return url;
+}
+function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
+	urlType = urlType || '';
+	wellFormatted = _undef(wellFormatted, false);
+	indentChar = _undef(indentChar, '\t');
+	var fontSizeList = 'xx-small,x-small,small,medium,large,x-large,xx-large'.split(',');
+	html = html.replace(/(<(?:pre|pre\s[^>]*)>)([\s\S]*?)(<\/pre>)/ig, function($0, $1, $2, $3) {
+		return $1 + $2.replace(/<(?:br|br\s[^>]*)>/ig, '\n') + $3;
+	});
+	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
+	html = html.replace(/<(?:p|p\s[^>]*)><\/p>/ig, '');
+	html = html.replace(/\u200B/g, '');
+	var htmlTagMap = {};
+	if (htmlTags) {
+		_each(htmlTags, function(key, val) {
+			var arr = key.split(',');
+			for (var i = 0, len = arr.length; i < len; i++) {
+				htmlTagMap[arr[i]] = _toMap(val);
+			}
+		});
+		if (!htmlTagMap.script) {
+			html = html.replace(/(<(?:script|script\s[^>]*)>)([\s\S]*?)(<\/script>)/ig, '');
+		}
+		if (!htmlTagMap.style) {
+			html = html.replace(/(<(?:style|style\s[^>]*)>)([\s\S]*?)(<\/style>)/ig, '');
+		}
+	}
+	var re = /(\s*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:"]+="[^"]*")|(?:\s+[\w\-:"]+='[^']*'))*)(\/)?>(\s*)/g;
+	var tagStack = [];
+	html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
+		var full = $0,
+			startNewline = $1 || '',
+			startSlash = $2 || '',
+			tagName = $3.toLowerCase(),
+			attr = $4 || '',
+			endSlash = $5 ? ' ' + $5 : '',
+			endNewline = $6 || '';
+		if (htmlTags && !htmlTagMap[tagName]) {
+			return '';
+		}
+		if (endSlash === '' && _SINGLE_TAG_MAP[tagName]) {
+			endSlash = ' /';
+		}
+		if (_INLINE_TAG_MAP[tagName]) {
+			if (startNewline) {
+				startNewline = ' ';
+			}
+			if (endNewline) {
+				endNewline = ' ';
+			}
+		}
+		if (_PRE_TAG_MAP[tagName]) {
+			if (startSlash) {
+				endNewline = '\n';
 			} else {
-				if (endNewline) endNewline = ' ';
+				startNewline = '\n';
 			}
-			if (tagName !== 'script' && tagName !== 'style') {
-				startNewline = '';
+		}
+		if (wellFormatted && tagName == 'br') {
+			endNewline = '\n';
+		}
+		if (_BLOCK_TAG_MAP[tagName] && !_PRE_TAG_MAP[tagName]) {
+			if (wellFormatted) {
+				if (startSlash && tagStack.length > 0 && tagStack[tagStack.length - 1] === tagName) {
+					tagStack.pop();
+				} else {
+					tagStack.push(tagName);
+				}
+				startNewline = '\n';
+				endNewline = '\n';
+				for (var i = 0, len = startSlash ? tagStack.length : tagStack.length - 1; i < len; i++) {
+					startNewline += indentChar;
+					if (!startSlash) {
+						endNewline += indentChar;
+					}
+				}
+				if (endSlash) {
+					tagStack.pop();
+				} else if (!startSlash) {
+					endNewline += indentChar;
+				}
+			} else {
+				startNewline = endNewline = '';
 			}
+		}
+		if (attr !== '') {
+			var attrMap = _getAttrList(full);
 			if (tagName === 'font') {
-				var style = {}, styleStr = '';
-				attr = attr.replace(/\s*([\w\-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
-					var key = $1.toLowerCase();
-					var val = $2 || '';
-					val = val.replace(/^["']|["']$/g, '');
+				var fontStyleMap = {}, fontStyle = '';
+				_each(attrMap, function(key, val) {
 					if (key === 'color') {
-						style['color'] = val;
-						return ' ';
+						fontStyleMap.color = val;
+						delete attrMap[key];
 					}
 					if (key === 'size') {
-						style['font-size'] = fontSizeHash[parseInt(val) - 1] || '';
-						return ' ';
+						fontStyleMap['font-size'] = fontSizeList[parseInt(val, 10) - 1] || '';
+						delete attrMap[key];
 					}
 					if (key === 'face') {
-						style['font-family'] = val;
-						return ' ';
+						fontStyleMap['font-family'] = val;
+						delete attrMap[key];
 					}
 					if (key === 'style') {
-						styleStr = val;
-						return ' ';
-					}
-					return $0;
-				});
-				if (styleStr && !/;$/.test(styleStr)) styleStr += ';';
-				KE.each(style, function(key, val) {
-					if (val !== '') { 
-						if (/\s/.test(val)) val = "'" + val + "'";
-						styleStr += key + ':' + val + ';';
+						fontStyle = val;
 					}
 				});
-				if (styleStr) attr += ' style="' + styleStr + '"';
-				tagName = 'span';
-			}
-			if (attr !== '') {
-				attr = attr.replace(/\s*([\w\-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
-					var key = $1.toLowerCase();
-					var val = $2 || '';
-					if (isFilter) {
-						if (key.charAt(0) === "." || (key !== "style" && typeof htmlTagHash[tagName][key] == "undefined")) return ' ';
-					}
+				if (fontStyle && !/;$/.test(fontStyle)) {
+					fontStyle += ';';
+				}
+				_each(fontStyleMap, function(key, val) {
 					if (val === '') {
-						val = '""';
-					} else {
-						if (key === "style") {
-							val = val.substr(1, val.length - 2);
-							val = val.replace(/\s*([^\s]+?)\s*:(.*?)(;|$)/g, function($0, $1, $2) {
-								var k = $1.toLowerCase();
-								if (isFilter) {
-									if (typeof htmlTagHash[tagName]['style'] == "undefined" && typeof htmlTagHash[tagName]['.' + k] == "undefined") return '';
-								}
-								var v = KE.util.trim($2);
-								v = KE.util.rgbToHex(v);
-								return k + ':' + v + ';';
-							});
-							val = KE.util.trim(val);
-							if (val === '') return '';
-							val = '"' + val + '"';
-						}
-						if (KE.util.inArray(key, ['src', 'href'])) {
-							if (val.charAt(0) === '"') {
-								val = val.substr(1, val.length - 2);
-							}
-							val = KE.format.getUrl(val, urlType);
-						}
-						if (val.charAt(0) !== '"') val = '"' + val + '"';
+						return;
 					}
-					return ' ' + key + '=' + val + ' ';
-				});
-				attr = attr.replace(/\s+(checked|selected|disabled|readonly)(\s+|$)/ig, function($0, $1) {
-					var key = $1.toLowerCase();
-					if (isFilter) {
-						if (key.charAt(0) === "." || typeof htmlTagHash[tagName][key] == "undefined") return ' ';
+					if (/\s/.test(val)) {
+						val = "'" + val + "'";
 					}
-					return ' ' + key + '="' + key + '"' + ' ';
+					fontStyle += key + ':' + val + ';';
 				});
-				attr = KE.util.trim(attr);
-				attr = attr.replace(/\s+/g, ' ');
-				if (attr) attr = ' ' + attr;
-				return startNewline + '<' + startSlash + tagName + attr + endSlash + '>' + endNewline;
-			} else {
-				return startNewline + '<' + startSlash + tagName + endSlash + '>' + endNewline;
+				attrMap.style = fontStyle;
 			}
-		});
-		if (!KE.browser.IE) {
-			html = html.replace(/<p><br\s+\/>\n<\/p>/ig, '<p>&nbsp;</p>');
-			html = html.replace(/<br\s+\/>\n<\/p>/ig, '</p>');
-		}
-		html = html.replace(/\u200B/g, '');
-		var reg = KE.setting.inlineTags.join('|');
-		var trimHtml = function(inHtml) {
-			var outHtml = inHtml.replace(new RegExp('<(' + reg + ')[^>]*><\\/(' + reg + ')>', 'ig'), function($0, $1, $2) {
-				if ($1 == $2) return '';
-				else return $0;
-			});
-			if (inHtml !== outHtml) outHtml = trimHtml(outHtml);
-			return outHtml;
-		};
-		return KE.util.trim(trimHtml(html));
-	}
-};
-
-KE.attr = function(el, key, val) {
-	if (KE.browser.IE && KE.browser.VERSION < 8 && key.toLowerCase() == 'class') key = 'className';
-	val = '' + val;
-	el.setAttribute(key, val);
-	if (val === '') el.removeAttribute(key);
-};
-
-KE.addClass = function(el, className) {
-	if (typeof el == 'object') {
-		var cls = el.className;
-		if (cls) {
-			if ((' ' + cls + ' ').indexOf(' ' + className + ' ') < 0) {
-				el.className = cls + ' ' + className;
-			}
-		} else {
-			el.className = className;
-		}
-	} else if (typeof el == 'string') {
-		if (/\s+class\s*=/.test(el)) {
-			el = el.replace(/(\s+class=["']?)([^"']*)(["']?[\s>])/, function($0, $1, $2, $3) {
-				if ((' ' + $2 + ' ').indexOf(' ' + className + ' ') < 0) {
-					return $2 === '' ? $1 + className + $3 : $1 + $2 + ' ' + className + $3;
-				} else {
-					return $0;
+			_each(attrMap, function(key, val) {
+				if (_FILL_ATTR_MAP[key]) {
+					attrMap[key] = key;
+				}
+				if (_inArray(key, ['src', 'href']) >= 0) {
+					attrMap[key] = _formatUrl(val, urlType);
+				}
+				if (htmlTags && key !== 'style' && !htmlTagMap[tagName]['*'] && !htmlTagMap[tagName][key] ||
+					tagName === 'body' && key === 'contenteditable' ||
+					/^kindeditor_\d+$/.test(key)) {
+					delete attrMap[key];
+				}
+				if (key === 'style' && val !== '') {
+					var styleMap = _getCssList(val);
+					_each(styleMap, function(k, v) {
+						if (htmlTags && !htmlTagMap[tagName].style && !htmlTagMap[tagName]['.' + k]) {
+							delete styleMap[k];
+						}
+					});
+					var style = '';
+					_each(styleMap, function(k, v) {
+						style += k + ':' + v + ';';
+					});
+					attrMap.style = style;
 				}
 			});
-		} else {
-			el = el.substr(0, el.length - 1) + ' class="' + className + '">';
+			attr = '';
+			_each(attrMap, function(key, val) {
+				if (key === 'style' && val === '') {
+					return;
+				}
+				attr += ' ' + key + '="' + val + '"';
+			});
+		}
+		if (tagName === 'font') {
+			tagName = 'span';
+		}
+		return startNewline + '<' + startSlash + tagName + attr + endSlash + '>' + endNewline;
+	});
+	html = html.replace(/(<(?:pre|pre\s[^>]*)>)([\s\S]*?)(<\/pre>)/ig, function($0, $1, $2, $3) {
+		return $1 + $2.replace(/\n/g, '<span id="__kindeditor_pre_newline__">\n') + $3;
+	});
+	html = html.replace(/\n\s*\n/g, '\n');
+	html = html.replace(/<span id="__kindeditor_pre_newline__">\n/g, '\n');
+	return _trim(html);
+}
+function _clearMsWord(html, htmlTags) {
+	html = html.replace(/<meta[\s\S]*?>/ig, '')
+		.replace(/<![\s\S]*?>/ig, '')
+		.replace(/<style[^>]*>[\s\S]*?<\/style>/ig, '')
+		.replace(/<script[^>]*>[\s\S]*?<\/script>/ig, '')
+		.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/ig, '')
+		.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '')
+		.replace(/<xml>[\s\S]*?<\/xml>/ig, '')
+		.replace(/<(?:table|td)[^>]*>/ig, function(full) {
+			return full.replace(/border-bottom:([#\w\s]+)/ig, 'border:$1');
+		});
+	return _formatHtml(html, htmlTags);
+}
+function _mediaType(src) {
+	if (/\.(rm|rmvb)(\?|$)/i.test(src)) {
+		return 'audio/x-pn-realaudio-plugin';
+	}
+	if (/\.(swf|flv)(\?|$)/i.test(src)) {
+		return 'application/x-shockwave-flash';
+	}
+	return 'video/x-ms-asf-plugin';
+}
+function _mediaClass(type) {
+	if (/realaudio/i.test(type)) {
+		return 'ke-rm';
+	}
+	if (/flash/i.test(type)) {
+		return 'ke-flash';
+	}
+	return 'ke-media';
+}
+function _mediaAttrs(srcTag) {
+	return _getAttrList(unescape(srcTag));
+}
+function _mediaEmbed(attrs) {
+	var html = '<embed ';
+	_each(attrs, function(key, val) {
+		html += key + '="' + val + '" ';
+	});
+	html += '/>';
+	return html;
+}
+function _mediaImg(blankPath, attrs) {
+	var width = attrs.width,
+		height = attrs.height,
+		type = attrs.type || _mediaType(attrs.src),
+		srcTag = _mediaEmbed(attrs),
+		style = '';
+	if (width > 0) {
+		style += 'width:' + width + 'px;';
+	}
+	if (height > 0) {
+		style += 'height:' + height + 'px;';
+	}
+	var html = '<img class="' + _mediaClass(type) + '" src="' + blankPath + '" ';
+	if (style !== '') {
+		html += 'style="' + style + '" ';
+	}
+	html += 'data-ke-tag="' + escape(srcTag) + '" alt="" />';
+	return html;
+}
+K.formatUrl = _formatUrl;
+K.formatHtml = _formatHtml;
+K.getCssList = _getCssList;
+K.getAttrList = _getAttrList;
+K.mediaType = _mediaType;
+K.mediaAttrs = _mediaAttrs;
+K.mediaEmbed = _mediaEmbed;
+K.mediaImg = _mediaImg;
+K.clearMsWord = _clearMsWord;
+function _contains(nodeA, nodeB) {
+	if (nodeA.nodeType == 9 && nodeB.nodeType != 9) {
+		return true;
+	}
+	while ((nodeB = nodeB.parentNode)) {
+		if (nodeB == nodeA) {
+			return true;
 		}
 	}
-	return el;
-};
-
-KE.removeClass = function(el, className) {
-	var cls = el.className || '';
-	cls = ' ' + cls + ' ';
-	className = ' ' + className + ' ';
-	if (cls.indexOf(className) >= 0) {
-		cls = KE.util.trim(cls.replace(new RegExp(className, 'ig'), ''));
-		if (cls === '') {
-			var key = el.getAttribute('class') ? 'class' : 'className';
-			el.removeAttribute(key);
-		} else {
-			el.className = cls;
+	return false;
+}
+function _getAttr(el, key) {
+	key = key.toLowerCase();
+	var val = null;
+	if (_IE && _V < 8) {
+		var div = el.ownerDocument.createElement('div');
+		div.appendChild(el.cloneNode(false));
+		var list = _getAttrList(div.innerHTML.toLowerCase());
+		if (key in list) {
+			val = list[key];
 		}
+	} else {
+		val = el.getAttribute(key, 2);
 	}
-	return el;
-};
-
-KE.getComputedStyle = function(el, key) {
-	var doc = el.ownerDocument,
-		win = doc.parentWindow || doc.defaultView,
-		jsKey = KE.util.getJsKey(key),
-		val = '';
-	if (win.getComputedStyle) {
-		var style = win.getComputedStyle(el, null);
-		val = style[jsKey] || style.getPropertyValue(key) || el.style[jsKey];
-	} else if (el.currentStyle) {
-		val = el.currentStyle[jsKey] || el.style[jsKey];
+	if (key === 'style' && val !== null) {
+		val = _formatCss(val);
 	}
 	return val;
-};
-
-KE.getCommonAncestor = function(keSel, tagName) {
-	var range = keSel.range,
-		keRange = keSel.keRange,
-		startNode = keRange.startNode,
-		endNode = keRange.endNode;
-	if (KE.util.inArray(tagName, ['table', 'td', 'tr'])) {
-		if (KE.browser.IE) {
-			if (range.item) {
-				if (range.item(0).nodeName.toLowerCase() === tagName) {
-					startNode = endNode = range.item(0);
+}
+function _queryAll(expr, root) {
+	var exprList = expr.split(',');
+	if (exprList.length > 1) {
+		var mergedResults = [];
+		_each(exprList, function() {
+			_each(_queryAll(this, root), function() {
+				if (_inArray(this, mergedResults) < 0) {
+					mergedResults.push(this);
 				}
-			} else {
-				var rangeA = range.duplicate();
-				rangeA.collapse(true);
-				var rangeB = range.duplicate();
-				rangeB.collapse(false);
-				startNode = rangeA.parentElement();
-				endNode = rangeB.parentElement();
+			});
+		});
+		return mergedResults;
+	}
+	root = root || document;
+	function escape(str) {
+		if (typeof str != 'string') {
+			return str;
+		}
+		return str.replace(/([^\w\-])/g, '\\$1');
+	}
+	function stripslashes(str) {
+		return str.replace(/\\/g, '');
+	}
+	function cmpTag(tagA, tagB) {
+		return tagA === '*' || tagA.toLowerCase() === escape(tagB.toLowerCase());
+	}
+	function byId(id, tag, root) {
+		var arr = [],
+			doc = root.ownerDocument || root,
+			el = doc.getElementById(stripslashes(id));
+		if (el) {
+			if (cmpTag(tag, el.nodeName) && _contains(root, el)) {
+				arr.push(el);
+			}
+		}
+		return arr;
+	}
+	function byClass(className, tag, root) {
+		var doc = root.ownerDocument || root, arr = [], els, i, len, el;
+		if (root.getElementsByClassName) {
+			els = root.getElementsByClassName(stripslashes(className));
+			for (i = 0, len = els.length; i < len; i++) {
+				el = els[i];
+				if (cmpTag(tag, el.nodeName)) {
+					arr.push(el);
+				}
+			}
+		} else if (doc.querySelectorAll) {
+			els = doc.querySelectorAll((root.nodeName !== '#document' ? root.nodeName + ' ' : '') + tag + '.' + className);
+			for (i = 0, len = els.length; i < len; i++) {
+				el = els[i];
+				if (_contains(root, el)) {
+					arr.push(el);
+				}
 			}
 		} else {
-			var rangeA = range.cloneRange();
-			rangeA.collapse(true);
-			var rangeB = range.cloneRange();
-			rangeB.collapse(false);
-			startNode = rangeA.startContainer;
-			endNode = rangeB.startContainer;
-		}
-	}
-	function find(node) {
-		while (node) {
-			if (node.nodeType == 1) {
-				if (node.tagName.toLowerCase() === tagName) return node;
+			els = root.getElementsByTagName(tag);
+			className = ' ' + className + ' ';
+			for (i = 0, len = els.length; i < len; i++) {
+				el = els[i];
+				if (el.nodeType == 1) {
+					var cls = el.className;
+					if (cls && (' ' + cls + ' ').indexOf(className) > -1) {
+						arr.push(el);
+					}
+				}
 			}
-			node = node.parentNode;
 		}
-		return null;
-	};
-	var start = find(startNode),
-		end = find(endNode);
-	if (start && end && start === end) {
-		return start;
+		return arr;
 	}
-	return null;
-};
-
-KE.queryCommandValue = function(doc, cmd) {
-	cmd = cmd.toLowerCase();
-	function commandValue() {
-		var val = doc.queryCommandValue(cmd);
-		if (typeof val !== 'string') val = '';
-		return val;
-	}
-	var val = '';
-	if (cmd === 'fontname') {
-		val = commandValue();
-		val = val.replace(/['"]/g, '');
-	} else if (cmd === 'formatblock') {
-		val = commandValue();
-		if (val === '') {
-			var keSel = new KE.selection(doc);
-			var el = KE.getCommonAncestor(keSel, 'h1');
-			if (!el) el = KE.getCommonAncestor(keSel, 'h2');
-			if (!el) el = KE.getCommonAncestor(keSel, 'h3');
-			if (!el) el = KE.getCommonAncestor(keSel, 'h4');
-			if (!el) el = KE.getCommonAncestor(keSel, 'p');
-			if (el) val = el.nodeName;
+	function byName(name, tag, root) {
+		var arr = [], doc = root.ownerDocument || root,
+			els = doc.getElementsByName(stripslashes(name)), el;
+		for (var i = 0, len = els.length; i < len; i++) {
+			el = els[i];
+			if (cmpTag(tag, el.nodeName) && _contains(root, el)) {
+				if (el.getAttributeNode('name')) {
+					arr.push(el);
+				}
+			}
 		}
-		if (val === 'Normal') val = 'p';
-	} else if (cmd === 'fontsize') {
-		var keSel = new KE.selection(doc);
-		var el = KE.getCommonAncestor(keSel, 'span');
-		if (el) val = KE.getComputedStyle(el, 'font-size');
-	} else if (cmd === 'textcolor') {
-		var keSel = new KE.selection(doc);
-		var el = KE.getCommonAncestor(keSel, 'span');
-		if (el) val = KE.getComputedStyle(el, 'color');
-		val = KE.util.rgbToHex(val);
-		if (val === '') val = 'default';
-	} else if (cmd === 'bgcolor') {
-		var keSel = new KE.selection(doc);
-		var el = KE.getCommonAncestor(keSel, 'span');
-		if (el) val = KE.getComputedStyle(el, 'background-color');
-		val = KE.util.rgbToHex(val);
-		if (val === '') val = 'default';
+		return arr;
 	}
-	return val.toLowerCase();
-};
-
-KE.util = {
-	getDocumentElement : function(doc) {
-		doc = doc || document;
-		return (doc.compatMode != "CSS1Compat") ? doc.body : doc.documentElement;
+	function byAttr(key, val, tag, root) {
+		var arr = [], els = root.getElementsByTagName(tag), el;
+		for (var i = 0, len = els.length; i < len; i++) {
+			el = els[i];
+			if (el.nodeType == 1) {
+				if (val === null) {
+					if (_getAttr(el, key) !== null) {
+						arr.push(el);
+					}
+				} else {
+					if (val === escape(_getAttr(el, key))) {
+						arr.push(el);
+					}
+				}
+			}
+		}
+		return arr;
+	}
+	function select(expr, root) {
+		var arr = [], matches;
+		matches = /^((?:\\.|[^.#\s\[<>])+)/.exec(expr);
+		var tag = matches ? matches[1] : '*';
+		if ((matches = /#((?:[\w\-]|\\.)+)$/.exec(expr))) {
+			arr = byId(matches[1], tag, root);
+		} else if ((matches = /\.((?:[\w\-]|\\.)+)$/.exec(expr))) {
+			arr = byClass(matches[1], tag, root);
+		} else if ((matches = /\[((?:[\w\-]|\\.)+)\]/.exec(expr))) {
+			arr = byAttr(matches[1].toLowerCase(), null, tag, root);
+		} else if ((matches = /\[((?:[\w\-]|\\.)+)\s*=\s*['"]?((?:\\.|[^'"]+)+)['"]?\]/.exec(expr))) {
+			var key = matches[1].toLowerCase(), val = matches[2];
+			if (key === 'id') {
+				arr = byId(val, tag, root);
+			} else if (key === 'class') {
+				arr = byClass(val, tag, root);
+			} else if (key === 'name') {
+				arr = byName(val, tag, root);
+			} else {
+				arr = byAttr(key, val, tag, root);
+			}
+		} else {
+			var els = root.getElementsByTagName(tag), el;
+			for (var i = 0, len = els.length; i < len; i++) {
+				el = els[i];
+				if (el.nodeType == 1) {
+					arr.push(el);
+				}
+			}
+		}
+		return arr;
+	}
+	var parts = [], arr, re = /((?:\\.|[^\s>])+|[\s>])/g;
+	while ((arr = re.exec(expr))) {
+		if (arr[1] !== ' ') {
+			parts.push(arr[1]);
+		}
+	}
+	var results = [];
+	if (parts.length == 1) {
+		return select(parts[0], root);
+	}
+	var isChild = false, part, els, subResults, val, v, i, j, k, length, len, l;
+	for (i = 0, lenth = parts.length; i < lenth; i++) {
+		part = parts[i];
+		if (part === '>') {
+			isChild = true;
+			continue;
+		}
+		if (i > 0) {
+			els = [];
+			for (j = 0, len = results.length; j < len; j++) {
+				val = results[j];
+				subResults = select(part, val);
+				for (k = 0, l = subResults.length; k < l; k++) {
+					v = subResults[k];
+					if (isChild) {
+						if (val === v.parentNode) {
+							els.push(v);
+						}
+					} else {
+						els.push(v);
+					}
+				}
+			}
+			results = els;
+		} else {
+			results = select(part, root);
+		}
+		if (results.length === 0) {
+			return [];
+		}
+	}
+	return results;
+}
+function _query(expr, root) {
+	var arr = _queryAll(expr, root);
+	return arr.length > 0 ? arr[0] : null;
+}
+K.query = _query;
+K.queryAll = _queryAll;
+function _get(val) {
+	return K(val)[0];
+}
+function _getDoc(node) {
+	if (!node) {
+		return document;
+	}
+	return node.ownerDocument || node.document || node;
+}
+function _getWin(node) {
+	if (!node) {
+		return window;
+	}
+	var doc = _getDoc(node);
+	return doc.parentWindow || doc.defaultView;
+}
+function _setHtml(el, html) {
+	if (el.nodeType != 1) {
+		return;
+	}
+	var doc = _getDoc(el);
+	try {
+		el.innerHTML = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + html;
+		var temp = doc.getElementById('__kindeditor_temp_tag__');
+		temp.parentNode.removeChild(temp);
+	} catch(e) {
+		K(el).empty();
+		K('@' + html, doc).each(function() {
+			el.appendChild(this);
+		});
+	}
+}
+function _hasClass(el, cls) {
+	return _inString(cls, el.className, ' ');
+}
+function _setAttr(el, key, val) {
+	if (_IE && _V < 8 && key.toLowerCase() == 'class') {
+		key = 'className';
+	}
+	el.setAttribute(key, '' + val);
+}
+function _removeAttr(el, key) {
+	if (_IE && _V < 8 && key.toLowerCase() == 'class') {
+		key = 'className';
+	}
+	_setAttr(el, key, '');
+	el.removeAttribute(key);
+}
+function _getNodeName(node) {
+	if (!node || !node.nodeName) {
+		return '';
+	}
+	return node.nodeName.toLowerCase();
+}
+function _computedCss(el, key) {
+	var self = this, win = _getWin(el), camelKey = _toCamel(key), val = '';
+	if (win.getComputedStyle) {
+		var style = win.getComputedStyle(el, null);
+		val = style[camelKey] || style.getPropertyValue(key) || el.style[camelKey];
+	} else if (el.currentStyle) {
+		val = el.currentStyle[camelKey] || el.style[camelKey];
+	}
+	return val;
+}
+function _hasVal(node) {
+	return !!_VALUE_TAG_MAP[_getNodeName(node)];
+}
+function _docElement(doc) {
+	doc = doc || document;
+	return _QUIRKS ? doc.body : doc.documentElement;
+}
+function _docHeight(doc) {
+	var el = _docElement(doc);
+	return Math.max(el.scrollHeight, el.clientHeight);
+}
+function _docWidth(doc) {
+	var el = _docElement(doc);
+	return Math.max(el.scrollWidth, el.clientWidth);
+}
+function _getScrollPos(doc) {
+	doc = doc || document;
+	var x, y;
+	if (_IE || _OPERA) {
+		x = _docElement(doc).scrollLeft;
+		y = _docElement(doc).scrollTop;
+	} else {
+		x = _getWin(doc).scrollX;
+		y = _getWin(doc).scrollY;
+	}
+	return {x : x, y : y};
+}
+function KNode(node) {
+	this.init(node);
+}
+_extend(KNode, {
+	init : function(node) {
+		var self = this;
+		for (var i = 0, len = node.length; i < len; i++) {
+			self[i] = node[i].get ? node[i][0] : node[i];
+		}
+		self.length = node.length;
+		self.doc = _getDoc(self[0]);
+		self.name = _getNodeName(self[0]);
+		self.type = self.length > 0 ? self[0].nodeType : null;
+		self.win = _getWin(self[0]);
+		self._data = {};
 	},
-	getDocumentHeight : function(doc) {
-		var el = this.getDocumentElement(doc);
-		return Math.max(el.scrollHeight, el.clientHeight);
+	each : function(fn) {
+		var self = this;
+		for (var i = 0; i < self.length; i++) {
+			if (fn.call(self[i], i, self[i]) === false) {
+				return self;
+			}
+		}
+		return self;
 	},
-	getDocumentWidth : function(doc) {
-		var el = this.getDocumentElement(doc);
-		return Math.max(el.scrollWidth, el.clientWidth);
+	bind : function(type, fn) {
+		this.each(function() {
+			_bind(this, type, fn);
+		});
+		return this;
 	},
-	createTable : function(doc) {
-		var table = KE.$$('table', doc);
-		table.cellPadding = 0;
-		table.cellSpacing = 0;
-		table.border = 0;
-		return {table: table, cell: table.insertRow(0).insertCell(0)};
+	unbind : function(type, fn) {
+		this.each(function() {
+			_unbind(this, type, fn);
+		});
+		return this;
 	},
-	loadStyle : function(path) {
-		var link = KE.$$('link');
-		link.setAttribute('type', 'text/css');
-		link.setAttribute('rel', 'stylesheet');
-		link.setAttribute('href', path);
-		document.getElementsByTagName("head")[0].appendChild(link);
+	fire : function(type) {
+		if (this.length < 1) {
+			return this;
+		}
+		_fire(this[0], type);
+		return this;
 	},
-	getAttrList : function(tag) {
-		var re = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([\w\-:]+))|(?:([\w\-:]+)="([^"]*)")|(?:([\w\-:]+)='([^']*)'))(?=(?:\s|\/|>)+)/g;
-		var arr, key, val, list = {};
-		while ((arr = re.exec(tag))) {
-			key = arr[1] || arr[2] || arr[4] || arr[6];
-			val = arr[1] || (arr[2] ? arr[3] : (arr[4] ? arr[5] : arr[7]));
-			list[key] = val;
+	hasAttr : function(key) {
+		if (this.length < 1) {
+			return false;
+		}
+		return !!_getAttr(this[0], key);
+	},
+	attr : function(key, val) {
+		var self = this;
+		if (key === undefined) {
+			return _getAttrList(self.outer());
+		}
+		if (typeof key === 'object') {
+			_each(key, function(k, v) {
+				self.attr(k, v);
+			});
+			return self;
+		}
+		if (val === undefined) {
+			val = self.length < 1 ? null : _getAttr(self[0], key);
+			return val === null ? '' : val;
+		}
+		self.each(function() {
+			_setAttr(this, key, val);
+		});
+		return self;
+	},
+	removeAttr : function(key) {
+		this.each(function() {
+			_removeAttr(this, key);
+		});
+		return this;
+	},
+	get : function(i) {
+		if (this.length < 1) {
+			return null;
+		}
+		return this[i || 0];
+	},
+	hasClass : function(cls) {
+		if (this.length < 1) {
+			return false;
+		}
+		return _hasClass(this[0], cls);
+	},
+	addClass : function(cls) {
+		this.each(function() {
+			if (!_hasClass(this, cls)) {
+				this.className = _trim(this.className + ' ' + cls);
+			}
+		});
+		return this;
+	},
+	removeClass : function(cls) {
+		this.each(function() {
+			if (_hasClass(this, cls)) {
+				this.className = _trim(this.className.replace(new RegExp('(^|\\s)' + cls + '(\\s|$)'), ' '));
+			}
+		});
+		return this;
+	},
+	html : function(val) {
+		var self = this;
+		if (val === undefined) {
+			if (self.length < 1) {
+				return '';
+			}
+			return _formatHtml(self[0].innerHTML);
+		}
+		self.each(function() {
+			_setHtml(this, val);
+		});
+		return self;
+	},
+	text : function() {
+		var self = this;
+		if (self.length < 1) {
+			return '';
+		}
+		return _IE ? self[0].innerText : self[0].textContent;
+	},
+	hasVal : function() {
+		if (this.length < 1) {
+			return false;
+		}
+		return _hasVal(this[0]);
+	},
+	val : function(val) {
+		var self = this;
+		if (val === undefined) {
+			if (self.length < 1) {
+				return '';
+			}
+			return self.hasVal() ? self[0].value : self.attr('value');
+		} else {
+			self.each(function() {
+				if (_hasVal(this)) {
+					this.value = val;
+				} else {
+					_setAttr(this, 'value' , val);
+				}
+			});
+			return self;
+		}
+	},
+	css : function(key, val) {
+		var self = this;
+		if (key === undefined) {
+			return _getCssList(self.attr('style'));
+		}
+		if (typeof key === 'object') {
+			_each(key, function(k, v) {
+				self.css(k, v);
+			});
+			return self;
+		}
+		if (val === undefined) {
+			if (self.length < 1) {
+				return '';
+			}
+			return self[0].style[_toCamel(key)] || _computedCss(self[0], key) || '';
+		}
+		self.each(function() {
+			this.style[_toCamel(key)] = val;
+		});
+		return self;
+	},
+	width : function(val) {
+		var self = this;
+		if (val === undefined) {
+			if (self.length < 1) {
+				return 0;
+			}
+			return self[0].offsetWidth;
+		}
+		return self.css('width', _addUnit(val));
+	},
+	height : function(val) {
+		var self = this;
+		if (val === undefined) {
+			if (self.length < 1) {
+				return 0;
+			}
+			return self[0].offsetHeight;
+		}
+		return self.css('height', _addUnit(val));
+	},
+	opacity : function(val) {
+		this.each(function() {
+			if (this.style.opacity === undefined) {
+				this.style.filter = val == 1 ? '' : 'alpha(opacity=' + (val * 100) + ')';
+			} else {
+				this.style.opacity = val == 1 ? '' : val;
+			}
+		});
+		return this;
+	},
+	data : function(key, val) {
+		var self = this;
+		if (val === undefined) {
+			return self._data[key];
+		}
+		self._data[key] = val;
+		return self;
+	},
+	pos : function() {
+		var self = this, node = self[0], x = 0, y = 0;
+		if (node) {
+			if (node.getBoundingClientRect) {
+				var box = node.getBoundingClientRect(),
+					pos = _getScrollPos(self.doc);
+				x = box.left + pos.x;
+				y = box.top + pos.y;
+			} else {
+				while (node) {
+					x += node.offsetLeft;
+					y += node.offsetTop;
+					node = node.offsetParent;
+				}
+			}
+		}
+		return {x : _round(x), y : _round(y)};
+	},
+	clone : function(bool) {
+		if (this.length < 1) {
+			return new KNode([]);
+		}
+		return new KNode([this[0].cloneNode(bool)]);
+	},
+	append : function(expr) {
+		this.each(function() {
+			if (this.appendChild) {
+				this.appendChild(_get(expr));
+			}
+		});
+		return this;
+	},
+	before : function(expr) {
+		this.each(function() {
+			this.parentNode.insertBefore(_get(expr), this);
+		});
+		return this;
+	},
+	after : function(expr) {
+		this.each(function() {
+			if (this.nextSibling) {
+				this.parentNode.insertBefore(_get(expr), this.nextSibling);
+			} else {
+				this.parentNode.appendChild(_get(expr));
+			}
+		});
+		return this;
+	},
+	replaceWith : function(expr) {
+		var nodes = [];
+		this.each(function(i, node) {
+			_unbind(node);
+			var newNode = _get(expr);
+			node.parentNode.replaceChild(newNode, node);
+			nodes.push(newNode);
+		});
+		return K(nodes);
+	},
+	empty : function() {
+		var self = this;
+		self.each(function(i, node) {
+			var child = node.firstChild;
+			while (child) {
+				if (!node.parentNode) {
+					return;
+				}
+				var next = child.nextSibling;
+				child.parentNode.removeChild(child);
+				child = next;
+			}
+		});
+		return self;
+	},
+	remove : function(keepChilds) {
+		var self = this;
+		self.each(function(i, node) {
+			if (!node.parentNode) {
+				return;
+			}
+			_unbind(node);
+			if (keepChilds) {
+				var child = node.firstChild;
+				while (child) {
+					var next = child.nextSibling;
+					node.parentNode.insertBefore(child, node);
+					child = next;
+				}
+			}
+			node.parentNode.removeChild(node);
+			delete self[i];
+		});
+		self.length = 0;
+		self._data = {};
+		return self;
+	},
+	show : function(val) {
+		return this.css('display', val === undefined ? 'block' : val);
+	},
+	hide : function() {
+		return this.css('display', 'none');
+	},
+	outer : function() {
+		var self = this;
+		if (self.length < 1) {
+			return '';
+		}
+		var div = self.doc.createElement('div'), html;
+		div.appendChild(self[0].cloneNode(true));
+		html = _formatHtml(div.innerHTML);
+		div = null;
+		return html;
+	},
+	isSingle : function() {
+		return !!_SINGLE_TAG_MAP[this.name];
+	},
+	isInline : function() {
+		return !!_INLINE_TAG_MAP[this.name];
+	},
+	isBlock : function() {
+		return !!_BLOCK_TAG_MAP[this.name];
+	},
+	isStyle : function() {
+		return !!_STYLE_TAG_MAP[this.name];
+	},
+	isControl : function() {
+		return !!_CONTROL_TAG_MAP[this.name];
+	},
+	contains : function(otherNode) {
+		if (this.length < 1) {
+			return false;
+		}
+		return _contains(this[0], _get(otherNode));
+	},
+	parent : function() {
+		if (this.length < 1) {
+			return null;
+		}
+		var node = this[0].parentNode;
+		return node ? new KNode([node]) : null;
+	},
+	children : function() {
+		if (this.length < 1) {
+			return [];
+		}
+		var list = [], child = this[0].firstChild;
+		while (child) {
+			if (child.nodeType != 3 || _trim(child.nodeValue) !== '') {
+				list.push(new KNode([child]));
+			}
+			child = child.nextSibling;
 		}
 		return list;
 	},
-	inArray : function(str, arr) {
-		for (var i = 0; i < arr.length; i++) {if (str == arr[i]) return true;}
-		return false;
+	first : function() {
+		var list = this.children();
+		return list.length > 0 ? list[0] : null;
 	},
-	trim : function(str) {
-		return str.replace(/^\s+|\s+$/g, "");
+	last : function() {
+		var list = this.children();
+		return list.length > 0 ? list[list.length - 1] : null;
 	},
-	getJsKey : function(key) {
-		var arr = key.split('-');
-		key = '';
-		for (var i = 0, len = arr.length; i < len; i++) {
-			key += (i > 0) ? arr[i].charAt(0).toUpperCase() + arr[i].substr(1) : arr[i];
+	index : function() {
+		if (this.length < 1) {
+			return -1;
 		}
-		return key;
-	},
-	arrayToHash : function(arr) {
-		var hash = {};
-		for (var i = 0, len = arr.length; i < len; i++) hash[arr[i]] = 1;
-		return hash;
-	},
-	escape : function(str) {
-		str = str.replace(/&/g, '&amp;');
-		str = str.replace(/</g, '&lt;');
-		str = str.replace(/>/g, '&gt;');
-		str = str.replace(/"/g, '&quot;');
-		return str;
-	},
-	unescape : function(str) {
-		str = str.replace(/&lt;/g, '<');
-		str = str.replace(/&gt;/g, '>');
-		str = str.replace(/&quot;/g, '"');
-		str = str.replace(/&amp;/g, '&');
-		return str;
-	},
-	getScrollPos : function() {
-		var x, y;
-		if (KE.browser.IE || KE.browser.OPERA) {
-			var el = this.getDocumentElement();
-			x = el.scrollLeft;
-			y = el.scrollTop;
-		} else {
-			x = window.scrollX;
-			y = window.scrollY;
+		var i = -1, sibling = this[0];
+		while (sibling) {
+			i++;
+			sibling = sibling.previousSibling;
 		}
-		return {x : x, y : y};
+		return i;
 	},
-	getElementPos : function(el) {
-		var x = 0, y = 0;
-		if (el.getBoundingClientRect) {
-			var box = el.getBoundingClientRect();
-			var pos = this.getScrollPos();
-			x = box.left + pos.x;
-			y = box.top + pos.y;
-		} else {
-            x = el.offsetLeft;
-            y = el.offsetTop;
-            var parent = el.offsetParent;
-            while (parent) {
-                x += parent.offsetLeft;
-                y += parent.offsetTop;
-                parent = parent.offsetParent;
-            }
+	prev : function() {
+		if (this.length < 1) {
+			return null;
 		}
-		return {x : x, y : y};
+		var node = this[0].previousSibling;
+		return node ? new KNode([node]) : null;
 	},
-	getCoords : function(ev) {
-		ev = ev || window.event;
-		return {
-			x : ev.clientX,
-			y : ev.clientY
-		};
-	},
-	setOpacity : function(el, opacity) {
-		if (typeof el.style.opacity == "undefined") {
-			el.style.filter = (opacity == 100) ? "" : "alpha(opacity=" + opacity + ")";
-		} else {
-			el.style.opacity = (opacity == 100) ? "" : (opacity / 100);
+	next : function() {
+		if (this.length < 1) {
+			return null;
 		}
+		var node = this[0].nextSibling;
+		return node ? new KNode([node]) : null;
 	},
-	getIframeDoc : function(iframe) {
-		return iframe.contentDocument || iframe.contentWindow.document;
-	},
-	rgbToHex : function(str) {
-		function hex(s) {
-			s = parseInt(s).toString(16);
-			return s.length > 1 ? s : '0' + s;
-		};
-		return str.replace(/rgb\s*?\(\s*?(\d+)\s*?,\s*?(\d+)\s*?,\s*?(\d+)\s*?\)/ig,
-			function($0, $1, $2, $3) {
-				return '#' + hex($1) + hex($2) + hex($3);
-			}
-		);
-	},
-	parseJson : function (text) {
-		//extract JSON string
-		var match;
-		if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
-			text = match[0];
-		}
-		var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-		cx.lastIndex = 0;
-		if (cx.test(text)) {
-			text = text.replace(cx, function (a) {
-				return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-			});
-		}
-		if (/^[\],:{}\s]*$/.
-		test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
-		replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-		replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-			return eval('(' + text + ')');
-		}
-		throw 'JSON parse error';
-	},
-	getParam : function(url, name) {
-		return url.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? unescape(RegExp.$1) : '';
-	},
-	createRange : function(doc) {
-		return doc.body.createTextRange ? doc.body.createTextRange() : doc.createRange();
-	},
-	getNodeType : function(node) {
-		return (node.nodeType == 1 && KE.util.inArray(node.tagName.toLowerCase(), KE.setting.noEndTags)) ? 88 : node.nodeType;
-	},
-	inMarquee : function(node) {
-		var n = node, nodeName;
-		while (n) {
-			nodeName = n.nodeName.toLowerCase();
-			if (nodeName == 'marquee' || nodeName == 'select') return true;
-			n = n.parentNode;
-		}
-		return false;
-	},
-	moveToElementText : function (range, el) {
-		if (!this.inMarquee(el)) range.moveToElementText(el);
-	},
-	getNodeTextLength : function(node) {
-		var type = KE.util.getNodeType(node);
-		if (type == 1) {
-			var html = node.innerHTML;
-			return html.replace(/<.*?>/ig, "").length;
-		} else if (type == 3) {
-			return node.nodeValue.length;
-		}
-	},
-	getNodeStartRange : function(doc, node) {
-		var range = KE.util.createRange(doc);
-		var type = node.nodeType;
-		if (type == 1) {
-			KE.util.moveToElementText(range, node);
-			return range;
-		} else if (type == 3) {
-			var offset = 0;
-			var sibling = node.previousSibling;
-			while (sibling) {
-				if (sibling.nodeType == 1) {
-					var nodeRange = KE.util.createRange(doc);
-					KE.util.moveToElementText(nodeRange, sibling);
-					range.setEndPoint('StartToEnd', nodeRange);
-					range.moveStart('character', offset);
-					return range;
-				} else if (sibling.nodeType == 3) {
-					offset += sibling.nodeValue.length;
-				}
-				sibling = sibling.previousSibling;
-			}
-			KE.util.moveToElementText(range, node.parentNode);
-			range.moveStart('character', offset);
-			return range;
-		}
-	},
-	removeParent : function(parent) {
-		if (parent.hasChildNodes) {
-			var node = parent.firstChild;
-			while (node) {
-				var nextNode = node.nextSibling;
-				parent.parentNode.insertBefore(node, parent);
-				node = nextNode;
-			}
-		}
-		parent.parentNode.removeChild(parent);
-	},
-	pluginLang : function(pluginName, doc) {
-		KE.each(KE.lang.plugins[pluginName], function (key, val) {
-			var span = KE.$('lang.' + key, doc);
-			if (span) {
-				span.parentNode.insertBefore(doc.createTextNode(val), span);
-				span.parentNode.removeChild(span);
-			}
-		});
-	},
-	drag : function(id, mousedownObj, moveObj, func) {
-		var g = KE.g[id];
-		mousedownObj.onmousedown = function(e) {
-			var self = this;
-			e = e || window.event;
-			var pos = KE.util.getCoords(e);
-			var objTop = parseInt(moveObj.style.top);
-			var objLeft = parseInt(moveObj.style.left);
-			var objWidth = moveObj.style.width;
-			var objHeight = moveObj.style.height;
-			if (objWidth.match(/%$/)) objWidth = moveObj.offsetWidth + 'px';
-			if (objHeight.match(/%$/)) objHeight = moveObj.offsetHeight + 'px';
-			objWidth = parseInt(objWidth);
-			objHeight = parseInt(objHeight);
-			var mouseTop = pos.y;
-			var mouseLeft = pos.x;
-			var scrollPos = KE.util.getScrollPos();
-			var scrollTop = scrollPos.y;
-			var scrollLeft = scrollPos.x;
-			var dragFlag = true;
-			function moveListener(e) {
-				if (dragFlag) {
-					var pos = KE.util.getCoords(e);
-					var scrollPos = KE.util.getScrollPos();
-					var top = parseInt(pos.y - mouseTop - scrollTop + scrollPos.y);
-					var left = parseInt(pos.x - mouseLeft - scrollLeft + scrollPos.x);
-					func(objTop, objLeft, objWidth, objHeight, top, left);
-				}
-			}
-			var iframePos = KE.util.getElementPos(g.iframe);
-			function iframeMoveListener(e) {
-				if (dragFlag) {
-					var pos = KE.util.getCoords(e, g.iframeDoc);
-					var top = parseInt(iframePos.y + pos.y - mouseTop - scrollTop);
-					var left = parseInt(iframePos.x + pos.x - mouseLeft - scrollLeft);
-					func(objTop, objLeft, objWidth, objHeight, top, left);
-				}
-			}
-			var selectListener = function() { return false; };
-			function upListener(e) {
-				dragFlag = false;
-				if (self.releaseCapture) self.releaseCapture();
-				KE.event.remove(document, 'mousemove', moveListener);
-				KE.event.remove(document, 'mouseup', upListener);
-				KE.event.remove(g.iframeDoc, 'mousemove', iframeMoveListener);
-				KE.event.remove(g.iframeDoc, 'mouseup', upListener);
-				KE.event.remove(document, 'selectstart', selectListener);
-				KE.event.stop(e);
-				return false;
-			}
-			KE.event.add(document, 'mousemove', moveListener);
-			KE.event.add(document, 'mouseup', upListener);
-			KE.event.add(g.iframeDoc, 'mousemove', iframeMoveListener);
-			KE.event.add(g.iframeDoc, 'mouseup', upListener);
-			KE.event.add(document, 'selectstart', selectListener);
-			if (self.setCapture) self.setCapture();
-			KE.event.stop(e);
-			return false;
-		};
-	},
-	resize : function(id, width, height, isCheck, isResizeWidth) {
-		isResizeWidth = (typeof isResizeWidth == "undefined") ? true : isResizeWidth;
-		var g = KE.g[id];
-		if (!g.container) return;
-		if (isCheck && (parseInt(width) <= g.minWidth || parseInt(height) <= g.minHeight)) return;
-		if (isResizeWidth) g.container.style.width = width;
-		if (KE.browser.IE) {
-			//improve IE performance (issue #126)
-			var temp = g.toolbarTable && g.toolbarTable.offsetHeight;
-		}
-		g.container.style.height = height;
-		var diff = parseInt(height) - g.toolbarHeight - g.statusbarHeight;
-		if (diff >= 0) {
-			g.iframe.style.height = diff + 'px';
-			g.newTextarea.style.height = (((KE.browser.IE && KE.browser.VERSION < 8 || document.compatMode != 'CSS1Compat') && diff >= 2) ? diff - 2 : diff) + 'px';
-		}
-	},
-	hideLoadingPage : function(id) {
-		var stack = KE.g[id].dialogStack;
-		var dialog = stack[stack.length - 1];
-		dialog.loading.style.display = 'none';
-		dialog.iframe.style.display = '';
-	},
-	showLoadingPage : function(id) {
-		var stack = KE.g[id].dialogStack;
-		var dialog = stack[stack.length - 1];
-		dialog.loading.style.display = '';
-		dialog.iframe.style.display = 'none';
-	},
-	setDefaultPlugin : function(id) {
-		var items = [
-			'selectall', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-			'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-			'superscript', 'bold', 'italic', 'underline', 'strikethrough'
-		];
-		var shortcuts = {
-			bold : 'B',
-			italic : 'I',
-			underline : 'U'
-		};
-		for (var i = 0; i < items.length; i++) {
-			var item = items[i],
-				plugin = {};
-			if (item in shortcuts) {
-				plugin.init = (function(item) {
-					return function(id) {
-						KE.event.ctrl(KE.g[id].iframeDoc, shortcuts[item], function(e) {
-							KE.plugin[item].click(id);
-							KE.util.focus(id);
-						}, id);
-					};
-				})(item);
-			}
-			plugin.click = (function(item) {
-				return function(id) {
-					KE.util.execCommand(id, item, null);
-				};
-			})(item);
-			KE.plugin[item] = plugin;
-		}
-	},
-	getFullHtml : function(id) {
-		var html = '<html>';
-		html += '<head>';
-		html += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-		html += '<title>KindEditor</title>';
-		html += '<link href="' + KE.g[id].skinsPath + 'common/editor.css?ver=' + escape(KE.version) + '" rel="stylesheet" type="text/css" />';
-		var cssPath = KE.g[id].cssPath;
-		if (typeof cssPath == 'string') cssPath = [cssPath];
-		for (var i = 0, len = cssPath.length; i < len; i++) {
-			if (cssPath[i] !== '') html += '<link href="' + cssPath[i] + '" rel="stylesheet" type="text/css" />';
-		}
-		html += '</head>';
-		html += '<body class="ke-content"></body>';
-		html += '</html>';
-		return html;
-	},
-	getMediaType : function(src) {
-		if (src.match(/\.(rm|rmvb)(\?|$)/i)) return 'rm';
-		else if (src.match(/\.(swf|flv)(\?|$)/i)) return 'flash';
-		else return 'media';
-	},
-	getMediaImage : function(id, type, attrs) {
-		var width = attrs.width;
-		var height = attrs.height;
-		type = type || this.getMediaType(attrs.src);
-		var srcTag = this.getMediaEmbed(attrs);
-		var style = '';
-		if (width > 0) style += 'width:' + width + 'px;';
-		if (height > 0) style += 'height:' + height + 'px;';
-		var className = 'ke-' + type;
-		var html = '<img class="' + className + '" src="' + KE.g[id].skinsPath + 'common/blank.gif" ';
-		if (style !== '') html += 'style="' + style + '" ';
-		html += 'kesrctag="' + escape(srcTag) + '" alt="" />';
-		return html;
-	},
-	getMediaEmbed : function(attrs) {
-		var html = '<embed ';
-		KE.each(attrs, function(key, val) {
-			html += key + '="' + val + '" ';
-		});
-		html += '/>';
-		return html;
-	},
-	execGetHtmlHooks : function(id, html) {
-		var hooks = KE.g[id].getHtmlHooks;
-		for (var i = 0, len = hooks.length; i < len; i++) {
-			html = hooks[i](html);
-		}
-		return html;
-	},
-	execSetHtmlHooks : function(id, html) {
-		var hooks = KE.g[id].setHtmlHooks;
-		for (var i = 0, len = hooks.length; i < len; i++) {
-			html = hooks[i](html);
-		}
-		return html;
-	},
-	execOnchangeHandler : function(id) {
-		var handlers = KE.g[id].onchangeHandlerStack;
-		for (var i = 0, len = handlers.length; i < len; i++) {
-			handlers[i]();
-		}
-	},
-	toData : function(id, srcData) {
-		var g = KE.g[id];
-		var html = this.execGetHtmlHooks(id, srcData);
-		html = html.replace(/^\s*<br[^>]*>\s*$/ig, '');
-		html = html.replace(/^\s*<p>\s*&nbsp;\s*<\/p>\s*$/ig, '');
-		if (g.filterMode) {
-			return KE.format.getHtml(html, g.htmlTags, g.urlType);
-		} else {
-			return KE.format.getHtml(html, null, g.urlType);
-		}
-	},
-	getData : function(id, wyswygMode) {
-		var g = KE.g[id];
-		wyswygMode = (wyswygMode === undefined) ? g.wyswygMode : wyswygMode;
-		if (!wyswygMode) {
-			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
-		}
-		return this.toData(id, g.iframeDoc.body.innerHTML);
-	},
-	getSrcData : function(id) {
-		var g = KE.g[id];
-		if (!g.wyswygMode) {
-			this.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, g.newTextarea.value));
-		}
-		return g.iframeDoc.body.innerHTML;
-	},
-	getPureData : function(id) {
-		return this.extractText(this.getData(id));
-	},
-	extractText : function(str) {
-		str = str.replace(/<(?!img|embed).*?>/ig, '');
-		str = str.replace(/&nbsp;/ig, ' ');
-		return str;
-	},
-	isEmpty : function(id) {
-		return this.getPureData(id).replace(/\r\n|\n|\r/, '').replace(/^\s+|\s+$/, '') === '';
-	},
-	setData : function(id) {
-		var g = KE.g[id];
-		if (g.srcTextarea) g.srcTextarea.value = this.getData(id);
-	},
-	focus : function(id) {
-		var g = KE.g[id];
-		if (g.wyswygMode) {
-			g.iframeWin.focus();
-		} else {
-			g.newTextarea.focus();
-		}
-	},
-	click : function(id, cmd) {
-		this.focus(id);
-		KE.hideMenu(id);
-		KE.plugin[cmd].click(id);
-	},
-	selection : function(id) {
-		if (!KE.browser.IE || !KE.g[id].keRange) {
-			this.setSelection(id);
-		}
-	},
-	setSelection : function(id) {
-		var g = KE.g[id];
-		var keSel = new KE.selection(g.iframeDoc);
-		if (!KE.browser.IE || keSel.range.item || keSel.range.parentElement().ownerDocument === g.iframeDoc) {
-			g.keSel = keSel;
-			g.keRange = g.keSel.keRange;
-			g.sel = g.keSel.sel;
-			g.range = g.keSel.range;
-		}
-	},
-	select : function(id) {
-		if (KE.browser.IE && KE.g[id].wyswygMode && KE.g[id].range) KE.g[id].range.select();
-	},
-	execCommand : function(id, cmd, value) {
-		KE.util.focus(id);
-		KE.util.select(id);
-		try {
-			KE.g[id].iframeDoc.execCommand(cmd, false, value);
-		} catch(e) {}
-		KE.toolbar.updateState(id);
-		KE.util.execOnchangeHandler(id);
-	},
-	innerHtml : function(el, html) {
-		if (KE.browser.IE) {
-			el.innerHTML = '<img id="__ke_temp_tag__" width="0" height="0" />' + html;
-			var temp = KE.$('__ke_temp_tag__', el.ownerDocument);
-			if (temp) temp.parentNode.removeChild(temp);
-		} else {
-			el.innerHTML = html;
-		}
-	},
-	pasteHtml : function(id, html, isStart) {
-		var g = KE.g[id];
-		var imgStr = '<img id="__ke_temp_tag__" width="0" height="0" />';
-		if (isStart) html = imgStr + html;
-		else html += imgStr;
-		if (KE.browser.IE) {
-			if (g.range.item) g.range.item(0).outerHTML = html;
-			else g.range.pasteHTML(html);
-		} else {
-			g.range.deleteContents();
-			var frag = g.range.createContextualFragment(html);
-			g.range.insertNode(frag);
-		}
-		var node = KE.$('__ke_temp_tag__', g.iframeDoc);
-		var blank = g.iframeDoc.createTextNode('');
-		node.parentNode.replaceChild(blank, node);
-		g.keRange.selectNode(blank);
-		g.keSel.addRange(g.keRange);
-	},
-	insertHtml : function(id, html) {
-		if (html === '') return;
-		var g = KE.g[id];
-		if (!g.wyswygMode) return;
-		if (!g.range) return;
-		html = this.execSetHtmlHooks(id, html);
-		if (KE.browser.IE) {
-			this.select(id);
-			if (g.range.item) {
-				try {
-					g.range.item(0).outerHTML = html;
-				} catch(e) {
-					var el = g.range.item(0);
-					var parent = el.parentNode;
-					parent.removeChild(el);
-					if (parent.nodeName.toLowerCase() != 'body') parent = parent.parentNode;
-					this.innerHtml(parent, html + parent.innerHTML);
-				}
-			} else {
-				g.range.pasteHTML('<span id="__ke_temp_tag__">\u200B</span>' + html);
-				var node = KE.$('__ke_temp_tag__', g.iframeDoc);
-				node.parentNode.removeChild(node);
-			}
-		} else if (KE.browser.GECKO) {
-			this.execCommand(id, 'inserthtml', html);
+	scan : function(fn, order) {
+		if (this.length < 1) {
 			return;
-		} else {
-			this.pasteHtml(id, html);
 		}
-		KE.util.execOnchangeHandler(id);
-	},
-	setFullHtml : function(id, html) {
-		var g = KE.g[id];
-		if (!KE.browser.IE && html === '') html = '<br />';
-		var html = KE.util.execSetHtmlHooks(id, html);
-		this.innerHtml(g.iframeDoc.body, html);
-		if (!g.wyswygMode) g.newTextarea.value = KE.util.getData(id, true);
-		KE.util.execOnchangeHandler(id);
-	},
-	selectImageWebkit : function(id, e, isSelection) {
-		if (KE.browser.WEBKIT) {
-			var target = e.srcElement || e.target;
-			if (target.tagName.toLowerCase() == 'img') {
-				if (isSelection) KE.util.selection(id);
-				var range = KE.g[id].keRange;
-				range.selectNode(target);
-				KE.g[id].keSel.addRange(range);
-			}
-		}
-	},
-	addTabEvent : function(id) {
-		var g = KE.g[id];
-		KE.event.add(g.iframeDoc, 'keydown', function(e) {
-			if (e.keyCode == 9) {
-				if (g.afterTab) g.afterTab(id);
-				KE.event.stop(e);
-				return false;
-			}
-		}, id);
-	},
-	addContextmenuEvent : function(id) {
-		var g = KE.g[id];
-		if (g.contextmenuItems.length == 0) return;
-		if (!g.useContextmenu) return;
-		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
-			KE.hideMenu(id);
-			KE.util.setSelection(id);
-			KE.util.selectImageWebkit(id, e, false);
-			var maxWidth = 0;
-			var items = [];
-			for (var i = 0, len = g.contextmenuItems.length; i < len; i++) {
-				var item = g.contextmenuItems[i];
-				if (item === '-') {
-					items.push(item);
-				} else if (item.cond && item.cond(id)) {
-					items.push(item);
-					if (item.options) {
-						var width = parseInt(item.options.width) || 0;
-						if (width > maxWidth) maxWidth = width;
-					}
-				}
-				prevItem = item;
-			}
-			while (items.length > 0 && items[0] === '-') {
-				items.shift();
-			}
-			while (items.length > 0 && items[items.length - 1] === '-') {
-				items.pop();
-			}
-			var prevItem = null;
-			for (var i = 0, len = items.length; i < len; i++) {
-				if (items[i] === '-' && prevItem === '-') delete items[i];
-				prevItem = items[i] || null;
-			}
-			if (items.length > 0) {
-				var menu = new KE.menu({
-					id : id,
-					event : e,
-					type : 'contextmenu',
-					width : maxWidth
-				});
-				for (var i = 0, len = items.length; i < len; i++) {
-					var item = items[i];
-					if (!item) continue;
-					if (item === '-') {
-						if (i < len - 1) menu.addSeparator();
-					} else {
-						menu.add(item.text, (function(item) {
-							return function() {
-								item.click(id, menu);
-							};
-						})(item), item.options);
-					}
-				}
-				menu.show();
-				KE.event.stop(e);
-				return false;
-			}
-			return true;
-		}, id);
-	},
-	addNewlineEvent : function(id) {
-		var g = KE.g[id];
-		if (KE.browser.IE && g.newlineTag.toLowerCase() != 'br') return;
-		if (KE.browser.GECKO && KE.browser.VERSION < 3 && g.newlineTag.toLowerCase() != 'p') return;
-		if (KE.browser.OPERA) return;
-		KE.event.add(g.iframeDoc, 'keydown', function(e) {
-			if (e.keyCode != 13 || e.shiftKey || e.ctrlKey || e.altKey) return true;
-			KE.util.setSelection(id);
-			var parent = g.keRange.getParentElement();
-			if (KE.util.inMarquee(parent)) return;
-			var tagName = parent.tagName.toLowerCase();
-			if (g.newlineTag.toLowerCase() == 'br') {
-				if (!KE.util.inArray(tagName, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'])) {
-					KE.util.pasteHtml(id, '<br />');
-					var nextNode = g.keRange.startNode.nextSibling;
-					if (KE.browser.IE) {
-						if (!nextNode) KE.util.pasteHtml(id, '<br />', true);
-					} else if (KE.browser.WEBKIT) {
-						if (!nextNode) {
-							KE.util.pasteHtml(id, '<br />', true);
-						} else {
-							var range = new KE.range(g.iframeDoc);
-							range.selectNode(nextNode.parentNode);
-							range.setStart(nextNode, 0);
-							if (range.cloneContents().innerHTML.replace(/<(?!img|embed).*?>/ig, '') === '') {
-								KE.util.pasteHtml(id, '<br />', true);
-							}
-						}
-					}
-					KE.event.stop(e);
+		order = (order === undefined) ? true : order;
+		function walk(node) {
+			var n = order ? node.firstChild : node.lastChild;
+			while (n) {
+				var next = order ? n.nextSibling : n.previousSibling;
+				if (fn(n) === false) {
 					return false;
 				}
+				if (walk(n) === false) {
+					return false;
+				}
+				n = next;
+			}
+		}
+		walk(this[0]);
+		return this;
+	}
+});
+_each(('blur,focus,focusin,focusout,load,resize,scroll,unload,click,dblclick,' +
+	'mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave,' +
+	'change,select,submit,keydown,keypress,keyup,error,contextmenu').split(','), function(i, type) {
+	KNode.prototype[type] = function(fn) {
+		return fn ? this.bind(type, fn) : this.fire(type);
+	};
+});
+var _K = K;
+K = function(expr, root) {
+	if (expr === undefined || expr === null) {
+		return;
+	}
+	function newNode(node) {
+		if (!node[0]) {
+			node = [];
+		}
+		return new KNode(node);
+	}
+	if (typeof expr === 'string') {
+		if (root) {
+			root = _get(root);
+		}
+		var length = expr.length;
+		if (expr.charAt(0) === '@') {
+			expr = expr.substr(1);
+		}
+		if (expr.length !== length || /<.+>/.test(expr)) {
+			var doc = root ? root.ownerDocument || root : document,
+				div = doc.createElement('div'), list = [];
+			div.innerHTML = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + expr;
+			for (var i = 0, len = div.childNodes.length; i < len; i++) {
+				var child = div.childNodes[i];
+				if (child.id == '__kindeditor_temp_tag__') {
+					continue;
+				}
+				list.push(child);
+			}
+			return newNode(list);
+		}
+		return newNode(_queryAll(expr, root));
+	}
+	if (expr && expr.get) {
+		return expr;
+	}
+	if (_isArray(expr)) {
+		return newNode(expr);
+	}
+	return newNode(_toArray(arguments));
+};
+_each(_K, function(key, val) {
+	K[key] = val;
+});
+window.KindEditor = K;
+var _START_TO_START = 0,
+	_START_TO_END = 1,
+	_END_TO_END = 2,
+	_END_TO_START = 3,
+	_BOOKMARK_ID = 0;
+function _updateCollapsed(range) {
+	range.collapsed = (range.startContainer === range.endContainer && range.startOffset === range.endOffset);
+	return range;
+}
+function _copyAndDelete(range, isCopy, isDelete) {
+	var doc = range.doc, nodeList = [];
+	function splitTextNode(node, startOffset, endOffset) {
+		var length = node.nodeValue.length, centerNode;
+		if (isCopy) {
+			var cloneNode = node.cloneNode(true);
+			if (startOffset > 0) {
+				centerNode = cloneNode.splitText(startOffset);
 			} else {
-				if (!KE.util.inArray(tagName, ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'div', 'li'])) {
-					KE.util.execCommand(id, 'formatblock', '<P>');
+				centerNode = cloneNode;
+			}
+			if (endOffset < length) {
+				centerNode.splitText(endOffset - startOffset);
+			}
+		}
+		if (isDelete) {
+			var center = node;
+			if (startOffset > 0) {
+				center = node.splitText(startOffset);
+				range.setStart(node, startOffset);
+			}
+			if (endOffset < length) {
+				var right = center.splitText(endOffset - startOffset);
+				range.setEnd(right, 0);
+			}
+			nodeList.push(center);
+		}
+		return centerNode;
+	}
+	function removeNodes() {
+		if (isDelete) {
+			range.up().collapse(true);
+		}
+		for (var i = 0, len = nodeList.length; i < len; i++) {
+			var node = nodeList[i];
+			if (node.parentNode) {
+				node.parentNode.removeChild(node);
+			}
+		}
+	}
+	var copyRange = range.cloneRange().down();
+	var start = -1, incStart = -1, incEnd = -1, end = -1,
+		ancestor = range.commonAncestor(), frag = doc.createDocumentFragment();
+	if (ancestor.nodeType == 3) {
+		var textNode = splitTextNode(ancestor, range.startOffset, range.endOffset);
+		if (isCopy) {
+			frag.appendChild(textNode);
+		}
+		removeNodes();
+		return isCopy ? frag : range;
+	}
+	function extractNodes(parent, frag) {
+		var node = parent.firstChild, nextNode;
+		while (node) {
+			var testRange = new KRange(doc).selectNode(node);
+			if (start <= 0) {
+				start = testRange.compareBoundaryPoints(_START_TO_END, range);
+			}
+			if (start >= 0 && incStart <= 0) {
+				incStart = testRange.compareBoundaryPoints(_START_TO_START, range);
+			}
+			if (incStart >= 0 && incEnd <= 0) {
+				incEnd = testRange.compareBoundaryPoints(_END_TO_END, range);
+			}
+			if (incEnd >= 0 && end <= 0) {
+				end = testRange.compareBoundaryPoints(_END_TO_START, range);
+			}
+			if (end >= 0) {
+				return false;
+			}
+			nextNode = node.nextSibling;
+			if (start > 0) {
+				if (node.nodeType == 1) {
+					if (incStart >= 0 && incEnd <= 0) {
+						if (isCopy) {
+							frag.appendChild(node.cloneNode(true));
+						}
+						if (isDelete) {
+							nodeList.push(node);
+						}
+					} else {
+						var childFlag;
+						if (isCopy) {
+							childFlag = node.cloneNode(false);
+							frag.appendChild(childFlag);
+						}
+						if (extractNodes(node, childFlag) === false) {
+							return false;
+						}
+					}
+				} else if (node.nodeType == 3) {
+					var textNode;
+					if (node == copyRange.startContainer) {
+						textNode = splitTextNode(node, copyRange.startOffset, node.nodeValue.length);
+					} else if (node == copyRange.endContainer) {
+						textNode = splitTextNode(node, 0, copyRange.endOffset);
+					} else {
+						textNode = splitTextNode(node, 0, node.nodeValue.length);
+					}
+					if (isCopy) {
+						try {
+							frag.appendChild(textNode);
+						} catch(e) {}
+					}
 				}
 			}
-			return true;
-		}, id);
-	}
-};
-
-KE.layout = {
-	hide : function(id) {
-		var g = KE.g[id];
-		KE.hideMenu(id);
-		var stack = g.dialogStack;
-		while (stack.length > 0) {
-			var dialog = stack[stack.length - 1];
-			dialog.hide();
+			node = nextNode;
 		}
-		g.maskDiv.style.display = 'none';
 	}
-};
-
-KE.hideMenu = function(id) {
-	var g = KE.g[id];
-	g.hideDiv.innerHTML = '';
-	g.hideDiv.style.display = 'none';
-};
-
-KE.colorpicker = function(arg) {
-	var wrapper;
-	var x = arg.x || 0;
-	var y = arg.y || 0;
-	var z = arg.z || 0;
-	var colors = arg.colors || KE.setting.colorTable;
-	var doc = arg.doc || document;
-	var onclick = arg.onclick;
-	var selectedColor = (arg.selectedColor || '').toLowerCase();
-	function init() {
-		wrapper = KE.$$('div');
-		wrapper.className = 'ke-colorpicker';
-		wrapper.style.top = y + 'px';
-		wrapper.style.left = x + 'px';
-		wrapper.style.zIndex = z;
+	extractNodes(ancestor, frag);
+	if (isDelete) {
+		range.up().collapse(true);
 	}
-	init.call(this);
-	this.remove = function() {
-		doc.body.removeChild(wrapper);
-	};
-	this.getElement = function() {
-		function addAttr(cell, color, cls) {
-			if (selectedColor === color.toLowerCase()) cls += ' ke-colorpicker-cell-selected';
-			cell.className = cls;
-			cell.title = color || KE.lang['noColor'];
-			cell.onmouseover = function() { this.className = cls + ' ke-colorpicker-cell-on'; };
-			cell.onmouseout = function() { this.className = cls; };
-			cell.onclick = function() { onclick(color); };
-			if (color) {
-				var div = KE.$$('div');
-				div.className = 'ke-colorpicker-cell-color';
-				div.style.backgroundColor = color;
-				cell.appendChild(div);
+	for (var i = 0, len = nodeList.length; i < len; i++) {
+		var node = nodeList[i];
+		if (node.parentNode) {
+			node.parentNode.removeChild(node);
+		}
+	}
+	return isCopy ? frag : range;
+}
+function _moveToElementText(range, el) {
+	var node = el;
+	while (node) {
+		var knode = K(node);
+		if (knode.name == 'marquee' || knode.name == 'select') {
+			return;
+		}
+		node = node.parentNode;
+	}
+	try {
+		range.moveToElementText(el);
+	} catch(e) {}
+}
+function _getStartEnd(rng, isStart) {
+	var doc = rng.parentElement().ownerDocument,
+		pointRange = rng.duplicate();
+	pointRange.collapse(isStart);
+	var parent = pointRange.parentElement(),
+		nodes = parent.childNodes;
+	if (nodes.length === 0) {
+		return {node: parent.parentNode, offset: K(parent).index()};
+	}
+	var startNode = doc, startPos = 0, cmp = -1;
+	var testRange = rng.duplicate();
+	_moveToElementText(testRange, parent);
+	for (var i = 0, len = nodes.length; i < len; i++) {
+		var node = nodes[i];
+		cmp = testRange.compareEndPoints('StartToStart', pointRange);
+		if (cmp === 0) {
+			return {node: node.parentNode, offset: i};
+		}
+		if (node.nodeType == 1) {
+			var nodeRange = rng.duplicate(), dummy, knode = K(node), newNode = node;
+			if (knode.isControl()) {
+				dummy = doc.createElement('span');
+				knode.after(dummy);
+				newNode = dummy;
+				startPos += knode.text().replace(/\r\n|\n|\r/g, '').length;
+			}
+			_moveToElementText(nodeRange, newNode);
+			testRange.setEndPoint('StartToEnd', nodeRange);
+			if (cmp > 0) {
+				startPos += nodeRange.text.replace(/\r\n|\n|\r/g, '').length;
 			} else {
-				cell.innerHTML = KE.lang['noColor'];
+				startPos = 0;
+			}
+			if (dummy) {
+				K(dummy).remove();
+			}
+		} else if (node.nodeType == 3) {
+			testRange.moveStart('character', node.nodeValue.length);
+			startPos += node.nodeValue.length;
+		}
+		if (cmp < 0) {
+			startNode = node;
+		}
+	}
+	if (cmp < 0 && startNode.nodeType == 1) {
+		return {node: parent, offset: K(parent.lastChild).index() + 1};
+	}
+	if (cmp > 0) {
+		while (startNode.nextSibling && startNode.nodeType == 1) {
+			startNode = startNode.nextSibling;
+		}
+	}
+	testRange = rng.duplicate();
+	_moveToElementText(testRange, parent);
+	testRange.setEndPoint('StartToEnd', pointRange);
+	startPos -= testRange.text.replace(/\r\n|\n|\r/g, '').length;
+	return {node: startNode, offset: startPos};
+}
+function _getEndRange(node, offset) {
+	var doc = node.ownerDocument || node,
+		range = doc.body.createTextRange();
+	if (doc == node) {
+		range.collapse(true);
+		return range;
+	}
+	if (node.nodeType == 1 && node.childNodes.length > 0) {
+		var children = node.childNodes, isStart, child;
+		if (offset === 0) {
+			child = children[0];
+			isStart = true;
+		} else {
+			child = children[offset - 1];
+			isStart = false;
+		}
+		if (!child) {
+			return range;
+		}
+		if (K(child).name === 'head') {
+			if (offset === 1) {
+				isStart = true;
+			}
+			if (offset === 2) {
+				isStart = false;
+			}
+			range.collapse(isStart);
+			return range;
+		}
+		if (child.nodeType == 1) {
+			var kchild = K(child), span;
+			if (kchild.isControl()) {
+				span = doc.createElement('span');
+				if (isStart) {
+					kchild.before(span);
+				} else {
+					kchild.after(span);
+				}
+				child = span;
+			}
+			_moveToElementText(range, child);
+			range.collapse(isStart);
+			if (span) {
+				K(span).remove();
+			}
+			return range;
+		}
+		node = child;
+		offset = isStart ? 0 : child.nodeValue.length;
+	}
+	var dummy = doc.createElement('span');
+	K(node).before(dummy);
+	_moveToElementText(range, dummy);
+	range.moveStart('character', offset);
+	K(dummy).remove();
+	return range;
+}
+function _toRange(rng) {
+	var doc, range;
+	function tr2td(start) {
+		if (K(start.node).name == 'tr') {
+			start.node = start.node.cells[start.offset];
+			start.offset = 0;
+		}
+	}
+	if (_IE) {
+		if (rng.item) {
+			doc = _getDoc(rng.item(0));
+			range = new KRange(doc);
+			range.selectNode(rng.item(0));
+			return range;
+		}
+		doc = rng.parentElement().ownerDocument;
+		var start = _getStartEnd(rng, true),
+			end = _getStartEnd(rng, false);
+		tr2td(start);
+		tr2td(end);
+		range = new KRange(doc);
+		range.setStart(start.node, start.offset);
+		range.setEnd(end.node, end.offset);
+		return range;
+	}
+	var startContainer = rng.startContainer;
+	doc = startContainer.ownerDocument || startContainer;
+	range = new KRange(doc);
+	range.setStart(startContainer, rng.startOffset);
+	range.setEnd(rng.endContainer, rng.endOffset);
+	return range;
+}
+function KRange(doc) {
+	this.init(doc);
+}
+_extend(KRange, {
+	init : function(doc) {
+		var self = this;
+		self.startContainer = doc;
+		self.startOffset = 0;
+		self.endContainer = doc;
+		self.endOffset = 0;
+		self.collapsed = true;
+		self.doc = doc;
+	},
+	commonAncestor : function() {
+		function getParents(node) {
+			var parents = [];
+			while (node) {
+				parents.push(node);
+				node = node.parentNode;
+			}
+			return parents;
+		}
+		var parentsA = getParents(this.startContainer),
+			parentsB = getParents(this.endContainer),
+			i = 0, lenA = parentsA.length, lenB = parentsB.length, parentA, parentB;
+		while (++i) {
+			parentA = parentsA[lenA - i];
+			parentB = parentsB[lenB - i];
+			if (!parentA || !parentB || parentA !== parentB) {
+				break;
 			}
 		}
-		var table = KE.$$('table');
+		return parentsA[lenA - i + 1];
+	},
+	setStart : function(node, offset) {
+		var self = this, doc = self.doc;
+		self.startContainer = node;
+		self.startOffset = offset;
+		if (self.endContainer === doc) {
+			self.endContainer = node;
+			self.endOffset = offset;
+		}
+		return _updateCollapsed(this);
+	},
+	setEnd : function(node, offset) {
+		var self = this, doc = self.doc;
+		self.endContainer = node;
+		self.endOffset = offset;
+		if (self.startContainer === doc) {
+			self.startContainer = node;
+			self.startOffset = offset;
+		}
+		return _updateCollapsed(this);
+	},
+	setStartBefore : function(node) {
+		return this.setStart(node.parentNode || this.doc, K(node).index());
+	},
+	setStartAfter : function(node) {
+		return this.setStart(node.parentNode || this.doc, K(node).index() + 1);
+	},
+	setEndBefore : function(node) {
+		return this.setEnd(node.parentNode || this.doc, K(node).index());
+	},
+	setEndAfter : function(node) {
+		return this.setEnd(node.parentNode || this.doc, K(node).index() + 1);
+	},
+	selectNode : function(node) {
+		return this.setStartBefore(node).setEndAfter(node);
+	},
+	selectNodeContents : function(node) {
+		var knode = K(node);
+		if (knode.type == 3 || knode.isSingle()) {
+			return this.selectNode(node);
+		}
+		var children = knode.children();
+		if (children.length > 0) {
+			return this.setStartBefore(children[0][0]).setEndAfter(children[children.length - 1][0]);
+		}
+		return this.setStart(node, 0).setEnd(node, 0);
+	},
+	collapse : function(toStart) {
+		if (toStart) {
+			return this.setEnd(this.startContainer, this.startOffset);
+		}
+		return this.setStart(this.endContainer, this.endOffset);
+	},
+	compareBoundaryPoints : function(how, range) {
+		var rangeA = this.get(), rangeB = range.get();
+		if (_IE) {
+			var arr = {};
+			arr[_START_TO_START] = 'StartToStart';
+			arr[_START_TO_END] = 'EndToStart';
+			arr[_END_TO_END] = 'EndToEnd';
+			arr[_END_TO_START] = 'StartToEnd';
+			var cmp = rangeA.compareEndPoints(arr[how], rangeB);
+			if (cmp !== 0) {
+				return cmp;
+			}
+			var nodeA, nodeB, nodeC, posA, posB;
+			if (how === _START_TO_START || how === _END_TO_START) {
+				nodeA = this.startContainer;
+				posA = this.startOffset;
+			}
+			if (how === _START_TO_END || how === _END_TO_END) {
+				nodeA = this.endContainer;
+				posA = this.endOffset;
+			}
+			if (how === _START_TO_START || how === _START_TO_END) {
+				nodeB = range.startContainer;
+				posB = range.startOffset;
+			}
+			if (how === _END_TO_END || how === _END_TO_START) {
+				nodeB = range.endContainer;
+				posB = range.endOffset;
+			}
+			if (nodeA === nodeB) {
+				var diff = posA - posB;
+				return diff > 0 ? 1 : (diff < 0 ? -1 : 0);
+			}
+			nodeC = nodeB;
+			while (nodeC && nodeC.parentNode !== nodeA) {
+				nodeC = nodeC.parentNode;
+			}
+			if (nodeC) {
+				return K(nodeC).index() >= posA ? -1 : 1;
+			}
+			nodeC = nodeA;
+			while (nodeC && nodeC.parentNode !== nodeB) {
+				nodeC = nodeC.parentNode;
+			}
+			if (nodeC) {
+				return K(nodeC).index() >= posB ? 1 : -1;
+			}
+			nodeC = K(nodeB).next();
+			if (nodeC && nodeC.contains(nodeA)) {
+				return 1;
+			}
+			nodeC = K(nodeA).next();
+			if (nodeC && nodeC.contains(nodeB)) {
+				return -1;
+			}
+		} else {
+			return rangeA.compareBoundaryPoints(how, rangeB);
+		}
+	},
+	cloneRange : function() {
+		return new KRange(this.doc).setStart(this.startContainer, this.startOffset).setEnd(this.endContainer, this.endOffset);
+	},
+	toString : function() {
+		var rng = this.get(), str = _IE ? rng.text : rng.toString();
+		return str.replace(/\r\n|\n|\r/g, '');
+	},
+	cloneContents : function() {
+		return _copyAndDelete(this, true, false);
+	},
+	deleteContents : function() {
+		return _copyAndDelete(this, false, true);
+	},
+	extractContents : function() {
+		return _copyAndDelete(this, true, true);
+	},
+	insertNode : function(node) {
+		var self = this,
+			sc = self.startContainer, so = self.startOffset,
+			ec = self.endContainer, eo = self.endOffset,
+			firstChild, lastChild, c, nodeCount = 1;
+		if (node.nodeName.toLowerCase() === '#document-fragment') {
+			firstChild = node.firstChild;
+			lastChild = node.lastChild;
+			nodeCount = node.childNodes.length;
+		}
+		if (sc.nodeType == 1) {
+			c = sc.childNodes[so];
+			if (c) {
+				sc.insertBefore(node, c);
+				if (sc === ec) {
+					eo += nodeCount;
+				}
+			} else {
+				sc.appendChild(node);
+			}
+		} else if (sc.nodeType == 3) {
+			if (so === 0) {
+				sc.parentNode.insertBefore(node, sc);
+				if (sc.parentNode === ec) {
+					eo += nodeCount;
+				}
+			} else if (so >= sc.nodeValue.length) {
+				if (sc.nextSibling) {
+					sc.parentNode.insertBefore(node, sc.nextSibling);
+				} else {
+					sc.parentNode.appendChild(node);
+				}
+			} else {
+				if (so > 0) {
+					c = sc.splitText(so);
+				} else {
+					c = sc;
+				}
+				sc.parentNode.insertBefore(node, c);
+				if (sc === ec) {
+					ec = c;
+					eo -= so;
+				}
+			}
+		}
+		if (firstChild) {
+			self.setStartBefore(firstChild).setEndAfter(lastChild);
+		} else {
+			self.selectNode(node);
+		}
+		if (self.compareBoundaryPoints(_END_TO_END, self.cloneRange().setEnd(ec, eo)) >= 1) {
+			return self;
+		}
+		return self.setEnd(ec, eo);
+	},
+	surroundContents : function(node) {
+		node.appendChild(this.extractContents());
+		return this.insertNode(node).selectNode(node);
+	},
+	isControl : function() {
+		var self = this,
+			sc = self.startContainer, so = self.startOffset,
+			ec = self.endContainer, eo = self.endOffset, rng;
+		return sc.nodeType == 1 && sc === ec && so + 1 === eo && K(sc.childNodes[so]).isControl();
+	},
+	get : function(hasControlRange) {
+		var self = this, doc = self.doc, node, rng;
+		if (!_IE) {
+			rng = doc.createRange();
+			try {
+				rng.setStart(self.startContainer, self.startOffset);
+				rng.setEnd(self.endContainer, self.endOffset);
+			} catch (e) {}
+			return rng;
+		}
+		if (hasControlRange && self.isControl()) {
+			rng = doc.body.createControlRange();
+			rng.addElement(self.startContainer.childNodes[self.startOffset]);
+			return rng;
+		}
+		var range = self.cloneRange().down();
+		rng = doc.body.createTextRange();
+		rng.setEndPoint('StartToStart', _getEndRange(range.startContainer, range.startOffset));
+		rng.setEndPoint('EndToStart', _getEndRange(range.endContainer, range.endOffset));
+		return rng;
+	},
+	html : function() {
+		return K(this.cloneContents()).outer();
+	},
+	down : function() {
+		var self = this;
+		function downPos(node, pos, isStart) {
+			if (node.nodeType != 1) {
+				return;
+			}
+			var children = K(node).children();
+			if (children.length === 0) {
+				return;
+			}
+			var left, right, child, offset;
+			if (pos > 0) {
+				left = children[pos - 1];
+			}
+			if (pos < children.length) {
+				right = children[pos];
+			}
+			if (left && left.type == 3) {
+				child = left[0];
+				offset = child.nodeValue.length;
+			}
+			if (right && right.type == 3) {
+				child = right[0];
+				offset = 0;
+			}
+			if (!child) {
+				return;
+			}
+			if (isStart) {
+				self.setStart(child, offset);
+			} else {
+				self.setEnd(child, offset);
+			}
+		}
+		downPos(self.startContainer, self.startOffset, true);
+		downPos(self.endContainer, self.endOffset, false);
+		return self;
+	},
+	up : function() {
+		var self = this;
+		function upPos(node, pos, isStart) {
+			if (node.nodeType != 3) {
+				return;
+			}
+			if (pos === 0) {
+				if (isStart) {
+					self.setStartBefore(node);
+				} else {
+					self.setEndBefore(node);
+				}
+			} else if (pos == node.nodeValue.length) {
+				if (isStart) {
+					self.setStartAfter(node);
+				} else {
+					self.setEndAfter(node);
+				}
+			}
+		}
+		upPos(self.startContainer, self.startOffset, true);
+		upPos(self.endContainer, self.endOffset, false);
+		return self;
+	},
+	enlarge : function(toBlock) {
+		var self = this;
+		self.up();
+		function enlargePos(node, pos, isStart) {
+			var knode = K(node), parent;
+			if (knode.type == 3 || _NOSPLIT_TAG_MAP[knode.name] || !toBlock && knode.isBlock()) {
+				return;
+			}
+			if (pos === 0) {
+				while (!knode.prev()) {
+					parent = knode.parent();
+					if (!parent || _NOSPLIT_TAG_MAP[parent.name] || !toBlock && parent.isBlock()) {
+						break;
+					}
+					knode = parent;
+				}
+				if (isStart) {
+					self.setStartBefore(knode[0]);
+				} else {
+					self.setEndBefore(knode[0]);
+				}
+			} else if (pos == knode.children().length) {
+				while (!knode.next()) {
+					parent = knode.parent();
+					if (!parent || _NOSPLIT_TAG_MAP[parent.name] || !toBlock && parent.isBlock()) {
+						break;
+					}
+					knode = parent;
+				}
+				if (isStart) {
+					self.setStartAfter(knode[0]);
+				} else {
+					self.setEndAfter(knode[0]);
+				}
+			}
+		}
+		enlargePos(self.startContainer, self.startOffset, true);
+		enlargePos(self.endContainer, self.endOffset, false);
+		return self;
+	},
+	createBookmark : function(serialize) {
+		var self = this, doc = self.doc, endNode,
+			startNode = K('<span style="display:none;"></span>', doc)[0];
+		startNode.id = '__kindeditor_bookmark_start_' + (_BOOKMARK_ID++) + '__';
+		if (!self.collapsed) {
+			endNode = startNode.cloneNode(true);
+			endNode.id = '__kindeditor_bookmark_end_' + (_BOOKMARK_ID++) + '__';
+		}
+		if (endNode) {
+			self.cloneRange().collapse(false).insertNode(endNode).setEndBefore(endNode);
+		}
+		self.insertNode(startNode).setStartAfter(startNode);
+		return {
+			start : serialize ? '#' + startNode.id : startNode,
+			end : endNode ? (serialize ? '#' + endNode.id : endNode) : null
+		};
+	},
+	moveToBookmark : function(bookmark) {
+		var self = this, doc = self.doc,
+			start = K(bookmark.start, doc), end = bookmark.end ? K(bookmark.end, doc) : null;
+		if (!start || start.length < 1) {
+			return self;
+		}
+		self.setStartBefore(start[0]);
+		start.remove();
+		if (end && end.length > 0) {
+			self.setEndBefore(end[0]);
+			end.remove();
+		} else {
+			self.collapse(true);
+		}
+		return self;
+	},
+	dump : function() {
+		console.log('--------------------');
+		console.log(this.startContainer.nodeType == 3 ? this.startContainer.nodeValue : this.startContainer, this.startOffset);
+		console.log(this.endContainer.nodeType == 3 ? this.endContainer.nodeValue : this.endContainer, this.endOffset);
+	}
+});
+function _range(mixed) {
+	if (!mixed.nodeName) {
+		return mixed.get ? mixed : _toRange(mixed);
+	}
+	return new KRange(mixed);
+}
+K.range = _range;
+K.START_TO_START = _START_TO_START;
+K.START_TO_END = _START_TO_END;
+K.END_TO_END = _END_TO_END;
+K.END_TO_START = _END_TO_START;
+function _nativeCommand(doc, key, val) {
+	try {
+		doc.execCommand(key, false, val);
+	} catch(e) {}
+}
+function _nativeCommandValue(doc, key) {
+	var val = '';
+	try {
+		val = doc.queryCommandValue(key);
+	} catch (e) {}
+	if (typeof val !== 'string') {
+		val = '';
+	}
+	return val;
+}
+function _getSel(doc) {
+	var win = _getWin(doc);
+	return doc.selection || win.getSelection();
+}
+function _getRng(doc) {
+	var sel = _getSel(doc), rng;
+	try {
+		if (sel.rangeCount > 0) {
+			rng = sel.getRangeAt(0);
+		} else {
+			rng = sel.createRange();
+		}
+	} catch(e) {}
+	if (_IE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
+		return null;
+	}
+	return rng;
+}
+function _singleKeyMap(map) {
+	var newMap = {}, arr, v;
+	_each(map, function(key, val) {
+		arr = key.split(',');
+		for (var i = 0, len = arr.length; i < len; i++) {
+			v = arr[i];
+			newMap[v] = val;
+		}
+	});
+	return newMap;
+}
+function _hasAttrOrCss(knode, map) {
+	return _hasAttrOrCssByKey(knode, map, '*') || _hasAttrOrCssByKey(knode, map);
+}
+function _hasAttrOrCssByKey(knode, map, mapKey) {
+	mapKey = mapKey || knode.name;
+	if (knode.type !== 1) {
+		return false;
+	}
+	var newMap = _singleKeyMap(map);
+	if (!newMap[mapKey]) {
+		return false;
+	}
+	var arr = newMap[mapKey].split(',');
+	for (var i = 0, len = arr.length; i < len; i++) {
+		var key = arr[i];
+		if (key === '*') {
+			return true;
+		}
+		var match = /^(\.?)([^=]+)(?:=([^=]*))?$/.exec(key);
+		var method = match[1] ? 'css' : 'attr';
+		key = match[2];
+		var val = match[3] || '';
+		if (val === '' && knode[method](key) !== '') {
+			return true;
+		}
+		if (val !== '' && knode[method](key) === val) {
+			return true;
+		}
+	}
+	return false;
+}
+function _removeAttrOrCss(knode, map) {
+	if (knode.type != 1) {
+		return;
+	}
+	_removeAttrOrCssByKey(knode, map, '*');
+	_removeAttrOrCssByKey(knode, map);
+}
+function _removeAttrOrCssByKey(knode, map, mapKey) {
+	mapKey = mapKey || knode.name;
+	if (knode.type !== 1) {
+		return;
+	}
+	var newMap = _singleKeyMap(map);
+	if (!newMap[mapKey]) {
+		return;
+	}
+	var arr = newMap[mapKey].split(','), allFlag = false;
+	for (var i = 0, len = arr.length; i < len; i++) {
+		var key = arr[i];
+		if (key === '*') {
+			allFlag = true;
+			break;
+		}
+		var match = /^(\.?)([^=]+)(?:=([^=]*))?$/.exec(key);
+		key = match[2];
+		if (match[1]) {
+			key = _toCamel(key);
+			if (knode[0].style[key]) {
+				knode[0].style[key] = '';
+			}
+		} else {
+			knode.removeAttr(key);
+		}
+	}
+	if (allFlag) {
+		knode.remove(true);
+	}
+}
+function _getInnerNode(knode) {
+	var inner = knode;
+	while (inner.first()) {
+		inner = inner.first();
+	}
+	return inner;
+}
+function _isEmptyNode(knode) {
+	return _getInnerNode(knode).isStyle();
+}
+function _mergeWrapper(a, b) {
+	a = a.clone(true);
+	var lastA = _getInnerNode(a), childA = a, merged = false;
+	while (b) {
+		while (childA) {
+			if (childA.name === b.name) {
+				_mergeAttrs(childA, b.attr(), b.css());
+				merged = true;
+			}
+			childA = childA.first();
+		}
+		if (!merged) {
+			lastA.append(b.clone(false));
+		}
+		merged = false;
+		b = b.first();
+	}
+	return a;
+}
+function _wrapNode(knode, wrapper) {
+	wrapper = wrapper.clone(true);
+	if (knode.type == 3) {
+		_getInnerNode(wrapper).append(knode.clone(false));
+		knode.replaceWith(wrapper);
+		return wrapper;
+	}
+	var nodeWrapper = knode, child;
+	while ((child = knode.first()) && child.children().length == 1) {
+		knode = child;
+	}
+	child = knode.first();
+	var frag = knode.doc.createDocumentFragment();
+	while (child) {
+		frag.appendChild(child[0]);
+		child = child.next();
+	}
+	wrapper = _mergeWrapper(nodeWrapper, wrapper);
+	if (frag.firstChild) {
+		_getInnerNode(wrapper).append(frag);
+	}
+	nodeWrapper.replaceWith(wrapper);
+	return wrapper;
+}
+function _mergeAttrs(knode, attrs, styles) {
+	_each(attrs, function(key, val) {
+		if (key !== 'style') {
+			knode.attr(key, val);
+		}
+	});
+	_each(styles, function(key, val) {
+		knode.css(key, val);
+	});
+}
+function _inPreElement(knode) {
+	while (knode && knode.name != 'body') {
+		if (_PRE_TAG_MAP[knode.name] || knode.name == 'div' && knode.hasClass('ke-script')) {
+			return true;
+		}
+		knode = knode.parent();
+	}
+	return false;
+}
+function KCmd(range) {
+	this.init(range);
+}
+_extend(KCmd, {
+	init : function(range) {
+		var self = this, doc = range.doc;
+		self.doc = doc;
+		self.win = _getWin(doc);
+		self.sel = _getSel(doc);
+		self.range = range;
+	},
+	selection : function(forceReset) {
+		var self = this, doc = self.doc, rng = _getRng(doc);
+		self.sel = _getSel(doc);
+		if (rng) {
+			self.range = _range(rng);
+			if (K(self.range.startContainer).name == 'html') {
+				self.range.selectNodeContents(doc.body).collapse(false);
+			}
+			return self;
+		}
+		if (forceReset) {
+			self.range.selectNodeContents(doc.body).collapse(false);
+		}
+		return self;
+	},
+	select : function() {
+		var self = this, sel = self.sel, range = self.range.cloneRange(),
+			sc = range.startContainer, so = range.startOffset,
+			ec = range.endContainer, eo = range.endOffset,
+			doc = _getDoc(sc), win = self.win, rng;
+		if (sc.nodeType == 1 && range.collapsed) {
+			if (_IE) {
+				var dummy = K('<span>&nbsp;</span>', doc);
+				range.insertNode(dummy[0]);
+				rng = doc.body.createTextRange();
+				try {
+					rng.moveToElementText(dummy[0]);
+				} catch(ex) {}
+				rng.collapse(false);
+				rng.select();
+				dummy.remove();
+				win.focus();
+				return self;
+			}
+			if (_WEBKIT) {
+				var children = sc.childNodes;
+				if (K(sc).isInline() || so > 0 && K(children[so - 1]).isInline() || children[so] && K(children[so]).isInline()) {
+					range.insertNode(doc.createTextNode('\u200B'));
+				}
+			}
+		}
+		rng = range.get(true);
+		if (_IE) {
+			try {
+				rng.select();
+			} catch(e) {}
+		} else {
+			sel.removeAllRanges();
+			sel.addRange(rng);
+		}
+		win.focus();
+		return self;
+	},
+	wrap : function(val) {
+		var self = this, doc = self.doc, range = self.range, wrapper;
+		wrapper = K(val, doc);
+		if (range.collapsed) {
+			range.insertNode(wrapper[0]).selectNodeContents(wrapper[0]);
+			return self;
+		}
+		if (wrapper.isBlock()) {
+			var copyWrapper = wrapper.clone(true), child = copyWrapper;
+			while (child.first()) {
+				child = child.first();
+			}
+			child.append(range.extractContents());
+			range.insertNode(copyWrapper[0]).selectNode(copyWrapper[0]);
+			return self;
+		}
+		range.enlarge();
+		var bookmark = range.createBookmark(), ancestor = range.commonAncestor(), isStart = false;
+		K(ancestor).scan(function(node) {
+			if (!isStart && node == bookmark.start) {
+				isStart = true;
+				return;
+			}
+			if (isStart) {
+				if (node == bookmark.end) {
+					return false;
+				}
+				var knode = K(node);
+				if (_inPreElement(knode)) {
+					return;
+				}
+				if (knode.type == 3 && _trim(node.nodeValue).length > 0) {
+					var parent;
+					while ((parent = knode.parent()) && parent.isStyle() && parent.children().length == 1) {
+						knode = parent;
+					}
+					_wrapNode(knode, wrapper);
+				}
+			}
+		});
+		range.moveToBookmark(bookmark);
+		return self;
+	},
+	split : function(isStart, map) {
+		var range = this.range, doc = range.doc;
+		var tempRange = range.cloneRange().collapse(isStart);
+		var node = tempRange.startContainer, pos = tempRange.startOffset,
+			parent = node.nodeType == 3 ? node.parentNode : node,
+			needSplit = false, knode;
+		while (parent && parent.parentNode) {
+			knode = K(parent);
+			if (map) {
+				if (!knode.isStyle()) {
+					break;
+				}
+				if (!_hasAttrOrCss(knode, map)) {
+					break;
+				}
+			} else {
+				if (_NOSPLIT_TAG_MAP[knode.name]) {
+					break;
+				}
+			}
+			needSplit = true;
+			parent = parent.parentNode;
+		}
+		if (needSplit) {
+			var dummy = doc.createElement('span');
+			range.cloneRange().collapse(!isStart).insertNode(dummy);
+			if (isStart) {
+				tempRange.setStartBefore(parent.firstChild).setEnd(node, pos);
+			} else {
+				tempRange.setStart(node, pos).setEndAfter(parent.lastChild);
+			}
+			var frag = tempRange.extractContents(),
+				first = frag.firstChild, last = frag.lastChild;
+			if (isStart) {
+				tempRange.insertNode(frag);
+				range.setStartAfter(last).setEndBefore(dummy);
+			} else {
+				parent.appendChild(frag);
+				range.setStartBefore(dummy).setEndBefore(first);
+			}
+			var dummyParent = dummy.parentNode;
+			if (dummyParent == range.endContainer) {
+				var prev = K(dummy).prev(), next = K(dummy).next();
+				if (prev && next && prev.type == 3 && next.type == 3) {
+					range.setEnd(prev[0], prev[0].nodeValue.length);
+				} else if (!isStart) {
+					range.setEnd(range.endContainer, range.endOffset - 1);
+				}
+			}
+			dummyParent.removeChild(dummy);
+		}
+		return this;
+	},
+	remove : function(map) {
+		var self = this, doc = self.doc, range = self.range;
+		if (range.collapsed) {
+			self.split(true, map);
+			range.collapse(true);
+			return self;
+		}
+		range.enlarge();
+		if (range.startOffset === 0) {
+			var ksc = K(range.startContainer), parent;
+			while ((parent = ksc.parent()) && parent.isStyle() && parent.children().length == 1) {
+				ksc = parent;
+			}
+			range.setStart(ksc[0], 0);
+			ksc = K(range.startContainer);
+			if (ksc.isBlock()) {
+				_removeAttrOrCss(ksc, map);
+			}
+			var kscp = ksc.parent();
+			if (kscp && kscp.isBlock()) {
+				_removeAttrOrCss(kscp, map);
+			}
+		}
+		self.split(true, map);
+		self.split(false, map);
+		var startDummy = doc.createElement('span'), endDummy = doc.createElement('span');
+		range.cloneRange().collapse(false).insertNode(endDummy);
+		range.cloneRange().collapse(true).insertNode(startDummy);
+		var nodeList = [], cmpStart = false;
+		K(range.commonAncestor()).scan(function(node) {
+			if (!cmpStart && node == startDummy) {
+				cmpStart = true;
+				return;
+			}
+			if (node == endDummy) {
+				return false;
+			}
+			if (cmpStart) {
+				nodeList.push(node);
+			}
+		});
+		K(startDummy).remove();
+		K(endDummy).remove();
+		var sc = range.startContainer, so = range.startOffset,
+			ec = range.endContainer, eo = range.endOffset;
+		if (so > 0) {
+			var startBefore = K(sc.childNodes[so - 1]);
+			if (startBefore && _isEmptyNode(startBefore)) {
+				startBefore.remove();
+				range.setStart(sc, so - 1);
+				if (sc == ec) {
+					range.setEnd(ec, eo - 1);
+				}
+			}
+			var startAfter = K(sc.childNodes[so]);
+			if (startAfter && _isEmptyNode(startAfter)) {
+				startAfter.remove();
+				if (sc == ec) {
+					range.setEnd(ec, eo - 1);
+				}
+			}
+		}
+		var endAfter = K(ec.childNodes[range.endOffset]);
+		if (endAfter && _isEmptyNode(endAfter)) {
+			endAfter.remove();
+		}
+		var bookmark = range.createBookmark(true);
+		_each(nodeList, function(i, node) {
+			_removeAttrOrCss(K(node), map);
+		});
+		range.moveToBookmark(bookmark);
+		return self;
+	},
+	commonNode : function(map) {
+		var range = this.range,
+			ec = range.endContainer, eo = range.endOffset,
+			node = (ec.nodeType == 3 || eo === 0) ? ec : ec.childNodes[eo - 1],
+			child = node, parent = node;
+		while (parent) {
+			if (_hasAttrOrCss(K(parent), map)) {
+				return K(parent);
+			}
+			parent = parent.parentNode;
+		}
+		while (child && (child = child.firstChild) && child.childNodes.length == 1) {
+			if (_hasAttrOrCss(K(child), map)) {
+				return K(child);
+			}
+		}
+		if (node.nodeType == 1 || (ec.nodeType == 3 && eo === 0)) {
+			var prev = K(node).prev();
+			if (prev && _hasAttrOrCss(prev, map)) {
+				return prev;
+			}
+		}
+		return null;
+	},
+	commonAncestor : function(tagName) {
+		var range = this.range,
+			sc = range.startContainer, so = range.startOffset,
+			ec = range.endContainer, eo = range.endOffset,
+			startNode = (sc.nodeType == 3 || so === 0) ? sc : sc.childNodes[so - 1],
+			endNode = (ec.nodeType == 3 || eo === 0) ? ec : ec.childNodes[eo - 1];
+		function find(node) {
+			while (node) {
+				if (node.nodeType == 1) {
+					if (node.tagName.toLowerCase() === tagName) {
+						return node;
+					}
+				}
+				node = node.parentNode;
+			}
+			return null;
+		}
+		var start = find(startNode), end = find(endNode);
+		if (start && end && start === end) {
+			return K(start);
+		}
+		return null;
+	},
+	state : function(key) {
+		var self = this, doc = self.doc, bool = false;
+		try {
+			bool = doc.queryCommandState(key);
+		} catch (e) {}
+		return bool;
+	},
+	val : function(key) {
+		var self = this, doc = self.doc, range = self.range;
+		function lc(val) {
+			return val.toLowerCase();
+		}
+		key = lc(key);
+		var val = '', knode;
+		if (key === 'fontfamily' || key === 'fontname') {
+			val = _nativeCommandValue(doc, 'fontname');
+			val = val.replace(/['"]/g, '');
+			return lc(val);
+		}
+		if (key === 'formatblock') {
+			val = _nativeCommandValue(doc, key);
+			if (val === '') {
+				knode = self.commonNode({'h1,h2,h3,h4,h5,h6,p,div,pre,address' : '*'});
+				if (knode) {
+					val = knode.name;
+				}
+			}
+			if (val === 'Normal') {
+				val = 'p';
+			}
+			return lc(val);
+		}
+		if (key === 'fontsize') {
+			knode = self.commonNode({'*' : '.font-size'});
+			if (knode) {
+				val = knode.css('font-size');
+			}
+			return lc(val);
+		}
+		if (key === 'forecolor') {
+			knode = self.commonNode({'*' : '.color'});
+			if (knode) {
+				val = knode.css('color');
+			}
+			val = _toHex(val);
+			if (val === '') {
+				val = 'default';
+			}
+			return lc(val);
+		}
+		if (key === 'hilitecolor') {
+			knode = self.commonNode({'*' : '.background-color'});
+			if (knode) {
+				val = knode.css('background-color');
+			}
+			val = _toHex(val);
+			if (val === '') {
+				val = 'default';
+			}
+			return lc(val);
+		}
+		return val;
+	},
+	toggle : function(wrapper, map) {
+		var self = this;
+		if (self.commonNode(map)) {
+			self.remove(map);
+		} else {
+			self.wrap(wrapper);
+		}
+		return self.select();
+	},
+	bold : function() {
+		return this.toggle('<strong></strong>', {
+			span : '.font-weight=bold',
+			strong : '*',
+			b : '*'
+		});
+	},
+	italic : function() {
+		return this.toggle('<em></em>', {
+			span : '.font-style=italic',
+			em : '*',
+			i : '*'
+		});
+	},
+	underline : function() {
+		return this.toggle('<u></u>', {
+			span : '.text-decoration=underline',
+			u : '*'
+		});
+	},
+	strikethrough : function() {
+		return this.toggle('<s></s>', {
+			span : '.text-decoration=line-through',
+			s : '*'
+		});
+	},
+	forecolor : function(val) {
+		return this.toggle('<span style="color:' + val + ';"></span>', {
+			span : '.color=' + val,
+			font : 'color'
+		});
+	},
+	hilitecolor : function(val) {
+		return this.toggle('<span style="background-color:' + val + ';"></span>', {
+			span : '.background-color=' + val
+		});
+	},
+	fontsize : function(val) {
+		return this.toggle('<span style="font-size:' + val + ';"></span>', {
+			span : '.font-size=' + val,
+			font : 'size'
+		});
+	},
+	fontname : function(val) {
+		return this.fontfamily(val);
+	},
+	fontfamily : function(val) {
+		return this.toggle('<span style="font-family:' + val + ';"></span>', {
+			span : '.font-family=' + val,
+			font : 'face'
+		});
+	},
+	removeformat : function() {
+		var map = {
+			'*' : '.font-weight,.font-style,.text-decoration,.color,.background-color,.font-size,.font-family'
+		},
+		tags = _STYLE_TAG_MAP;
+		_each(tags, function(key, val) {
+			map[key] = '*';
+		});
+		this.remove(map);
+		return this.select();
+	},
+	inserthtml : function(val) {
+		var self = this, range = self.range;
+		if (val === '') {
+			return self;
+		}
+		if (_inPreElement(K(range.startContainer))) {
+			return self;
+		}
+		function pasteHtml(range, val) {
+			val = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + val;
+			var rng = range.get();
+			if (rng.item) {
+				rng.item(0).outerHTML = val;
+			} else {
+				rng.pasteHTML(val);
+			}
+			var temp = range.doc.getElementById('__kindeditor_temp_tag__');
+			temp.parentNode.removeChild(temp);
+			var newRange = _toRange(rng);
+			range.setEnd(newRange.endContainer, newRange.endOffset);
+			range.collapse(false);
+			self.select();
+		}
+		function insertHtml(range, val) {
+			var doc = range.doc,
+				frag = doc.createDocumentFragment();
+			K('@' + val, doc).each(function() {
+				frag.appendChild(this);
+			});
+			range.deleteContents();
+			range.insertNode(frag);
+			range.collapse(false);
+			self.select();
+		}
+		if (_IE) {
+			try {
+				pasteHtml(range, val);
+			} catch(e) {
+				insertHtml(range, val);
+			}
+			return self;
+		}
+		insertHtml(range, val);
+		return self;
+	},
+	hr : function() {
+		return this.inserthtml('<hr />');
+	},
+	print : function() {
+		this.win.print();
+		return this;
+	},
+	insertimage : function(url, title, width, height, border, align) {
+		title = _undef(title, '');
+		border = _undef(border, 0);
+		var html = '<img src="' + _escape(url) + '" data-ke-src="' + _escape(url) + '" ';
+		if (width) {
+			html += 'width="' + _escape(width) + '" ';
+		}
+		if (height) {
+			html += 'height="' + _escape(height) + '" ';
+		}
+		if (title) {
+			html += 'title="' + _escape(title) + '" ';
+		}
+		if (align) {
+			html += 'align="' + _escape(align) + '" ';
+		}
+		html += 'alt="' + _escape(title) + '" ';
+		html += '/>';
+		return this.inserthtml(html);
+	},
+	createlink : function(url, type) {
+		var self = this, doc = self.doc, range = self.range;
+		self.select();
+		var a = self.commonNode({ a : '*' });
+		if (a && !range.isControl()) {
+			range.selectNode(a.get());
+			self.select();
+		}
+		if (range.collapsed) {
+			var html = '<a href="' + _escape(url) + '" data-ke-src="' + _escape(url) + '" ';
+			if (type) {
+				html += ' target="' + _escape(type) + '"';
+			}
+			html += '>' + _escape(url) + '</a>';
+			self.inserthtml(html);
+		} else {
+			_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
+			K('a[href="__kindeditor_temp_url__"]', doc).each(function() {
+				K(this).attr('href', url).attr('data-ke-src', url);
+				if (type) {
+					K(this).attr('target', type);
+				} else {
+					K(this).removeAttr('target');
+				}
+			});
+		}
+		return self;
+	},
+	unlink : function() {
+		var self = this, doc = self.doc, range = self.range;
+		self.select();
+		if (range.collapsed) {
+			var a = self.commonNode({ a : '*' });
+			if (a) {
+				range.selectNode(a.get());
+				self.select();
+			}
+			_nativeCommand(doc, 'unlink', null);
+			if (_WEBKIT && K(range.startContainer).name === 'img') {
+				var parent = K(range.startContainer).parent();
+				if (parent.name === 'a') {
+					parent.remove(true);
+				}
+			}
+		} else {
+			_nativeCommand(doc, 'unlink', null);
+		}
+		return self;
+	}
+});
+_each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull,insertorderedlist,' +
+	'insertunorderedlist,indent,outdent,subscript,superscript').split(','), function(i, name) {
+	KCmd.prototype[name] = function(val) {
+		var self = this;
+		if (_IE) {
+			rng = self.range.get(true);
+			try {
+				rng.select();
+			} catch(e) {}
+		}
+		_nativeCommand(self.doc, name, val);
+		if (!_IE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
+			self.selection();
+		}
+		return self;
+	};
+});
+_each('cut,copy,paste'.split(','), function(i, name) {
+	KCmd.prototype[name] = function() {
+		var self = this;
+		if (!self.doc.queryCommandSupported(name)) {
+			throw 'not supported';
+		}
+		if (_IE) {
+			rng = self.range.get(true);
+			try {
+				rng.select();
+			} catch(e) {}
+		}
+		_nativeCommand(self.doc, name, null);
+		return self;
+	};
+});
+function _cmd(mixed) {
+	if (mixed.nodeName) {
+		var doc = _getDoc(mixed);
+		mixed = _range(doc).selectNodeContents(doc.body).collapse(false);
+	}
+	return new KCmd(mixed);
+}
+K.cmd = _cmd;
+function _drag(options) {
+	var moveEl = options.moveEl,
+		moveFn = options.moveFn,
+		clickEl = options.clickEl || moveEl,
+		beforeDrag = options.beforeDrag,
+		iframeFix = options.iframeFix === undefined ? true : options.iframeFix;
+	var docs = [document],
+		poss = [{ x : 0, y : 0}],
+		listeners = [];
+	if (iframeFix) {
+		K('iframe').each(function() {
+			try {
+				docs.push(_iframeDoc(this));
+			} catch (e) {}
+			poss.push(K(this).pos());
+		});
+	}
+	clickEl.mousedown(function(e) {
+		var self = clickEl.get(),
+			x = _removeUnit(moveEl.css('left')),
+			y = _removeUnit(moveEl.css('top')),
+			width = moveEl.width(),
+			height = moveEl.height(),
+			pageX = e.pageX,
+			pageY = e.pageY,
+			dragging = true;
+		if (beforeDrag) {
+			beforeDrag();
+		}
+		_each(docs, function(i, doc) {
+			function moveListener(e) {
+				if (dragging) {
+					var diffX = _round(poss[i].x + e.pageX - pageX),
+						diffY = _round(poss[i].y + e.pageY - pageY);
+					moveFn.call(clickEl, x, y, width, height, diffX, diffY);
+				}
+				e.stop();
+			}
+			function selectListener(e) {
+				e.stop();
+			}
+			function upListener(e) {
+				dragging = false;
+				if (self.releaseCapture) {
+					self.releaseCapture();
+				}
+				_each(listeners, function() {
+					K(this.doc).unbind('mousemove', this.move)
+						.unbind('mouseup', this.up)
+						.unbind('selectstart', this.select);
+				});
+				e.stop();
+			}
+			K(doc).mousemove(moveListener)
+				.mouseup(upListener)
+				.bind('selectstart', selectListener);
+			listeners.push({
+				doc : doc,
+				move : moveListener,
+				up : upListener,
+				select : selectListener
+			});
+		});
+		if (self.setCapture) {
+			self.setCapture();
+		}
+		e.stop();
+	});
+}
+function KWidget(options) {
+	this.init(options);
+}
+_extend(KWidget, {
+	init : function(options) {
+		var self = this;
+		self.name = options.name || '';
+		self.doc = options.doc || document;
+		self.win = _getWin(self.doc);
+		self.x = _addUnit(options.x);
+		self.y = _addUnit(options.y);
+		self.z = options.z;
+		self.width = _addUnit(options.width);
+		self.height = _addUnit(options.height);
+		self.div = K('<div style="display:block;"></div>');
+		self.options = options;
+		self._alignEl = options.alignEl;
+		if (self.width) {
+			self.div.css('width', self.width);
+		}
+		if (self.height) {
+			self.div.css('height', self.height);
+		}
+		if (self.z) {
+			self.div.css({
+				position : 'absolute',
+				left : self.x,
+				top : self.y,
+				'z-index' : self.z
+			});
+		}
+		if (self.z && (self.x === undefined || self.y === undefined)) {
+			self.autoPos(self.width, self.height);
+		}
+		if (options.cls) {
+			self.div.addClass(options.cls);
+		}
+		if (options.css) {
+			self.div.css(options.css);
+		}
+		if (options.src) {
+			K(options.src).hide().after(self.div);
+		} else {
+			K(self.doc.body).append(self.div);
+		}
+		if (options.html) {
+			self.div.html(options.html);
+		}
+		if (options.autoScroll) {
+			if (_IE && _V < 7 || _QUIRKS) {
+				var scrollPos = _getScrollPos();
+				K(self.win).bind('scroll', function(e) {
+					var pos = _getScrollPos(),
+						diffX = pos.x - scrollPos.x,
+						diffY = pos.y - scrollPos.y;
+					self.pos(_removeUnit(self.x) + diffX, _removeUnit(self.y) + diffY, false);
+				});
+			} else {
+				self.div.css('position', 'fixed');
+			}
+		}
+	},
+	pos : function(x, y, updateProp) {
+		var self = this;
+		updateProp = _undef(updateProp, true);
+		if (x !== null) {
+			x = x < 0 ? 0 : _addUnit(x);
+			self.div.css('left', x);
+			if (updateProp) {
+				self.x = x;
+			}
+		}
+		if (y !== null) {
+			y = y < 0 ? 0 : _addUnit(y);
+			self.div.css('top', y);
+			if (updateProp) {
+				self.y = y;
+			}
+		}
+		return self;
+	},
+	autoPos : function(width, height) {
+		var self = this,
+			w = _removeUnit(width) || 0,
+			h = _removeUnit(height) || 0,
+			scrollPos = _getScrollPos();
+		if (self._alignEl) {
+			var knode = K(self._alignEl),
+				pos = knode.pos(),
+				diffX = _round(knode[0].clientWidth / 2 - w / 2),
+				diffY = _round(knode[0].clientHeight / 2 - h / 2);
+			x = diffX < 0 ? pos.x : pos.x + diffX;
+			y = diffY < 0 ? pos.y : pos.y + diffY;
+		} else {
+			var docEl = _docElement(self.doc);
+			x = _round(scrollPos.x + (docEl.clientWidth - w) / 2);
+			y = _round(scrollPos.y + (docEl.clientHeight - h) / 2);
+		}
+		if (!(_IE && _V < 7 || _QUIRKS)) {
+			x -= scrollPos.x;
+			y -= scrollPos.y;
+		}
+		return self.pos(x, y);
+	},
+	remove : function() {
+		var self = this;
+		if (_IE && _V < 7) {
+			K(self.win).unbind('scroll');
+		}
+		self.div.remove();
+		_each(self, function(i) {
+			self[i] = null;
+		});
+		return this;
+	},
+	show : function() {
+		this.div.show();
+		return this;
+	},
+	hide : function() {
+		this.div.hide();
+		return this;
+	},
+	draggable : function(options) {
+		var self = this;
+		options = options || {};
+		options.moveEl = self.div;
+		options.moveFn = function(x, y, width, height, diffX, diffY) {
+			if ((x = x + diffX) < 0) {
+				x = 0;
+			}
+			if ((y = y + diffY) < 0) {
+				y = 0;
+			}
+			self.pos(x, y);
+		};
+		_drag(options);
+		return self;
+	}
+});
+function _widget(options) {
+	return new KWidget(options);
+}
+K.widget = _widget;
+function _iframeDoc(iframe) {
+	iframe = _get(iframe);
+	return iframe.contentDocument || iframe.contentWindow.document;
+}
+function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
+	var arr = [
+		'<html><head><meta charset="utf-8" /><title>KindEditor</title>',
+		'<style>',
+		'html {margin:0;padding:0;}',
+		'body {margin:0;padding:5px;}',
+		'body, td {font:12px/1.5 "sans serif",tahoma,verdana,helvetica;}',
+		'body, p, div {word-wrap: break-word;}',
+		'p {margin:5px 0;}',
+		'table {border-collapse:collapse;}',
+		'img {border:0;}',
+		'table.ke-zeroborder td {border:1px dotted #AAA;}',
+		'img.ke-flash {',
+		'	border:1px solid #AAA;',
+		'	background-image:url(' + themesPath + 'common/flash.gif);',
+		'	background-position:center center;',
+		'	background-repeat:no-repeat;',
+		'	width:100px;',
+		'	height:100px;',
+		'}',
+		'img.ke-rm {',
+		'	border:1px solid #AAA;',
+		'	background-image:url(' + themesPath + 'common/rm.gif);',
+		'	background-position:center center;',
+		'	background-repeat:no-repeat;',
+		'	width:100px;',
+		'	height:100px;',
+		'}',
+		'img.ke-media {',
+		'	border:1px solid #AAA;',
+		'	background-image:url(' + themesPath + 'common/media.gif);',
+		'	background-position:center center;',
+		'	background-repeat:no-repeat;',
+		'	width:100px;',
+		'	height:100px;',
+		'}',
+		'img.ke-anchor {',
+		'	border:1px dashed #666;',
+		'	width:16px;',
+		'	height:16px;',
+		'}',
+		'.ke-script {',
+		'	display:none;',
+		'	font-size:0;',
+		'	width:0;',
+		'	height:0;',
+		'}',
+		'.ke-pagebreak {',
+		'	border:1px dotted #AAA;',
+		'	font-size:0;',
+		'	height:2px;',
+		'}',
+		'</style>'
+	];
+	if (!_isArray(cssPath)) {
+		cssPath = [cssPath];
+	}
+	_each(cssPath, function(i, path) {
+		if (path) {
+			arr.push('<link href="' + path + '" rel="stylesheet" />');
+		}
+	});
+	if (cssData) {
+		arr.push('<style>' + cssData + '</style>');
+	}
+	arr.push('</head><body ' + (bodyClass ? 'class="' + bodyClass + '"' : '') + '></body></html>');
+	return arr.join('\n');
+}
+function _elementVal(knode, val) {
+	return knode.hasVal() ? knode.val(val) : knode.html(val);
+}
+function KEdit(options) {
+	this.init(options);
+}
+_extend(KEdit, KWidget, {
+	init : function(options) {
+		var self = this;
+		KEdit.parent.init.call(self, options);
+		self.srcElement = K(options.srcElement);
+		self.div.addClass('ke-edit');
+		self.designMode = _undef(options.designMode, true);
+		self.beforeGetHtml = options.beforeGetHtml;
+		self.beforeSetHtml = options.beforeSetHtml;
+		self.afterSetHtml = options.afterSetHtml;
+		var themesPath = _undef(options.themesPath, ''),
+			bodyClass = options.bodyClass,
+			cssPath = options.cssPath,
+			cssData = options.cssData,
+			isDocumentDomain = location.host.replace(/:\d+/, '') !== document.domain,
+			srcScript = ('document.open();' +
+				(isDocumentDomain ? 'document.domain="' + document.domain + '";' : '') +
+				'document.close();'),
+			iframeSrc = _IE ? ' src="javascript:void(function(){' + encodeURIComponent(srcScript) + '}())"' : '';
+		self.iframe = K('<iframe class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + '></iframe>').css('width', '100%');
+		self.textarea = K('<textarea class="ke-edit-textarea" hidefocus="true"></textarea>').css('width', '100%');
+		if (self.width) {
+			self.setWidth(self.width);
+		}
+		if (self.height) {
+			self.setHeight(self.height);
+		}
+		if (self.designMode) {
+			self.textarea.hide();
+		} else {
+			self.iframe.hide();
+		}
+		function ready() {
+			var doc = _iframeDoc(self.iframe);
+			doc.open();
+			if (isDocumentDomain) {
+				doc.domain = document.domain;
+			}
+			doc.write(_getInitHtml(themesPath, bodyClass, cssPath, cssData));
+			doc.close();
+			self.win = self.iframe[0].contentWindow;
+			self.doc = doc;
+			var cmd = _cmd(doc);
+			self.afterChange(function(e) {
+				cmd.selection();
+			});
+			if (_WEBKIT) {
+				K(doc).click(function(e) {
+					if (K(e.target).name === 'img') {
+						cmd.selection(true);
+						cmd.range.selectNode(e.target);
+						cmd.select();
+					}
+				});
+			}
+			if (_IE) {
+				K(doc).keydown(function(e) {
+					if (e.which == 8) {
+						cmd.selection();
+						var rng = cmd.range;
+						if (rng.isControl()) {
+							rng.collapse(true);
+							K(rng.startContainer.childNodes[rng.startOffset]).remove();
+							e.preventDefault();
+						}
+					}
+				});
+			}
+			self.cmd = cmd;
+			self.html(_elementVal(self.srcElement));
+			if (_IE) {
+				doc.body.disabled = true;
+				doc.body.contentEditable = true;
+				doc.body.removeAttribute('disabled');
+			} else {
+				doc.designMode = 'on';
+			}
+			if (options.afterCreate) {
+				options.afterCreate.call(self);
+			}
+		}
+		if (isDocumentDomain) {
+			self.iframe.bind('load', function(e) {
+				self.iframe.unbind('load');
+				if (_IE) {
+					ready();
+				} else {
+					setTimeout(ready, 0);
+				}
+			});
+		}
+		self.div.append(self.iframe);
+		self.div.append(self.textarea);
+		self.srcElement.hide();
+		!isDocumentDomain && ready();
+	},
+	setWidth : function(val) {
+		this.div.css('width', _addUnit(val));
+		return this;
+	},
+	setHeight : function(val) {
+		var self = this;
+		val = _addUnit(val);
+		self.div.css('height', val);
+		self.iframe.css('height', val);
+		if ((_IE && _V < 8) || _QUIRKS) {
+			val = _addUnit(_removeUnit(val) - 2);
+		}
+		self.textarea.css('height', val);
+		return self;
+	},
+	remove : function() {
+		var self = this, doc = self.doc;
+		K(doc.body).unbind();
+		K(doc).unbind();
+		K(self.win).unbind();
+		_elementVal(self.srcElement, self.html());
+		self.srcElement.show();
+		doc.write('');
+		self.iframe.unbind();
+		self.textarea.unbind();
+		KEdit.parent.remove.call(self);
+	},
+	html : function(val, isFull) {
+		var self = this, doc = self.doc;
+		if (self.designMode) {
+			var body = doc.body;
+			if (val === undefined) {
+				if (isFull) {
+					val = '<!doctype html><html>' + body.parentNode.innerHTML + '</html>';
+				} else {
+					val = body.innerHTML;
+				}
+				if (self.beforeGetHtml) {
+					val = self.beforeGetHtml(val);
+				}
+				if (_GECKO && val == '<br />') {
+					val = '';
+				}
+				return val;
+			}
+			if (self.beforeSetHtml) {
+				val = self.beforeSetHtml(val);
+			}
+			K(body).html(val);
+			if (self.afterSetHtml) {
+				self.afterSetHtml();
+			}
+			return self;
+		}
+		if (val === undefined) {
+			return self.textarea.val();
+		}
+		self.textarea.val(val);
+		return self;
+	},
+	design : function(bool) {
+		var self = this, val;
+		if (bool === undefined ? !self.designMode : bool) {
+			if (!self.designMode) {
+				val = self.html();
+				self.designMode = true;
+				self.html(val);
+				self.textarea.hide();
+				self.iframe.show();
+			}
+		} else {
+			if (self.designMode) {
+				val = self.html();
+				self.designMode = false;
+				self.html(val);
+				self.iframe.hide();
+				self.textarea.show();
+			}
+		}
+		return self.focus();
+	},
+	focus : function() {
+		var self = this;
+		self.designMode ? self.win.focus() : self.textarea[0].focus();
+		return self;
+	},
+	blur : function() {
+		var self = this;
+		if (_IE) {
+			var input = K('<input type="text" style="float:left;width:0;height:0;padding:0;margin:0;border:0;" value="" />', self.div);
+			self.div.append(input);
+			input[0].focus();
+			input.remove();
+		} else {
+			self.designMode ? self.win.blur() : self.textarea[0].blur();
+		}
+		return self;
+	},
+	afterChange : function(fn) {
+		var self = this, doc = self.doc, body = doc.body;
+		K(doc).keyup(function(e) {
+			if (!e.ctrlKey && !e.altKey && _CHANGE_KEY_MAP[e.which]) {
+				fn(e);
+			}
+		});
+		K(doc).mouseup(fn).contextmenu(fn);
+		K(self.win).blur(fn);
+		function timeoutHandler(e) {
+			setTimeout(function() {
+				fn(e);
+			}, 1);
+		}
+		K(body).bind('paste', timeoutHandler);
+		K(body).bind('cut', timeoutHandler);
+		return self;
+	}
+});
+function _edit(options) {
+	return new KEdit(options);
+}
+K.edit = _edit;
+K.iframeDoc = _iframeDoc;
+function _selectToolbar(name, fn) {
+	var self = this,
+		knode = self.get(name);
+	if (knode) {
+		if (knode.hasClass('ke-disabled')) {
+			return;
+		}
+		fn(knode);
+	}
+}
+function KToolbar(options) {
+	this.init(options);
+}
+_extend(KToolbar, KWidget, {
+	init : function(options) {
+		var self = this;
+		KToolbar.parent.init.call(self, options);
+		self.disableMode = _undef(options.disableMode, false);
+		self.noDisableItemMap = _toMap(_undef(options.noDisableItems, []));
+		self._itemMap = {};
+		self.div.addClass('ke-toolbar').bind('contextmenu,mousedown,mousemove', function(e) {
+			e.preventDefault();
+		}).attr('unselectable', 'on');
+		function find(target) {
+			var knode = K(target);
+			if (knode.hasClass('ke-outline')) {
+				return knode;
+			}
+			if (knode.hasClass('ke-toolbar-icon')) {
+				return knode.parent();
+			}
+		}
+		function hover(e, method) {
+			var knode = find(e.target);
+			if (knode) {
+				if (knode.hasClass('ke-disabled')) {
+					return;
+				}
+				if (knode.hasClass('ke-selected')) {
+					return;
+				}
+				knode[method]('ke-on');
+			}
+		}
+		self.div.mouseover(function(e) {
+			hover(e, 'addClass');
+		})
+		.mouseout(function(e) {
+			hover(e, 'removeClass');
+		})
+		.click(function(e) {
+			var knode = find(e.target);
+			if (knode) {
+				if (knode.hasClass('ke-disabled')) {
+					return;
+				}
+				self.options.click.call(this, e, knode.attr('data-name'));
+			}
+		});
+	},
+	get : function(name) {
+		if (this._itemMap[name]) {
+			return this._itemMap[name];
+		}
+		return (this._itemMap[name] = K('span.ke-icon-' + name, this.div).parent());
+	},
+	select : function(name) {
+		_selectToolbar.call(this, name, function(knode) {
+			knode.addClass('ke-selected');
+		});
+		return self;
+	},
+	unselect : function(name) {
+		_selectToolbar.call(this, name, function(knode) {
+			knode.removeClass('ke-selected').removeClass('ke-on');
+		});
+		return self;
+	},
+	enable : function(name) {
+		var self = this,
+			knode = name.get ? name : self.get(name);
+		if (knode) {
+			knode.removeClass('ke-disabled');
+			knode.opacity(1);
+		}
+		return self;
+	},
+	disable : function(name) {
+		var self = this,
+			knode = name.get ? name : self.get(name);
+		if (knode) {
+			knode.removeClass('ke-selected').addClass('ke-disabled');
+			knode.opacity(0.5);
+		}
+		return self;
+	},
+	disableAll : function(bool, noDisableItems) {
+		var self = this, map = self.noDisableItemMap, item;
+		if (noDisableItems) {
+			map = _toMap(noDisableItems);
+		}
+		if (bool === undefined ? !self.disableMode : bool) {
+			K('span.ke-outline', self.div).each(function() {
+				var knode = K(this),
+					name = knode[0].getAttribute('data-name', 2);
+				if (!map[name]) {
+					self.disable(knode);
+				}
+			});
+			self.disableMode = true;
+		} else {
+			K('span.ke-outline', self.div).each(function() {
+				var knode = K(this),
+					name = knode[0].getAttribute('data-name', 2);
+				if (!map[name]) {
+					self.enable(knode);
+				}
+			});
+			self.disableMode = false;
+		}
+		return self;
+	}
+});
+function _toolbar(options) {
+	return new KToolbar(options);
+}
+K.toolbar = _toolbar;
+function KMenu(options) {
+	this.init(options);
+}
+_extend(KMenu, KWidget, {
+	init : function(options) {
+		var self = this;
+		options.z = options.z || 811213;
+		KMenu.parent.init.call(self, options);
+		self.centerLineMode = _undef(options.centerLineMode, true);
+		self.div.addClass('ke-menu').bind('click,mousedown', function(e){
+			e.stopPropagation();
+		}).attr('unselectable', 'on');
+	},
+	addItem : function(item) {
+		var self = this;
+		if (item.title === '-') {
+			self.div.append(K('<div class="ke-menu-separator"></div>'));
+			return;
+		}
+		var itemDiv = K('<div class="ke-menu-item" unselectable="on"></div>'),
+			leftDiv = K('<div class="ke-inline-block ke-menu-item-left"></div>'),
+			rightDiv = K('<div class="ke-inline-block ke-menu-item-right"></div>'),
+			height = _addUnit(item.height),
+			iconClass = item.iconClass;
+		self.div.append(itemDiv);
+		if (height) {
+			itemDiv.css('height', height);
+			rightDiv.css('line-height', height);
+		}
+		var centerDiv;
+		if (self.centerLineMode) {
+			centerDiv = K('<div class="ke-inline-block ke-menu-item-center"></div>');
+			if (height) {
+				centerDiv.css('height', height);
+			}
+		}
+		itemDiv.mouseover(function(e) {
+			K(this).addClass('ke-menu-item-on');
+			if (centerDiv) {
+				centerDiv.addClass('ke-menu-item-center-on');
+			}
+		})
+		.mouseout(function(e) {
+			K(this).removeClass('ke-menu-item-on');
+			if (centerDiv) {
+				centerDiv.removeClass('ke-menu-item-center-on');
+			}
+		})
+		.click(function(e) {
+			item.click.call(K(this));
+			e.stopPropagation();
+		})
+		.append(leftDiv);
+		if (centerDiv) {
+			itemDiv.append(centerDiv);
+		}
+		itemDiv.append(rightDiv);
+		if (item.checked) {
+			iconClass = 'ke-icon-checked';
+		}
+		leftDiv.html('<span class="ke-inline-block ke-toolbar-icon ke-toolbar-icon-url ' + iconClass + '"></span>');
+		rightDiv.html(item.title);
+		return self;
+	},
+	remove : function() {
+		var self = this;
+		if (self.options.beforeRemove) {
+			self.options.beforeRemove.call(self);
+		}
+		K('.ke-menu-item', self.div[0]).unbind();
+		KMenu.parent.remove.call(self);
+		return self;
+	}
+});
+function _menu(options) {
+	return new KMenu(options);
+}
+K.menu = _menu;
+function KColorPicker(options) {
+	this.init(options);
+}
+_extend(KColorPicker, KWidget, {
+	init : function(options) {
+		var self = this;
+		options.z = options.z || 811213;
+		KColorPicker.parent.init.call(self, options);
+		var colors = options.colors || [
+			['#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500'],
+			['#009900', '#006600', '#99BB00', '#B8D100', '#60D978', '#00D5FF'],
+			['#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE'],
+			['#FFFFFF', '#CCCCCC', '#999999', '#666666', '#333333', '#000000']
+		];
+		self.selectedColor = (options.selectedColor || '').toLowerCase();
+		self._cells = [];
+		self.div.addClass('ke-colorpicker').bind('click,mousedown', function(e){
+			e.stopPropagation();
+		}).attr('unselectable', 'on');
+		var table = self.doc.createElement('table');
+		self.div.append(table);
 		table.className = 'ke-colorpicker-table';
 		table.cellPadding = 0;
 		table.cellSpacing = 0;
 		table.border = 0;
-		var row = table.insertRow(0),
-			cell = row.insertCell(0);
+		var row = table.insertRow(0), cell = row.insertCell(0);
 		cell.colSpan = colors[0].length;
-		addAttr(cell, '', 'ke-colorpicker-cell-top');
+		self._addAttr(cell, '', 'ke-colorpicker-cell-top');
 		for (var i = 0; i < colors.length; i++) {
-			var row = table.insertRow(i + 1);
+			row = table.insertRow(i + 1);
 			for (var j = 0; j < colors[i].length; j++) {
-				var color = colors[i][j],
-					cell = row.insertCell(j);
-				addAttr(cell, color, 'ke-colorpicker-cell');
+				cell = row.insertCell(j);
+				self._addAttr(cell, colors[i][j], 'ke-colorpicker-cell');
 			}
 		}
-		return table;
-	};
-	this.create = function() {
-		wrapper.appendChild(this.getElement());
-		KE.event.bind(wrapper, 'click', function(e){});
-		KE.event.bind(wrapper, 'mousedown', function(e){});
-		doc.body.appendChild(wrapper);
-	};
-};
-
-KE.menu = function(arg){
-	function getPos(width, height) {
-		var id = arg.id;
-		var x = 0;
-		var y = 0;
-		if (this.type == 'menu') {
-			var obj = KE.g[id].toolbarIcon[arg.cmd];
-			var pos = KE.util.getElementPos(obj[0]);
-			x = pos.x;
-			y = pos.y + obj[0].offsetHeight;
-		} else {
-			var pos = KE.util.getCoords(arg.event);
-			var iframePos = KE.util.getElementPos(KE.g[id].iframe);
-			x = pos.x + iframePos.x;
-			y = pos.y + iframePos.y + 5;
-		}
-		if (width > 0 || height > 0) {
-			var scrollPos = KE.util.getScrollPos();
-			var docEl = KE.util.getDocumentElement();
-			var maxLeft = scrollPos.x + docEl.clientWidth - width - 2;
-			if (x > maxLeft) x = maxLeft;
-		}
-		return {x : x, y : y};
-	};
-	function init() {
-		var width = arg.width;
-		this.type = (arg.type && arg.type == 'contextmenu') ? arg.type : 'menu';
-		var div = KE.$$('div');
-		div.className = 'ke-' + this.type;
-		div.setAttribute('name', arg.cmd);
-		var pos = getPos.call(this, 0, 0);
-		div.style.top = pos.y + 'px';
-		div.style.left = pos.x + 'px';
-		if (arg.width) div.style.width = (/^\d+$/.test(width)) ? width + 'px' : width;
-		KE.event.bind(div, 'click', function(e){}, arg.id);
-		KE.event.bind(div, 'mousedown', function(e){}, arg.id);
-		this.div = div;
-	};
-	init.call(this);
-	this.add = function(html, event, options) {
-		var height, iconHtml, checked = false;
-		if (options !== undefined) {
-			height = options.height;
-			iconHtml = options.iconHtml;
-			checked = options.checked;
-		}
+	},
+	_addAttr : function(cell, color, cls) {
 		var self = this;
-		var cDiv = KE.$$('div');
-		cDiv.className = 'ke-' + self.type + '-item';
-		if (height) cDiv.style.height = height;
-		var left = KE.$$('div');
-		left.className = 'ke-' + this.type + '-left';
-		var center = KE.$$('div');
-		center.className = 'ke-' + self.type + '-center';
-		if (height) center.style.height = height;
-		var right = KE.$$('div');
-		right.className = 'ke-' + this.type + '-right';
-		if (height) right.style.lineHeight = height;
-		cDiv.onmouseover = function() {
-			this.className = 'ke-' + self.type + '-item ke-' + self.type + '-item-on';
-			center.className = 'ke-' + self.type + '-center ke-' + self.type + '-center-on';
-		};
-		cDiv.onmouseout = function() {
-			this.className = 'ke-' + self.type + '-item';
-			center.className = 'ke-' + self.type + '-center';
-		};
-		cDiv.onclick = event;
-		cDiv.appendChild(left);
-		cDiv.appendChild(center);
-		cDiv.appendChild(right);
-		if (checked) {
-			KE.util.innerHtml(left, '<span class="ke-common-icon ke-common-icon-url ke-icon-checked"></span>');
-		} else {
-			if (iconHtml) KE.util.innerHtml(left, iconHtml);
+		cell = K(cell).addClass(cls);
+		if (self.selectedColor === color.toLowerCase()) {
+			cell.addClass('ke-colorpicker-cell-selected');
 		}
-		KE.util.innerHtml(right, html);
-		this.append(cDiv);
-	};
-	this.addSeparator = function() {
-		var div = KE.$$('div');
-		div.className = 'ke-' + this.type + '-separator';
-		this.append(div);
-	};
-	this.append = function(el) {
-		this.div.appendChild(el);
-	};
-	this.insert = function(html) {
-		KE.util.innerHtml(this.div, html);
-	};
-	this.hide = function() {
-		KE.hideMenu(arg.id);
-	};
-	this.show = function() {
-		this.hide();
-		var id = arg.id;
-		KE.g[id].hideDiv.style.display = '';
-		KE.g[id].hideDiv.appendChild(this.div);
-		var pos = getPos.call(this, this.div.clientWidth, this.div.clientHeight);
-		this.div.style.top = pos.y + 'px';
-		this.div.style.left = pos.x + 'px';
-	};
-	this.picker = function(color) {
-		var colorTable = KE.g[arg.id].colorTable;
-		var picker = new KE.colorpicker({
-			colors : colorTable,
-			onclick : function(color) { KE.plugin[arg.cmd].exec(arg.id, color); },
-			selectedColor : color
+		cell.attr('title', color || self.options.noColor);
+		cell.mouseover(function(e) {
+			K(this).addClass('ke-colorpicker-cell-on');
 		});
-		this.append(picker.getElement());
-		this.show();
-	};
-};
-
-KE.button = function(arg) {
-	arg = arg || {};
-	doc = arg.doc || document;
-	var span = KE.$$('span', doc);
-	span.className = 'ke-button-common ke-button-outer ' + (arg.className || '');
-	span.title = arg.text;
-	btn = KE.$$('input', doc);
-	btn.className = 'ke-button-common ke-button';
-	btn.type = 'button';
-	btn.value = arg.text || '';
-	if (arg.clickFn) {
-		btn.onclick = arg.clickFn;
+		cell.mouseout(function(e) {
+			K(this).removeClass('ke-colorpicker-cell-on');
+		});
+		cell.click(function(e) {
+			e.stop();
+			self.options.click.call(K(this), color);
+		});
+		if (color) {
+			cell.append(K('<div class="ke-colorpicker-cell-color" unselectable="on"></div>').css('background-color', color));
+		} else {
+			cell.html(self.options.noColor);
+		}
+		K(cell).attr('unselectable', 'on');
+		self._cells.push(cell);
+	},
+	remove : function() {
+		var self = this;
+		_each(self._cells, function() {
+			this.unbind();
+		});
+		KColorPicker.parent.remove.call(self);
+		return self;
 	}
-	span.appendChild(btn);
-	return {span : span, btn : btn};
+});
+function _colorpicker(options) {
+	return new KColorPicker(options);
 }
-
-KE.dialog = function(arg){
-	var self = this;
-	this.widthMargin = 30;
-	this.heightMargin = 100;
-	this.zIndex = 19811214;
-	this.width = arg.width;
-	this.height = arg.height;
-	var minTop, minLeft;
-	function setLimitNumber() {
-		var docEl = KE.util.getDocumentElement();
-		var pos = KE.util.getScrollPos();
-		minTop = pos.y;
-		minLeft = pos.x;
-	}
-	function init() {
-		this.beforeHide = arg.beforeHide;
-		this.afterHide = arg.afterHide;
-		this.beforeShow = arg.beforeShow;
-		this.afterShow = arg.afterShow;
-		this.ondrag = arg.ondrag;
-	}
-	init.call(this);
-	function getPos() {
-		var width = this.width + this.widthMargin;
-		var height = this.height + this.heightMargin;
-		var id = arg.id;
-		var g = KE.g[id];
-		var x = 0, y = 0;
-		if (g.dialogAlignType == 'page') {
-			var el = KE.util.getDocumentElement();
-			var scrollPos = KE.util.getScrollPos();
-			x = Math.round(scrollPos.x + (el.clientWidth - width) / 2);
-			y = Math.round(scrollPos.y + (el.clientHeight - height) / 2);
-		} else {
-			var pos = KE.util.getElementPos(KE.g[id].container);
-			var el = g.container;
-			var xDiff = Math.round(el.clientWidth / 2) - Math.round(width / 2);
-			var yDiff = Math.round(el.clientHeight / 2) - Math.round(height / 2);
-			x = xDiff < 0 ? pos.x : pos.x + xDiff;
-			y = yDiff < 0 ? pos.y : pos.y + yDiff;
-		}
-		x = x < 0 ? 0 : x;
-		y = y < 0 ? 0 : y;
-		return {x : x, y : y};
-	};
-	this.resize = function(width, height) {
-		if (width) this.width = width;
-		if (height) this.height = height;
-		this.hide();
-		this.show();
-	};
-	this.hide = function() {
-		var id = arg.id;
-		if (this.beforeHide) this.beforeHide(id);
-		var stack = KE.g[id].dialogStack;
-		if (stack[stack.length - 1] != this) return;
-		var dialog = stack.pop();
-		var iframe = dialog.iframe;
-		iframe.src = 'javascript:false';
-		iframe.parentNode.removeChild(iframe);
-		document.body.removeChild(this.div);
-		if (stack.length < 1) {
-			KE.g[id].maskDiv.style.display = 'none';
-		}
-		KE.event.remove(window, 'resize', setLimitNumber);
-		KE.event.remove(window, 'scroll', setLimitNumber);
-		if (this.afterHide) this.afterHide(id);
-		KE.util.focus(id);
-	};
-	this.show = function() {
-		if (this.beforeShow) this.beforeShow(id);
-		var self = this;
-		var id = arg.id;
-		var div = KE.$$('div');
-		div.className = 'ke-dialog';
-		KE.event.bind(div, 'click', function(e){}, id);
-		var stack = KE.g[id].dialogStack;
-		if (stack.length > 0) {
-			this.zIndex = stack[stack.length - 1].zIndex + 1;
-		}
-		div.style.zIndex = this.zIndex;
-		var pos = getPos.call(this);
-		div.style.top = pos.y + 'px';
-		div.style.left = pos.x + 'px';
-		if (KE.g[id].shadowMode) {
-			KE.addClass(div, 'ke-dialog-shadow');
-		} else {
-			KE.addClass(div, 'ke-dialog-no-shadow');
-		}
-		var titleDiv = KE.$$('div');
-		titleDiv.className = 'ke-dialog-title';
-		titleDiv.innerHTML = arg.title;
-		var span = KE.$$('span');
-		span.className = 'ke-dialog-close';
-		span.alt = KE.lang['close'];
-		span.title = KE.lang['close'];
-		span.onclick = function () {
-			self.hide();
-			KE.util.select(id);
-		};
-		titleDiv.appendChild(span);
-		setLimitNumber();
-		KE.event.add(window, 'resize', setLimitNumber);
-		KE.event.add(window, 'scroll', setLimitNumber);
-		KE.util.drag(id, titleDiv, div, function(objTop, objLeft, objWidth, objHeight, top, left) {
-			if (self.ondrag) self.ondrag(id);
-			setLimitNumber();
-			top = objTop + top;
-			left = objLeft + left;
-			if (top < minTop) top = minTop;
-			if (left < minLeft) left = minLeft;
-			div.style.top = top + 'px';
-			div.style.left = left + 'px';
-		});
-		div.appendChild(titleDiv);
-		var bodyDiv = KE.$$('div');
-		bodyDiv.className = 'ke-dialog-body';
-		var loadingTable = KE.util.createTable();
-		loadingTable.table.className = 'ke-loading-table';
-		loadingTable.table.style.width = this.width + 'px';
-		loadingTable.table.style.height = this.height + 'px';
-		var loadingImg = KE.$$('span');
-		loadingImg.className = 'ke-loading-img';
-		loadingTable.cell.appendChild(loadingImg);
-		var iframe = (KE.g[id].dialogStack.length == 0 && KE.g[id].dialog) ? KE.g[id].dialog : KE.$$('iframe');
-		if (arg.useFrameCSS) {
-			iframe.className = 'ke-dialog-iframe ke-dialog-iframe-border';
-		} else {
-			iframe.className = 'ke-dialog-iframe';
-		}
-		iframe.setAttribute("frameBorder", "0");
-		iframe.style.width = this.width + 'px';
-		iframe.style.height = this.height + 'px';
-		iframe.style.display = 'none';
-		bodyDiv.appendChild(iframe);
-		bodyDiv.appendChild(loadingTable.table);
-		div.appendChild(bodyDiv);
-		var bottomDiv = KE.$$('div');
-		bottomDiv.className = 'ke-dialog-bottom';
-		var noButton = null;
-		var yesButton = null;
-		var previewButton = null;
-		if (arg.previewButton) {
-			var btn = KE.button({
-				className : 'ke-dialog-preview',
-				text : arg.previewButton,
-				clickFn : function() {
-					var stack = KE.g[id].dialogStack;
-					if (stack[stack.length - 1] == self) {
-						if (arg.previewClickFn) {
-							arg.previewClickFn(id);
-						} else {
-							KE.plugin[arg.cmd].preview(id);
-						}
-					}
-				}
-			});
-			previewButton = btn.btn;
-			bottomDiv.appendChild(btn.span);
-		}
-		if (arg.yesButton) {
-			var btn = KE.button({
-				className : 'ke-dialog-yes',
-				text : arg.yesButton,
-				clickFn : function() {
-					var stack = KE.g[id].dialogStack;
-					if (stack[stack.length - 1] == self) {
-						if (arg.yesClickFn) {
-							arg.yesClickFn(id);
-						} else {
-							KE.plugin[arg.cmd].exec(id);
-						}
-					}
-				}
-			});
-			yesButton = btn.btn;
-			bottomDiv.appendChild(btn.span);
-		}
-		if (arg.noButton) {
-			var btn = KE.button({
-				className : 'ke-dialog-no',
-				text : arg.noButton,
-				clickFn : function() {
-					self.hide();
-					KE.util.select(id);
-				}
-			});
-			noButton = btn.btn;
-			bottomDiv.appendChild(btn.span);
-		}
-		if (arg.yesButton || arg.noButton || arg.previewButton) {
-			div.appendChild(bottomDiv);
-		}
-		document.body.appendChild(div);
-		KE.event.bind(div, 'mousedown', function(e){}, id);
-		window.focus();
-		if (arg.html !== undefined) {
-			var dialogDoc = KE.util.getIframeDoc(iframe);
-			var html = KE.util.getFullHtml(id);
-			dialogDoc.open();
-			dialogDoc.write(html);
-			dialogDoc.close();
-			KE.util.innerHtml(dialogDoc.body, arg.html);
-		} else if (arg.url !== undefined) {
-			iframe.src = arg.url;
-		} else {
-			var param = 'id=' + escape(id) + '&ver=' + escape(KE.version);
-			if (arg.file === undefined) {
-				iframe.src = KE.g[id].pluginsPath + arg.cmd + '.html?' + param;
-			} else {
-				param = (/\?/.test(arg.file) ? '&' : '?') + param;
-				iframe.src = KE.g[id].pluginsPath + arg.file + param;
-			}
-		}
-		KE.g[id].maskDiv.style.width = KE.util.getDocumentWidth() + 'px';
-		KE.g[id].maskDiv.style.height = KE.util.getDocumentHeight() + 'px';
-		KE.g[id].maskDiv.style.display = 'block';
-		this.iframe = iframe;
-		this.loading = loadingTable.table;
-		this.noButton = noButton;
-		this.yesButton = yesButton;
-		this.previewButton = previewButton;
-		this.div = div;
-		KE.g[id].dialogStack.push(this);
-		KE.g[id].dialog = iframe;
-		KE.g[id].yesButton = yesButton;
-		KE.g[id].noButton = noButton;
-		KE.g[id].previewButton = previewButton;
-		if (!arg.loadingMode) KE.util.hideLoadingPage(id);
-		if (this.afterShow) this.afterShow(id);
-		if (KE.g[id].afterDialogCreate) KE.g[id].afterDialogCreate(id);
-	};
-};
-
-KE.toolbar = {
-	updateState : function(id) {
-		var cmdList = [
-			'justifyleft', 'justifycenter', 'justifyright',
-			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript',
-			'bold', 'italic', 'underline', 'strikethrough'
-		];
-		for (var i = 0; i < cmdList.length; i++) {
-			var cmd = cmdList[i];
-			var state = false;
+K.colorpicker = _colorpicker;
+function KUploadButton(options) {
+	this.init(options);
+}
+_extend(KUploadButton, {
+	init : function(options) {
+		var self = this,
+			button = K(options.button),
+			fieldName = options.fieldName || 'file',
+			url = options.url || '',
+			title = button.val(),
+			cls = button[0].className || '',
+			target = 'kindeditor_upload_iframe_' + new Date().getTime();
+		var html = [
+			'<div class="ke-inline-block ' + cls + '">',
+			'<iframe name="' + target + '" style="display:none;"></iframe>',
+			'<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + url + '">',
+			'<span class="ke-button-common">',
+			'<input type="button" class="ke-button-common ke-button" value="' + title + '" />',
+			'</span>',
+			'<input type="file" class="ke-upload-file" name="' + fieldName + '" tabindex="-1" />',
+			'</form></div>'].join('');
+		var div = K(html, button.doc);
+		button.hide();
+		button.before(div);
+		self.div = div;
+		self.button = button;
+		self.iframe = K('iframe', div);
+		self.form = K('form', div);
+		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common').width());
+		self.options = options;
+	},
+	submit : function() {
+		var self = this,
+			iframe = self.iframe;
+		iframe.bind('load', function() {
+			iframe.unbind();
+			var data, str = K.iframeDoc(iframe).body.innerHTML;
 			try {
-				state = KE.g[id].iframeDoc.queryCommandState(cmd);
-			} catch(e) {}
-			if (state) {
-				KE.toolbar.select(id, cmd);
-			} else {
-				KE.toolbar.unselect(id, cmd);
+				data = K.json(str);
+			} catch (e) {
+				alert(str);
 			}
-		}
-	},
-	isSelected : function(id, cmd) {
-		if (KE.plugin[cmd] && KE.plugin[cmd].isSelected) return true;
-		else return false;
-	},
-	select : function(id, cmd) {
-		if (KE.g[id].toolbarIcon[cmd]) {
-			var a = KE.g[id].toolbarIcon[cmd][0];
-			a.className = 'ke-icon ke-icon-selected';
-			a.onmouseover = null;
-			a.onmouseout = null;
-		}
-	},
-	unselect : function(id, cmd) {
-		if (KE.g[id].toolbarIcon[cmd]) {
-			var a = KE.g[id].toolbarIcon[cmd][0];
-			a.className = 'ke-icon';
-			a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
-			a.onmouseout = function(){ this.className = 'ke-icon'; };
-		}
-	},
-	_setAttr : function(id, a, cmd) {
-		a.className = 'ke-icon';
-		a.href = 'javascript:;';
-		a.onclick = function(e) {
-			e = e || window.event;
-			var div = KE.g[id].hideDiv.firstChild;
-			if (div && div.getAttribute('name') == cmd) {
-				KE.hideMenu(id);
-			} else {
-				KE.util.click(id, cmd);
-			}
-			if (e.preventDefault) e.preventDefault();
-			if (e.stopPropagation) e.stopPropagation();
-			if (e.cancelBubble !== undefined) e.cancelBubble = true;
-			return false;
-		};
-		a.onmouseover = function(){ this.className = 'ke-icon ke-icon-on'; };
-		a.onmouseout = function(){ this.className = 'ke-icon'; };
-		a.hidefocus = true;
-		a.title = KE.lang[cmd];
-	},
-	able : function(id, arr) {
-		var self = this;
-		KE.each(KE.g[id].toolbarIcon, function(cmd, obj) {
-			if (!KE.util.inArray(cmd, arr)) {
-				var a = obj[0];
-				var span = obj[1];
-				self._setAttr(id, a, cmd);
-				KE.util.setOpacity(span, 100);
+			if (data) {
+				self.options.afterUpload.call(self, data);
 			}
 		});
+		self.form[0].submit();
+		var tempForm = document.createElement('form');
+		self.fileBox.before(tempForm);
+		K(tempForm).append(self.fileBox);
+		tempForm.reset();
+		K(tempForm).remove(true);
+		return self;
 	},
-	disable : function(id, arr) {
-		KE.each(KE.g[id].toolbarIcon, function(cmd, obj) {
-			if (!KE.util.inArray(cmd, arr)) {
-				var a = obj[0];
-				var span = obj[1];
-				a.className = 'ke-icon ke-icon-disabled';
-				KE.util.setOpacity(span, 50);
-				a.onclick = null;
-				a.onmouseover = null;
-				a.onmouseout = null;
+	remove : function() {
+		var self = this;
+		if (self.fileBox) {
+			self.fileBox.unbind();
+		}
+		self.div.remove();
+		self.button.show();
+		return self;
+	}
+});
+function _uploadbutton(options) {
+	return new KUploadButton(options);
+}
+K.uploadbutton = _uploadbutton;
+function _createButton(arg) {
+	arg = arg || {};
+	var name = arg.name || '',
+		span = K('<span class="ke-button-common ke-button-outer" title="' + name + '"></span>'),
+		btn = K('<input class="ke-button-common ke-button" type="button" value="' + name + '" />');
+	if (arg.click) {
+		btn.click(arg.click);
+	}
+	span.append(btn);
+	return span;
+}
+function KDialog(options) {
+	this.init(options);
+}
+_extend(KDialog, KWidget, {
+	init : function(options) {
+		var self = this;
+		options.z = options.z || 811213;
+		KDialog.parent.init.call(self, options);
+		var title = options.title,
+			body = K(options.body, self.doc),
+			previewBtn = options.previewBtn,
+			yesBtn = options.yesBtn,
+			noBtn = options.noBtn,
+			closeBtn = options.closeBtn,
+			shadowMode = _undef(options.shadowMode, true),
+			showMask = _undef(options.showMask, true);
+		self.div.addClass('ke-dialog').bind('click,mousedown', function(e){
+			e.stopPropagation();
+		}).addClass('ke-dialog-' + (shadowMode ? '' : 'no-') + 'shadow');
+		var headerDiv = K('<div class="ke-dialog-header"></div>');
+		self.div.append(headerDiv);
+		headerDiv.html(title);
+		self.closeIcon = K('<span class="ke-dialog-icon-close" title="' + closeBtn.name + '"></span>').click(closeBtn.click);
+		headerDiv.append(self.closeIcon);
+		self.draggable({
+			clickEl : headerDiv,
+			beforeDrag : options.beforeDrag
+		});
+		var bodyDiv = K('<div class="ke-dialog-body"></div>');
+		self.div.append(bodyDiv);
+		bodyDiv.append(body);
+		var footerDiv = K('<div class="ke-dialog-footer"></div>');
+		if (previewBtn || yesBtn || noBtn) {
+			self.div.append(footerDiv);
+		}
+		_each([
+			{ btn : previewBtn, name : 'preview' },
+			{ btn : yesBtn, name : 'yes' },
+			{ btn : noBtn, name : 'no' }
+		], function() {
+			if (this.btn) {
+				var button = _createButton(this.btn);
+				button.addClass('ke-dialog-' + this.name);
+				footerDiv.append(button);
 			}
 		});
+		if (self.height) {
+			bodyDiv.height(_removeUnit(self.height) - headerDiv.height() - footerDiv.height());
+		}
+		self.mask = null;
+		if (showMask) {
+			var docEl = _docElement(self.doc),
+				docWidth = Math.max(docEl.scrollWidth, docEl.clientWidth),
+				docHeight = Math.max(docEl.scrollHeight, docEl.clientHeight);
+			self.mask = _widget({
+				x : 0,
+				y : 0,
+				z : self.z - 1,
+				cls : 'ke-dialog-mask',
+				width : docWidth,
+				height : docHeight
+			});
+		}
+		self.autoPos(self.div.width(), self.div.height());
+		self.footerDiv = footerDiv;
+		self.bodyDiv = bodyDiv;
+		self.headerDiv = headerDiv;
 	},
-	create : function(id) {
+	showLoading : function() {
+		var self = this, body = self.bodyDiv;
+		self.loading = K('<div class="ke-dialog-loading"></div>')
+			.width(body.width()).height(body.height())
+			.css('top', self.headerDiv.height() + 'px');
+		body.css('visibility', 'hidden').after(self.loading);
+		return self;
+	},
+	hideLoading : function() {
+		this.loading && this.loading.remove();
+		this.bodyDiv.css('visibility', 'visible');
+		return this;
+	},
+	remove : function() {
 		var self = this;
-		var defaultItemHash = KE.util.arrayToHash(KE.setting.items);
-		KE.g[id].toolbarIcon = [];
-		var tableObj = KE.util.createTable();
-		var toolbar = tableObj.table;
-		toolbar.className = 'ke-toolbar';
-		toolbar.oncontextmenu = function() { return false; };
-		toolbar.onmousedown = function() { return false; };
-		toolbar.onmousemove = function() { return false; };
-		var toolbarCell = tableObj.cell;
-		var length = KE.g[id].items.length;
-		var cellNum = 0;
-		var row;
-		KE.g[id].toolbarHeight = KE.g[id].toolbarLineHeight;
-		for (var i = 0; i < length; i++) {
-			var cmd = KE.g[id].items[i];
-			if (i == 0 || cmd == '-') {
-				var table = KE.$$('table');
-				table.cellPadding = 0;
-				table.cellSpacing = 0;
-				table.border = 0;
-				table.className = 'ke-toolbar-table';
-				row = table.insertRow(0);
-				cellNum = 0;
-				toolbarCell.appendChild(table);
-				if (cmd == '-') {
-					KE.g[id].toolbarHeight += KE.g[id].toolbarLineHeight;
-					continue;
+		if (self.options.beforeRemove) {
+			self.options.beforeRemove.call(self);
+		}
+		if (self.mask) {
+			self.mask.remove();
+		}
+		self.closeIcon.unbind();
+		K('input', self.div).unbind();
+		self.footerDiv.unbind();
+		self.bodyDiv.unbind();
+		self.headerDiv.unbind();
+		KDialog.parent.remove.call(self);
+		return self;
+	}
+});
+function _dialog(options) {
+	return new KDialog(options);
+}
+K.dialog = _dialog;
+function _tabs(options) {
+	var self = _widget(options),
+		remove = self.remove,
+		afterSelect = options.afterSelect,
+		div = self.div,
+		liList = [];
+	div.addClass('ke-tabs')
+		.bind('contextmenu,mousedown,mousemove', function(e) {
+			e.preventDefault();
+		});
+	var ul = K('<ul class="ke-tabs-ul ke-clearfix"></ul>');
+	div.append(ul);
+	self.add = function(tab) {
+		var li = K('<li class="ke-tabs-li">' + tab.title + '</li>');
+		li.data('tab', tab);
+		liList.push(li);
+		ul.append(li);
+	};
+	self.selectedIndex = 0;
+	self.select = function(index) {
+		self.selectedIndex = index;
+		_each(liList, function(i, li) {
+			li.unbind();
+			if (i === index) {
+				li.addClass('ke-tabs-li-selected');
+				K(li.data('tab').panel).show('');
+			} else {
+				li.removeClass('ke-tabs-li-selected').removeClass('ke-tabs-li-on')
+				.mouseover(function() {
+					K(this).addClass('ke-tabs-li-on');
+				})
+				.mouseout(function() {
+					K(this).removeClass('ke-tabs-li-on');
+				})
+				.click(function() {
+					self.select(i);
+				});
+				K(li.data('tab').panel).hide();
+			}
+		});
+		if (afterSelect) {
+			afterSelect.call(self, index);
+		}
+	};
+	self.remove = function() {
+		_each(liList, function() {
+			this.remove();
+		});
+		ul.remove();
+		remove.call(self);
+	};
+	return self;
+}
+K.tabs = _tabs;
+function _loadScript(url, fn) {
+	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
+		script = document.createElement('script');
+	head.appendChild(script);
+	script.src = url;
+	script.charset = 'utf-8';
+	script.onload = script.onreadystatechange = function() {
+		if (!this.readyState || this.readyState === 'loaded') {
+			if (fn) {
+				fn();
+			}
+			script.onload = script.onreadystatechange = null;
+			head.removeChild(script);
+		}
+	};
+}
+function _loadStyle(url) {
+	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
+		link = document.createElement('link'),
+		absoluteUrl = _formatUrl(url, 'absolute');
+	var links = K('link[rel="stylesheet"]', head);
+	for (var i = 0, len = links.length; i < len; i++) {
+		if (_formatUrl(links[i].href, 'absolute') === absoluteUrl) {
+			return;
+		}
+	}
+	head.appendChild(link);
+	link.href = url;
+	link.rel = 'stylesheet';
+}
+function _ajax(url, fn, method, param, dataType) {
+	method = method || 'GET';
+	dataType = dataType || 'json';
+	var xhr = window.XMLHttpRequest ? new window.XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.open(method, url, true);
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			if (fn) {
+				var data = _trim(xhr.responseText);
+				if (dataType == 'json') {
+					data = _json(data);
+				}
+				fn(data);
+			}
+		}
+	};
+	if (method == 'POST') {
+		var params = [];
+		_each(param, function(key, val) {
+			params.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+		});
+		try {
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		} catch (e) {}
+		xhr.send(params.join('&'));
+	} else {
+		xhr.send(null);
+	}
+}
+K.loadScript = _loadScript;
+K.loadStyle = _loadStyle;
+K.ajax = _ajax;
+var _plugins = {};
+function _plugin(name, fn) {
+	if (!fn) {
+		return _plugins[name];
+	}
+	_plugins[name] = fn;
+}
+var _language = {};
+function _parseLangKey(key) {
+	var match, ns = 'core';
+	if ((match = /^(\w+)\.(\w+)$/.exec(key))) {
+		ns = match[1];
+		key = match[2];
+	}
+	return { ns : ns, key : key };
+}
+function _lang(mixed, langType) {
+	langType = langType === undefined ? K.options.langType : langType;
+	if (typeof mixed === 'string') {
+		if (!_language[langType]) {
+			return 'no language';
+		}
+		var pos = mixed.length - 1;
+		if (mixed.substr(pos) === '.') {
+			return _language[langType][mixed.substr(0, pos)];
+		}
+		var obj = _parseLangKey(mixed);
+		return _language[langType][obj.ns][obj.key];
+	}
+	_each(mixed, function(key, val) {
+		var obj = _parseLangKey(key);
+		if (!_language[langType]) {
+			_language[langType] = {};
+		}
+		if (!_language[langType][obj.ns]) {
+			_language[langType][obj.ns] = {};
+		}
+		_language[langType][obj.ns][obj.key] = val;
+	});
+}
+function _getImageFromRange(range, fn) {
+	var sc = range.startContainer, so = range.startOffset;
+	if (!_WEBKIT && !range.isControl()) {
+		return;
+	}
+	var img = K(sc.childNodes[so]);
+	if (!img || img.name != 'img') {
+		return;
+	}
+	if (fn(img)) {
+		return img;
+	}
+}
+function _bindContextmenuEvent() {
+	var self = this, doc = self.edit.doc;
+	K(doc).contextmenu(function(e) {
+		if (self.menu) {
+			self.hideMenu();
+		}
+		if (!self.useContextmenu) {
+			e.preventDefault();
+			return;
+		}
+		if (self._contextmenus.length === 0) {
+			return;
+		}
+		var maxWidth = 0, items = [];
+		_each(self._contextmenus, function() {
+			if (this.title == '-') {
+				items.push(this);
+				return;
+			}
+			if (this.cond && this.cond()) {
+				items.push(this);
+				if (this.width && this.width > maxWidth) {
+					maxWidth = this.width;
 				}
 			}
-			var cell = row.insertCell(cellNum);
-			cell.hideforcus = true;
-			cellNum++;
-			if (cmd == '|') {
-				var div = KE.$$('div');
-				div.className = 'ke-toolbar-separator';
-				cell.appendChild(div);
-				continue;
+		});
+		while (items.length > 0 && items[0].title == '-') {
+			items.shift();
+		}
+		while (items.length > 0 && items[items.length - 1].title == '-') {
+			items.pop();
+		}
+		var prevItem = null;
+		_each(items, function(i) {
+			if (this.title == '-' && prevItem.title == '-') {
+				delete items[i];
 			}
-			var a = KE.$$('a');
-			a.tabIndex = -1;
-			self._setAttr(id, a, cmd);
-			var span = KE.$$('span');
-			if (typeof defaultItemHash[cmd] == 'undefined') {
-				span.className = 'ke-common-icon ke-icon-' + cmd;
+			prevItem = this;
+		});
+		if (items.length > 0) {
+			e.preventDefault();
+			var pos = K(self.edit.iframe).pos(),
+				menu = _menu({
+					x : pos.x + e.clientX,
+					y : pos.y + e.clientY,
+					width : maxWidth,
+					css : { visibility: 'hidden' }
+				});
+			_each(items, function() {
+				if (this.title) {
+					menu.addItem(this);
+				}
+			});
+			var docEl = _docElement(menu.doc),
+				menuHeight = menu.div.height();
+			if (e.clientY + menuHeight >= docEl.clientHeight - 100) {
+				menu.pos(menu.x, _removeUnit(menu.y) - menuHeight);
+			}
+			menu.div.css('visibility', 'visible');
+			self.menu = menu;
+		}
+	});
+}
+function _bindNewlineEvent() {
+	var self = this, doc = self.edit.doc, newlineTag = self.newlineTag;
+	if (_IE && newlineTag !== 'br') {
+		return;
+	}
+	if (_GECKO && _V < 3 && newlineTag !== 'p') {
+		return;
+	}
+	if (_OPERA) {
+		return;
+	}
+	var brSkipTagMap = _toMap('h1,h2,h3,h4,h5,h6,pre,li'),
+		pSkipTagMap = _toMap('p,h1,h2,h3,h4,h5,h6,pre,li,blockquote');
+	function getAncestorTagName(range) {
+		var ancestor = K(range.commonAncestor());
+		while (ancestor) {
+			if (ancestor.type == 1 && !ancestor.isStyle()) {
+				break;
+			}
+			ancestor = ancestor.parent();
+		}
+		return ancestor.name;
+	}
+	K(doc).keydown(function(e) {
+		if (e.which != 13 || e.shiftKey || e.ctrlKey || e.altKey) {
+			return;
+		}
+		self.cmd.selection();
+		var tagName = getAncestorTagName(self.cmd.range);
+		if (tagName == 'marquee' || tagName == 'select') {
+			return;
+		}
+		if (newlineTag === 'br' && !brSkipTagMap[tagName]) {
+			e.preventDefault();
+			self.insertHtml('<br />');
+			return;
+		}
+		if (!pSkipTagMap[tagName]) {
+			_nativeCommand(doc, 'formatblock', '<p>');
+		}
+	});
+	K(doc).keyup(function(e) {
+		if (e.which != 13 || e.shiftKey || e.ctrlKey || e.altKey) {
+			return;
+		}
+		if (newlineTag == 'br') {
+			return;
+		}
+		self.cmd.selection();
+		var tagName = getAncestorTagName(self.cmd.range);
+		if (tagName == 'marquee' || tagName == 'select') {
+			return;
+		}
+		if (!pSkipTagMap[tagName]) {
+			_nativeCommand(doc, 'formatblock', '<p>');
+		}
+		var div = self.cmd.commonAncestor('div');
+		if (div) {
+			var p = K('<p></p>'),
+				child = div[0].firstChild;
+			while (child) {
+				var next = child.nextSibling;
+				p.append(child);
+				child = next;
+			}
+			div.before(p);
+			div.remove();
+			self.cmd.range.selectNodeContents(p[0]);
+			self.cmd.select();
+		}
+	});
+}
+function _bindTabEvent() {
+	var self = this;
+	K(self.edit.doc).keydown(function(e) {
+		if (e.which == 9) {
+			e.preventDefault();
+			if (self.afterTab) {
+				self.afterTab.call(self, e);
+				return;
+			}
+			self.insertHtml('&nbsp;&nbsp;&nbsp;&nbsp;');
+		}
+	});
+}
+function _bindFocusEvent() {
+	var self = this;
+	K(self.edit.textarea[0], self.edit.win).focus(function(e) {
+		if (self.afterFocus) {
+			self.afterFocus.call(self, e);
+		}
+	}).blur(function(e) {
+		if (self.afterBlur) {
+			self.afterBlur.call(self, e);
+		}
+	});
+}
+function _removeBookmarkTag(html) {
+	return _trim(html.replace(/<span [^>]*id="?__kindeditor_bookmark_\w+_\d+__"?[^>]*><\/span>/ig, ''));
+}
+function _addBookmarkToStack(stack, bookmark) {
+	if (stack.length === 0) {
+		stack.push(bookmark);
+		return;
+	}
+	var prev = stack[stack.length - 1];
+	if (_removeBookmarkTag(bookmark.html) !== _removeBookmarkTag(prev.html)) {
+		stack.push(bookmark);
+	}
+}
+function _undoToRedo(fromStack, toStack) {
+	var self = this, edit = self.edit,
+		body = edit.doc.body,
+		range, bookmark;
+	if (fromStack.length === 0) {
+		return self;
+	}
+	if (edit.designMode) {
+		range = self.cmd.range;
+		bookmark = range.createBookmark(true);
+		bookmark.html = body.innerHTML;
+	} else {
+		bookmark = {
+			html : body.innerHTML
+		};
+	}
+	_addBookmarkToStack(toStack, bookmark);
+	var prev = fromStack.pop();
+	if (_removeBookmarkTag(bookmark.html) === _removeBookmarkTag(prev.html) && fromStack.length > 0) {
+		prev = fromStack.pop();
+	}
+	if (edit.designMode) {
+		edit.html(prev.html);
+		if (prev.start) {
+			range.moveToBookmark(prev);
+			self.select();
+		}
+	} else {
+		K(body).html(_removeBookmarkTag(prev.html));
+	}
+	return self;
+}
+function KEditor(options) {
+	var self = this;
+	self.options = {};
+	function setOption(key, val) {
+		if (KEditor.prototype[key] === undefined) {
+			self[key] = val;
+		}
+		self.options[key] = val;
+	}
+	_each(options, function(key, val) {
+		setOption(key, options[key]);
+	});
+	_each(K.options, function(key, val) {
+		if (self[key] === undefined) {
+			setOption(key, val);
+		}
+	});
+	setOption('width', _undef(self.width, self.minWidth));
+	setOption('height', _undef(self.height, self.minHeight));
+	setOption('width', _addUnit(self.width));
+	setOption('height', _addUnit(self.height));
+	if (_MOBILE) {
+		self.designMode = false;
+	}
+	var se = K(self.srcElement || '<textarea/>');
+	self.srcElement = se;
+	self.initContent = _elementVal(se);
+	self.plugin = {};
+	self.isCreated = false;
+	self.isLoading = false;
+	self._handlers = {};
+	self._contextmenus = [];
+	self._undoStack = [];
+	self._redoStack = [];
+	self._calledPlugins = {};
+	self._firstAddBookmark = true;
+	self.menu = self.contextmenu = null;
+	self.dialogs = [];
+}
+KEditor.prototype = {
+	lang : function(mixed) {
+		return _lang(mixed, this.langType);
+	},
+	loadPlugin : function(name, fn) {
+		var self = this;
+		if (_plugins[name]) {
+			if (self._calledPlugins[name]) {
+				if (fn) {
+					fn.call(self);
+				}
+				return self;
+			}
+			_plugins[name].call(self, KindEditor);
+			if (fn) {
+				fn.call(self);
+			}
+			self._calledPlugins[name] = true;
+			return self;
+		}
+		if (self.isLoading) {
+			return self;
+		}
+		self.isLoading = true;
+		_loadScript(self.pluginsPath + name + '/' + name + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
+			self.isLoading = false;
+			if (_plugins[name]) {
+				self.loadPlugin(name, fn);
+			}
+		});
+		return self;
+	},
+	handler : function(key, fn) {
+		var self = this;
+		if (!self._handlers[key]) {
+			self._handlers[key] = [];
+		}
+		if (_isFunction(fn)) {
+			self._handlers[key].push(fn);
+			return self;
+		}
+		_each(self._handlers[key], function() {
+			fn = this.call(self, fn);
+		});
+		return fn;
+	},
+	clickToolbar : function(name, fn) {
+		var self = this, key = 'clickToolbar' + name;
+		if (fn === undefined) {
+			if (self._handlers[key]) {
+				return self.handler(key);
+			}
+			self.loadPlugin(name, function() {
+				self.handler(key);
+			});
+			return self;
+		}
+		return self.handler(key, fn);
+	},
+	updateState : function() {
+		var self = this;
+		_each(('justifyleft,justifycenter,justifyright,justifyfull,insertorderedlist,insertunorderedlist,' +
+			'subscript,superscript,bold,italic,underline,strikethrough').split(','), function(i, name) {
+			self.cmd.state(name) ? self.toolbar.select(name) : self.toolbar.unselect(name);
+		});
+		return self;
+	},
+	addContextmenu : function(item) {
+		this._contextmenus.push(item);
+		return this;
+	},
+	afterCreate : function(fn) {
+		return this.handler('afterCreate', fn);
+	},
+	beforeRemove : function(fn) {
+		return this.handler('beforeRemove', fn);
+	},
+	beforeGetHtml : function(fn) {
+		return this.handler('beforeGetHtml', fn);
+	},
+	beforeSetHtml : function(fn) {
+		return this.handler('beforeSetHtml', fn);
+	},
+	afterSetHtml : function(fn) {
+		return this.handler('afterSetHtml', fn);
+	},
+	create : function() {
+		var self = this, fullscreenMode = self.fullscreenMode;
+		if (self.isCreated) {
+			return self;
+		}
+		if (fullscreenMode) {
+			_docElement().style.overflow = 'hidden';
+		} else {
+			_docElement().style.overflow = '';
+		}
+		var width = fullscreenMode ? _docElement().clientWidth + 'px' : self.width,
+			height = fullscreenMode ? _docElement().clientHeight + 'px' : self.height;
+		if ((_IE && _V < 8) || _QUIRKS) {
+			height = _addUnit(_removeUnit(height) + 2);
+		}
+		var container = self.container = K(self.layout);
+		if (fullscreenMode) {
+			K(document.body).append(container);
+		} else {
+			self.srcElement.before(container);
+		}
+		var toolbarDiv = K('.toolbar', container),
+			editDiv = K('.edit', container),
+			statusbar = self.statusbar = K('.statusbar', container);
+		container.removeClass('container')
+			.addClass('ke-container ke-container-' + self.themeType).css('width', width);
+		if (fullscreenMode) {
+			container.css({
+				position : 'absolute',
+				left : 0,
+				top : 0,
+				'z-index' : 811211
+			});
+			self._scrollPos = _getScrollPos();
+			window.scrollTo(0, 0);
+			K(document.body).css({
+				'height' : '1px',
+				'overflow' : 'hidden'
+			});
+			K(document.body.parentNode).css('overflow', 'hidden');
+		} else {
+			if (self._scrollPos) {
+				K(document.body).css({
+					'height' : '',
+					'overflow' : ''
+				});
+				K(document.body.parentNode).css('overflow', '');
+				window.scrollTo(self._scrollPos.x, self._scrollPos.y);
+			}
+		}
+		var htmlList = [];
+		K.each(self.items, function(i, name) {
+			if (name == '|') {
+				htmlList.push('<span class="ke-inline-block ke-separator"></span>');
+			} else if (name == '/') {
+				htmlList.push('<br />');
 			} else {
-				span.className = 'ke-common-icon ke-common-icon-url ke-icon-' + cmd;
+				htmlList.push('<span class="ke-inline-block ke-outline" data-name="' + name + '" title="' + self.lang(name) + '" unselectable="on">');
+				htmlList.push('<span class="ke-inline-block ke-toolbar-icon ke-toolbar-icon-url ke-icon-' + name + '" unselectable="on"></span></span>');
 			}
-			a.appendChild(span);
-			cell.appendChild(a);
-			KE.g[id].toolbarIcon[cmd] = [a, span];
-			if (KE.toolbar.isSelected(id, cmd)) KE.toolbar.select(id, cmd);
+		});
+		var toolbar = self.toolbar = _toolbar({
+			src : toolbarDiv,
+			html : htmlList.join(''),
+			noDisableItems : self.noDisableItems,
+			click : function(e, name) {
+				e.stop();
+				if (self.menu) {
+					var menuName = self.menu.name;
+					self.hideMenu();
+					if (menuName === name) {
+						return;
+					}
+				}
+				self.clickToolbar(name);
+			}
+		});
+		var edit = self.edit = _edit({
+			height : _removeUnit(height) - toolbar.div.height(),
+			src : editDiv,
+			srcElement : self.srcElement,
+			designMode : self.designMode,
+			themesPath : self.themesPath,
+			bodyClass : self.bodyClass,
+			cssPath : self.cssPath,
+			cssData : self.cssData,
+			beforeGetHtml : function(html) {
+				html = self.beforeGetHtml(html);
+				return _formatHtml(html, self.filterMode ? self.htmlTags : null, self.urlType, self.wellFormatMode, self.indentChar);
+			},
+			beforeSetHtml : function(html) {
+				html = _formatHtml(html, self.filterMode ? self.htmlTags : null, '', false);
+				return self.beforeSetHtml(html);
+			},
+			afterSetHtml : function() {
+				self.afterSetHtml();
+			},
+			afterCreate : function() {
+				self.edit = edit = this;
+				self.cmd = edit.cmd;
+				self._docMousedownFn = function(e) {
+					if (self.menu) {
+						self.hideMenu();
+					}
+				};
+				K(edit.doc, document).mousedown(self._docMousedownFn);
+				_bindContextmenuEvent.call(self);
+				_bindNewlineEvent.call(self);
+				_bindTabEvent.call(self);
+				_bindFocusEvent.call(self);
+				edit.afterChange(function(e) {
+					if (!edit.designMode) {
+						return;
+					}
+					self.updateState();
+					self.addBookmark();
+					if (self.options.afterChange) {
+						self.options.afterChange.call(self);
+					}
+				});
+				edit.textarea.keyup(function(e) {
+					if (!e.ctrlKey && !e.altKey && _INPUT_KEY_MAP[e.which]) {
+						if (self.options.afterChange) {
+							self.options.afterChange.call(self);
+						}
+					}
+				});
+				if (self.readonlyMode) {
+					self.readonly();
+				}
+				self.isCreated = true;
+				self.initContent = self.html();
+				self.afterCreate();
+				if (self.options.afterCreate) {
+					self.options.afterCreate.call(self);
+				}
+			}
+		});
+		statusbar.removeClass('statusbar').addClass('ke-statusbar')
+			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
+			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
+		K(window).unbind('resize');
+		self.resize(width, height);
+		function newResize(width, height, updateProp) {
+			updateProp = _undef(updateProp, true);
+			if (width && width >= self.minWidth) {
+				self.resize(width, null);
+				if (updateProp) {
+					self.width = _addUnit(width);
+				}
+			}
+			if (height && height >= self.minHeight) {
+				self.resize(null, height);
+				if (updateProp) {
+					self.height = _addUnit(height);
+				}
+			}
 		}
-		return toolbar;
-	}
-};
-
-KE.history = {
-	addStackData : function(stack, data) {
-		var prev = '';
-		if (stack.length > 0) {
-			prev = stack[stack.length - 1];
-		}
-		if (stack.length == 0 || data !== prev) stack.push(data);
-	},
-	add : function(id, minChangeSize) {
-		var g = KE.g[id];
-		var html = KE.util.getSrcData(id);
-		if (g.undoStack.length > 0) {
-			var prevHtml = g.undoStack[g.undoStack.length - 1];
-			if (Math.abs(html.length - prevHtml.length) < minChangeSize) return;
-		}
-		this.addStackData(g.undoStack, html);
-	},
-	undo : function(id) {
-		var g = KE.g[id];
-		if (g.undoStack.length == 0) return;
-		var html = KE.util.getSrcData(id);
-		this.addStackData(g.redoStack, html);
-		var prevHtml = g.undoStack.pop();
-		if (html === prevHtml && g.undoStack.length > 0) {
-			prevHtml = g.undoStack.pop();
-		}
-		prevHtml = KE.util.toData(id, prevHtml);
-		if (g.wyswygMode) {
-			KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, prevHtml));
+		if (fullscreenMode) {
+			K(window).bind('resize', function(e) {
+				if (self.isCreated) {
+					newResize(_docElement().clientWidth, _docElement().clientHeight, false);
+				}
+			});
+			toolbar.select('fullscreen');
+			statusbar.first().css('visibility', 'hidden');
+			statusbar.last().css('visibility', 'hidden');
 		} else {
-			g.newTextarea.value = prevHtml;
+			if (self.resizeType > 0) {
+				_drag({
+					moveEl : container,
+					clickEl : statusbar,
+					moveFn : function(x, y, width, height, diffX, diffY) {
+						height += diffY;
+						newResize(null, height);
+					}
+				});
+			} else {
+				statusbar.first().css('visibility', 'hidden');
+			}
+			if (self.resizeType === 2) {
+				_drag({
+					moveEl : container,
+					clickEl : statusbar.last(),
+					moveFn : function(x, y, width, height, diffX, diffY) {
+						width += diffX;
+						height += diffY;
+						newResize(width, height);
+					}
+				});
+			} else {
+				statusbar.last().css('visibility', 'hidden');
+			}
+		}
+		return self;
+	},
+	remove : function() {
+		var self = this;
+		if (!self.isCreated) {
+			return self;
+		}
+		self.beforeRemove();
+		if (self.menu) {
+			self.hideMenu();
+		}
+		_each(self.dialogs, function() {
+			self.hideDialog();
+		});
+		K(document).unbind('mousedown', self._docMousedownFn);
+		self.toolbar.remove();
+		self.edit.remove();
+		self.statusbar.last().unbind();
+		self.statusbar.unbind();
+		self.container.remove();
+		self.container = self.toolbar = self.edit = self.menu = null;
+		self.dialogs = [];
+		self.isCreated = false;
+		return self;
+	},
+	resize : function(width, height) {
+		var self = this;
+		if (width !== null) {
+			self.container.css('width', _addUnit(width));
+		}
+		if (height !== null) {
+			height = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
+			if (height > 0) {
+				self.edit.setHeight(height);
+			}
+		}
+		return self;
+	},
+	select : function() {
+		this.isCreated && this.cmd.select();
+		return this;
+	},
+	html : function(val) {
+		var self = this;
+		if (val === undefined) {
+			return self.isCreated ? self.edit.html() : _elementVal(self.srcElement);
+		}
+		self.isCreated ? self.edit.html(val) : _elementVal(self.srcElement, val);
+		return self;
+	},
+	fullHtml : function() {
+		return this.isCreated ? this.edit.html(undefined, true) : '';
+	},
+	text : function(val) {
+		var self = this;
+		if (val === undefined) {
+			return _trim(self.html().replace(/<(?!img|embed).*?>/ig, '').replace(/&nbsp;/ig, ' '));
+		} else {
+			return self.html(_escape(val));
 		}
 	},
-	redo : function(id) {
-		var g = KE.g[id];
-		if (g.redoStack.length == 0) return;
-		var html = KE.util.getSrcData(id);
-		this.addStackData(g.undoStack, html);
-		var nextHtml = g.redoStack.pop();
-		nextHtml = KE.util.toData(id, nextHtml);
-		if (g.wyswygMode) {
-			KE.util.innerHtml(g.iframeDoc.body, KE.util.execSetHtmlHooks(id, nextHtml));
-		} else {
-			g.newTextarea.value = nextHtml;
+	isEmpty : function() {
+		return _trim(this.text().replace(/\r\n|\n|\r/, '')) === '';
+	},
+	isDirty : function() {
+		return _trim(this.initContent.replace(/\r\n|\n|\r|t/g, '')) !== _trim(this.html().replace(/\r\n|\n|\r|t/g, ''));
+	},
+	selectedHtml : function() {
+		return this.isCreated ? this.cmd.range.html() : '';
+	},
+	count : function(mode) {
+		var self = this;
+		mode = (mode || 'html').toLowerCase();
+		if (mode === 'html') {
+			return _removeBookmarkTag(self.html()).length;
 		}
-	}
-};
-
-KE.readonly = function(id, isReadonly) {
-	isReadonly = isReadonly == undefined ? true : isReadonly;
-	var g = KE.g[id];
-	if (KE.browser.IE) g.iframeDoc.body.contentEditable = isReadonly ? 'false' : 'true';
-	else g.iframeDoc.designMode = isReadonly ? 'off' : 'on';
-};
-
-KE.focus = function(id, position) {
-	position = (position || '').toLowerCase();
-	if (!KE.g[id].container) return;
-	KE.util.focus(id);
-	if (position === 'end') {
-		KE.util.setSelection(id);
-		if (!KE.g[id].sel) return; //issue #120: Sometimes Firefox does not get selection
-		var sel = KE.g[id].keSel,
-			range = KE.g[id].keRange,
-			doc = KE.g[id].iframeDoc;
-		range.selectTextNode(doc.body);
-		range.collapse(false);
-		sel.addRange(range);
-	}
-};
-
-KE.blur = function(id) {
-	var g = KE.g[id];
-	if (!g.container) return;
-	if (KE.browser.IE) {
-		var input = KE.$$('input');
-		input.type = 'text';
-		g.container.appendChild(input);
-		input.focus();
-		g.container.removeChild(input);
-	} else {
-		g.wyswygMode ? g.iframeWin.blur() : g.newTextarea.blur();
-	}
-};
-
-KE.html = function(id, val) {
-	if (val === undefined) {
-		return KE.util.getData(id);
-	} else {
-		if (!KE.g[id].container) return;
-		KE.util.setFullHtml(id, val);
-		KE.focus(id);
-	}
-};
-
-KE.text = function(id, val) {
-	if (val === undefined) {
-		val = KE.html(id);
-		val = val.replace(/<.*?>/ig, '');
-		val = val.replace(/&nbsp;/ig, ' ');
-		val = KE.util.trim(val);
-		return val;
-	} else {
-		KE.html(id, KE.util.escape(val));
-	}
-};
-
-KE.insertHtml = function(id, val) {
-	if (!KE.g[id].container) return;
-	var range = KE.g[id].range;
-	if (!range) {
-		KE.appendHtml(id, val);
-	} else {
-		KE.focus(id);
-		KE.util.selection(id);
-		KE.util.insertHtml(id, val);
-	}
-};
-
-KE.appendHtml = function(id, val) {
-	KE.html(id, KE.html(id) + val);
-};
-
-KE.isEmpty = function(id) {
-	return KE.util.isEmpty(id);
-};
-
-KE.selectedHtml = function(id) {
-	var range = KE.g[id].range;
-	if (!range) return '';
-	var html = '';
-	if (KE.browser.IE) {
-		if (range.item) {
-			html = range.item(0).outerHTML;
-		} else {
-			html = range.htmlText;
+		if (mode === 'text') {
+			return self.text().replace(/<(?:img|embed).*?>/ig, 'K').replace(/\r\n|\n|\r/g, '').length;
 		}
-	} else {
-		var temp = KE.$$('div', KE.g[id].iframeDoc);
-		temp.appendChild(range.cloneContents());
-		html = temp.innerHTML;
+		return 0;
+	},
+	exec : function(key) {
+		key = key.toLowerCase();
+		var self = this, cmd = self.cmd,
+			changeFlag = _inArray(key, 'selectall,copy,paste,print'.split(',')) < 0;
+		if (changeFlag) {
+			self.addBookmark(false);
+		}
+		cmd[key].apply(cmd, _toArray(arguments, 1));
+		if (changeFlag) {
+			self.updateState();
+			self.addBookmark(false);
+			if (self.options.afterChange) {
+				self.options.afterChange.call(self);
+			}
+		}
+		return self;
+	},
+	insertHtml : function(val) {
+		if (!this.isCreated) {
+			return this;
+		}
+		val = this.beforeSetHtml(val);
+		this.exec('inserthtml', val);
+		return this;
+	},
+	appendHtml : function(val) {
+		this.html(this.html() + val);
+		if (this.isCreated) {
+			var cmd = this.cmd;
+			cmd.range.selectNodeContents(cmd.doc.body).collapse(false);
+			cmd.select();
+		}
+		return this;
+	},
+	sync : function() {
+		_elementVal(this.srcElement, this.html());
+		return this;
+	},
+	focus : function() {
+		this.isCreated ? this.edit.focus() : this.srcElement[0].focus();
+		return this;
+	},
+	blur : function() {
+		this.isCreated ? this.edit.blur() : this.srcElement[0].blur();
+		return this;
+	},
+	addBookmark : function(checkSize) {
+		checkSize = _undef(checkSize, true);
+		var self = this, edit = self.edit,
+			body = edit.doc.body,
+			html = body.innerHTML, bookmark;
+		if (checkSize && self._undoStack.length > 0) {
+			var prev = self._undoStack[self._undoStack.length - 1];
+			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
+				return self;
+			}
+		}
+		if (edit.designMode && !self._firstAddBookmark) {
+			var range = self.cmd.range;
+			bookmark = range.createBookmark(true);
+			bookmark.html = body.innerHTML;
+			range.moveToBookmark(bookmark);
+		} else {
+			bookmark = {
+				html : body.innerHTML
+			};
+		}
+		self._firstAddBookmark = false;
+		_addBookmarkToStack(self._undoStack, bookmark);
+		return self;
+	},
+	undo : function() {
+		return _undoToRedo.call(this, this._undoStack, this._redoStack);
+	},
+	redo : function() {
+		return _undoToRedo.call(this, this._redoStack, this._undoStack);
+	},
+	fullscreen : function(bool) {
+		this.fullscreenMode = (bool === undefined ? !this.fullscreenMode : bool);
+		return this.remove().create();
+	},
+	readonly : function(isReadonly) {
+		isReadonly = _undef(isReadonly, true);
+		var self = this, edit = self.edit, doc = edit.doc;
+		if (self.designMode) {
+			self.toolbar.disableAll(isReadonly, []);
+		} else {
+			_each(self.noDisableItems, function() {
+				self.toolbar[isReadonly ? 'disable' : 'enable'](this);
+			});
+		}
+		if (_IE) {
+			doc.body.contentEditable = !isReadonly;
+		} else {
+			doc.designMode = isReadonly ? 'off' : 'on';
+		}
+		edit.textarea[0].disabled = isReadonly;
+	},
+	createMenu : function(options) {
+		var self = this,
+			name = options.name,
+			knode = self.toolbar.get(name),
+			pos = knode.pos();
+		options.x = pos.x;
+		options.y = pos.y + knode.height();
+		if (options.selectedColor !== undefined) {
+			options.cls = 'ke-colorpicker-' + self.themeType;
+			options.noColor = self.lang('noColor');
+			self.menu = _colorpicker(options);
+		} else {
+			options.cls = 'ke-menu-' + self.themeType;
+			options.centerLineMode = false;
+			self.menu = _menu(options);
+		}
+		return self.menu;
+	},
+	hideMenu : function() {
+		this.menu.remove();
+		this.menu = null;
+		return this;
+	},
+	hideContextmenu : function() {
+		this.contextmenu.remove();
+		this.contextmenu = null;
+		return this;
+	},
+	createDialog : function(options) {
+		var self = this, name = options.name;
+		options.autoScroll = _undef(options.autoScroll, true);
+		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
+		options.closeBtn = _undef(options.closeBtn, {
+			name : self.lang('close'),
+			click : function(e) {
+				self.hideDialog();
+				if (_IE) {
+					self.cmd.select();
+				}
+			}
+		});
+		options.noBtn = _undef(options.noBtn, {
+			name : self.lang(options.yesBtn ? 'no' : 'close'),
+			click : function(e) {
+				self.hideDialog();
+				if (_IE) {
+					self.cmd.select();
+				}
+			}
+		});
+		if (self.dialogAlignType != 'page') {
+			options.alignEl = self.container;
+		}
+		options.cls = 'ke-dialog-' + self.themeType;
+		if (self.dialogs.length > 0) {
+			var firstDialog = self.dialogs[0],
+				parentDialog = self.dialogs[self.dialogs.length - 1];
+			firstDialog.mask.div.css('z-index', parentDialog.z + 1);
+			options.z = parentDialog.z + 2;
+			options.showMask = false;
+		}
+		var dialog = _dialog(options);
+		self.dialogs.push(dialog);
+		return dialog;
+	},
+	hideDialog : function() {
+		var self = this;
+		if (self.dialogs.length > 0) {
+			self.dialogs.pop().remove();
+		}
+		if (self.dialogs.length > 0) {
+			var firstDialog = self.dialogs[0],
+				parentDialog = self.dialogs[self.dialogs.length - 1];
+			firstDialog.mask.div.css('z-index', parentDialog.z - 1);
+		}
+		return self;
 	}
-	return KE.util.toData(id, html);
 };
-
-KE.count = function(id, mode) {
-	mode = (mode || 'html').toLowerCase();
-	if (mode === 'html') {
-		return KE.html(id).length;
-	} else if (mode === 'text') {
-		var data = KE.util.getPureData(id);
-		data = data.replace(/<(?:img|embed).*?>/ig, 'K');
-		data = data.replace(/\r\n|\n|\r/g, '');
-		data = KE.util.trim(data);
-		return data.length;
+function _editor(options) {
+	return new KEditor(options);
+}
+function _create(expr, options) {
+	options = options || {};
+	options.basePath = _undef(options.basePath, K.basePath);
+	options.themesPath = _undef(options.themesPath, options.basePath + 'themes/');
+	options.langPath = _undef(options.langPath, options.basePath + 'lang/');
+	options.pluginsPath = _undef(options.pluginsPath, options.basePath + 'plugins/');
+	if (_undef(options.loadStyleMode, K.options.loadStyleMode)) {
+		var themeType = _undef(options.themeType, K.options.themeType);
+		_loadStyle(options.themesPath + 'default/default.css');
+		_loadStyle(options.themesPath + themeType + '/' + themeType + '.css');
 	}
-	return 0;
-};
-
-KE.sync = function(id) {
-	return KE.util.setData(id);
-};
-
-KE.remove = function(id, mode) {
-	var g = KE.g[id];
-	if (!g.container) return false;
-	mode = (typeof mode == "undefined") ? 0 : mode;
-	KE.util.setData(id);
-	var container = g.container;
-	var eventStack = g.eventStack;
-	for (var i = 0, len = eventStack.length; i < len; i++) {
-		var item = eventStack[i];
-		if (item) KE.event.remove(item.el, item.type, item.fn, id);
+	function create(editor) {
+		_each(_plugins, function(name, fn) {
+			fn.call(editor, KindEditor);
+		});
+		return editor.create();
 	}
-	g.iframeDoc.src = 'javascript:false';
-	g.iframe.parentNode.removeChild(g.iframe);
-	if (mode == 1) {
-		document.body.removeChild(container);
-	} else {
-		var srcTextarea = g.srcTextarea;
-		srcTextarea.parentNode.removeChild(container);
-		if (mode == 0) srcTextarea.style.display = '';
+	var knode = K(expr);
+	if (!knode) {
+		return;
 	}
-	document.body.removeChild(g.hideDiv);
-	document.body.removeChild(g.maskDiv);
-	g.container = null;
-	g.dialogStack = [];
-	g.contextmenuItems = [];
-	g.getHtmlHooks = [];
-	g.setHtmlHooks = [];
-	g.onchangeHandlerStack = [];
-	g.eventStack = [];
-};
-
-KE.create = function(id, mode) {
-	if (KE.g[id].beforeCreate) KE.g[id].beforeCreate(id);
-	if (KE.browser.IE && KE.browser.VERSION < 7) try { document.execCommand('BackgroundImageCache', false, true); }catch(e){}
-	var srcTextarea = KE.$(id) || document.getElementsByName(id)[0];
-	mode = (typeof mode == "undefined") ? 0 : mode;
-	if (mode == 0 && KE.g[id].container) return;
-	var width = KE.g[id].width || srcTextarea.style.width || srcTextarea.offsetWidth + 'px';
-	var height = KE.g[id].height || srcTextarea.style.height || srcTextarea.offsetHeight + 'px';
-	var tableObj = KE.util.createTable();
-	var container = tableObj.table;
-	container.className = 'ke-container';
-	container.style.width = width;
-	container.style.height = height;
-	var toolbarOuter = tableObj.cell;
-	toolbarOuter.className = 'ke-toolbar-outer';
-	var textareaOuter = container.insertRow(1).insertCell(0);
-	textareaOuter.className = 'ke-textarea-outer';
-	tableObj = KE.util.createTable();
-	var textareaTable = tableObj.table;
-	textareaTable.className = 'ke-textarea-table';
-	var textareaCell = tableObj.cell;
-	textareaOuter.appendChild(textareaTable);
-	var bottomOuter = container.insertRow(2).insertCell(0);
-	bottomOuter.className = 'ke-bottom-outer';
-	srcTextarea.style.display = 'none';
-	if (mode == 1) document.body.appendChild(container);
-	else srcTextarea.parentNode.insertBefore(container, srcTextarea);
-	var toolbarTable = KE.toolbar.create(id);
-	toolbarTable.style.height = KE.g[id].toolbarHeight + 'px';
-	toolbarOuter.appendChild(toolbarTable);
-	var iframe = KE.g[id].iframe || KE.$$('iframe');
-	iframe.tabIndex = KE.g[id].tabIndex || srcTextarea.tabIndex;
-	iframe.className = 'ke-iframe';
-	iframe.setAttribute("frameBorder", "0");
-	var newTextarea = KE.$$('textarea');
-	newTextarea.tabIndex = iframe.tabIndex;
-	newTextarea.className = 'ke-textarea';
-	newTextarea.style.display = 'none';
-	KE.g[id].container = container;
-	KE.g[id].iframe = iframe;
-	KE.g[id].newTextarea = newTextarea;
-	KE.util.resize(id, width, height);
-	textareaCell.appendChild(iframe);
-	textareaCell.appendChild(newTextarea);
-	var bottom = KE.$$('table');
-	bottom.className = 'ke-bottom';
-	bottom.cellPadding = 0;
-	bottom.cellSpacing = 0;
-	bottom.border = 0;
-	bottom.style.height = KE.g[id].statusbarHeight + 'px';
-	var row = bottom.insertRow(0);
-	var bottomLeft = row.insertCell(0);
-	bottomLeft.className = 'ke-bottom-left';
-	var leftImg = KE.$$('span');
-	leftImg.className = 'ke-bottom-left-img';
-	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
-		bottomLeft.style.cursor = 'default';
-		leftImg.style.visibility = 'hidden';
+	options.srcElement = knode[0];
+	if (!options.width) {
+		options.width = knode[0].style.width || knode.width();
 	}
-	bottomLeft.appendChild(leftImg);
-	var bottomRight = row.insertCell(1);
-	bottomRight.className = 'ke-bottom-right';
-	var rightImg = KE.$$('span');
-	rightImg.className = 'ke-bottom-right-img';
-	if (KE.g[id].config.resizeMode == 0 || mode == 1) {
-		bottomRight.style.cursor = 'default';
-		rightImg.style.visibility = 'hidden';
-	} else if (KE.g[id].config.resizeMode == 1) {
-		bottomRight.style.cursor = 's-resize';
-		rightImg.style.visibility = 'hidden';
+	if (!options.height) {
+		options.height = knode[0].style.height || knode.height();
 	}
-	bottomRight.appendChild(rightImg);
-	bottomOuter.appendChild(bottom);
-	var hideDiv = KE.$$('div');
-	hideDiv.className = 'ke-reset';
-	hideDiv.style.display = 'none';
-	var maskDiv = KE.$$('div');
-	maskDiv.className = 'ke-mask';
-	KE.util.setOpacity(maskDiv, 50);
-	KE.event.bind(maskDiv, 'click', function(e){}, id);
-	KE.event.bind(maskDiv, 'mousedown', function(e){}, id);
-	document.body.appendChild(hideDiv);
-	document.body.appendChild(maskDiv);
-	KE.util.setDefaultPlugin(id);
-	var iframeWin = iframe.contentWindow;
-	var iframeDoc = KE.util.getIframeDoc(iframe);
-	if (!KE.browser.IE) iframeDoc.designMode = 'on';
-	var html = KE.util.getFullHtml(id);
-	iframeDoc.open();
-	iframeDoc.write(html);
-	iframeDoc.close();
-	if (!KE.g[id].wyswygMode) {
-		newTextarea.value = KE.util.execSetHtmlHooks(id, srcTextarea.value);
-		newTextarea.style.display = 'block';
-		iframe.style.display = 'none';
-		KE.toolbar.disable(id, ['source', 'fullscreen']);
-		KE.toolbar.select(id, 'source');
+	var editor = new KEditor(options);
+	if (_language[editor.langType]) {
+		return create(editor);
 	}
-	if (KE.g[id].syncType == 'form') {
-		var el = srcTextarea;
-		while ((el = el.parentNode)) {
-			if (el.nodeName.toLowerCase() == 'form') {
-				KE.event.add(el, 'submit', function() { KE.sync(id); }, id);
+	_loadScript(editor.langPath + editor.langType + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
+		return create(editor);
+	});
+	return editor;
+}
+if (_IE && _V < 7) {
+	_nativeCommand(document, 'BackgroundImageCache', true);
+}
+K.editor = _editor;
+K.create = _create;
+K.plugin = _plugin;
+K.lang = _lang;
+_plugin('core', function(K) {
+	var self = this,
+		shortcutKeys = {
+			undo : 'Z', redo : 'Y', bold : 'B', italic : 'I', underline : 'U', print : 'P', selectall : 'A'
+		};
+	self.afterSetHtml(function() {
+		if (self.options.afterChange) {
+			self.options.afterChange.call(self);
+		}
+	});
+	if (self.syncType == 'form') {
+		var el = K(self.srcElement), hasForm = false;
+		while ((el = el.parent())) {
+			if (el.name == 'form') {
+				hasForm = true;
 				break;
 			}
 		}
+		if (hasForm) {
+			el.bind('submit', function(e) {
+				self.sync();
+			});
+			var resetBtn = K('[type="reset"]', el);
+			resetBtn.click(function() {
+				self.html(self.initContent);
+			});
+			self.beforeRemove(function() {
+				el.unbind();
+				resetBtn.unbind();
+			});
+		}
 	}
-	function hideMenu() {
-		KE.hideMenu(id);
-	}
-	function updateToolbar() {
-		KE.toolbar.updateState(id);
-	}
-	if (KE.browser.WEBKIT) {
-		KE.event.add(iframeDoc, 'click', function(e) {
-			KE.util.selectImageWebkit(id, e, true);
-		}, id);
-	}
-	if (KE.browser.IE) {
-		KE.event.add(iframeDoc, 'keydown', function(e) {
-			if (e.keyCode == 8) {
-				var range = KE.g[id].range;
-				if (range.item) {
-					var item = range.item(0);
-					item.parentNode.removeChild(item);
-					KE.util.execOnchangeHandler(id);
-					KE.event.stop(id);
-					return false;
+	self.clickToolbar('source', function() {
+		if (_MOBILE) {
+			return;
+		}
+		if (self.edit.designMode) {
+			self.toolbar.disableAll(true);
+			self.edit.design(false);
+			self.toolbar.select('source');
+		} else {
+			self.toolbar.disableAll(false);
+			self.edit.design(true);
+			self.toolbar.unselect('source');
+		}
+		self.designMode = self.edit.designMode;
+	});
+	self.afterCreate(function() {
+		if (!self.designMode) {
+			self.toolbar.disableAll(true).select('source');
+		}
+	});
+	self.clickToolbar('fullscreen', function() {
+		self.fullscreen();
+	});
+	var loaded = false;
+	self.afterCreate(function() {
+		K(self.edit.doc, self.edit.textarea).keyup(function(e) {
+			if (e.which == 27) {
+				setTimeout(function() {
+					self.fullscreen();
+				}, 0);
+			}
+		});
+		if (loaded) {
+			if (_IE && !self.designMode) {
+				return;
+			}
+			self.focus();
+		}
+		if (!loaded) {
+			loaded = true;
+		}
+	});
+	_each('undo,redo'.split(','), function(i, name) {
+		if (shortcutKeys[name]) {
+			self.afterCreate(function() {
+				_ctrl(this.edit.doc, shortcutKeys[name], function() {
+					self.clickToolbar(name);
+				});
+			});
+		}
+		self.clickToolbar(name, function() {
+			self[name]();
+		});
+	});
+	self.clickToolbar('formatblock', function() {
+		var blocks = self.lang('formatblock.formatBlock'),
+			heights = {
+				h1 : 28,
+				h2 : 24,
+				h3 : 18,
+				H4 : 14,
+				p : 12
+			},
+			curVal = self.cmd.val('formatblock'),
+			menu = self.createMenu({
+				name : 'formatblock',
+				width : self.langType == 'en' ? 200 : 150
+			});
+		_each(blocks, function(key, val) {
+			var style = 'font-size:' + heights[key] + 'px;';
+			if (key.charAt(0) === 'h') {
+				style += 'font-weight:bold;';
+			}
+			menu.addItem({
+				title : '<span style="' + style + '">' + val + '</span>',
+				height : heights[key] + 12,
+				checked : (curVal === key || curVal === val),
+				click : function() {
+					self.select().exec('formatblock', '<' + key + '>').hideMenu();
+				}
+			});
+		});
+	});
+	self.clickToolbar('fontname', function() {
+		var curVal = self.cmd.val('fontname'),
+			menu = self.createMenu({
+				name : 'fontname',
+				width : 150
+			});
+		_each(self.lang('fontname.fontName'), function(key, val) {
+			menu.addItem({
+				title : '<span style="font-family: ' + key + ';">' + val + '</span>',
+				checked : (curVal === key.toLowerCase() || curVal === val.toLowerCase()),
+				click : function() {
+					self.exec('fontname', key).hideMenu();
+				}
+			});
+		});
+	});
+	self.clickToolbar('fontsize', function() {
+		var curVal = self.cmd.val('fontsize');
+			menu = self.createMenu({
+				name : 'fontsize',
+				width : 150
+			});
+		_each(self.fontSizeTable, function(i, val) {
+			menu.addItem({
+				title : '<span style="font-size:' + val + ';">' + val + '</span>',
+				height : _removeUnit(val) + 12,
+				checked : curVal === val,
+				click : function() {
+					self.exec('fontsize', val).hideMenu();
+				}
+			});
+		});
+	});
+	_each('forecolor,hilitecolor'.split(','), function(i, name) {
+		self.clickToolbar(name, function() {
+			self.createMenu({
+				name : name,
+				selectedColor : self.cmd.val(name) || 'default',
+				colors : self.colorTable,
+				click : function(color) {
+					self.exec(name, color).hideMenu();
+				}
+			});
+		});
+	});
+	_each(('cut,copy,paste').split(','), function(i, name) {
+		self.clickToolbar(name, function() {
+			self.focus();
+			try {
+				self.exec(name, null);
+			} catch(e) {
+				alert(self.lang(name + 'Error'));
+			}
+		});
+	});
+	self.clickToolbar('about', function() {
+		var html = '<div style="margin:20px;">' +
+			'<div>KindEditor ' + _VERSION + '</div>' +
+			'<div>Copyright &copy; <a href="http://www.kindsoft.net/" target="_blank">kindsoft.net</a> All rights reserved.</div>' +
+			'</div>';
+		self.createDialog({
+			name : 'about',
+			width : 300,
+			title : self.lang('about'),
+			body : html
+		});
+	});
+	self.plugin.getSelectedLink = function() {
+		return self.cmd.commonAncestor('a');
+	};
+	self.plugin.getSelectedImage = function() {
+		return _getImageFromRange(self.edit.cmd.range, function(img) {
+			return !/^ke-\w+$/i.test(img[0].className);
+		});
+	};
+	self.plugin.getSelectedFlash = function() {
+		return _getImageFromRange(self.edit.cmd.range, function(img) {
+			return img[0].className == 'ke-flash';
+		});
+	};
+	self.plugin.getSelectedMedia = function() {
+		return _getImageFromRange(self.edit.cmd.range, function(img) {
+			return img[0].className == 'ke-flash' || img[0].className == 'ke-rm';
+		});
+	};
+	self.plugin.getSelectedAnchor = function() {
+		return _getImageFromRange(self.edit.cmd.range, function(img) {
+			return img[0].className == 'ke-anchor';
+		});
+	};
+	_each('link,image,flash,media,anchor'.split(','), function(i, name) {
+		var uName = name.charAt(0).toUpperCase() + name.substr(1);
+		_each('edit,delete'.split(','), function(j, val) {
+			self.addContextmenu({
+				title : self.lang(val + uName),
+				click : function() {
+					self.loadPlugin(name, function() {
+						self.plugin[name][val]();
+						self.hideMenu();
+					});
+				},
+				cond : self.plugin['getSelected' + uName],
+				width : 150,
+				iconClass : val == 'edit' ? 'ke-icon-' + name : undefined
+			});
+		});
+		self.addContextmenu({ title : '-' });
+	});
+	self.plugin.getSelectedTable = function() {
+		return self.cmd.commonAncestor('table');
+	};
+	self.plugin.getSelectedRow = function() {
+		return self.cmd.commonAncestor('tr');
+	};
+	self.plugin.getSelectedCell = function() {
+		return self.cmd.commonAncestor('td');
+	};
+	_each(('prop,cellprop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,rowmerge,colmerge,' +
+	'rowsplit,colsplit,coldelete,rowdelete,insert,delete').split(','), function(i, val) {
+		var cond = _inArray(val, ['prop', 'delete']) < 0 ? self.plugin.getSelectedCell : self.plugin.getSelectedTable;
+		self.addContextmenu({
+			title : self.lang('table' + val),
+			click : function() {
+				self.loadPlugin('table', function() {
+					self.plugin.table[val]();
+					self.hideMenu();
+				});
+			},
+			cond : cond,
+			width : 170,
+			iconClass : 'ke-icon-table' + val
+		});
+	});
+	self.addContextmenu({ title : '-' });
+	_each(('selectall,justifyleft,justifycenter,justifyright,justifyfull,insertorderedlist,' +
+		'insertunorderedlist,indent,outdent,subscript,superscript,hr,print,' +
+		'bold,italic,underline,strikethrough,removeformat,unlink').split(','), function(i, name) {
+		if (shortcutKeys[name]) {
+			self.afterCreate(function() {
+				_ctrl(this.edit.doc, shortcutKeys[name], function() {
+					self.cmd.selection();
+					self.clickToolbar(name);
+				});
+			});
+		}
+		self.clickToolbar(name, function() {
+			self.focus().exec(name, null);
+		});
+	});
+	self.afterCreate(function() {
+		var doc = self.edit.doc, cmd, bookmark, div,
+			cls = '__kindeditor_paste__', pasting = false;
+		function movePastedData() {
+			cmd.range.moveToBookmark(bookmark);
+			cmd.select();
+			if (_WEBKIT) {
+				K('div.' + cls, div).each(function() {
+					K(this).after('<br />').remove(true);
+				});
+				K('span.Apple-style-span', div).remove(true);
+				K('meta', div).remove();
+			}
+			var html = div[0].innerHTML;
+			div.remove();
+			if (html === '') {
+				return;
+			}
+			if (self.pasteType === 2) {
+				if (/schemas-microsoft-com|worddocument|mso-\w+/i.test(html)) {
+					html = _clearMsWord(html, self.filterMode ? self.htmlTags : K.options.htmlTags);
+				} else {
+					html = _formatHtml(html, self.filterMode ? self.htmlTags : null);
+					html = self.beforeSetHtml(html);
 				}
 			}
-		}, id);
-	}
-	function afterFocus() {
-		if (KE.g[id].afterFocus) KE.g[id].afterFocus(id);
-	}
-	function afterBlur() {
-		if (KE.g[id].afterBlur) KE.g[id].afterBlur(id);
-	}
-	KE.event.add(iframeDoc, 'mousedown', hideMenu, id);
-	KE.event.add(iframeDoc, 'click', updateToolbar, id);
-	KE.event.input(iframeDoc, updateToolbar, id);
-	KE.event.bind(newTextarea, 'click', hideMenu, id);
-	KE.event.add(document, 'click', hideMenu, id);
-	KE.event.add(iframeWin, 'focus', afterFocus);
-	KE.event.add(newTextarea, 'focus', afterFocus);
-	KE.event.add(iframeWin, 'blur', afterBlur);
-	KE.event.add(newTextarea, 'blur', afterBlur);
-	KE.g[id].toolbarTable = toolbarTable;
-	KE.g[id].textareaTable = textareaTable;
-	KE.g[id].srcTextarea = srcTextarea;
-	KE.g[id].bottom = bottom;
-	KE.g[id].hideDiv = hideDiv;
-	KE.g[id].maskDiv = maskDiv;
-	KE.g[id].iframeWin = iframeWin;
-	KE.g[id].iframeDoc = iframeDoc;
-	KE.g[id].width = width;
-	KE.g[id].height = height;
-	KE.util.drag(id, bottomRight, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-		if (KE.g[id].resizeMode == 2) {
-			KE.util.resize(id, (objWidth + left) + 'px', (objHeight + top) + 'px', true);
-		} else if (KE.g[id].resizeMode == 1) {
-			KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
+			if (self.pasteType === 1) {
+				html = html.replace(/<br[^>]*>/ig, '\n');
+				html = html.replace(/<\/p><p[^>]*>/ig, '\n');
+				html = html.replace(/<[^>]+/g, '');
+				html = html.replace(/&nbsp;/ig, ' ');
+				html = html.replace(/\n\s*\n/g, '\n');
+				if (self.newlineTag == 'p') {
+					html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
+				} else {
+					html = html.replace(/\n/g, '<br />$&');
+				}
+			}
+			self.insertHtml(html);
 		}
-		if (KE.g[id].resizeMode > 0) {
-			if (KE.g[id].afterDrag) KE.g[id].afterDrag(id);
-		}
-	});
-	KE.util.drag(id, bottomLeft, container, function(objTop, objLeft, objWidth, objHeight, top, left) {
-		if (KE.g[id].resizeMode > 0) {
-			KE.util.resize(id, objWidth + 'px', (objHeight + top) + 'px', true, false);
-			if (KE.g[id].afterDrag) KE.g[id].afterDrag(id);
-		}
-	});
-	KE.each(KE.plugin, function(cmd, plugin) {
-		if (plugin.init) plugin.init(id);
-	});
-	KE.g[id].getHtmlHooks.push(function(html) {
-		html = html.replace(/(<[^>]*)kesrc="([^"]+)"([^>]*>)/ig, function(full, start, src, end) {
-			full = full.replace(/(\s+(?:href|src)=")[^"]+(")/i, '$1' + src + '$2');
-			full = full.replace(/\s+kesrc="[^"]+"/i, '');
-			return full;
+		K(doc.body).bind('paste', function(e){
+			if (self.pasteType === 0) {
+				e.stop();
+				return;
+			}
+			if (pasting) {
+				return;
+			}
+			pasting = true;
+			K('div.' + cls, doc).remove();
+			cmd = self.cmd.selection();
+			bookmark = cmd.range.createBookmark();
+			div = K('<div class="' + cls + '"></div>', doc).css({
+				position : 'absolute',
+				width : '1px',
+				height : '1px',
+				overflow : 'hidden',
+				left : '-1981px',
+				top : K(bookmark.start).pos().y + 'px',
+				'white-space' : 'nowrap'
+			});
+			K(doc.body).append(div);
+			if (_IE) {
+				var rng = cmd.range.get(true);
+				rng.moveToElementText(div[0]);
+				rng.select();
+				rng.execCommand('paste');
+				e.preventDefault();
+			} else {
+				cmd.range.selectNodeContents(div[0]);
+				cmd.select();
+			}
+			setTimeout(function() {
+				movePastedData();
+				pasting = false;
+			}, 0);
 		});
-		html = html.replace(/(<[^>]+\s)ke-(on\w+="[^"]+"[^>]*>)/ig, function(full, start, end) {
+	});
+	self.beforeGetHtml(function(html) {
+		return html.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
+			var imgAttrs = _getAttrList(full),
+				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
+			return _mediaEmbed(attrs);
+		})
+		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {
+			var imgAttrs = _getAttrList(full);
+			return '<a name="' + unescape(imgAttrs['data-ke-name']) + '"></a>';
+		})
+		.replace(/<div\s+[^>]*data-ke-script-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
+			return '<script' + unescape(attr) + '>' + code + '</script>';
+		})
+		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
+			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, '$1' + src + '$2');
+			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
+			return full;
+		})
+		.replace(/(<[^>]+\s)data-ke-(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
 			return start + end;
 		});
-		return html;
 	});
-	KE.g[id].setHtmlHooks.push(function(html) {
-		html = html.replace(/(<[^>]*)(href|src)="([^"]+)"([^>]*>)/ig, function(full, start, key, src, end) {
-			if (full.match(/\skesrc="[^"]+"/i)) return full;
-			full = start + key + '="' + src + '"' + ' kesrc="' + src + '"' + end;
+	self.beforeSetHtml(function(html) {
+		return html.replace(/<embed[^>]*type="([^"]+)"[^>]*>(?:<\/embed>)?/ig, function(full) {
+			var attrs = _getAttrList(full);
+			attrs.src = _undef(attrs.src, '');
+			attrs.width = _undef(attrs.width, 0);
+			attrs.height = _undef(attrs.height, 0);
+			return _mediaImg(self.themesPath + 'common/blank.gif', attrs);
+		})
+		.replace(/<a[^>]*name="([^"]+)"[^>]*>(?:<\/a>)?/ig, function(full) {
+			var attrs = _getAttrList(full);
+			return '<img class="ke-anchor" src="' + self.themesPath + 'common/anchor.gif" data-ke-name="' + escape(attrs.name) + '" />';
+		})
+		.replace(/<script([^>]*)>([\s\S]*?)<\/script>/ig, function(full, attr, code) {
+			return '<div class="ke-script" data-ke-script-attr="' + escape(attr) + '">' + code + '</div>';
+		})
+		.replace(/(<[^>]*)(href|src)="([^"]*)"([^>]*>)/ig, function(full, start, key, src, end) {
+			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
+				return full;
+			}
+			full = start + key + '="' + src + '"' + ' data-ke-src="' + src + '"' + end;
 			return full;
+		})
+		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
+			return start + 'data-ke-' + end;
+		})
+		.replace(/<table[^>]*\s+border="0"[^>]*>/ig, function(full) {
+			if (full.indexOf('ke-zeroborder') >= 0) {
+				return full;
+			}
+			return _addClassToTag(full, 'ke-zeroborder');
 		});
-		html = html.replace(/(<[^>]+\s)(on\w+="[^"]+"[^>]*>)/ig, function(full, start, end) {
-			return start + 'ke-' + end;
-		});
-		return html;
 	});
-	KE.util.addContextmenuEvent(id);
-	KE.util.addNewlineEvent(id);
-	KE.util.addTabEvent(id);
-	function setSelectionHandler() {
-		KE.util.setSelection(id);
-	}
-	KE.event.input(iframeDoc, setSelectionHandler, id);
-	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler, id);
-	KE.event.add(document, 'mousedown', setSelectionHandler, id);
-	KE.onchange(id, function(id) {
-		if (KE.g[id].autoSetDataMode || KE.g[id].syncType == 'auto') {
-			KE.util.setData(id);
-			if (KE.g[id].afterSetData) KE.g[id].afterSetData(id);
-		}
-		if (KE.g[id].afterChange) KE.g[id].afterChange(id);
-		KE.history.add(id, KE.g[id].minChangeSize);
-	});
-	if (KE.browser.IE) {
-		iframeDoc.body.disabled = true;
-		KE.readonly(id, false);
-		iframeDoc.body.removeAttribute('disabled');
-	}
-	KE.util.setFullHtml(id, srcTextarea.value);
-	KE.history.add(id, 0);
-	if (mode > 0) KE.util.focus(id);
-	if (KE.g[id].afterCreate) KE.g[id].afterCreate(id);
-};
-
-KE.onchange = function(id, func) {
-	var g = KE.g[id];
-	function handler() {
-		func(id);
-	};
-	g.onchangeHandlerStack.push(handler);
-	KE.event.input(g.iframeDoc, handler, id);
-	KE.event.input(g.newTextarea, handler, id);
-	KE.event.add(g.iframeDoc, 'mouseup', function(e) {
-		window.setTimeout(function() {
-			func(id);
-		}, 0);
-	}, id);
-};
-
-var _needStyle = true;
-
-KE.init = function(args) {
-	var g = KE.g[args.id] = args;
-	g.config = {};
-	g.undoStack = [];
-	g.redoStack = [];
-	g.dialogStack = [];
-	g.contextmenuItems = [];
-	g.getHtmlHooks = [];
-	g.setHtmlHooks = [];
-	g.onchangeHandlerStack = [];
-	g.eventStack = [];
-	KE.each(KE.setting, function(key, val) {
-		g[key] = (typeof args[key] == 'undefined') ? val : args[key];
-		g.config[key] = g[key];
-	});
-	if (g.loadStyleMode && _needStyle) {
-		KE.util.loadStyle(g.skinsPath + g.skinType + '.css');
-		_needStyle = false;
-	}
-}
-
-KE.show = function(args) {
-	KE.init(args);
-	KE.event.ready(function() { KE.create(args.id); });
-};
-
-if (window.KE === undefined) window.KE = KE;
-window.KindEditor = KE;
-
-})();
-
-(function (KE, undefined) {
-
-KE.langType = 'zh_CN';
-
-KE.lang = {
-	source : 'HTML代码',
-	undo : '后退(Ctrl+Z)',
-	redo : '前进(Ctrl+Y)',
-	cut : '剪切(Ctrl+X)',
-	copy : '复制(Ctrl+C)',
-	paste : '粘贴(Ctrl+V)',
-	plainpaste : '粘贴为无格式文本',
-	wordpaste : '从Word粘贴',
-	selectall : '全选',
-	justifyleft : '左对齐',
-	justifycenter : '居中',
-	justifyright : '右对齐',
-	justifyfull : '两端对齐',
-	insertorderedlist : '编号',
-	insertunorderedlist : '项目符号',
-	indent : '增加缩进',
-	outdent : '减少缩进',
-	subscript : '下标',
-	superscript : '上标',
-	title : '标题',
-	fontname : '字体',
-	fontsize : '文字大小',
-	textcolor : '文字颜色',
-	bgcolor : '文字背景',
-	bold : '粗体(Ctrl+B)',
-	italic : '斜体(Ctrl+I)',
-	underline : '下划线(Ctrl+U)',
-	strikethrough : '删除线',
-	removeformat : '删除格式',
-	image : '图片',
-	flash : '插入Flash',
-	media : '插入多媒体',
-	table : '插入表格',
-	hr : '插入横线',
-	emoticons : '插入表情',
-	link : '超级链接',
-	unlink : '取消超级链接',
-	fullscreen : '全屏显示',
-	about : '关于',
-	print : '打印',
-	fileManager : '浏览服务器',
-	advtable : '表格',
-	tablecell : '单元格',
-	yes : '确定',
-	no : '取消',
-	close : '关闭',
-	editImage : '图片属性',
-	deleteImage : '删除图片',
-	editLink : '超级链接属性',
-	deleteLink : '取消超级链接',
-	tableprop : '表格属性',
-	tablecellprop : '单元格属性',
-	tableinsert : '插入表格',
-	tabledelete : '删除表格',
-	tablecolinsertleft : '左侧插入列',
-	tablecolinsertright : '右侧插入列',
-	tablerowinsertabove : '上方插入行',
-	tablerowinsertbelow : '下方插入行',
-	tablecoldelete : '删除列',
-	tablerowdelete : '删除行',
-	noColor : '无颜色',
-	invalidImg : "请输入有效的URL地址。\n只允许jpg,gif,bmp,png格式。",
-	invalidMedia : "请输入有效的URL地址。\n只允许swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。",
-	invalidWidth : "宽度必须为数字。",
-	invalidHeight : "高度必须为数字。",
-	invalidBorder : "边框必须为数字。",
-	invalidUrl : "请输入有效的URL地址。",
-	invalidRows : '行数为必选项，只允许输入大于0的数字。',
-	invalidCols : '列数为必选项，只允许输入大于0的数字。',
-	invalidPadding : '边距必须为数字。',
-	invalidSpacing : '间距必须为数字。',
-	invalidBorder : '边框必须为数字。',
-	pleaseInput : "请输入内容。",
-	invalidJson : '服务器发生故障。',
-	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
-	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
-	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
-};
-
-var plugins = KE.lang.plugins = {};
-
-plugins.about = {
-	version : KE.version,
-	title : 'HTML可视化编辑器'
-};
-
-plugins.plainpaste = {
-	comment : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。'
-};
-
-plugins.wordpaste = {
-	comment : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。'
-};
-
-plugins.link = {
-	url : 'URL地址',
-	linkType : '打开类型',
-	newWindow : '新窗口',
-	selfWindow : '当前窗口'
-};
-
-plugins.flash = {
-	url : 'Flash地址',
-	width : '宽度',
-	height : '高度'
-};
-
-plugins.media = {
-	url : '媒体文件地址',
-	width : '宽度',
-	height : '高度',
-	autostart : '自动播放'
-};
-
-plugins.image = {
-	remoteImage : '远程图片',
-	localImage : '本地上传',
-	remoteUrl : '图片地址',
-	localUrl : '图片地址',
-	size : '图片大小',
-	width : '宽',
-	height : '高',
-	resetSize : '重置大小',
-	align : '对齐方式',
-	defaultAlign : '默认方式',
-	leftAlign : '左对齐',
-	rightAlign : '右对齐',
-	imgTitle : '图片说明',
-	viewServer : '浏览...'
-};
-
-plugins.file_manager = {
-	emptyFolder : '空文件夹',
-	moveup : '移到上一级文件夹',
-	viewType : '显示方式：',
-	viewImage : '缩略图',
-	listImage : '详细信息',
-	orderType : '排序方式：',
-	fileName : '名称',
-	fileSize : '大小',
-	fileType : '类型'
-};
-
-plugins.advtable = {
-	cells : '单元格数',
-	rows : '行数',
-	cols : '列数',
-	size : '大小',
-	width : '宽度',
-	height : '高度',
-	percent : '%',
-	px : 'px',
-	space : '边距间距',
-	padding : '边距',
-	spacing : '间距',
-	align : '对齐方式',
-	textAlign : '水平对齐',
-	verticalAlign : '垂直对齐',
-	alignDefault : '默认',
-	alignLeft : '左对齐',
-	alignCenter : '居中',
-	alignRight : '右对齐',
-	alignTop : '顶部',
-	alignMiddle : '中部',
-	alignBottom : '底部',
-	alignBaseline : '基线',
-	border : '边框',
-	borderWidth : '边框',
-	borderColor : '颜色',
-	backgroundColor : '背景颜色'
-};
-
-plugins.title = {
-	h1 : '标题 1',
-	h2 : '标题 2',
-	h3 : '标题 3',
-	h4 : '标题 4',
-	p : '正 文'
-};
-
-plugins.fontname = {
-	fontName : {
-		'SimSun' : '宋体',
-		'NSimSun' : '新宋体',
-		'FangSong_GB2312' : '仿宋_GB2312',
-		'KaiTi_GB2312' : '楷体_GB2312',
-		'SimHei' : '黑体',
-		'Microsoft YaHei' : '微软雅黑',
-		'Arial' : 'Arial',
-		'Arial Black' : 'Arial Black',
-		'Times New Roman' : 'Times New Roman',
-		'Courier New' : 'Courier New',
-		'Tahoma' : 'Tahoma',
-		'Verdana' : 'Verdana'
-	}
-};
-
-})(KindEditor);
-
-(function (KE, undefined) {
-
-KE.plugin.about = {
-	click : function(id) {
-		KE.util.selection(id);
-		var dialog = new KE.dialog({
-			id : id,
-			cmd : 'about',
-			file : 'about.html',
-			width : 300,
-			height : 70,
-			loadingMode : true,
-			title : KE.lang['about'],
-			noButton : KE.lang['close']
-		});
-		dialog.show();
-	}
-};
-
-KE.plugin.undo = {
-	init : function(id) {
-		KE.event.ctrl(KE.g[id].iframeDoc, 'Z', function(e) {
-			KE.plugin['undo'].click(id);
-			KE.util.focus(id);
-		}, id);
-		KE.event.ctrl(KE.g[id].newTextarea, 'Z', function(e) {
-			KE.plugin['undo'].click(id);
-			KE.util.focus(id);
-		}, id);
-	},
-	click : function(id) {
-		KE.history.undo(id);
-		KE.util.execOnchangeHandler(id);
-	}
-};
-
-KE.plugin.redo = {
-	init : function(id) {
-		KE.event.ctrl(KE.g[id].iframeDoc, 'Y', function(e) {
-			KE.plugin['redo'].click(id);
-			KE.util.focus(id);
-		}, id);
-		KE.event.ctrl(KE.g[id].newTextarea, 'Y', function(e) {
-			KE.plugin['redo'].click(id);
-			KE.util.focus(id);
-		}, id);
-	},
-	click : function(id) {
-		KE.history.redo(id);
-		KE.util.execOnchangeHandler(id);
-	}
-};
-
-KE.plugin.cut = {
-	click : function(id) {
-		try {
-			if (!KE.g[id].iframeDoc.queryCommandSupported('cut')) throw 'e';
-		} catch(e) {
-			alert(KE.lang.cutError);
-			return;
-		}
-		KE.util.execCommand(id, 'cut', null);
-	}
-};
-
-KE.plugin.copy = {
-	click : function(id) {
-		try {
-			if (!KE.g[id].iframeDoc.queryCommandSupported('copy')) throw 'e';
-		} catch(e) {
-			alert(KE.lang.copyError);
-			return;
-		}
-		KE.util.execCommand(id, 'copy', null);
-	}
-};
-
-KE.plugin.paste = {
-	click : function(id) {
-		try {
-			if (!KE.g[id].iframeDoc.queryCommandSupported('paste')) throw 'e';
-		} catch(e) {
-			alert(KE.lang.pasteError);
-			return;
-		}
-		KE.util.execCommand(id, 'paste', null);
-	}
-};
-
-KE.plugin.plainpaste = {
-	click : function(id) {
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : 'plainpaste',
-			file : 'plainpaste.html',
-			width : 450,
-			height : 300,
-			loadingMode : true,
-			title : KE.lang['plainpaste'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	exec : function(id) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var html = KE.$('textArea', dialogDoc).value;
-		html = KE.util.escape(html);
-		html = html.replace(/ /g, '&nbsp;');
-		if (KE.g[id].newlineTag == 'p') {
-			html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\r\n|\n|\r/g, '</p><p>');
-		} else {
-			html = html.replace(/\r\n|\n|\r/g, '<br />$&');
-		}
-		KE.util.insertHtml(id, html);
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.wordpaste = {
-	click : function(id) {
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : 'wordpaste',
-			file : 'wordpaste.html',
-			width : 450,
-			height : 300,
-			loadingMode : true,
-			title : KE.lang['wordpaste'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	exec : function(id) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var wordIframe = KE.$('wordIframe', dialogDoc);
-		var str = KE.util.getIframeDoc(wordIframe).body.innerHTML;
-		str = str.replace(/<meta(\n|.)*?>/ig, "");
-		str = str.replace(/<!(\n|.)*?>/ig, "");
-		str = str.replace(/<style[^>]*>(\n|.)*?<\/style>/ig, "");
-		str = str.replace(/<script[^>]*>(\n|.)*?<\/script>/ig, "");
-		str = str.replace(/<w:[^>]+>(\n|.)*?<\/w:[^>]+>/ig, "");
-		str = str.replace(/<xml>(\n|.)*?<\/xml>/ig, "");
-		str = str.replace(/\r\n|\n|\r/ig, "");
-		str = KE.util.execGetHtmlHooks(id, str);
-		str = KE.format.getHtml(str, KE.g[id].htmlTags, KE.g[id].urlType);
-		KE.util.insertHtml(id, str);
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.fullscreen = {
-	click : function(id) {
-		var g = KE.g[id];
-		var self = this;
-		var resetSize = function() {
-			var el = KE.util.getDocumentElement();
-			g.width = el.clientWidth + 'px';
-			g.height = (el.clientHeight - (KE.util.inArray('-', g.items) ? 4 : 6)) + 'px';
-		};
-		var windowSize = '';
-		var resizeListener = function() {
-			if (!self.isSelected) return;
-			var el = KE.util.getDocumentElement();
-			var size = [el.clientWidth, el.clientHeight].join('');
-			if (windowSize != size) {
-				windowSize = size;
-				resetSize();
-				KE.util.resize(id, g.width, g.height);
-			}
-		}
-		if (this.isSelected) {
-			this.isSelected = false;
-			KE.util.setData(id);
-			KE.remove(id, 1);
-			g.width = this.width;
-			g.height = this.height;
-			KE.create(id, 2);
-			document.body.style.height = this.bodyHeight;
-			document.body.style.overflow = this.bodyOverflow;
-			document.body.parentNode.style.overflow = this.htmlOverflow;
-			window.scrollTo(this.scrollPos.x, this.scrollPos.y);
-			KE.event.remove(window, 'resize', resizeListener);
-			g.resizeMode = g.config.resizeMode;
-			KE.toolbar.unselect(id, "fullscreen");
-		} else {
-			this.isSelected = true;
-			this.width = g.container.style.width;
-			this.height = g.container.style.height;
-			KE.util.setData(id);
-			KE.remove(id, 2);
-			this.scrollPos = KE.util.getScrollPos();
-			window.scrollTo(0, 0);
-			this.bodyHeight = KE.getComputedStyle(document.body, 'height');
-			this.bodyOverflow = KE.getComputedStyle(document.body, 'overflow');
-			this.htmlOverflow = KE.getComputedStyle(document.body.parentNode, 'overflow');
-			document.body.style.height = 0;
-			document.body.style.overflow = 'hidden';
-			document.body.parentNode.style.overflow = 'hidden';
-			resetSize();
-			KE.create(id, 1);
-			var div = g.container;
-			div.style.position = 'absolute';
-			div.style.left = 0;
-			div.style.top = 0;
-			div.style.zIndex = 19811211;
-			KE.event.add(window, 'resize', resizeListener);
-			g.resizeMode = 0;
-			KE.toolbar.select(id, "fullscreen");
-		}
-	}
-};
-
-KE.plugin.bgcolor = {
-	click : function(id) {
-		KE.util.selection(id);
-		var color = KE.queryCommandValue(KE.g[id].iframeDoc, 'bgcolor');
-		this.menu = new KE.menu({
-			id : id,
-			cmd : 'bgcolor'
-		});
-		this.menu.picker(color);
-	},
-	exec : function(id, value) {
-		var cmd = new KE.cmd(id);
-		if (value == '') {
-			cmd.remove({
-				'span' : ['.background-color']
-			});
-		} else {
-			cmd.wrap('span', [{'.background-color': value}]);
-		}
-		KE.util.execOnchangeHandler(id);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.fontname = {
-	click : function(id) {
-		var fontName = KE.lang.plugins.fontname.fontName;
-		var cmd = 'fontname';
-		KE.util.selection(id);
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd,
-			width : 150
-		});
-		var font = KE.queryCommandValue(KE.g[id].iframeDoc, cmd);
-		KE.each(fontName, function(key, value) {
-			var html = '<span class="ke-reset" style="font-family: ' + key + ';">' + value + '</span>';
-			menu.add(
-				html,
-				function() { KE.plugin[cmd].exec(id, key); },
-				{ checked : (font === key.toLowerCase() || font === value.toLowerCase()) }
-			);
-		});
-		menu.show();
-		this.menu = menu;
-	},
-	exec : function(id, value) {
-		var cmd = new KE.cmd(id);
-		cmd.wrap('span', [{'.font-family': value}]);
-		KE.util.execOnchangeHandler(id);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.fontsize = {
-	click : function(id) {
-		var fontSize = ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'];
-		var cmd = 'fontsize';
-		KE.util.selection(id);
-		var size = KE.queryCommandValue(KE.g[id].iframeDoc, 'fontsize');
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd,
-			width : 120
-		});
-		for (var i = 0, len = fontSize.length; i < len; i++) {
-			var value = fontSize[i];
-			var html = '<span class="ke-reset" style="font-size: ' + value + ';">' + value + '</span>';
-			menu.add(
-				html,
-				(function(value) {
-					return function() {
-						KE.plugin[cmd].exec(id, value);
-					};
-				})(value),
-				{
-					height : (parseInt(value) + 12) + 'px',
-					checked : (size === value)
-				}
-			);
-		}
-		menu.show();
-		this.menu = menu;
-	},
-	exec : function(id, value) {
-		var cmd = new KE.cmd(id);
-		cmd.wrap('span', [{'.font-size': value}]);
-		KE.util.execOnchangeHandler(id);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.hr = {
-	click : function(id) {
-		KE.util.selection(id);
-		KE.util.insertHtml(id, '<hr />');
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.print = {
-	click : function(id) {
-		KE.util.selection(id);
-		KE.g[id].iframeWin.print();
-	}
-};
-
-KE.plugin.removeformat = {
-	click : function(id) {
-		KE.util.selection(id);
-		var cmd = new KE.cmd(id);
-		var tags = {
-			'*' : ['class', 'style']
-		};
-		for (var i = 0, len = KE.g[id].inlineTags.length; i < len; i++) {
-			tags[KE.g[id].inlineTags[i]] = ['*'];
-		}
-		cmd.remove(tags);
-		KE.util.execOnchangeHandler(id);
-		KE.toolbar.updateState(id);
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.source = {
-	click : function(id) {
-		var g = KE.g[id];
-		if (!g.wyswygMode) {
-			KE.util.setFullHtml(id, g.newTextarea.value);
-			g.iframe.style.display = 'block';
-			g.newTextarea.style.display = 'none';
-			KE.toolbar.able(id, ['source', 'fullscreen']);
-			g.wyswygMode = true;
-			this.isSelected = false;
-			KE.toolbar.unselect(id, "source");
-		} else {
-			KE.hideMenu(id);
-			g.newTextarea.value = KE.util.getData(id);
-			g.iframe.style.display = 'none';
-			g.newTextarea.style.display = 'block';
-			KE.toolbar.disable(id, ['source', 'fullscreen']);
-			g.wyswygMode = false;
-			this.isSelected = true;
-			KE.toolbar.select(id, "source");
-		}
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.textcolor = {
-	click : function(id) {
-		KE.util.selection(id);
-		var color = KE.queryCommandValue(KE.g[id].iframeDoc, 'textcolor');
-		this.menu = new KE.menu({
-			id : id,
-			cmd : 'textcolor'
-		});
-		this.menu.picker(color);
-	},
-	exec : function(id, value) {
-		var cmd = new KE.cmd(id);
-		if (value == '') {
-			cmd.remove({
-				'span' : ['.color'],
-				'font' : ['color']
-			});
-		} else {
-			cmd.wrap('span', [{'.color': value}]);
-		}
-		KE.util.execOnchangeHandler(id);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.title = {
-	click : function(id) {
-		var lang = KE.lang.plugins.title;
-		var title = {
-			'H1' : lang.h1,
-			'H2' : lang.h2,
-			'H3' : lang.h3,
-			'H4' : lang.h4,
-			'P' : lang.p
-		};
-		var sizeHash = {
-			'H1' : 28,
-			'H2' : 24,
-			'H3' : 18,
-			'H4' : 14,
-			'P' : 12
-		};
-		var cmd = 'title';
-		KE.util.selection(id);
-		var block = KE.queryCommandValue(KE.g[id].iframeDoc, 'formatblock');
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd,
-			width : (KE.langType == 'en' ? 200 : 150)
-		});
-		KE.each(title, function(key, value) {
-			var style = 'font-size:' + sizeHash[key] + 'px;'
-			if (key !== 'P') style += 'font-weight:bold;';
-			var html = '<span class="ke-reset" style="' + style + '">' + value + '</span>';
-			menu.add(html, function() {
-				KE.plugin[cmd].exec(id, '<' + key + '>'); },
-				{
-					height : (sizeHash[key] + 12) + 'px',
-					checked : (block === key.toLowerCase() || block === value.toLowerCase() )
-				}
-			);
-		});
-		menu.show();
-		this.menu = menu;
-	},
-	exec : function(id, value) {
-		KE.util.select(id);
-		KE.util.execCommand(id, 'formatblock', value);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.emoticons = {
-	click : function(id) {
-		var self = this,
-			cmd = 'emoticons',
-			rows = 5,
-			cols = 9,
-			total = 135,
-			startNum = 0,
-			cells = rows * cols,
-			pages = Math.ceil(total / cells),
-			colsHalf = Math.floor(cols / 2),
-			g = KE.g[id],
-			path = g.pluginsPath + 'emoticons/',
-			allowPreview = (g.allowPreviewEmoticons === undefined) ? true : g.allowPreviewEmoticons;
-		KE.util.selection(id);
-		var wrapperDiv = KE.$$('div');
-		wrapperDiv.className = 'ke-plugin-emoticons-wrapper';
-		var previewDiv, previewImg;
-		if (allowPreview) {
-			previewDiv = KE.$$('div');
-			previewDiv.className = 'ke-plugin-emoticons-preview';
-			previewDiv.style.right = 0;
-			var previewImg = KE.$$('img');
-			previewImg.className = 'ke-reset';
-			previewImg.src = path + '0.gif';
-			previewImg.border = 0;
-			previewDiv.appendChild(previewImg);
-			wrapperDiv.appendChild(previewDiv);
-		}
-		function createEmoticonsTable(pageNum) {
-			var table = KE.$$('table');
-			if (previewDiv) {
-				table.onmouseover = function() { previewDiv.style.display = 'block'; };
-				table.onmouseout = function() { previewDiv.style.display = 'none'; };
-			}
-			table.className = 'ke-plugin-emoticons-table';
-			table.cellPadding = 0;
-			table.cellSpacing = 0;
-			table.border = 0;
-			var num = (pageNum - 1) * cells + startNum;
-			for (var i = 0; i < rows; i++) {
-				var row = table.insertRow(i);
-				for (var j = 0; j < cols; j++) {
-					var cell = row.insertCell(j);
-					cell.className = 'ke-plugin-emoticons-cell';
-					if (previewDiv) {
-						cell.onmouseover = (function(j, num) {
-							return function() {
-								if (j > colsHalf) {
-									previewDiv.style.left = 0;
-									previewDiv.style.right = '';
-								} else {
-									previewDiv.style.left = '';
-									previewDiv.style.right = 0;
-								}
-								previewImg.src = path + num + '.gif';;
-								this.className = 'ke-plugin-emoticons-cell ke-plugin-emoticons-cell-on';
-							};
-						})(j, num);
-					} else {
-						cell.onmouseover = function() {
-							this.className = 'ke-plugin-emoticons-cell ke-plugin-emoticons-cell-on';
-						};
-					}
-					cell.onmouseout = function() { this.className = 'ke-plugin-emoticons-cell'; };
-					cell.onclick = (function(num) {
-						return function() {
-							self.exec(id, num);
-							return false;
-						};
-					})(num);
-					var span = KE.$$('span');
-					span.className = 'ke-plugin-emoticons-img';
-					span.style.backgroundPosition = '-' + (24 * num) + 'px 0px';
-					cell.appendChild(span);
-					num++;
-				}
-			}
-			return table;
-		}
-		var table = createEmoticonsTable(1);
-		wrapperDiv.appendChild(table);
-		var pageDiv = KE.$$('div');
-		pageDiv.className = 'ke-plugin-emoticons-page';
-		wrapperDiv.appendChild(pageDiv);
-		function createPageTable(currentPageNum) {
-			for (var pageNum = 1; pageNum <= pages; pageNum++) {
-				if (currentPageNum !== pageNum) {
-					var a = KE.$$('a');
-					a.href = 'javascript:;';
-					a.innerHTML = '[' + pageNum + ']';
-					a.onclick = (function(pageNum) {
-						return function() {
-							wrapperDiv.removeChild(table);
-							var newTable = createEmoticonsTable(pageNum);
-							wrapperDiv.insertBefore(newTable, pageDiv);
-							table = newTable;
-							pageDiv.innerHTML = '';
-							createPageTable(pageNum);
-							return false;
-						};
-					})(pageNum);
-					pageDiv.appendChild(a);
-				} else {
-					pageDiv.appendChild(document.createTextNode('[' + pageNum + ']'));
-				}
-				pageDiv.appendChild(document.createTextNode(' '));
-			}
-		}
-		createPageTable(1);
-		var menu = new KE.menu({
-			id : id,
-			cmd : cmd
-		});
-		menu.append(wrapperDiv);
-		menu.show();
-		this.menu = menu;
-	},
-	exec : function(id, num) {
-		var src = KE.g[id].pluginsPath + 'emoticons/' + num + '.gif';
-		var html = '<img src="' + src + '" kesrc="' + src + '" alt="" />';
-		KE.util.insertHtml(id, html);
-		this.menu.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.flash = {
-	init : function(id) {
-		var self = this;
-		KE.g[id].getHtmlHooks.push(function(html) {
-			return html.replace(/<img[^>]*class="?ke-flash"?[^>]*>/ig, function(imgStr) {
-				var width = imgStr.match(/style="[^"]*;?\s*width:\s*(\d+)/i) ? RegExp.$1 : 0;
-				var height = imgStr.match(/style="[^"]*;?\s*height:\s*(\d+)/i) ? RegExp.$1 : 0;
-				width = width || (imgStr.match(/width="([^"]+)"/i) ? RegExp.$1 : 0);
-				height = height || (imgStr.match(/height="([^"]+)"/i) ? RegExp.$1 : 0);
-				if (imgStr.match(/kesrctag="([^"]+)"/i)) {
-					var attrs = KE.util.getAttrList(unescape(RegExp.$1));
-					attrs.width = width || attrs.width || 0;
-					attrs.height = height || attrs.height || 0;
-					attrs.kesrc = attrs.src;
-					return KE.util.getMediaEmbed(attrs);
-				}
-			});
-		});
-		KE.g[id].setHtmlHooks.push(function(html) {
-			return html.replace(/<embed[^>]*type="application\/x-shockwave-flash"[^>]*>(?:<\/embed>)?/ig, function($0) {
-				var src = $0.match(/\s+src="([^"]+)"/i) ? RegExp.$1 : '';
-				if ($0.match(/\s+kesrc="([^"]+)"/i)) src = RegExp.$1;
-				var width = $0.match(/\s+width="([^"]+)"/i) ? RegExp.$1 : 0;
-				var height = $0.match(/\s+height="([^"]+)"/i) ? RegExp.$1 : 0;
-				var attrs = KE.util.getAttrList($0);
-				attrs.src = src;
-				attrs.width = width;
-				attrs.height = height;
-				return KE.util.getMediaImage(id, 'flash', attrs);
-			});
-		});
-	},
-	click : function(id) {
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : 'flash',
-			file : 'flash.html',
-			width : 400,
-			height : 140,
-			loadingMode : true,
-			title : KE.lang['flash'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	check : function(id, url, width, height) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		if (!url.match(/^.{3,}$/)) {
-			alert(KE.lang['invalidUrl']);
-			KE.$('url', dialogDoc).focus();
-			return false;
-		}
-		if (!width.match(/^\d*$/)) {
-			alert(KE.lang['invalidWidth']);
-			KE.$('width', dialogDoc).focus();
-			return false;
-		}
-		if (!height.match(/^\d*$/)) {
-			alert(KE.lang['invalidHeight']);
-			KE.$('height', dialogDoc).focus();
-			return false;
-		}
-		return true;
-	},
-	exec : function(id) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var url = KE.$('url', dialogDoc).value;
-		var width = KE.$('width', dialogDoc).value;
-		var height = KE.$('height', dialogDoc).value;
-		if (!this.check(id, url, width, height)) return false;
-		var html = KE.util.getMediaImage(id, 'flash', {
-			src : url,
-			type : KE.g[id].mediaTypes['flash'],
-			width : width,
-			height : height,
-			quality : 'high'
-		});
-		KE.util.insertHtml(id, html);
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.image = {
-	getSelectedNode : function(id) {
-		var g = KE.g[id];
-		var startNode = g.keRange.startNode;
-		var endNode = g.keRange.endNode;
-		if (!KE.browser.WEBKIT && !g.keSel.isControl) return;
-		if (startNode.nodeType != 1) return;
-		if (startNode.tagName.toLowerCase() != 'img') return;
-		if (startNode != endNode) return;
-		if (!startNode.className.match(/^ke-\w+/i)) return startNode;
-	},
-	init : function(id) {
-		var self = this;
-		var g = KE.g[id];
-		g.contextmenuItems.push({
-			text : KE.lang['editImage'],
-			click : function(id, menu) {
-				KE.util.select(id);
-				menu.hide();
-				self.click(id);
-			},
-			cond : function(id) {
-				return self.getSelectedNode(id);
-			},
-			options : {
-				width : '150px',
-				iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-image"></span>'
-			}
-		});
-		g.contextmenuItems.push({
-			text : KE.lang['deleteImage'],
-			click : function(id, menu) {
-				KE.util.select(id);
-				menu.hide();
-				var img = self.getSelectedNode(id);
-				img.parentNode.removeChild(img);
-				KE.util.execOnchangeHandler(id);
-			},
-			cond : function(id) {
-				return self.getSelectedNode(id);
-			},
-			options : {
-				width : '150px'
-			}
-		});
-		g.contextmenuItems.push('-');
-	},
-	click : function(id) {
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : 'image',
-			file : 'image/image.html',
-			width : 400,
-			height : 220,
-			loadingMode : true,
-			title : KE.lang['image'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	check : function(id) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var type = KE.$('type', dialogDoc).value;
-		var width = KE.$('imgWidth', dialogDoc).value;
-		var height = KE.$('imgHeight', dialogDoc).value;
-		var title = KE.$('imgTitle', dialogDoc).value;
-		var urlBox;
-		if (type == 2) {
-			urlBox = KE.$('imgFile', dialogDoc);
-		} else {
-			urlBox = KE.$('url', dialogDoc);
-		}
-		if (!urlBox.value.match(/\.(jpg|jpeg|gif|bmp|png)(\s|\?|$)/i)) {
-			alert(KE.lang['invalidImg']);
-			urlBox.focus();
-			return false;
-		}
-		if (!width.match(/^\d*$/)) {
-			alert(KE.lang['invalidWidth']);
-			KE.$('imgWidth', dialogDoc).focus();
-			return false;
-		}
-		if (!height.match(/^\d*$/)) {
-			alert(KE.lang['invalidHeight']);
-			KE.$('imgHeight', dialogDoc).focus();
-			return false;
-		}
-		return true;
-	},
-	exec : function(id) {
-		var self = this;
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var type = KE.$('type', dialogDoc).value;
-		var width = KE.$('imgWidth', dialogDoc).value;
-		var height = KE.$('imgHeight', dialogDoc).value;
-		var title = KE.$('imgTitle', dialogDoc).value;
-		var alignElements = dialogDoc.getElementsByName('align');
-		var align = '';
-		for (var i = 0, len = alignElements.length; i < len; i++) {
-			if (alignElements[i].checked) {
-				align = alignElements[i].value;
-				break;
-			}
-		}
-		if (!this.check(id)) return false;
-		if (type == 2) {
-			KE.$('editorId', dialogDoc).value = id;
-			var uploadIframe = KE.$('uploadIframe', dialogDoc);
-			KE.util.showLoadingPage(id);
-			var onloadFunc = function() {
-				KE.event.remove(uploadIframe, 'load', onloadFunc);
-				KE.util.hideLoadingPage(id);
-				var uploadDoc = KE.util.getIframeDoc(uploadIframe);
-				var data = '';
-				try {
-					data = KE.util.parseJson(uploadDoc.body.innerHTML);
-				} catch(e) {
-					alert(KE.lang.invalidJson);
-				}
-				if (typeof data === 'object' && 'error' in data) {
-					if (data.error === 0) {
-						var url = KE.format.getUrl(data.url, 'absolute');
-						self.insert(id, url, title, width, height, 0, align);
-						if (KE.g[id].afterUpload) KE.g[id].afterUpload(id, url);
-					} else {
-						alert(data.message);
-						return false;
-					}
-				}
-			};
-			KE.event.add(uploadIframe, 'load', onloadFunc);
-			dialogDoc.uploadForm.submit();
-			return;
-		} else {
-			var url = KE.$('url', dialogDoc).value;
-			this.insert(id, url, title, width, height, 0, align);
-		}
-	},
-	insert : function(id, url, title, width, height, border, align) {
-		var html = '<img src="' + url + '" kesrc="' + url + '" ';
-		if (width > 0) html += 'width="' + width + '" ';
-		if (height > 0) html += 'height="' + height + '" ';
-		if (title) html += 'title="' + title + '" ';
-		if (align) html += 'align="' + align + '" ';
-		html += 'alt="' + title + '" ';
-		if (border) html += 'border="' + border + '" ';
-		html += '/>';
-		KE.util.insertHtml(id, html);
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.link = {
-	getSelectedNode : function(id) {
-		return KE.getCommonAncestor(KE.g[id].keSel, 'a');
-	},
-	init : function(id) {
-		var self = this;
-		KE.g[id].contextmenuItems.push({
-			text : KE.lang['editLink'],
-			click : function(id, menu) {
-				KE.util.select(id);
-				menu.hide();
-				self.click(id);
-			},
-			cond : function(id) {
-				return self.getSelectedNode(id);
-			},
-			options : {
-				width : '150px',
-				iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-link"></span>'
-			}
-		});
-	},
-	click : function(id) {
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : 'link',
-			file : 'link/link.html',
-			width : 400,
-			height : 90,
-			loadingMode : true,
-			title : KE.lang['link'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	exec : function(id) {
-		var g = KE.g[id];
-		KE.util.select(id);
-		var range = g.keRange;
-		var startNode = range.startNode;
-		var endNode = range.endNode;
-		var iframeDoc = g.iframeDoc;
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var url = KE.$('hyperLink', dialogDoc).value;
-		var target = KE.$('linkType', dialogDoc).value;
-		if (!url.match(/.+/) || url.match(/^\w+:\/\/\/?$/)) {
-			alert(KE.lang['invalidUrl']);
-			KE.$('hyperLink', dialogDoc).focus();
-			return false;
-		}
-		var node = range.getParentElement();
-		while (node) {
-			if (node.tagName.toLowerCase() == 'a' || node.tagName.toLowerCase() == 'body') break;
-			node = node.parentNode;
-		}
-		node = node.parentNode;
-		var isItem;
-		if (KE.browser.IE) {
-			isItem = !!g.range.item;
-		} else {
-			isItem = (startNode.nodeType == 1 && startNode === endNode && startNode.nodeName.toLowerCase() != 'br');
-		}
-		var isEmpty = !isItem;
-		if (!isItem) isEmpty = KE.browser.IE ? g.range.text === '' : g.range.toString() === '';
-		if (isEmpty || KE.util.isEmpty(id)) {
-			var html = '<a href="' + url + '"';
-			if (target) html += ' target="' + target + '"';
-			html += '>' + url + '</a>';
-			KE.util.insertHtml(id, html);
-		} else {
-			iframeDoc.execCommand('createlink', false, '__ke_temp_url__');
-			var arr = node.getElementsByTagName('a');
-			for (var i = 0, l = arr.length; i < l; i++) {
-				if (arr[i].href.match(/\/?__ke_temp_url__$/)) {
-					arr[i].href = url;
-					arr[i].setAttribute('kesrc', url);
-					if (target) arr[i].target = target;
-					else arr[i].removeAttribute('target');
-				}
-			}
-			if (KE.browser.WEBKIT && isItem && startNode.tagName.toLowerCase() == 'img') {
-				var parent = startNode.parentNode;
-				if (parent.tagName.toLowerCase() != 'a') {
-					var a = KE.$$('a', iframeDoc);
-					parent.insertBefore(a, startNode);
-					a.appendChild(startNode);
-					parent = a;
-				}
-				parent.href = url;
-				parent.setAttribute('kesrc', url);
-				if (target) parent.target = target;
-				else parent.removeAttribute('target');
-				g.keSel.addRange(range);
-			}
-		}
-		KE.util.execOnchangeHandler(id);
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.unlink = {
-	init : function(id) {
-		var self = this;
-		KE.g[id].contextmenuItems.push({
-			text : KE.lang['deleteLink'],
-			click : function(id, menu) {
-				KE.util.select(id);
-				menu.hide();
-				self.click(id);
-			},
-			cond : function(id) {
-				return KE.plugin['link'].getSelectedNode(id);
-			},
-			options : {
-				width : '150px',
-				iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-unlink"></span>'
-			}
-		});
-		KE.g[id].contextmenuItems.push('-');
-	},
-	click : function(id) {
-		var g = KE.g[id];
-		var iframeDoc = g.iframeDoc;
-		KE.util.selection(id);
-		var range = g.keRange;
-		var startNode = range.startNode;
-		var endNode = range.endNode;
-		var isItem = (startNode.nodeType == 1 && startNode === endNode);
-		var isEmpty = !isItem;
-		if (!isItem) isEmpty = KE.browser.IE ? g.range.text === '' : g.range.toString() === '';
-		if (isEmpty) {
-			var linkNode = KE.plugin['link'].getSelectedNode(id);
-			if (!linkNode) return;
-			var range = g.keRange;
-			range.selectTextNode(linkNode);
-			g.keSel.addRange(range);
-			KE.util.select(id);
-			iframeDoc.execCommand('unlink', false, null);
-			if (KE.browser.WEBKIT && startNode.tagName.toLowerCase() == 'img') {
-				var parent = startNode.parentNode;
-				if (parent.tagName.toLowerCase() == 'a') {
-					KE.util.removeParent(parent);
-					g.keSel.addRange(range);
-				}
-			}
-		} else {
-			iframeDoc.execCommand('unlink', false, null);
-		}
-		KE.util.execOnchangeHandler(id);
-		KE.toolbar.updateState(id);
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.media = {
-	init : function(id) {
-		var self = this;
-		var typeHash = {};
-		KE.each(KE.g[id].mediaTypes, function(key, val) {
-			typeHash[val] = key;
-		});
-		KE.g[id].getHtmlHooks.push(function(html) {
-			return html.replace(/<img[^>]*class="?ke-\w+"?[^>]*>/ig, function($0) {
-				var width = $0.match(/style="[^"]*;?\s*width:\s*(\d+)/i) ? RegExp.$1 : 0;
-				var height = $0.match(/style="[^"]*;?\s*height:\s*(\d+)/i) ? RegExp.$1 : 0;
-				width = width || ($0.match(/width="([^"]+)"/i) ? RegExp.$1 : 0);
-				height = height || ($0.match(/height="([^"]+)"/i) ? RegExp.$1 : 0);
-				if ($0.match(/\s+kesrctag="([^"]+)"/i)) {
-					var attrs = KE.util.getAttrList(unescape(RegExp.$1));
-					attrs.width = width || attrs.width || 0;
-					attrs.height = height || attrs.height || 0;
-					attrs.kesrc = attrs.src;
-					return KE.util.getMediaEmbed(attrs);
-				}
-			});
-		});
-		KE.g[id].setHtmlHooks.push(function(html) {
-			return html.replace(/<embed[^>]*type="([^"]+)"[^>]*>(?:<\/embed>)?/ig, function($0, $1) {
-				if (typeof typeHash[$1] == 'undefined') return $0;
-				var src = $0.match(/\s+src="([^"]+)"/i) ? RegExp.$1 : '';
-				if ($0.match(/\s+kesrc="([^"]+)"/i)) src = RegExp.$1;
-				var width = $0.match(/\s+width="([^"]+)"/i) ? RegExp.$1 : 0;
-				var height = $0.match(/\s+height="([^"]+)"/i) ? RegExp.$1 : 0;
-				var attrs = KE.util.getAttrList($0);
-				attrs.src = src;
-				attrs.width = width;
-				attrs.height = height;
-				return KE.util.getMediaImage(id, '', attrs);
-			});
-		});
-	},
-	click : function(id) {
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : 'media',
-			file : 'media.html',
-			width : 400,
-			height : 170,
-			loadingMode : true,
-			title : KE.lang['media'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	check : function(id, url, width, height) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		if (!url.match(/^.{3,}\.(swf|flv|mp3|wav|wma|wmv|mid|avi|mpg|mpeg|asf|rm|rmvb)(\?|$)/i)) {
-			alert(KE.lang['invalidMedia']);
-			KE.$('url', dialogDoc).focus();
-			return false;
-		}
-		if (!width.match(/^\d*$/)) {
-			alert(KE.lang['invalidWidth']);
-			KE.$('width', dialogDoc).focus();
-			return false;
-		}
-		if (!height.match(/^\d*$/)) {
-			alert(KE.lang['invalidHeight']);
-			KE.$('height', dialogDoc).focus();
-			return false;
-		}
-		return true;
-	},
-	exec : function(id) {
-		var dialogDoc = KE.util.getIframeDoc(this.dialog.iframe);
-		var url = KE.$('url', dialogDoc).value;
-		var width = KE.$('width', dialogDoc).value;
-		var height = KE.$('height', dialogDoc).value;
-		if (!this.check(id, url, width, height)) return false;
-		var autostart = KE.$('autostart', dialogDoc).checked ? 'true' : 'false';
-		var html = KE.util.getMediaImage(id, '', {
-			src : url,
-			type : KE.g[id].mediaTypes[KE.util.getMediaType(url)],
-			width : width,
-			height : height,
-			autostart : autostart,
-			loop : 'true'
-		});
-		KE.util.insertHtml(id, html);
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-KE.plugin.advtable = {
-	getSelectedTable : function(id) {
-		return KE.getCommonAncestor(KE.g[id].keSel, 'table');
-	},
-	getSelectedRow : function(id) {
-		return KE.getCommonAncestor(KE.g[id].keSel, 'tr');
-	},
-	getSelectedCell : function(id) {
-		return KE.getCommonAncestor(KE.g[id].keSel, 'td');
-	},
-	tableprop : function(id) {
-		this.click(id);
-	},
-	tablecellprop : function(id) {
-		var self = this;
-		KE.util.selection(id);
-		var dialog = new KE.dialog({
-			id : id,
-			cmd : 'advtable',
-			file : 'advtable/cell.html',
-			width : 420,
-			height : 150,
-			loadingMode : true,
-			title : KE.lang['tablecell'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no'],
-			yesClickFn : function(id) {
-				var dialogDoc = KE.util.getIframeDoc(dialog.iframe),
-					widthBox = KE.$('width', dialogDoc),
-					heightBox = KE.$('height', dialogDoc),
-					widthTypeBox = KE.$('widthType', dialogDoc),
-					heightTypeBox = KE.$('heightType', dialogDoc),
-					textAlignBox = KE.$('textAlign', dialogDoc),
-					verticalAlignBox = KE.$('verticalAlign', dialogDoc),
-					borderBox = KE.$('border', dialogDoc),
-					borderColorBox = KE.$('borderColor', dialogDoc),
-					backgroundColorBox = KE.$('backgroundColor', dialogDoc),
-					width = widthBox.value,
-					height = heightBox.value,
-					widthType = widthTypeBox.value,
-					heightType = heightTypeBox.value,
-					textAlign = textAlignBox.value,
-					verticalAlign = verticalAlignBox.value,
-					border = borderBox.value,
-					borderColor = borderColorBox.innerHTML,
-					backgroundColor = backgroundColorBox.innerHTML;
-				if (!width.match(/^\d*$/)) {
-					alert(KE.lang['invalidWidth']);
-					widthBox.focus();
-					return false;
-				}
-				if (!height.match(/^\d*$/)) {
-					alert(KE.lang['invalidHeight']);
-					heightBox.focus();
-					return false;
-				}
-				if (!border.match(/^\d*$/)) {
-					alert(KE.lang['invalidBorder']);
-					borderBox.focus();
-					return false;
-				}
-				var cell = self.getSelectedCell(id);
-				cell.style.width = width !== '' ? (width + widthType) : '';
-				cell.style.height = height !== '' ? (height + heightType) : '';
-				cell.style.backgroundColor = backgroundColor;
-				cell.style.textAlign = textAlign;
-				cell.style.verticalAlign = verticalAlign;
-				cell.style.borderWidth = border;
-				cell.style.borderStyle = border !== '' ? 'solid' : '';
-				cell.style.borderColor = borderColor;
-				KE.util.execOnchangeHandler(id);
-				dialog.hide();
-				KE.util.focus(id);
-			}
-		});
-		dialog.show();
-	},
-	tableinsert : function(id) {
-		this.click(id, 'insert');
-	},
-	tabledelete : function(id) {
-		var table = this.getSelectedTable(id);
-		table.parentNode.removeChild(table);
-	},
-	tablecolinsert : function(id, offset) {
-		var table = this.getSelectedTable(id),
-			cell = this.getSelectedCell(id),
-			index = cell.cellIndex + offset;
-		for (var i = 0, len = table.rows.length; i < len; i++) {
-			var newCell = table.rows[i].insertCell(index);
-			newCell.innerHTML = '&nbsp;';
-		}
-	},
-	tablecolinsertleft : function(id) {
-		this.tablecolinsert(id, 0);
-	},
-	tablecolinsertright : function(id) {
-		this.tablecolinsert(id, 1);
-	},
-	tablerowinsert : function(id, offset) {
-		var table = this.getSelectedTable(id),
-			row = this.getSelectedRow(id),
-			newRow = table.insertRow(row.rowIndex + offset);
-		for (var i = 0, len = row.cells.length; i < len; i++) {
-			var cell = newRow.insertCell(i);
-			cell.innerHTML = '&nbsp;';
-		}
-	},
-	tablerowinsertabove : function(id) {
-		this.tablerowinsert(id, 0);
-	},
-	tablerowinsertbelow : function(id) {
-		this.tablerowinsert(id, 1);
-	},
-	tablecoldelete : function(id) {
-		var table = this.getSelectedTable(id),
-			cell = this.getSelectedCell(id),
-			index = cell.cellIndex;
-		for (var i = 0, len = table.rows.length; i < len; i++) {
-			table.rows[i].deleteCell(index);
-		}
-	},
-	tablerowdelete : function(id) {
-		var table = this.getSelectedTable(id);
-		var row = this.getSelectedRow(id);
-		table.deleteRow(row.rowIndex);
-	},
-	init : function(id) {
-		var self = this;
-		var zeroborder = 'ke-zeroborder';
-		var tableCmds = 'prop,cellprop,colinsertleft,colinsertright,rowinsertabove,rowinsertbelow,coldelete,rowdelete,insert,delete'.split(',');
-		for (var i = 0, len = tableCmds.length; i < len; i++) {
-			var name = 'table' + tableCmds[i];
-			KE.g[id].contextmenuItems.push({
-				text : KE.lang[name],
-				click : (function(name) {
-					return function(id, menu) {
-						KE.util.select(id);
-						menu.hide();
-						if (self[name] !== undefined) self[name](id);
-						if (!/prop/.test(name)) {
-							KE.util.execOnchangeHandler(id);
-						}
-					};
-				})(name),
-				cond : (function(name) {
-					if (KE.util.inArray(name, ['tableprop', 'tabledelete'])) {
-						return function(id) {
-							return self.getSelectedTable(id);
-						};
-					} else {
-						return function(id) {
-							return self.getSelectedCell(id);
-						};
-					}
-				})(name),
-				options : {
-					width : '170px',
-					iconHtml : '<span class="ke-common-icon ke-common-icon-url ke-icon-' + name + '"></span>'
-				}
-			});
-		}
-		KE.g[id].contextmenuItems.push('-');
-		KE.g[id].setHtmlHooks.push(function(html) {
-			return html.replace(/<table([^>]*)>/ig, function($0, $1) {
-				if ($1.match(/\s+border=["']?(\d*)["']?/ig)) {
-					var border = RegExp.$1;
-					if ($1.indexOf(zeroborder) < 0 && (border === '' || border === '0')) {
-						return KE.addClass($0, zeroborder);
-					} else {
-						return $0;
-					}
-				} else {
-					return KE.addClass($0, zeroborder);
-				}
-			});
-		});
-	},
-	click : function(id, mode) {
-		mode = mode || 'default';
-		var cmd = 'advtable';
-		KE.util.selection(id);
-		this.dialog = new KE.dialog({
-			id : id,
-			cmd : cmd,
-			file : 'advtable/advtable.html?mode=' + mode,
-			width : 420,
-			height : 220,
-			loadingMode : true,
-			title : KE.lang['advtable'],
-			yesButton : KE.lang['yes'],
-			noButton : KE.lang['no']
-		});
-		this.dialog.show();
-	},
-	exec : function(id) {
-		var zeroborder = 'ke-zeroborder',
-			dialogDoc = KE.util.getIframeDoc(this.dialog.iframe),
-			modeBox = KE.$('mode', dialogDoc),
-			rowsBox = KE.$('rows', dialogDoc),
-			colsBox = KE.$('cols', dialogDoc),
-			widthBox = KE.$('width', dialogDoc),
-			heightBox = KE.$('height', dialogDoc),
-			widthTypeBox = KE.$('widthType', dialogDoc),
-			heightTypeBox = KE.$('heightType', dialogDoc),
-			paddingBox = KE.$('padding', dialogDoc),
-			spacingBox = KE.$('spacing', dialogDoc),
-			alignBox = KE.$('align', dialogDoc),
-			borderBox = KE.$('border', dialogDoc),
-			borderColorBox = KE.$('borderColor', dialogDoc),
-			backgroundColorBox = KE.$('backgroundColor', dialogDoc),
-			rows = rowsBox.value,
-			cols = colsBox.value,
-			width = widthBox.value,
-			height = heightBox.value,
-			widthType = widthTypeBox.value,
-			heightType = heightTypeBox.value,
-			padding = paddingBox.value,
-			spacing = spacingBox.value,
-			align = alignBox.value,
-			border = borderBox.value,
-			borderColor = borderColorBox.innerHTML,
-			backgroundColor = backgroundColorBox.innerHTML;
-		if (rows == '' || rows == 0 || !rows.match(/^\d*$/)) {
-			alert(KE.lang['invalidRows']);
-			rowsBox.focus();
-			return false;
-		}
-		if (cols == '' || cols == 0 || !cols.match(/^\d*$/)) {
-			alert(KE.lang['invalidCols']);
-			colsBox.focus();
-			return false;
-		}
-		if (!width.match(/^\d*$/)) {
-			alert(KE.lang['invalidWidth']);
-			widthBox.focus();
-			return false;
-		}
-		if (!height.match(/^\d*$/)) {
-			alert(KE.lang['invalidHeight']);
-			heightBox.focus();
-			return false;
-		}
-		if (!padding.match(/^\d*$/)) {
-			alert(KE.lang['invalidPadding']);
-			paddingBox.focus();
-			return false;
-		}
-		if (!spacing.match(/^\d*$/)) {
-			alert(KE.lang['invalidSpacing']);
-			spacingBox.focus();
-			return false;
-		}
-		if (!border.match(/^\d*$/)) {
-			alert(KE.lang['invalidBorder']);
-			borderBox.focus();
-			return false;
-		}
-		if (modeBox.value === 'update') {
-			var table = this.getSelectedTable(id);
-			table.style.width = width !== '' ? (width + widthType) : '';
-			table.style.height = height !== '' ? (height + heightType) : '';
-			table.style.backgroundColor = backgroundColor;
-			KE.attr(table, 'width', '');
-			KE.attr(table, 'height', '');
-			KE.attr(table, 'bgColor', '');
-			KE.attr(table, 'cellPadding', padding);
-			KE.attr(table, 'cellSpacing', spacing);
-			KE.attr(table, 'align', align);
-			if (border === '' || border === '0') {
-				KE.addClass(table, zeroborder);
-			} else {
-				KE.removeClass(table, zeroborder);
-			}
-			KE.attr(table, 'border', border);
-			KE.attr(table, 'borderColor', borderColor);
-			KE.util.execOnchangeHandler(id);
-		} else {
-			var style = '';
-			if (width !== '') style += 'width:' + width + widthType + ';';
-			if (height !== '') style += 'height:' + height + heightType + ';';
-			if (backgroundColor !== '') style += 'background-color:' + backgroundColor + ';';
-			var html = '<table';
-			if (style !== '') html += ' style="' + style + '"';
-			if (padding !== '') html += ' cellpadding="' + padding + '"';
-			if (spacing !== '') html += ' cellspacing="' + spacing + '"';
-			if (align !== '') html += ' align="' + align + '"';
-			if (border === '' || border === '0') html += ' class="' + zeroborder + '"';
-			if (border !== '') html += ' border="' + border + '"';
-			if (borderColor !== '') html += ' bordercolor="' + borderColor + '"';
-			html += '>';
-			for (var i = 0; i < rows; i++) {
-				html += '<tr>';
-				for (var j = 0; j < cols; j++) {
-					html += '<td>&nbsp;</td>';
-				}
-				html += '</tr>';
-			}
-			html += '</table>';
-			KE.util.insertHtml(id, html);
-		}
-		this.dialog.hide();
-		KE.util.focus(id);
-	}
-};
-
-})(KindEditor);
+});
+})(window);

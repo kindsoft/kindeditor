@@ -2,71 +2,77 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>KindEditor Test</title>
-		<style>
-			textarea {
-				display: block;
-			}
-		</style>
-		<script charset="utf-8" src="../src/core.js"></script>
-		<script charset="utf-8" src="../src/lang/zh_CN.js"></script>
-		<script charset="utf-8" src="../src/plugin.js"></script>
-		<script>
-			var editor_id = 'content1';
-			KE.show({
-				id : editor_id,
-				skinsPath : '../skins/',
-				pluginsPath : '../plugins/',
-				afterCreate : function(id) {
-					KE.event.bind(KE.$('button1'), 'click', openDialog1);
-					KE.event.bind(KE.$('button2'), 'click', openDialog2);
-					KE.event.bind(KE.$('button3'), 'click', openDialog3);
-				}
-			});
-			function openDialog1() {
-				var dialog = new KE.dialog({
-					id : editor_id,
-					html : '<h1>Hello KindEditor!</h1>',
-					width : 450,
-					height : 300,
-					title : '静态HTML',
-					noButton : KE.lang['no']
-				});
-				dialog.show();
-			}
-			function openDialog2() {
-				var dialog = new KE.dialog({
-					id : editor_id,
-					cmd : 'plainpaste',
-					file : 'plainpaste.html',
-					width : 450,
-					height : 300,
-					title : '插件模式',
-					yesButton : KE.lang['yes'],
-					noButton : KE.lang['no']
-				});
-				dialog.show();
-			}
-			var dialog;
-			function openDialog3(id) {
-				dialog = new KE.dialog({
-					id : editor_id,
-					url : 'dialog_iframe_document.html',
-					width : 450,
-					height : 300,
-					title : 'URL',
-					yesButton : KE.lang['yes'],
-					noButton : KE.lang['no']
-				});
-				dialog.show();
-			}
-		</script>
+		<title>KindEditor Dialog Test</title>
+		<link rel="stylesheet" href="../lib/qunit/qunit.css" />
+		<script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script>
+		<script src="../lib/qunit/qunit.js"></script>
+		<script src="../lib/jquery.js"></script>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/range.js"></script>
+		<script src="../src/cmd.js"></script>
+		<script src="../src/widget.js"></script>
+		<script src="../src/edit.js"></script>
+		<script src="../src/toolbar.js"></script>
+		<script src="../src/dialog.js"></script>
+		<script src="../src/main.js"></script>
+		<script src="../lang/zh_CN.js"></script>
 	</head>
 	<body>
-		<textarea id="content1" name="content1" style="width:90%;height:250px;"></textarea>
-		<br />
-		<input type="button" name="button" id="button1" value="静态HTML" />
-		<input type="button" name="button" id="button2" value="插件模式" />
-		<input type="button" name="button" id="button3" value="外部URL" />
+		<h1>KindEditor Dialog Test</h1>
+		<input type="button" id="create1" value="Create" />
+		<input type="button" id="create2" value="Create(no shadow)" />
+		<script>
+			K('#create1').click(function() {
+				var dialog = K.dialog({
+					width : 500,
+					title : '测试窗口',
+					body : '<div style="margin:10px;"><strong>内容</strong></div>',
+					closeBtn : {
+						name : '关闭',
+						click : function(e) {
+							dialog.remove();
+						}
+					},
+					yesBtn : {
+						name : '确定',
+						click : function(e) {
+							alert(this.value);
+						}
+					},
+					noBtn : {
+						name : '取消',
+						click : function(e) {
+							dialog.remove();
+						}
+					}
+				});
+			});
+			K('#create2').click(function() {
+				var dialog = K.dialog({
+					width : 500,
+					title : '测试窗口',
+					body : '<div style="margin:10px;"><strong>内容</strong></div>',
+					shadowMode : false,
+					closeBtn : {
+						name : '关闭',
+						click : function(e) {
+							dialog.remove();
+						}
+					},
+					noBtn : {
+						name : '取消',
+						click : function(e) {
+							dialog.remove();
+						}
+					}
+				});
+			});
+		</script>
 	</body>
 </html>

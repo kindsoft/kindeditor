@@ -12,6 +12,4 @@ KindEditor JSP
 	* commons-io-1.4.jar
 	* json_simple-1.1.jar
 
-3. 给kindeditor/attached目录添加写入权限。
-
-4. 打开浏览器，输入http://localhost:[P0RT]/kindeditor/jsp/demo.jsp。
+3. 打开浏览器，输入http://localhost:[P0RT]/kindeditor/jsp/demo.jsp。

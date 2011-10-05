@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor Tabs Test</title>
+		<link rel="stylesheet" href="../lib/qunit/qunit.css" />
+		<script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script>
+		<script src="../lib/qunit/qunit.js"></script>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/range.js"></script>
+		<script src="../src/cmd.js"></script>
+		<script src="../src/widget.js"></script>
+		<script src="../src/tabs.js"></script>
+	</head>
+	<body>
+		<h1>KindEditor Tabs Test</h1>
+		<div id="tabs"></div>
+		<div id="tab1">内容1</div>
+		<div id="tab2">内容2</div>
+		<div id="tab3">内容3</div>
+		<input type="button" id="create" value="Create" />
+		<input type="button" id="remove" value="Remove" />
+		<script>
+			var tabs = null;
+			K('#create').click(function() {
+				if (!tabs) {
+					tabs = K.tabs({
+						src : '#tabs',
+						afterSelect : function(i) {
+							K('#tab' + (i + 1)).html('选中了标签#' + (i + 1));
+						}
+					});
+					tabs.add({
+						title : '标签#1',
+						panel : '#tab1'
+					});
+					tabs.add({
+						title : '标签#2',
+						panel : '#tab2'
+					});
+					tabs.add({
+						title : '标签#3',
+						panel : '#tab3'
+					});
+					tabs.select(0);
+				}
+			});
+			K('#remove').click(function() {
+				if (tabs) {
+					tabs.remove();
+					tabs = null;
+				}
+			});
+			K('#create').click();
+		</script>
+	</body>
+</html>

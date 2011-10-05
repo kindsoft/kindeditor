@@ -8,30 +8,38 @@ String htmlData = request.getParameter("content1") != null ? request.getParamete
 <head>
 	<meta charset="utf-8" />
 	<title>KindEditor JSP</title>
-	<script type="text/javascript" charset="utf-8" src="../kindeditor.js"></script>
-	<script type="text/javascript">
-		KE.show({
-			id : 'content1',
-			imageUploadJson : '../../jsp/upload_json.jsp',
-			fileManagerJson : '../../jsp/file_manager_json.jsp',
-			allowFileManager : true,
-			afterCreate : function(id) {
-				KE.event.ctrl(document, 13, function() {
-					KE.util.setData(id);
-					document.forms['example'].submit();
-				});
-				KE.event.ctrl(KE.g[id].iframeDoc, 13, function() {
-					KE.util.setData(id);
-					document.forms['example'].submit();
-				});
-			}
+	<link rel="stylesheet" href="../themes/default/default.css" />
+	<link rel="stylesheet" href="../plugins/code/prettify.css" />
+	<script charset="utf-8" src="../kindeditor.js"></script>
+	<script charset="utf-8" src="../lang/zh_CN.js"></script>
+	<script charset="utf-8" src="../plugins/code/prettify.js"></script>
+	<script>
+		KindEditor.ready(function(K) {
+			var editor1 = K.create('textarea[name="content1"]', {
+				cssPath : '../plugins/code/prettify.css',
+				uploadJson : '../jsp/upload_json.jsp',
+				fileManagerJson : '../jsp/file_manager_json.jsp',
+				allowFileManager : true,
+				afterCreate : function() {
+					var self = this;
+					K.ctrl(document, 13, function() {
+						self.sync();
+						document.forms['example'].submit();
+					});
+					K.ctrl(self.edit.doc, 13, function() {
+						self.sync();
+						document.forms['example'].submit();
+					});
+				}
+			});
+			prettyPrint();
 		});
 	</script>
 </head>
 <body>
 	<%=htmlData%>
 	<form name="example" method="post" action="demo.jsp">
-		<textarea id="content1" name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"><%=htmlspecialchars(htmlData)%></textarea>
+		<textarea name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"><%=htmlspecialchars(htmlData)%></textarea>
 		<br />
 		<input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
 	</form>

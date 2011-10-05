@@ -12,12 +12,19 @@ require_once 'JSON.php';
 $php_path = dirname(__FILE__) . '/';
 $php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
+
+
 //文件保存目录路径
 $save_path = $php_path . '../attached/';
 //文件保存目录URL
 $save_url = $php_url . '../attached/';
 //定义允许上传的文件扩展名
-$ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
+$ext_arr = array(
+	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
+	'flash' => array('swf', 'flv'),
+	'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
+	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
+);
 //最大文件大小
 $max_size = 1000000;
 
@@ -51,16 +58,28 @@ if (empty($_FILES) === false) {
 	if ($file_size > $max_size) {
 		alert("上传文件大小超过限制。");
 	}
+	//检查目录名
+	$dir_name = empty($_GET['dir']) ? 'image' : trim($_GET['dir']);
+	if (empty($ext_arr[$dir_name])) {
+		alert("目录名不正确。");
+	}
 	//获得文件扩展名
 	$temp_arr = explode(".", $file_name);
 	$file_ext = array_pop($temp_arr);
 	$file_ext = trim($file_ext);
 	$file_ext = strtolower($file_ext);
 	//检查扩展名
-	if (in_array($file_ext, $ext_arr) === false) {
-		alert("上传文件扩展名是不允许的扩展名。");
+	if (in_array($file_ext, $ext_arr[$dir_name]) === false) {
+		alert("上传文件扩展名是不允许的扩展名。\n只允许" . implode(",", $ext_arr[$dir_name]) . "格式。");
 	}
 	//创建文件夹
+	if ($dir_name !== '') {
+		$save_path .= $dir_name . "/";
+		$save_url .= $dir_name . "/";
+		if (!file_exists($save_path)) {
+			mkdir($save_path);
+		}
+	}
 	$ymd = date("Ymd");
 	$save_path .= $ymd . "/";
 	$save_url .= $ymd . "/";

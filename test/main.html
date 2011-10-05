@@ -2,162 +2,346 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>KindEditor Test</title>
+		<title>KindEditor Main Test</title>
+		<!-- <script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script> -->
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<link rel="stylesheet" href="../themes/simple/simple.css" />
+		<!-- <link rel="stylesheet" href="../lib/taobao.css" /> -->
 		<style>
-			body {
-				line-height:18px;
+			.selected {
+				padding: 10px;
+				margin: 10px;
 			}
-			a:hover {
-				text-decoration: underline;
-				background-color: #aaa;
+			table, td, tr {
+				border: 1px solid #000;
+				padding: 10px;
+				margin: 10px;
 			}
 		</style>
-		<!-- <script src="https://getfirebug.com/firebug-lite.js"></script> -->
-		<script charset="utf-8" src="../src/core.js"></script>
-		<script charset="utf-8" src="../src/lang/zh_CN.js"></script>
-		<script charset="utf-8" src="../src/plugin.js"></script>
-		<script>
-			KE.show({
-				id : 'content1',
-				skinsPath : '../skins/',
-				pluginsPath : '../plugins/',
-				allowFileManager : true,
-				useContextmenu : true,
-				syncType : 'auto',
-				afterChange : function(id) {
-					KE.$('content_html').value = KE.$(id).value;
-				},
-				afterFocus : function(id) {
-					//KE.g[id].iframeDoc.body.style.backgroundColor = '#ddd';
-					//KE.g[id].newTextarea.style.backgroundColor = '#ddd';
-				},
-				afterBlur : function(id) {
-					//KE.g[id].iframeDoc.body.style.backgroundColor = '#fff';
-					//KE.g[id].newTextarea.style.backgroundColor = '#fff';
-				},
-				afterDrag : function(id) {
-					//console.log(id);
-				},
-				afterUpload : function(id, url) {
-					//console.log(url);
-				}
-			});
-		</script>
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/ajax.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/range.js"></script>
+		<script src="../src/cmd.js"></script>
+		<script src="../src/widget.js"></script>
+		<script src="../src/edit.js"></script>
+		<script src="../src/toolbar.js"></script>
+		<script src="../src/menu.js"></script>
+		<script src="../src/colorpicker.js"></script>
+		<script src="../src/uploadbutton.js"></script>
+		<script src="../src/dialog.js"></script>
+		<script src="../src/tabs.js"></script>
+		<script src="../src/main.js"></script>
+		<script src="../lang/zh_CN.js"></script>
+		<script src="../lang/en.js"></script>
+		<script src="../plugins/emoticons/emoticons.js"></script>
+		<script src="../plugins/flash/flash.js"></script>
+		<script src="../plugins/image/image.js"></script>
+		<script src="../plugins/link/link.js"></script>
+		<script src="../plugins/media/media.js"></script>
+		<script src="../plugins/plainpaste/plainpaste.js"></script>
+		<script src="../plugins/table/table.js"></script>
+		<script src="../plugins/wordpaste/wordpaste.js"></script>
+		<script src="../plugins/filemanager/filemanager.js"></script>
+		<script src="../plugins/preview/preview.js"></script>
+		<script src="../plugins/code/code.js"></script>
+		<script src="../plugins/map/map.js"></script>
+		<script src="../plugins/lineheight/lineheight.js"></script>
+		<script src="../plugins/clearhtml/clearhtml.js"></script>
 	</head>
 	<body>
-		<form name="example" method="post" action="./../php/demo.php">
-			<textarea id="content1" name="content1" style="width:90%;height:150px;">
-<table width="90%" cellpadding="5">
-<tr>
-<td>表格编辑</td>
-<td>多语言支持</td>
-<td>更漂亮的外观</td>
-</tr>
-<tr>
-<td>回显字体和颜色</td>
-<td>表情分页和预览</td>
-<td>新API</td>
-</tr>
+		<h1 id="type">KindEditor Main Test</h1>
+		<form method="post" action="../php/demo.php">
+			<p><textarea name="content1" cols="100" rows="20" style="width:800px;height:200px;">
+<div style="display:inline-block;"></div>123<div></div><div></div>
+<p style="text-align:left;text-indent:24pt;">
+	<span style="font-size:12pt;font-family:仿宋_GB2312;color:#E56600;">三个基</span><span style="font-family:仿宋_GB2312;font-size:16px;"><span style="color:#E56600;">本</span><span style="color:#E56600;">关系式</span></span> 
+</p>
+bbbbbbbbbbbbbbb
+<script>
+	// alert(1);
+</script>
+<table style="width:90%;" cellspacing="0" cellpadding="2">
+	<tbody>
+		<tr>
+			<td>
+				1
+			</td>
+			<td>
+				2
+			</td>
+			<td>
+				3
+			</td>
+			<td>
+				4
+			</td>
+		</tr>
+		<tr>
+			<td rowspan="2">
+				1
+			</td>
+			<td>
+				2
+			</td>
+			<td>
+				3
+			</td>
+			<td>
+				4
+			</td>
+		</tr>
+		<tr>
+			<td>
+				2
+			</td>
+			<td>
+				3
+			</td>
+			<td>
+				4
+			</td>
+		</tr>
+	</tbody>
 </table>
-<script type="text/javascript">alert(1);</script>
-<p><img alt="" src="http://kindsoft.net/images/logo_180_30.gif" border="0" onclick="javascript:alert(2);" /> </p>
-<p></p>
-KindEditor是一套开源的HTML可视化编辑器，主要用于让用户在网站上获得所见即所得编辑效果，兼容IE、Firefox、Chrome、Safari、Opera等主流浏览器。<br />
-KindEditor使用JavaScript编写，可以无缝的与Java、.NET、PHP、ASP等程序接合。 KindEditor非常适合在CMS、商城、论坛、博客、Wiki、电子邮件等互联网应用上使用，2006年7月首次发布2.0以来，KindEditor依靠出色的用户体验和领先的技术不断扩大编辑器市场占有率，目前在国内已经成为最受欢迎的编辑器之一。 <p></p>
-<table class="ke-zeroborder" width="90%">
-<tbody>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+<table style="width:90%;" cellspacing="0" cellpadding="2">
+	<tbody>
+		<tr>
+			<td>
+				1
+			</td>
+			<td>
+				2
+			</td>
+			<td>
+				3
+			</td>
+			<td>
+				4
+			</td>
+		</tr>
+		<tr>
+			<td rowspan="2">
+				a
+			</td>
+			<td colspan="2" rowspan="2">
+				b
+			</td>
+			<td rowspan="2">
+				d
+			</td>
+		</tr>
+		<tr>
+		</tr>
+		<tr>
+			<td>
+				1
+			</td>
+			<td>
+				2
+			</td>
+			<td>
+				3
+			</td>
+			<td>
+				4
+			</td>
+		</tr>
+	</tbody>
 </table>
+<style>
+	table {
+		border: 1px solid #000;
+	}
+</style>
 <pre>
-abcd
-1234
-efgh
+	123
+	456
 </pre>
-<p><img height="24" alt="" src="../plugins/emoticons/0.gif" width="24" border="0" /><strong>月下独酌</strong> - 李白</p>
-<p>花间一壶酒，独酌无相亲。</p>
-<p>举杯邀明月，对影成三人。</p>
-<p>月既不解饮，影徒随我身。</p>
-<p>暂伴月将影，行乐须及春。</p>
-<p>我歌月徘徊，我舞影零乱。</p>
-<p>醒时同交欢，醉后各分散。</p>
-<p>永结无情游，相期邈云汉。</p>
-啊<a href="wwww1">啊啊</a>啊dddddddddd<span style="color:#e53333;">ddddddddddd</span><br />
-啊<a href="wwww2">啊啊</a>啊<table width="90%" border="1">
-	<tr>
-		<td colspan="2" rowspan="2">&nbsp;</td>
-		<td><a href="http://wwwwwwwwwwww" target="_blank"><img height="24" alt="" src="../plugins/emoticons/0.gif" width="24" border="0" /></a></td>
-		<td>&nbsp;</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-	</tr>
+<br />
+<table style="width:90%;" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0">
+	<tbody>
+		<tr>
+			<td>
+				a
+			</td>
+			<td colspan="2" rowspan="2">
+				b
+			</td>
+			<td>
+				d
+			</td>
+		</tr>
+		<tr>
+			<td>
+				e
+			</td>
+			<td>
+				h
+			</td>
+		</tr>
+		<tr>
+			<td>
+				1
+			</td>
+			<td>
+				2
+			</td>
+			<td>
+				3
+			</td>
+			<td>
+				4
+			</td>
+		</tr>
+	</tbody>
 </table>
-</textarea>
-<br />
-			<textarea id="content_html" style="width:90%;height:100px;"></textarea>
+		<img src="data/logo_180_30.gif" onclick="javascript:alert(2);" />
+		测试内容1<div><a href="#">测试内容1</a><br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1</div></div><div>测试内容1<div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1测试内容1</div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1</div></div>
+		测试内容1<div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1</div></div><div>测试内容1<div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1测试内容1</div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1<br /></div><div>测试内容1</div>
+			</textarea></p>
 			<br />
-			<input type="button" name="button" value="Create Editor" onclick="javascript:KE.create('content1');" />
-			<input type="button" name="button" value="Remove Editor" onclick="javascript:KE.remove('content1');" />
-			<input type="button" name="button" value="Get HTML" onclick="javascript:alert(KE.html('content1'));" />
-			<input type="button" name="button" value="Set HTML" onclick="javascript:KE.html('content1', '<h1>Hello</h1>');" />
-			<input type="button" name="button" value="Get Text" onclick="javascript:alert(KE.text('content1'));" />
-			<input type="button" name="button" value="Set Text" onclick="javascript:KE.text('content1', '<h1>Hello</h1>');" />
-			<input type="button" name="button" value="Get Selected HTML" onclick="javascript:alert(KE.selectedHtml('content1'));" />
-			<input type="button" name="button" value="Insert HTML" onclick="javascript:KE.insertHtml('content1', '<mp3>http://www.xxx.com/1.mp3</mp3>');" />
-			<input type="button" name="button" value="Append HTML" onclick="javascript:KE.appendHtml('content1', '<h1>Hello</h1>');" />
-			<input type="button" name="button" value="Sync" onclick="javascript:KE.sync('content1');KE.$('content_html').value = KE.$('content1').value;" />
-			<input type="button" name="button" value="Focus" onclick="javascript:KE.focus('content1');" />
-			<input type="button" name="button" value="Blur" onclick="javascript:KE.blur('content1');" />
+			<textarea name="content2" cols="100" rows="20" style="width:700px;height:200px;">
+<div style="display:inline-block;"></div>123<div></div><div></div>
+</textarea>
+			<br />
+			<select id="uploadFile">
+				<option value="">附件列表</option>
+			</select>
+			<br />
+			<textarea id="insertHtml" style="width:90%;"><!-- comment test --><strong>abcd</strong></textarea>
+			<br />
+			<input type="button" id="create1" value="Create #1" />
+			<input type="button" id="create2" value="Create #2" />
+			<input type="button" id="remove1" value="Remove #1" />
+			<input type="button" id="remove2" value="Remove #2" />
+			<input type="button" id="getHtml1" value="Get HTML #1" />
+			<input type="button" id="fullHtml1" value="Get Full HTML #1" />
+			<input type="button" id="setHtml1" value="Set HTML #1" />
+			<input type="button" id="getText1" value="Get Text #1" />
+			<input type="button" id="setText1" value="Set Text #1" />
+			<input type="button" id="selectedHtml1" value="Get Selected HTML #1" />
+			<input type="button" id="insertHtml1" value="Insert HTML #1" />
+			<input type="button" id="appendHtml1" value="Append HTML #1" />
+			<input type="button" id="sync1" value="Sync #1" />
+			<input type="button" id="focus1" value="Focus #1" />
+			<input type="button" id="blur1" value="Blur #1" />
+			<input type="button" id="readonly1" value="Readonly #1" />
+			<input type="button" id="cancelReadonly1" value="Cancel Readonly #1" />
+			<input type="button" id="isEmpty1" value="Is Empty #1" />
+			<input type="button" id="isDirty1" value="Is Dirty #1" />
+			<input type="button" id="loadPlugin1" value="Load Plugin #1" />
 			<input type="submit" name="button" value="Submit" />
+			<input type="reset" name="button" value="Reset" />
 		</form>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+		<script>
+			KindEditor.DEBUG = true;
+			//KindEditor.options.filterMode = true;
+			//document.domain = 'kindsoft.net';
+			KindEditor.ready(function(K) {
+				var editor1 = K.create('textarea[name=content1]', {
+					basePath : '../',
+					pluginsPath : '../plugins/',
+					urlType : 'absolute',
+					themeType : 'simple',
+					allowImageUpload : false,
+					designMode : true,
+					allowFileManager : true,
+					fullscreenMode : false,
+					afterTab : function() {
+						editor2.focus();
+					},
+					afterChange : function() {
+						//console.log('1');
+					},
+					afterUpload : function(url) {
+						var select = K('#uploadFile')[0];
+						select.options.add(new Option(url, url));
+					}
+				});
+				K('#create1').click(function(e) {
+					editor1.create();
+				});
+				K('#remove1').click(function(e) {
+					editor1.remove();
+				});
+				K('#getHtml1').click(function(e) {
+					alert(editor1.html());
+				});
+				K('#fullHtml1').click(function(e) {
+					alert(editor1.fullHtml());
+				});
+				K('#setHtml1').click(function(e) {
+					editor1.html(K('#insertHtml').val());
+				});
+				K('#getText1').click(function(e) {
+					alert(editor1.text());
+				});
+				K('#setText1').click(function(e) {
+					editor1.text(K('#insertHtml').val());
+				});
+				K('#selectedHtml1').click(function(e) {
+					alert(editor1.selectedHtml());
+				});
+				K('#insertHtml1').click(function(e) {
+					editor1.insertHtml(K('#insertHtml').val());
+				});
+				K('#appendHtml1').click(function(e) {
+					editor1.appendHtml(K('#insertHtml').val());
+				});
+				K('#sync1').click(function(e) {
+					editor1.sync();
+					alert(K('textarea[name=content1]').val());
+				});
+				K('#focus1').click(function(e) {
+					editor1.focus();
+				});
+				K('#blur1').click(function(e) {
+					editor1.blur();
+				});
+				K('#readonly1').click(function(e) {
+					editor1.readonly();
+				});
+				K('#cancelReadonly1').click(function(e) {
+					editor1.readonly(false);
+				});
+				K('#isEmpty1').click(function(e) {
+					alert(editor1.isEmpty());
+				});
+				K('#isDirty1').click(function(e) {
+					alert(editor1.isDirty());
+				});
+				K('#loadPlugin1').click(function(e) {
+					editor1.loadPlugin('template', function() {
+						
+					});
+					editor1.loadPlugin('template', function() {
+						
+					});
+				});
+			});
+			KindEditor.ready(function(K) {
+				var editor2 = K.create(K('textarea[name=content2]').get(), {
+					basePath : '../',
+					langType : 'en',
+					afterTab : function() {
+						K('#uploadFile')[0].focus();
+					}
+				});
+				K('#create2').click(function(e) {
+					editor2.create();
+					
+				});
+				K('#remove2').click(function(e) {
+					editor2.remove();
+				});
+			});
+		</script>
+		<div style="height:1000px;"></div>
 	</body>
 </html>

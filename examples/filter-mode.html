@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Filter Mode Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			KindEditor.ready(function(K) {
+				K.create('textarea[name="content"]', {
+					filterMode : true
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h3>HTML过滤</h3>
+		<form>
+			<textarea name="content" style="width:800px;height:200px;"></textarea>
+			<p>
+				默认根据KindEditor.options.htmlTags过滤HTML标签，也可以通过参数自定义htmlTags。
+			</p>
+		</form>
+	</body>
+</html>
