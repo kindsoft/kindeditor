@@ -1,4 +1,4 @@
-<project name="KindEditor" default="check" basedir=".">
+<project name="KindEditor" default="min" basedir=".">
 
 	<description>
 		KindEditor build file
@@ -90,7 +90,13 @@
 		/>
 	</target>
 
-	<target name="min" depends="merge">
+	<target name="check" depends="merge">
+		<exec executable="java">
+			<arg line="-jar lib/jslint/js.jar lib/jslint/jslint-check.js"/>
+		</exec>
+	</target>
+
+	<target name="min" depends="check">
 		<exec executable="java">
 			<arg line="-jar lib/closure-compiler.jar --js=${filename}.js --js_output_file=${filename}-min.js"/>
 		</exec>
@@ -100,12 +106,6 @@
 			encoding="${charset}"
 			byline="false"
 		/>
-	</target>
-
-	<target name="check" depends="merge">
-		<exec executable="java">
-			<arg line="-jar lib/jslint/js.jar lib/jslint/jslint-check.js"/>
-		</exec>
 	</target>
 
 	<target name="zip" depends="min">

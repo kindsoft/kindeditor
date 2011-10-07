@@ -1327,7 +1327,10 @@ _plugin('core', function(K) {
 	self.beforeGetHtml(function(html) {
 		return html.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
 			var imgAttrs = _getAttrList(full),
+				styles = _getCssList(imgAttrs.style || ''),
 				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
+			attrs.width = _undef(imgAttrs.width, _removeUnit(_undef(styles.width, '')));
+			attrs.height = _undef(imgAttrs.height, _removeUnit(_undef(styles.height, '')));
 			return _mediaEmbed(attrs);
 		})
 		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {

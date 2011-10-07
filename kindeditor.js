@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.1 (2011-10-05)
+* @version 4.0.1 (2011-10-07)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.1 (2011-10-05)',
+var _VERSION = '4.0.1 (2011-10-07)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5464,7 +5464,10 @@ _plugin('core', function(K) {
 	self.beforeGetHtml(function(html) {
 		return html.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
 			var imgAttrs = _getAttrList(full),
+				styles = _getCssList(imgAttrs.style || ''),
 				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
+			attrs.width = _undef(imgAttrs.width, _removeUnit(_undef(styles.width, '')));
+			attrs.height = _undef(imgAttrs.height, _removeUnit(_undef(styles.height, '')));
 			return _mediaEmbed(attrs);
 		})
 		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {
