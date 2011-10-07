@@ -25,5 +25,6 @@ KindEditor 4.x 文档
 	tabs
 	uploadbutton
 	editor
+	changelog
 
 * :ref:`search`
