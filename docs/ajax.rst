@@ -25,6 +25,24 @@ K.loadScript(url [, fn])
 		console.log('ok');
 	});
 
+.. index:: loadStyle
+
+.. _loadStyle:
+
+K.loadStyle(url)
+--------------------------------------------------------
+加载CSS文件。
+
+* 参数:
+	* string url: CSS URL
+* 返回: undefined
+
+示例:
+
+.. sourcecode:: js
+
+	K.loadScript('test.css');
+
 .. index:: ajax
 
 .. _ajax:

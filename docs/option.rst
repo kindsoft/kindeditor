@@ -550,6 +550,27 @@ afterBlur
 * 数据类型: Function
 * 默认值: 无
 
+.. index:: afterUpload
+
+.. _afterUpload:
+
+afterUpload
+--------------------------------------------------------
+上传文件后执行的回调函数。
+
+* 数据类型: Function
+* 默认值: 无
+
+.. sourcecode:: js
+
+	KindEditor.ready(function(K) {
+		K.create('#id', {
+			afterUpload : function(url) {
+				alert(url);
+			}
+		});
+	});
+
 .. index:: uploadJson
 
 .. _uploadJson:
