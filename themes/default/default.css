@@ -939,6 +939,7 @@
 	width: 100px;
 	text-align: center;
 	overflow: hidden;
+	height:16px;
 }
 .ke-plugin-filemanager-body .ke-on {
 	border: 1px solid #5690D2;
