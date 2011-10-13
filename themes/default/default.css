@@ -461,6 +461,7 @@
 	border: 0;
 	margin: 0;
 	padding: 0;
+	overflow: auto;
 }
 .ke-edit-textarea {
 	font: 12px/1.5 "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
