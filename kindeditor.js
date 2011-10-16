@@ -5501,6 +5501,9 @@ _plugin('core', function(K) {
 		})
 		.replace(/<a[^>]*name="([^"]+)"[^>]*>(?:<\/a>)?/ig, function(full) {
 			var attrs = _getAttrList(full);
+			if (attrs.href !== undefined) {
+				return full;
+			}
 			return '<img class="ke-anchor" src="' + self.themesPath + 'common/anchor.gif" data-ke-name="' + escape(attrs.name) + '" />';
 		})
 		.replace(/<script([^>]*)>([\s\S]*?)<\/script>/ig, function(full, attr, code) {
