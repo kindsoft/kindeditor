@@ -988,6 +988,7 @@ _plugin('core', function(K) {
 			var resetBtn = K('[type="reset"]', el);
 			resetBtn.click(function() {
 				self.html(self.initContent);
+				self.cmd.selection();
 			});
 			self.beforeRemove(function() {
 				el.unbind();

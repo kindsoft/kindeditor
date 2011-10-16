@@ -8,6 +8,7 @@ ver 4.0.2
 * Bugfix: [FF] 在页面上设置iframe {overflow:hidden;} ，编辑区域不出现滚动条。
 * Bugfix: 浏览服务器插件，文件名很长的时候会换行。
 * Bugfix: [IE6-7] 在form里引入js的时候出现JS错误。
+* Bugfix: [IE] 当编辑器为空时，输入任意字符，然后点击表单的重置按钮，再点击页面空白处，出现JS错误。
 
 ver 4.0.1 (2011-10-07)
 * 改善: image插件，通过editor.plugin.imageDialog()可以单独调用图片弹出框。
