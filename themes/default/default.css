@@ -410,6 +410,7 @@
 	border-bottom: 1px solid #CCC;
 	background-color: #F0F0EE;
 	padding: 2px 5px;
+	text-align: left;
 	overflow: hidden;
 }
 .ke-toolbar-icon {
