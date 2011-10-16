@@ -695,7 +695,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 		return $1 + $2.replace(/<(?:br|br\s[^>]*)>/ig, '\n') + $3;
 	});
 	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
-	html = html.replace(/<(?:p|p\s[^>]*)><\/p>/ig, '');
+	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
 	html = html.replace(/\u200B/g, '');
 	var htmlTagMap = {};
 	if (htmlTags) {

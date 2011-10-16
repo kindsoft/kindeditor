@@ -124,8 +124,8 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	});
 	// <br/></p> to </p>
 	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
-	// delete <p></p>
-	html = html.replace(/<(?:p|p\s[^>]*)><\/p>/ig, '');
+	// <p></p> to <p><br /></p>
+	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
 	html = html.replace(/\u200B/g, '');
 	var htmlTagMap = {};
 	if (htmlTags) {
