@@ -12,6 +12,7 @@ ver 4.0.2
 * Bugfix: [IE8] 设置X-UA-Compatible=IE7，有时候无法加载编辑器。
 * Bugfix: a标签同时有name和href属性时，丢失name以外的属性。
 * Bugfix: 连续调用多个ready函数时，第4个ready无法执行。
+* Bugfix: 插入多媒体后，右键点击不会弹出菜单。
 
 ver 4.0.1 (2011-10-07)
 * 改善: image插件，通过editor.plugin.imageDialog()可以单独调用图片弹出框。

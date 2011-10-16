@@ -1173,7 +1173,7 @@ _plugin('core', function(K) {
 	};
 	self.plugin.getSelectedMedia = function() {
 		return _getImageFromRange(self.edit.cmd.range, function(img) {
-			return img[0].className == 'ke-flash' || img[0].className == 'ke-rm';
+			return img[0].className == 'ke-media' || img[0].className == 'ke-rm';
 		});
 	};
 	self.plugin.getSelectedAnchor = function() {
