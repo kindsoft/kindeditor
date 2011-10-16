@@ -145,3 +145,9 @@ K.ready(function() {
 K.ready(function() {
 	console.log('ready3');
 });
+K.ready(function() {
+	console.log('ready4');
+});
+K.ready(function() {
+	console.log('ready5');
+});

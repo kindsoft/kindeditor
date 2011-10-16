@@ -538,12 +538,6 @@ function _ready(fn) {
 		if (!loaded) {
 			loaded = true;
 			fn(KindEditor);
-			if (document.addEventListener) {
-				_unbind(document, 'DOMContentLoaded', readyFunc);
-			} else if (document.attachEvent) {
-				_unbind(document, 'readystatechange', ieReadyStateFunc);
-			}
-			_unbind(window, 'load', readyFunc);
 		}
 	}
 	function ieReadyFunc() {

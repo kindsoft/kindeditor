@@ -12,6 +12,12 @@
 		<br />
 		<textarea name="editor2" cols="100" rows="20" style="width:700px;height:100px;"></textarea>
 		<br />
+		<textarea name="editor3" cols="100" rows="20" style="width:700px;height:100px;"></textarea>
+		<br />
+		<textarea name="editor4" cols="100" rows="20" style="width:700px;height:100px;"></textarea>
+		<br />
+		<textarea name="editor5" cols="100" rows="20" style="width:700px;height:100px;"></textarea>
+		<br />
 		<input type="button" id="create1" value="Create #1" />
 		<input type="button" id="create2" value="Create #2" />
 		<input type="button" id="remove1" value="Remove #1" />
@@ -26,20 +32,38 @@
 				var editor1 = K.create('textarea[name=editor1]', {
 					allowFileManager : true
 				});
-				var editor2 = K.create(K('textarea[name=editor2]').get(), {
-					langType : 'en'
-				});
 				K('#create1').click(function(e) {
 					editor1.create();
-				});
-				K('#create2').click(function(e) {
-					editor2.create();
 				});
 				K('#remove1').click(function(e) {
 					editor1.remove();
 				});
+			});
+			KindEditor.ready(function(K) {
+				var editor2 = K.create('textarea[name=editor2]', {
+					langType : 'en'
+				});
+				K('#create2').click(function(e) {
+					editor2.create();
+				});
+				
 				K('#remove2').click(function(e) {
 					editor2.remove();
+				});
+			});
+			KindEditor.ready(function(K) {
+				var editor2 = K.create('textarea[name=editor3]', {
+					langType : 'en'
+				});
+			});
+			KindEditor.ready(function(K) {
+				var editor2 = K.create('textarea[name=editor4]', {
+					langType : 'en'
+				});
+			});
+			KindEditor.ready(function(K) {
+				var editor2 = K.create('textarea[name=editor5]', {
+					langType : 'en'
 				});
 			});
 		</script>
