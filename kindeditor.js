@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.1 (2011-10-07)
+* @version 4.0.1 (2011-10-16)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.1 (2011-10-07)',
+var _VERSION = '4.0.1 (2011-10-16)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -941,7 +941,7 @@ function _contains(nodeA, nodeB) {
 function _getAttr(el, key) {
 	key = key.toLowerCase();
 	var val = null;
-	if (_IE && _V < 8) {
+	if (_IE && _V < 8 && el.nodeName.toLowerCase() != 'script') {
 		var div = el.ownerDocument.createElement('div');
 		div.appendChild(el.cloneNode(false));
 		var list = _getAttrList(div.innerHTML.toLowerCase());

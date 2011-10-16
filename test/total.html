@@ -3,13 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>KindEditor Test</title>
-		<link rel="stylesheet" href="../themes/default/default.css" />
-		<script src="../kindeditor.js"></script>
-		<script src="../lang/zh_CN.js"></script>
-		<script src="../lang/en.js"></script>
 	</head>
 	<body>
 		<h1 id="type">KindEditor Test</h1>
+		<form method="post" action="../php/demo.php">
 		<textarea name="editor1" cols="100" rows="20" style="width:800px;height:200px;">
 <table style="width:90%;" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0"><tbody><tr>
 <td>a&nbsp;</td>
@@ -34,6 +31,9 @@
 		<input type="button" id="create2" value="Create #2" />
 		<input type="button" id="remove1" value="Remove #1" />
 		<input type="button" id="remove2" value="Remove #2" />
+		<script src="../kindeditor.js"></script>
+		<script src="../lang/zh_CN.js"></script>
+		<script src="../lang/en.js"></script>
 		<script>
 			//document.domain = 'domain.com';
 			KindEditor.ready(function(K) {
@@ -57,5 +57,6 @@
 				});
 			});
 		</script>
+		</form>
 	</body>
 </html>
