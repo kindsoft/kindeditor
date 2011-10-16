@@ -1076,7 +1076,7 @@ _plugin('core', function(K) {
 				style += 'font-weight:bold;';
 			}
 			menu.addItem({
-				title : '<span style="' + style + '">' + val + '</span>',
+				title : '<span style="' + style + '" unselectable="on">' + val + '</span>',
 				height : heights[key] + 12,
 				checked : (curVal === key || curVal === val),
 				click : function() {
@@ -1094,7 +1094,7 @@ _plugin('core', function(K) {
 			});
 		_each(self.lang('fontname.fontName'), function(key, val) {
 			menu.addItem({
-				title : '<span style="font-family: ' + key + ';">' + val + '</span>',
+				title : '<span style="font-family: ' + key + ';" unselectable="on">' + val + '</span>',
 				checked : (curVal === key.toLowerCase() || curVal === val.toLowerCase()),
 				click : function() {
 					self.exec('fontname', key).hideMenu();
@@ -1111,7 +1111,7 @@ _plugin('core', function(K) {
 			});
 		_each(self.fontSizeTable, function(i, val) {
 			menu.addItem({
-				title : '<span style="font-size:' + val + ';">' + val + '</span>',
+				title : '<span style="font-size:' + val + ';" unselectable="on">' + val + '</span>',
 				height : _removeUnit(val) + 12,
 				checked : curVal === val,
 				click : function() {
