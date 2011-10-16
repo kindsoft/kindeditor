@@ -1275,7 +1275,7 @@ _plugin('core', function(K) {
 			if (self.pasteType === 1) {
 				html = html.replace(/<br[^>]*>/ig, '\n');
 				html = html.replace(/<\/p><p[^>]*>/ig, '\n');
-				html = html.replace(/<[^>]+/g, '');
+				html = html.replace(/<[^>]+>/g, '');
 				html = html.replace(/&nbsp;/ig, ' ');
 				html = html.replace(/\n\s*\n/g, '\n');
 				if (self.newlineTag == 'p') {
