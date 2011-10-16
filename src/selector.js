@@ -25,7 +25,12 @@ function _getAttr(el, key) {
 			val = list[key];
 		}
 	} else {
-		val = el.getAttribute(key, 2);
+		// IE8ÉèÖÃ<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />£¬Å×³öÒì³£
+		try {
+			val = el.getAttribute(key, 2);
+		} catch(e) {
+			val = el.getAttribute(key, 1);
+		}
 	}
 	if (key === 'style' && val !== null) {
 		val = _formatCss(val);

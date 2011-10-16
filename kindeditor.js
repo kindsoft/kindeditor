@@ -949,7 +949,11 @@ function _getAttr(el, key) {
 			val = list[key];
 		}
 	} else {
-		val = el.getAttribute(key, 2);
+		try {
+			val = el.getAttribute(key, 2);
+		} catch(e) {
+			val = el.getAttribute(key, 1);
+		}
 	}
 	if (key === 'style' && val !== null) {
 		val = _formatCss(val);
