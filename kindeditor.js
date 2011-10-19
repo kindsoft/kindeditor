@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-16)
+* @version 4.0.2 (2011-10-19)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-16)',
+var _VERSION = '4.0.2 (2011-10-19)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3114,12 +3114,7 @@ _each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull
 	'insertunorderedlist,indent,outdent,subscript,superscript').split(','), function(i, name) {
 	KCmd.prototype[name] = function(val) {
 		var self = this;
-		if (_IE) {
-			rng = self.range.get(true);
-			try {
-				rng.select();
-			} catch(e) {}
-		}
+		self.select();
 		_nativeCommand(self.doc, name, val);
 		if (!_IE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
 			self.selection();
@@ -3133,12 +3128,7 @@ _each('cut,copy,paste'.split(','), function(i, name) {
 		if (!self.doc.queryCommandSupported(name)) {
 			throw 'not supported';
 		}
-		if (_IE) {
-			rng = self.range.get(true);
-			try {
-				rng.select();
-			} catch(e) {}
-		}
+		self.select();
 		_nativeCommand(self.doc, name, null);
 		return self;
 	};
