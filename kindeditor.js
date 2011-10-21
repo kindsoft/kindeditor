@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-19)
+* @version 4.0.2 (2011-10-21)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-19)',
+var _VERSION = '4.0.2 (2011-10-21)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3152,10 +3152,17 @@ function _drag(options) {
 		listeners = [];
 	if (iframeFix) {
 		K('iframe').each(function() {
+			var doc;
 			try {
-				docs.push(_iframeDoc(this));
-			} catch (e) {}
-			poss.push(K(this).pos());
+				doc = _iframeDoc(this);
+				K(doc);
+			} catch(e) {
+				doc = null;
+			}
+			if (doc) {
+				docs.push(doc);
+				poss.push(K(this).pos());
+			}
 		});
 	}
 	clickEl.mousedown(function(e) {
@@ -3251,7 +3258,7 @@ _extend(KWidget, {
 			self.div.css(options.css);
 		}
 		if (options.src) {
-			K(options.src).hide().after(self.div);
+			K(options.src).replaceWith(self.div);
 		} else {
 			K(self.doc.body).append(self.div);
 		}

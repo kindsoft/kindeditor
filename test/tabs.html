@@ -24,40 +24,26 @@
 		<div id="tab1">内容1</div>
 		<div id="tab2">内容2</div>
 		<div id="tab3">内容3</div>
-		<input type="button" id="create" value="Create" />
-		<input type="button" id="remove" value="Remove" />
 		<script>
-			var tabs = null;
-			K('#create').click(function() {
-				if (!tabs) {
-					tabs = K.tabs({
-						src : '#tabs',
-						afterSelect : function(i) {
-							K('#tab' + (i + 1)).html('选中了标签#' + (i + 1));
-						}
-					});
-					tabs.add({
-						title : '标签#1',
-						panel : '#tab1'
-					});
-					tabs.add({
-						title : '标签#2',
-						panel : '#tab2'
-					});
-					tabs.add({
-						title : '标签#3',
-						panel : '#tab3'
-					});
-					tabs.select(0);
+			var tabs = K.tabs({
+				src : '#tabs',
+				afterSelect : function(i) {
+					K('#tab' + (i + 1)).html('选中了标签#' + (i + 1));
 				}
 			});
-			K('#remove').click(function() {
-				if (tabs) {
-					tabs.remove();
-					tabs = null;
-				}
+			tabs.add({
+				title : '标签#1',
+				panel : '#tab1'
 			});
-			K('#create').click();
+			tabs.add({
+				title : '标签#2',
+				panel : '#tab2'
+			});
+			tabs.add({
+				title : '标签#3',
+				panel : '#tab3'
+			});
+			tabs.select(0);
 		</script>
 	</body>
 </html>

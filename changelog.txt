@@ -17,6 +17,8 @@ ver 4.0.2
 * Bugfix: [IE] 点击标题、字体、文字大小，编辑区域失去选中状态。
 * Bugfix: [FF,WEBKIT] 连续换行几次，切换到源代码，再切换到可视化模式，没有换行效果。
 * Bugfix: [WEBKIT] 选择几个文字，点击上标或下标功能，上下标格式不会被应用。
+* Bugfix: 加载编辑器后残留多余的div标签。
+* Bugfix: 页面上包含跨域iframe的时候JS报错。
 
 ver 4.0.1 (2011-10-07)
 * 改善: image插件，通过editor.plugin.imageDialog()可以单独调用图片弹出框。

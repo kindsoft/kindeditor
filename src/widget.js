@@ -10,11 +10,18 @@ function _drag(options) {
 		listeners = [];
 	if (iframeFix) {
 		K('iframe').each(function() {
-			// 在IE上，页面设置document.domain后，取得没做过处理的iframe document会报错，此时先跳过，不做处理
+			var doc;
+			// 判断是否跨域
 			try {
-				docs.push(_iframeDoc(this));
-			} catch (e) {}
-			poss.push(K(this).pos());
+				doc = _iframeDoc(this);
+				K(doc);
+			} catch(e) {
+				doc = null;
+			}
+			if (doc) {
+				docs.push(doc);
+				poss.push(K(this).pos());
+			}
 		});
 	}
 	clickEl.mousedown(function(e) {
@@ -114,7 +121,7 @@ _extend(KWidget, {
 			self.div.css(options.css);
 		}
 		if (options.src) {
-			K(options.src).hide().after(self.div);
+			K(options.src).replaceWith(self.div);
 		} else {
 			K(self.doc.body).append(self.div);
 		}
