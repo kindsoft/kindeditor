@@ -545,7 +545,7 @@ function _ready(fn) {
 			try {
 				document.documentElement.doScroll('left');
 			} catch(e) {
-				setTimeout(ieReadyFunc, 0);
+				setTimeout(ieReadyFunc, 100);
 				return;
 			}
 			readyFunc();
@@ -560,7 +560,7 @@ function _ready(fn) {
 		_bind(document, 'DOMContentLoaded', readyFunc);
 	} else if (document.attachEvent) {
 		_bind(document, 'readystatechange', ieReadyStateFunc);
-		if (document.documentElement.doScroll && window.frameElement === undefined) {
+		if (document.documentElement.doScroll) {
 			ieReadyFunc();
 		}
 	}
@@ -1464,6 +1464,12 @@ _extend(KNode, {
 			if (this.appendChild) {
 				this.appendChild(_get(expr));
 			}
+		});
+		return this;
+	},
+	appendTo : function(expr) {
+		this.each(function() {
+			_get(expr).appendChild(this);
 		});
 		return this;
 	},
@@ -4077,11 +4083,21 @@ _extend(KDialog, KWidget, {
 				width : docWidth,
 				height : docHeight
 			});
+			if (_IE && _V < 7) {
+				self.iframeMask = K('<iframe src="about:blank" style="position:absolute;top:0;left:0;z-index:' +
+					(self.z - 2) + ';width:' + docWidth + 'px;height:' + docHeight +
+					'px;filter:alpha(opacity=0)"></iframe>').appendTo(document.body);
+			}
 		}
 		self.autoPos(self.div.width(), self.div.height());
 		self.footerDiv = footerDiv;
 		self.bodyDiv = bodyDiv;
 		self.headerDiv = headerDiv;
+	},
+	setMaskIndex : function(z) {
+		var self = this;
+		self.mask.div.css('z-index', z);
+		self.iframeMask && self.iframeMask.css('z-index', z - 1);
 	},
 	showLoading : function() {
 		var self = this, body = self.bodyDiv;
@@ -4101,9 +4117,8 @@ _extend(KDialog, KWidget, {
 		if (self.options.beforeRemove) {
 			self.options.beforeRemove.call(self);
 		}
-		if (self.mask) {
-			self.mask.remove();
-		}
+		self.mask && self.mask.remove();
+		self.iframeMask && self.iframeMask.remove();
 		self.closeIcon.unbind();
 		K('input', self.div).unbind();
 		self.footerDiv.unbind();
@@ -5053,8 +5068,8 @@ KEditor.prototype = {
 		if (self.dialogs.length > 0) {
 			var firstDialog = self.dialogs[0],
 				parentDialog = self.dialogs[self.dialogs.length - 1];
-			firstDialog.mask.div.css('z-index', parentDialog.z + 1);
-			options.z = parentDialog.z + 2;
+			firstDialog.setMaskIndex(parentDialog.z + 2);
+			options.z = parentDialog.z + 3;
 			options.showMask = false;
 		}
 		var dialog = _dialog(options);
@@ -5069,7 +5084,7 @@ KEditor.prototype = {
 		if (self.dialogs.length > 0) {
 			var firstDialog = self.dialogs[0],
 				parentDialog = self.dialogs[self.dialogs.length - 1];
-			firstDialog.mask.div.css('z-index', parentDialog.z - 1);
+			firstDialog.setMaskIndex(parentDialog.z - 1);
 		}
 		return self;
 	}
@@ -5142,6 +5157,7 @@ _plugin('core', function(K) {
 		if (hasForm) {
 			el.bind('submit', function(e) {
 				self.sync();
+				self.edit.textarea.remove();
 			});
 			var resetBtn = K('[type="reset"]', el);
 			resetBtn.click(function() {

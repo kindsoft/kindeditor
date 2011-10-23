@@ -992,6 +992,8 @@ _plugin('core', function(K) {
 		if (hasForm) {
 			el.bind('submit', function(e) {
 				self.sync();
+				// Bugfix: 	Firefox下后退，编辑器数据不保存
+				self.edit.textarea.remove();
 			});
 			var resetBtn = K('[type="reset"]', el);
 			resetBtn.click(function() {
