@@ -76,11 +76,21 @@ _extend(KDialog, KWidget, {
 				width : docWidth,
 				height : docHeight
 			});
+			if (_IE && _V < 7) {
+				self.iframeMask = K('<iframe src="about:blank" style="position:absolute;top:0;left:0;z-index:' +
+					(self.z - 2) + ';width:' + docWidth + 'px;height:' + docHeight +
+					'px;filter:alpha(opacity=0)"></iframe>').appendTo(document.body);
+			}
 		}
 		self.autoPos(self.div.width(), self.div.height());
 		self.footerDiv = footerDiv;
 		self.bodyDiv = bodyDiv;
 		self.headerDiv = headerDiv;
+	},
+	setMaskIndex : function(z) {
+		var self = this;
+		self.mask.div.css('z-index', z);
+		self.iframeMask && self.iframeMask.css('z-index', z - 1);
 	},
 	showLoading : function() {
 		var self = this, body = self.bodyDiv;
@@ -100,9 +110,8 @@ _extend(KDialog, KWidget, {
 		if (self.options.beforeRemove) {
 			self.options.beforeRemove.call(self);
 		}
-		if (self.mask) {
-			self.mask.remove();
-		}
+		self.mask && self.mask.remove();
+		self.iframeMask && self.iframeMask.remove();
 		self.closeIcon.unbind();
 		K('input', self.div).unbind();
 		self.footerDiv.unbind();

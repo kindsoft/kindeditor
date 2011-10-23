@@ -347,6 +347,12 @@ _extend(KNode, {
 		});
 		return this;
 	},
+	appendTo : function(expr) {
+		this.each(function() {
+			_get(expr).appendChild(this);
+		});
+		return this;
+	},
 	before : function(expr) {
 		this.each(function() {
 			this.parentNode.insertBefore(_get(expr), this);

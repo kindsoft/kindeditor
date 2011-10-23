@@ -882,9 +882,9 @@ KEditor.prototype = {
 			var firstDialog = self.dialogs[0],
 				parentDialog = self.dialogs[self.dialogs.length - 1];
 			// 提高mask的z-index
-			firstDialog.mask.div.css('z-index', parentDialog.z + 1);
+			firstDialog.setMaskIndex(parentDialog.z + 2);
 			// 提高dialog的z-index
-			options.z = parentDialog.z + 2;
+			options.z = parentDialog.z + 3;
 			// 不显示mask
 			options.showMask = false;
 		}
@@ -901,7 +901,7 @@ KEditor.prototype = {
 			var firstDialog = self.dialogs[0],
 				parentDialog = self.dialogs[self.dialogs.length - 1];
 			// 降低mask的z-index
-			firstDialog.mask.div.css('z-index', parentDialog.z - 1);
+			firstDialog.setMaskIndex(parentDialog.z - 1);
 		}
 		return self;
 	}

@@ -332,7 +332,7 @@ function _ready(fn) {
 			try {
 				document.documentElement.doScroll('left');
 			} catch(e) {
-				setTimeout(ieReadyFunc, 0);
+				setTimeout(ieReadyFunc, 100);
 				return;
 			}
 			readyFunc();
@@ -347,7 +347,7 @@ function _ready(fn) {
 		_bind(document, 'DOMContentLoaded', readyFunc);
 	} else if (document.attachEvent) {
 		_bind(document, 'readystatechange', ieReadyStateFunc);
-		if (document.documentElement.doScroll && window.frameElement === undefined) {
+		if (document.documentElement.doScroll) {
 			ieReadyFunc();
 		}
 	}
