@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-21)
+* @version 4.0.2 (2011-10-23)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-21)',
+var _VERSION = '4.0.2 (2011-10-23)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4758,7 +4758,14 @@ KEditor.prototype = {
 			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
 			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
 		K(window).unbind('resize');
-		self.resize(width, height);
+		function initResize() {
+			if (statusbar.height() === 0) {
+				setTimeout(initResize, 100);
+				return;
+			}
+			self.resize(width, height);
+		}
+		initResize();
 		function newResize(width, height, updateProp) {
 			updateProp = _undef(updateProp, true);
 			if (width && width >= self.minWidth) {

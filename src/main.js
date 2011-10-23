@@ -577,7 +577,15 @@ KEditor.prototype = {
 		// remove resize event
 		K(window).unbind('resize');
 		// reset size
-		self.resize(width, height);
+		function initResize() {
+			// Bugfix: 页面刷新后，与第一次访问加载的编译器高度不一致
+			if (statusbar.height() === 0) {
+				setTimeout(initResize, 100);
+				return;
+			}
+			self.resize(width, height);
+		}
+		initResize();
 		// 为了限制宽度和高度，包装self.resize
 		function newResize(width, height, updateProp) {
 			updateProp = _undef(updateProp, true);
