@@ -18,6 +18,9 @@
 						} else {
 							alert(data.message);
 						}
+					},
+					afterError : function(str) {
+						alert('自定义错误信息: ' + str);
 					}
 				});
 				uploadbutton.fileBox.change(function(e) {

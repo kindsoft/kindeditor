@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-23)
+* @version 4.0.2 (2011-10-25)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-23)',
+var _VERSION = '4.0.2 (2011-10-25)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3954,6 +3954,9 @@ _extend(KUploadButton, {
 			title = button.val(),
 			cls = button[0].className || '',
 			target = 'kindeditor_upload_iframe_' + new Date().getTime();
+		options.afterError = options.afterError || function(str) {
+			alert(str);
+		};
 		var html = [
 			'<div class="ke-inline-block ' + cls + '">',
 			'<iframe name="' + target + '" style="display:none;"></iframe>',
@@ -3982,7 +3985,7 @@ _extend(KUploadButton, {
 			try {
 				data = K.json(str);
 			} catch (e) {
-				alert(str);
+				self.options.afterError.call(self, str);
 			}
 			if (data) {
 				self.options.afterUpload.call(self, data);

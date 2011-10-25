@@ -11,6 +11,9 @@ _extend(KUploadButton, {
 			title = button.val(),
 			cls = button[0].className || '',
 			target = 'kindeditor_upload_iframe_' + new Date().getTime();
+		options.afterError = options.afterError || function(str) {
+			alert(str);
+		};
 
 		var html = [
 			'<div class="ke-inline-block ' + cls + '">',
@@ -42,7 +45,7 @@ _extend(KUploadButton, {
 			try {
 				data = K.json(str);
 			} catch (e) {
-				alert(str);
+				self.options.afterError.call(self, str);
 			}
 			if (data) {
 				self.options.afterUpload.call(self, data);
