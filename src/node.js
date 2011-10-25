@@ -214,7 +214,7 @@ _extend(KNode, {
 	html : function(val) {
 		var self = this;
 		if (val === undefined) {
-			if (self.length < 1) {
+			if (self.length < 1 || self.type != 1) {
 				return '';
 			}
 			return _formatHtml(self[0].innerHTML);

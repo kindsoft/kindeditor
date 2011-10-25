@@ -1334,7 +1334,7 @@ _extend(KNode, {
 	html : function(val) {
 		var self = this;
 		if (val === undefined) {
-			if (self.length < 1) {
+			if (self.length < 1 || self.type != 1) {
 				return '';
 			}
 			return _formatHtml(self[0].innerHTML);
@@ -2512,10 +2512,11 @@ function _getInnerNode(knode) {
 	while (inner.first()) {
 		inner = inner.first();
 	}
+	console.log(inner[0]);
 	return inner;
 }
 function _isEmptyNode(knode) {
-	return _getInnerNode(knode).isStyle();
+	return knode.type == 1 && knode.html().replace(/<[^>]+>/g, '') === '';
 }
 function _mergeWrapper(a, b) {
 	a = a.clone(true);
