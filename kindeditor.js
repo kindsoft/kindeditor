@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-25)
+* @version 4.0.2 (2011-10-27)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-25)',
+var _VERSION = '4.0.2 (2011-10-27)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -560,7 +560,7 @@ function _ready(fn) {
 		_bind(document, 'DOMContentLoaded', readyFunc);
 	} else if (document.attachEvent) {
 		_bind(document, 'readystatechange', ieReadyStateFunc);
-		if (document.documentElement.doScroll) {
+		if (document.documentElement.doScroll && window.frameElement === undefined) {
 			ieReadyFunc();
 		}
 	}
@@ -2512,7 +2512,6 @@ function _getInnerNode(knode) {
 	while (inner.first()) {
 		inner = inner.first();
 	}
-	console.log(inner[0]);
 	return inner;
 }
 function _isEmptyNode(knode) {

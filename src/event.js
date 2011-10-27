@@ -347,7 +347,7 @@ function _ready(fn) {
 		_bind(document, 'DOMContentLoaded', readyFunc);
 	} else if (document.attachEvent) {
 		_bind(document, 'readystatechange', ieReadyStateFunc);
-		if (document.documentElement.doScroll) {
+		if (document.documentElement.doScroll && window.frameElement === undefined) {
 			ieReadyFunc();
 		}
 	}
