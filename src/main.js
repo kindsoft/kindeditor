@@ -858,7 +858,7 @@ KEditor.prototype = {
 			click : function(e) {
 				self.hideDialog();
 				// IE bugfix: 关闭dialog后，跳转到top
-				if (_IE) {
+				if (_IE && self.cmd) {
 					self.cmd.select();
 				}
 			}
@@ -868,7 +868,7 @@ KEditor.prototype = {
 			click : function(e) {
 				self.hideDialog();
 				// IE bugfix: 关闭dialog后，跳转到top
-				if (_IE) {
+				if (_IE && self.cmd) {
 					self.cmd.select();
 				}
 			}

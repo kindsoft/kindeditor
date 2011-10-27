@@ -5058,7 +5058,7 @@ KEditor.prototype = {
 			name : self.lang('close'),
 			click : function(e) {
 				self.hideDialog();
-				if (_IE) {
+				if (_IE && self.cmd) {
 					self.cmd.select();
 				}
 			}
@@ -5067,7 +5067,7 @@ KEditor.prototype = {
 			name : self.lang(options.yesBtn ? 'no' : 'close'),
 			click : function(e) {
 				self.hideDialog();
-				if (_IE) {
+				if (_IE && self.cmd) {
 					self.cmd.select();
 				}
 			}
