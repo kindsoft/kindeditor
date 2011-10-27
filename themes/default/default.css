@@ -680,6 +680,7 @@
 	vertical-align: middle;
 	zoom: 1;
 	*display: inline;
+	width: auto;
 }
 .ke-dialog-body .ke-textarea {
 	display: block;
