@@ -2712,7 +2712,6 @@ _extend(KCmd, {
 		if (needSplit) {
 			var dummy = doc.createElement('span');
 			range.cloneRange().collapse(!isStart).insertNode(dummy);
-			console.log(range.html());
 			if (isStart) {
 				tempRange.setStartBefore(parent.firstChild).setEnd(node, pos);
 			} else {
