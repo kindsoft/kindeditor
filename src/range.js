@@ -219,6 +219,14 @@ function _getStartEnd(rng, isStart) {
 	_moveToElementText(testRange, parent);
 	testRange.setEndPoint('StartToEnd', pointRange);
 	startPos -= testRange.text.replace(/\r\n|\n|\r/g, '').length;
+	// [textNode1][textNode2]ab|cd
+	if (cmp > 0 && startNode.nodeType == 3) {
+		var prevNode = startNode.previousSibling;
+		while (prevNode && prevNode.nodeType == 3) {
+			startPos -= prevNode.nodeValue.length;
+			prevNode = prevNode.previousSibling;
+		}
+	}
 	return {node: startNode, offset: startPos};
 }
 //根据Node和offset，取得表示该位置的原生Range。IE专用
@@ -746,7 +754,7 @@ _extend(KRange, {
 
 function _range(mixed) {
 	if (!mixed.nodeName) {
-		return mixed.get ? mixed : _toRange(mixed);
+		return mixed.constructor === KRange ? mixed : _toRange(mixed);
 	}
 	return new KRange(mixed);
 }

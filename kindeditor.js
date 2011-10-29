@@ -1901,6 +1901,13 @@ function _getStartEnd(rng, isStart) {
 	_moveToElementText(testRange, parent);
 	testRange.setEndPoint('StartToEnd', pointRange);
 	startPos -= testRange.text.replace(/\r\n|\n|\r/g, '').length;
+	if (cmp > 0 && startNode.nodeType == 3) {
+		var prevNode = startNode.previousSibling;
+		while (prevNode && prevNode.nodeType == 3) {
+			startPos -= prevNode.nodeValue.length;
+			prevNode = prevNode.previousSibling;
+		}
+	}
 	return {node: startNode, offset: startPos};
 }
 function _getEndRange(node, offset) {
@@ -2385,7 +2392,7 @@ _extend(KRange, {
 });
 function _range(mixed) {
 	if (!mixed.nodeName) {
-		return mixed.get ? mixed : _toRange(mixed);
+		return mixed.constructor === KRange ? mixed : _toRange(mixed);
 	}
 	return new KRange(mixed);
 }
@@ -5464,6 +5471,7 @@ _plugin('core', function(K) {
 			pasting = true;
 			K('div.' + cls, doc).remove();
 			cmd = self.cmd.selection();
+			cmd.range.dump();
 			bookmark = cmd.range.createBookmark();
 			div = K('<div class="' + cls + '"></div>', doc).css({
 				position : 'absolute',

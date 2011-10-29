@@ -1307,6 +1307,7 @@ _plugin('core', function(K) {
 			pasting = true;
 			K('div.' + cls, doc).remove();
 			cmd = self.cmd.selection();
+			cmd.range.dump();
 			bookmark = cmd.range.createBookmark();
 			div = K('<div class="' + cls + '"></div>', doc).css({
 				position : 'absolute',
