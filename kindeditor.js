@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-27)
+* @version 4.0.2 (2011-10-29)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-27)',
+var _VERSION = '4.0.2 (2011-10-29)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -1234,7 +1234,7 @@ _extend(KNode, {
 	init : function(node) {
 		var self = this;
 		for (var i = 0, len = node.length; i < len; i++) {
-			self[i] = node[i].get ? node[i][0] : node[i];
+			self[i] = node[i].constructor === KNode ? node[i][0] : node[i];
 		}
 		self.length = node.length;
 		self.doc = _getDoc(self[0]);
@@ -1690,7 +1690,7 @@ K = function(expr, root) {
 		}
 		return newNode(_queryAll(expr, root));
 	}
-	if (expr && expr.get) {
+	if (expr && expr.constructor === KNode) {
 		return expr;
 	}
 	if (_isArray(expr)) {
@@ -2712,6 +2712,7 @@ _extend(KCmd, {
 		if (needSplit) {
 			var dummy = doc.createElement('span');
 			range.cloneRange().collapse(!isStart).insertNode(dummy);
+			console.log(range.html());
 			if (isStart) {
 				tempRange.setStartBefore(parent.firstChild).setEnd(node, pos);
 			} else {

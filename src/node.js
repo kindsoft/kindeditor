@@ -113,7 +113,7 @@ _extend(KNode, {
 	init : function(node) {
 		var self = this;
 		for (var i = 0, len = node.length; i < len; i++) {
-			self[i] = node[i].get ? node[i][0] : node[i];
+			self[i] = node[i].constructor === KNode ? node[i][0] : node[i];
 		}
 		self.length = node.length;
 		self.doc = _getDoc(self[0]);
@@ -578,7 +578,7 @@ K = function(expr, root) {
 		return newNode(_queryAll(expr, root));
 	}
 	// KNode
-	if (expr && expr.get) {
+	if (expr && expr.constructor === KNode) {
 		return expr;
 	}
 	// Native NodeList
