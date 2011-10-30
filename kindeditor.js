@@ -2636,12 +2636,13 @@ _extend(KCmd, {
 				}
 			}
 		}
-		rng = range.get(true);
 		if (_IE) {
 			try {
+				rng = range.get(true);
 				rng.select();
 			} catch(e) {}
 		} else {
+			rng = range.get(true);
 			sel.removeAllRanges();
 			sel.addRange(rng);
 		}

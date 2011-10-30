@@ -26,7 +26,8 @@ ver 4.0.2
 * Bugfix: 选择粗体，取消粗体再应用粗体（即点两下粗体），则发现粗体、倾斜、下划线功能失效，无法选择。
 * Bugfix: [WEBKIT] 置入Issue 269中的HTML，全选，点击删除格式，又出现一个图片，图片变为两个。
 * Bugfix: 与MooTools类库有冲突。
-* Bugfix: [IE] 连续粘贴时位置偏移。
+* Bugfix: [IE] 选中粘贴过来的文本，进行格式操作时位置出现偏移。
+* Bugfix: [IE] 后退前进时有时候报错。
 
 ver 4.0.1 (2011-10-07)
 * 改善: image插件，通过editor.plugin.imageDialog()可以单独调用图片弹出框。

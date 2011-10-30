@@ -259,13 +259,13 @@ _extend(KCmd, {
 			}
 		}
 		//other case
-		rng = range.get(true);
 		if (_IE) {
-			// TODO: IE9有时候报错
 			try {
+				rng = range.get(true);
 				rng.select();
 			} catch(e) {}
 		} else {
+			rng = range.get(true);
 			sel.removeAllRanges();
 			sel.addRange(rng);
 		}
