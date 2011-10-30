@@ -523,6 +523,15 @@ test('cmd.execute', function() {
 	cmd.removeformat();
 	same(range.html(), 'abcdefg');
 	div.html('');
+	//14
+	div.html('\n<span></span><span><span style="font-size:18px;">abcd</span><span style="font-size:18px;"></span><span style="font-size:18px;"></span></span>\n');
+	range = K.range(document);
+	range.setEnd(div[0], 0);
+	range.setEnd(div.first().next()[0], 1);
+	cmd = K.cmd(range);
+	cmd.removeformat();
+	same(range.html(), 'abcd');
+	div.html('');
 });
 
 test('cmd.inserthtml', function() {

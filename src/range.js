@@ -74,9 +74,7 @@ function _copyAndDelete(range, isCopy, isDelete) {
 		var node = parent.firstChild, nextNode;
 		while (node) {
 			var testRange = new KRange(doc).selectNode(node);
-			if (start <= 0) {
-				start = testRange.compareBoundaryPoints(_START_TO_END, range);
-			}
+			start = testRange.compareBoundaryPoints(_START_TO_END, range);
 			if (start >= 0 && incStart <= 0) {
 				incStart = testRange.compareBoundaryPoints(_START_TO_START, range);
 			}

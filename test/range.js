@@ -613,6 +613,16 @@ test('range.extractContents', function() {
 	same(div.outer().toLowerCase(), '<div>abcd<strong><strong></strong></strong><strong><strong>efg</strong></strong></div>');
 	same(K(frag).outer().toLowerCase(), '<strong><strong></strong></strong>hijk');
 	document.body.removeChild(div[0]);
+	//14
+	div = K('<div>\n<span></span><span><span style="font-size:18px;">abcd</span><span style="font-size:18px;"></span><span style="font-size:18px;"></span></span>\n</div>');
+	document.body.appendChild(div[0]);
+	range = K.range(document);
+	range.setStart(div.first().next()[0], 1);
+	range.setEnd(div[0], 3);
+	frag = range.extractContents();
+	same(div.html().toLowerCase(), '<span></span><span><span style="font-size:18px;">abcd</span></span>');
+	same(K(frag).outer().toLowerCase(), '<span><span style="font-size:18px;"></span><span style="font-size:18px;"></span></span>');
+	document.body.removeChild(div[0]);
 });
 
 test('range.deleteContents', function() {

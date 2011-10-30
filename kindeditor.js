@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-29)
+* @version 4.0.2 (2011-10-30)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-29)',
+var _VERSION = '4.0.2 (2011-10-30)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -1766,9 +1766,7 @@ function _copyAndDelete(range, isCopy, isDelete) {
 		var node = parent.firstChild, nextNode;
 		while (node) {
 			var testRange = new KRange(doc).selectNode(node);
-			if (start <= 0) {
-				start = testRange.compareBoundaryPoints(_START_TO_END, range);
-			}
+			start = testRange.compareBoundaryPoints(_START_TO_END, range);
 			if (start >= 0 && incStart <= 0) {
 				incStart = testRange.compareBoundaryPoints(_START_TO_START, range);
 			}
