@@ -1114,7 +1114,7 @@ _plugin('core', function(K) {
 	});
 	// fontsize
 	self.clickToolbar('fontsize', function() {
-		var curVal = self.cmd.val('fontsize');
+		var curVal = self.cmd.val('fontsize'),
 			menu = self.createMenu({
 				name : 'fontsize',
 				width : 150
