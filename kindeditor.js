@@ -5,13 +5,13 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-30)
+* @version 4.0.2 (2011-10-31)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-30)',
+var _VERSION = '4.0.2 (2011-10-31)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5470,7 +5470,6 @@ _plugin('core', function(K) {
 			pasting = true;
 			K('div.' + cls, doc).remove();
 			cmd = self.cmd.selection();
-			cmd.range.dump();
 			bookmark = cmd.range.createBookmark();
 			div = K('<div class="' + cls + '"></div>', doc).css({
 				position : 'absolute',
