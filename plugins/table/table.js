@@ -235,7 +235,7 @@ KindEditor.plugin('table', function(K) {
 						for (var i = 0; i < rows; i++) {
 							html += '<tr>';
 							for (var j = 0; j < cols; j++) {
-								html += '<td>' + (K.IE ? '' : '<br />') + '</td>';
+								html += '<td>' + (K.IE ? '&nbsp;' : '<br />') + '</td>';
 							}
 							html += '</tr>';
 						}
