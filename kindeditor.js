@@ -5,13 +5,19 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-10-31)
+* @version 4.0.2 (2011-11-02)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
-var _VERSION = '4.0.2 (2011-10-31)',
+if (!window.console) {
+	window.console = {};
+}
+if (!console.log) {
+	console.log = function () {};
+}
+var _VERSION = '4.0.2 (2011-11-02)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -2820,7 +2826,6 @@ _extend(KCmd, {
 	},
 	commonNode : function(map) {
 		var range = this.range;
-		range.enlarge();
 		var ec = range.endContainer, eo = range.endOffset,
 			node = (ec.nodeType == 3 || eo === 0) ? ec : ec.childNodes[eo - 1];
 		function find(node) {
@@ -2838,9 +2843,9 @@ _extend(KCmd, {
 			}
 			return null;
 		}
-		var commonNode = find(node);
-		if (commonNode) {
-			return commonNode;
+		var cNode = find(node);
+		if (cNode) {
+			return cNode;
 		}
 		if (node.nodeType == 1 || (ec.nodeType == 3 && eo === 0)) {
 			var prev = K(node).prev();

@@ -463,7 +463,6 @@ _extend(KCmd, {
 	},
 	commonNode : function(map) {
 		var range = this.range;
-		range.enlarge();
 		var ec = range.endContainer, eo = range.endOffset,
 			node = (ec.nodeType == 3 || eo === 0) ? ec : ec.childNodes[eo - 1];
 		function find(node) {
@@ -481,9 +480,9 @@ _extend(KCmd, {
 			}
 			return null;
 		}
-		var commonNode = find(node);
-		if (commonNode) {
-			return commonNode;
+		var cNode = find(node);
+		if (cNode) {
+			return cNode;
 		}
 		//<strong>123</strong>|4567
 		//<strong>123</strong>|<br />
