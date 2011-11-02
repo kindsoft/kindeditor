@@ -708,6 +708,21 @@ _extend(KRange, {
 		enlargePos(self.endContainer, self.endOffset, false);
 		return self;
 	},
+	// 缩小边界
+	// <body>[<p><strong>123</strong></p>]</body> to <body><p><strong>[123]</strong></p></body>
+	shrink : function() {
+		var self = this, child, collapsed = self.collapsed;
+		while (self.startContainer.nodeType == 1 && (child = self.startContainer.childNodes[self.startOffset]) && child.nodeType == 1 && !K(child).isSingle()) {
+			self.setStart(child, 0);
+		}
+		if (collapsed) {
+			return self.collapse(collapsed);
+		}
+		while (self.endContainer.nodeType == 1 && self.endOffset > 0 && (child = self.endContainer.childNodes[self.endOffset - 1]) && child.nodeType == 1 && !K(child).isSingle()) {
+			self.setEnd(child, child.childNodes.length);
+		}
+		return self;
+	},
 	// 创建bookmark，通过插入临时节点标记位置
 	createBookmark : function(serialize) {
 		var self = this, doc = self.doc, endNode,

@@ -8,6 +8,7 @@ ver 4.0.3
 * Bugfix: [IE] 存在menu全局变量，可能发生冲突。
 * Bugfix: [IE] 单元格里没有内容时显示不正常。
 * Bugfix: 连续按粗体按钮时会生成很多strong。
+* Bugfix: 初始化编辑器后，按下粗体按钮，焦点不在<p>标签里。
 
 ver 4.0.2 (2011-10-30)
 * 新增: 上传按钮新增afterError回调函数，可定制JSON错误。

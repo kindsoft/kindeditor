@@ -231,13 +231,14 @@ _extend(KCmd, {
 		}
 		return self;
 	},
-	select : function() {
+	select : function(hasDummy) {
+		hasDummy = _undef(hasDummy, true);
 		var self = this, sel = self.sel, range = self.range.cloneRange(),
 			sc = range.startContainer, so = range.startOffset,
 			ec = range.endContainer, eo = range.endOffset,
 			doc = _getDoc(sc), win = self.win, rng;
-		//tag内部无内容时选中tag内部，<tagName>[]</tagName>
-		if (sc.nodeType == 1 && range.collapsed) {
+		// tag内部无内容时选中tag内部，<tagName>[]</tagName>
+		if (hasDummy && sc.nodeType == 1 && range.collapsed) {
 			if (_IE) {
 				var dummy = K('<span>&nbsp;</span>', doc);
 				range.insertNode(dummy[0]);
@@ -277,6 +278,7 @@ _extend(KCmd, {
 		wrapper = K(val, doc);
 		// collapsed=true
 		if (range.collapsed) {
+			range.shrink();
 			range.insertNode(wrapper[0]).selectNodeContents(wrapper[0]);
 			return self;
 		}
@@ -677,7 +679,7 @@ _extend(KCmd, {
 			var newRange = _toRange(rng);
 			range.setEnd(newRange.endContainer, newRange.endOffset);
 			range.collapse(false);
-			self.select();
+			self.select(false);
 		}
 		// 全浏览器兼容，在IE上速度慢
 		function insertHtml(range, val) {
@@ -689,7 +691,7 @@ _extend(KCmd, {
 			range.deleteContents();
 			range.insertNode(frag);
 			range.collapse(false);
-			self.select();
+			self.select(false);
 		}
 		if (_IE) {
 			try {

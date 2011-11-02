@@ -761,6 +761,19 @@ test('range.enlarge', function() {
 	div.html('');
 });
 
+test('range.shrink', function() {
+	var div = K('<div></div>');
+	K(document.body.firstChild).before(div);
+	//1
+	div.html('<p><strong><span>123</span>abc</strong></p>');
+	range = K.range(document);
+	range.setStart(div[0], 0);
+	range.setEnd(div[0], 1);
+	range.shrink();
+	same(range.html(), '<span>123</span>abc');
+	div.html('');
+});
+
 test('range.moveToBookmark', function() {
 	var div = K('<div></div>');
 	K(document.body.firstChild).before(div);
