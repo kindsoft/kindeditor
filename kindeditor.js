@@ -2355,6 +2355,19 @@ _extend(KRange, {
 		enlargePos(self.endContainer, self.endOffset, false);
 		return self;
 	},
+	shrink : function() {
+		var self = this, child, collapsed = self.collapsed;
+		while (self.startContainer.nodeType == 1 && (child = self.startContainer.childNodes[self.startOffset]) && child.nodeType == 1 && !K(child).isSingle()) {
+			self.setStart(child, 0);
+		}
+		if (collapsed) {
+			return self.collapse(collapsed);
+		}
+		while (self.endContainer.nodeType == 1 && self.endOffset > 0 && (child = self.endContainer.childNodes[self.endOffset - 1]) && child.nodeType == 1 && !K(child).isSingle()) {
+			self.setEnd(child, child.childNodes.length);
+		}
+		return self;
+	},
 	createBookmark : function(serialize) {
 		var self = this, doc = self.doc, endNode,
 			startNode = K('<span style="display:none;"></span>', doc)[0];
@@ -2616,12 +2629,13 @@ _extend(KCmd, {
 		}
 		return self;
 	},
-	select : function() {
+	select : function(hasDummy) {
+		hasDummy = _undef(hasDummy, true);
 		var self = this, sel = self.sel, range = self.range.cloneRange(),
 			sc = range.startContainer, so = range.startOffset,
 			ec = range.endContainer, eo = range.endOffset,
 			doc = _getDoc(sc), win = self.win, rng;
-		if (sc.nodeType == 1 && range.collapsed) {
+		if (hasDummy && sc.nodeType == 1 && range.collapsed) {
 			if (_IE) {
 				var dummy = K('<span>&nbsp;</span>', doc);
 				range.insertNode(dummy[0]);
@@ -2659,6 +2673,7 @@ _extend(KCmd, {
 		var self = this, doc = self.doc, range = self.range, wrapper;
 		wrapper = K(val, doc);
 		if (range.collapsed) {
+			range.shrink();
 			range.insertNode(wrapper[0]).selectNodeContents(wrapper[0]);
 			return self;
 		}
@@ -3034,7 +3049,7 @@ _extend(KCmd, {
 			var newRange = _toRange(rng);
 			range.setEnd(newRange.endContainer, newRange.endOffset);
 			range.collapse(false);
-			self.select();
+			self.select(false);
 		}
 		function insertHtml(range, val) {
 			var doc = range.doc,
@@ -3045,7 +3060,7 @@ _extend(KCmd, {
 			range.deleteContents();
 			range.insertNode(frag);
 			range.collapse(false);
-			self.select();
+			self.select(false);
 		}
 		if (_IE) {
 			try {
