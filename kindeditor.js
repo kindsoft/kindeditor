@@ -539,10 +539,6 @@ function _ctrl(el, key, fn) {
 	});
 }
 function _ready(fn) {
-	if (window.jQuery && _isFunction(jQuery)) {
-		jQuery(fn);
-		return;
-	}
 	var loaded = false;
 	function readyFunc() {
 		if (!loaded) {
