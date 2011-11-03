@@ -56,6 +56,7 @@ function _lang(mixed, langType) {
 
 // 当前range为图片时返回KNode，否则返回undefined
 function _getImageFromRange(range, fn) {
+	range = range.cloneRange().up();
 	var sc = range.startContainer, so = range.startOffset;
 	if (!_WEBKIT && !range.isControl()) {
 		return;

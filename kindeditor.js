@@ -4326,6 +4326,7 @@ function _lang(mixed, langType) {
 	});
 }
 function _getImageFromRange(range, fn) {
+	range = range.cloneRange().up();
 	var sc = range.startContainer, so = range.startOffset;
 	if (!_WEBKIT && !range.isControl()) {
 		return;
