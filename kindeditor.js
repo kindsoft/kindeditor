@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.2 (2011-11-03)
+* @version 4.0.2 (2011-11-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.2 (2011-11-03)',
+var _VERSION = '4.0.2 (2011-11-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4475,13 +4475,19 @@ function _bindNewlineEvent() {
 	});
 }
 function _bindTabEvent() {
-	var self = this;
-	K(self.edit.doc).keydown(function(e) {
+	var self = this, doc = self.edit.doc;
+	K(doc).keydown(function(e) {
 		if (e.which == 9) {
 			e.preventDefault();
 			if (self.afterTab) {
 				self.afterTab.call(self, e);
 				return;
+			}
+			var cmd = self.cmd, range = cmd.range;
+			range.shrink();
+			if (range.collapsed && range.startContainer.nodeType == 1) {
+				range.insertNode(K('@&nbsp;', doc)[0]);
+				cmd.select();
 			}
 			self.insertHtml('&nbsp;&nbsp;&nbsp;&nbsp;');
 		}

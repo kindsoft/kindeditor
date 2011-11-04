@@ -213,13 +213,20 @@ function _bindNewlineEvent() {
 }
 
 function _bindTabEvent() {
-	var self = this;
-	K(self.edit.doc).keydown(function(e) {
+	var self = this, doc = self.edit.doc;
+	K(doc).keydown(function(e) {
 		if (e.which == 9) {
 			e.preventDefault();
 			if (self.afterTab) {
 				self.afterTab.call(self, e);
 				return;
+			}
+			var cmd = self.cmd, range = cmd.range;
+			range.shrink();
+			// Bugfix #271: 回车，按下tab键，光标在下一行显示	
+			if (range.collapsed && range.startContainer.nodeType == 1) {
+				range.insertNode(K('@&nbsp;', doc)[0]);
+				cmd.select();
 			}
 			self.insertHtml('&nbsp;&nbsp;&nbsp;&nbsp;');
 		}
