@@ -577,6 +577,28 @@ enlarge()
 	console.log(range.startContainer, range.startOffset); // print p, 0
 	console.log(range.endContainer, range.endOffset); // print p, 1
 
+.. index:: shrink
+
+.. _KRange.shrink:
+
+shrink()
+--------------------------------------------------------
+缩小边界。
+
+* 参数: 无
+* 返回: KRange
+
+示例:
+
+.. sourcecode:: js
+
+	// <p><strong><span>123</span>abc</strong></p>
+	range.setStart(p, 0);
+	range.setEnd(p, 1);
+	range.shrink();
+	console.log(range.startContainer, range.startOffset); // print "123", 0
+	console.log(range.endContainer, range.endOffset); // print "abc", 3
+
 .. index:: createBookmark
 
 .. _KRange.createBookmark:
