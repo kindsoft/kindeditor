@@ -11,6 +11,7 @@ ver 4.0.3
 * Bugfix: 初始化编辑器后，按下粗体按钮，焦点不在<p>标签里。
 * Bugfix: [WEBKIT] 设定图片右对齐后，无法选取图片节点。
 * Bugfix: [IE] 回车，按下tab键，光标在下一行显示。
+* Bugfix: [IE] textarea的高度小于工具栏高度时JS报错。
 
 ver 4.0.2 (2011-10-30)
 * 新增: 上传按钮新增afterError回调函数，可定制JSON错误。

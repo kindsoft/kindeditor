@@ -513,8 +513,9 @@ KEditor.prototype = {
 			}
 		});
 		// create edit
+		var editHeight = _removeUnit(height) - toolbar.div.height();
 		var edit = self.edit = _edit({
-			height : _removeUnit(height) - toolbar.div.height(),
+			height : editHeight > 0 && _removeUnit(height) > self.minHeight ? editHeight : self.minHeight,
 			src : editDiv,
 			srcElement : self.srcElement,
 			designMode : self.designMode,
@@ -676,11 +677,13 @@ KEditor.prototype = {
 	resize : function(width, height) {
 		var self = this;
 		if (width !== null) {
-			self.container.css('width', _addUnit(width));
+			if (_removeUnit(width) > self.minWidth) {
+				self.container.css('width', _addUnit(width));
+			}
 		}
 		if (height !== null) {
 			height = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
-			if (height > 0) {
+			if (height > 0 && _removeUnit(height) > self.minHeight) {
 				self.edit.setHeight(height);
 			}
 		}
