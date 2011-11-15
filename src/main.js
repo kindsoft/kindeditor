@@ -725,7 +725,7 @@ KEditor.prototype = {
 		var self = this;
 		mode = (mode || 'html').toLowerCase();
 		if (mode === 'html') {
-			return _removeBookmarkTag(self.html()).length;
+			return self.html().length;
 		}
 		if (mode === 'text') {
 			return self.text().replace(/<(?:img|embed).*?>/ig, 'K').replace(/\r\n|\n|\r/g, '').length;
