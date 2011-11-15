@@ -204,13 +204,13 @@ KindEditor.plugin('image', function(K) {
 			originalHeight = height;
 		}
 		refreshBtn.click(function(e) {
-			var tempImg = K('<img src="' + urlBox.val() + '" />', self.edit.doc).css({
+			var tempImg = K('<img src="' + urlBox.val() + '" />', document).css({
 					position : 'absolute',
 					visibility : 'hidden',
 					top : 0,
-					left : '1000px'
+					left : '-1000px'
 				});
-			K(self.edit.doc.body).append(tempImg);
+			K(document.body).append(tempImg);
 			setSize(tempImg.width(), tempImg.height());
 			tempImg.remove();
 		});
