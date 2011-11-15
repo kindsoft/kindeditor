@@ -464,10 +464,11 @@ KEditor.prototype = {
 				top : 0,
 				'z-index' : 811211
 			});
-			// 为了防止拖动偏移，把文档高度设置成0
-			// bugfix: [WEBKIT] 高度为0时在dialog里无法粘贴文本
-			self._scrollPos = _getScrollPos();
+			if (!_GECKO) {
+				self._scrollPos = _getScrollPos();
+			}
 			window.scrollTo(0, 0);
+			// bugfix: [WEBKIT] 高度为0时在dialog里无法粘贴文本
 			K(document.body).css({
 				'height' : '1px',
 				'overflow' : 'hidden'
@@ -622,6 +623,11 @@ KEditor.prototype = {
 			statusbar.first().css('visibility', 'hidden');
 			statusbar.last().css('visibility', 'hidden');
 		} else {
+			if (_GECKO) {
+				K(window).bind('scroll', function(e) {
+					self._scrollPos = _getScrollPos();
+				});
+			}
 			// bind drag event
 			if (self.resizeType > 0) {
 				_drag({
