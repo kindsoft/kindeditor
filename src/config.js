@@ -86,7 +86,8 @@ K.options = {
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
 		],
 		pre : ['class'],
-		'hr,br,tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
+		hr : ['class', '.page-break-after'],
+		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
 	},
 	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
 };

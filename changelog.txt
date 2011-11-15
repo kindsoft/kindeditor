@@ -6,6 +6,7 @@
 ver 4.0.4
 * Bugfix: 浏览器使用有些插件时，上传文件提示不正确。
 * Bugfix: 单独调用图片功能时，点击重置大小图标报错。
+* Bugfix: 设置了参数filterMode:true，分页符就会丢失样式。
 
 ver 4.0.3 (2011-11-04)
 * Bugfix: [IE] 残留range.dump()调试代码，导致粘贴时报错。
