@@ -1,5 +1,8 @@
+<%@ CODEPAGE=65001 %>
 <%
 Option Explicit
+Response.CodePage=65001
+Response.Charset="UTF-8"
 
 Dim htmlData
 
