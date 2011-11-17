@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.3 (2011-11-15)
+* @version 4.0.3 (2011-11-17)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.3 (2011-11-15)',
+var _VERSION = '4.0.3 (2011-11-17)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4144,9 +4144,10 @@ _extend(KDialog, KWidget, {
 		self.mask.div.css('z-index', z);
 		self.iframeMask && self.iframeMask.css('z-index', z - 1);
 	},
-	showLoading : function() {
+	showLoading : function(msg) {
+		msg = _undef(msg, '');
 		var self = this, body = self.bodyDiv;
-		self.loading = K('<div class="ke-dialog-loading"></div>')
+		self.loading = K('<div class="ke-dialog-loading"><div class="ke-inline-block ke-dialog-loading-content" style="margin-top:' + Math.round(body.height() / 3) + 'px;">' + msg + '</div></div>')
 			.width(body.width()).height(body.height())
 			.css('top', self.headerDiv.height() + 'px');
 		body.css('visibility', 'hidden').after(self.loading);

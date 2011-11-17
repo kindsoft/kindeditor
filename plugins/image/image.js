@@ -75,6 +75,7 @@ KindEditor.plugin('image', function(K) {
 				click : function(e) {
 					// insert local image
 					if (tabs && tabs.selectedIndex === 1) {
+						dialog.showLoading(self.lang('uploadLoading'));
 						uploadbutton.submit();
 						localUrlBox.val('');
 						return;
@@ -154,6 +155,7 @@ KindEditor.plugin('image', function(K) {
 			fieldName : 'imgFile',
 			url : K.addParam(uploadJson, 'dir=image'),
 			afterUpload : function(data) {
+				dialog.hideLoading();
 				if (data.error === 0) {
 					var width = widthBox.val(),
 						height = heightBox.val(),

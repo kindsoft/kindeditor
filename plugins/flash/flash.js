@@ -88,6 +88,7 @@ KindEditor.plugin('flash', function(K) {
 					fieldName : 'imgFile',
 					url : K.addParam(uploadJson, 'dir=flash'),
 					afterUpload : function(data) {
+						dialog.hideLoading();
 						if (data.error === 0) {
 							var url = K.formatUrl(data.url, 'absolute');
 							urlBox.val(url);
@@ -101,6 +102,7 @@ KindEditor.plugin('flash', function(K) {
 					}
 				});
 				uploadbutton.fileBox.change(function(e) {
+					dialog.showLoading(self.lang('uploadLoading'));
 					uploadbutton.submit();
 				});
 			} else {

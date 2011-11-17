@@ -69,6 +69,7 @@ KindEditor.plugin('insertfile', function(K) {
 			fieldName : 'imgFile',
 			url : K.addParam(uploadJson, 'dir=file'),
 			afterUpload : function(data) {
+				dialog.hideLoading();
 				if (data.error === 0) {
 					var url = K.formatUrl(data.url, 'absolute');
 					urlBox.val(url);
@@ -82,6 +83,7 @@ KindEditor.plugin('insertfile', function(K) {
 			}
 		});
 		uploadbutton.fileBox.change(function(e) {
+			dialog.showLoading(self.lang('uploadLoading'));
 			uploadbutton.submit();
 		});
 		if (allowFileManager) {

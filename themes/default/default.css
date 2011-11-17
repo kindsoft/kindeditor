@@ -701,7 +701,16 @@
 	top: 0;
 	left: 0;
 	z-index: 1;
-	background: url("../common/loading.gif") no-repeat scroll center center transparent;
+	text-align: center;
+}
+.ke-dialog-loading-content {
+	background: url("../common/loading.gif") no-repeat;
+    color: #666;
+    font-size: 14px;
+    font-weight: bold;
+    height: 31px;
+    line-height: 31px;
+    padding-left: 36px;
 }
 .ke-dialog-row {
 	margin-bottom: 10px;

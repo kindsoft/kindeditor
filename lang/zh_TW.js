@@ -101,6 +101,8 @@ KindEditor.lang({
 	cutError : '您的瀏覽器安全設置不允許使用剪下操作，請使用快捷鍵(Ctrl+X)完成。',
 	copyError : '您的瀏覽器安全設置不允許使用剪下操作，請使用快捷鍵(Ctrl+C)完成。',
 	pasteError : '您的瀏覽器安全設置不允許使用剪下操作，請使用快捷鍵(Ctrl+V)完成。',
+	ajaxLoading : '加載中，請稍候 ...',
+	uploadLoading : '上傳中，請稍候 ...',
 	'plainpaste.comment' : '請使用快捷鍵(Ctrl+V)把內容貼到下方區域裡。',
 	'wordpaste.comment' : '請使用快捷鍵(Ctrl+V)把內容貼到下方區域裡。',
 	'link.url' : 'URL',

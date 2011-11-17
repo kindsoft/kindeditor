@@ -92,9 +92,10 @@ _extend(KDialog, KWidget, {
 		self.mask.div.css('z-index', z);
 		self.iframeMask && self.iframeMask.css('z-index', z - 1);
 	},
-	showLoading : function() {
+	showLoading : function(msg) {
+		msg = _undef(msg, '');
 		var self = this, body = self.bodyDiv;
-		self.loading = K('<div class="ke-dialog-loading"></div>')
+		self.loading = K('<div class="ke-dialog-loading"><div class="ke-inline-block ke-dialog-loading-content" style="margin-top:' + Math.round(body.height() / 3) + 'px;">' + msg + '</div></div>')
 			.width(body.width()).height(body.height())
 			.css('top', self.headerDiv.height() + 'px');
 		body.css('visibility', 'hidden').after(self.loading);
