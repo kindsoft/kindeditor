@@ -802,6 +802,8 @@
 .ke-upload-area {
 	position: relative;
 	overflow: hidden;
+	margin: 0;
+	padding: 0;
 }
 .ke-upload-area .ke-upload-file {
 	position: absolute;
