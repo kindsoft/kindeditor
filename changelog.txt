@@ -15,6 +15,7 @@ ver 4.0.4
 * Bugfix: [IE] 编辑器无内容，加粗，切换到代码模式，再回到可视化模式，加粗，JS报错。
 * Bugfix: [IE] 插入<input value="abc&quot;def"/>，会自动变为 <input value="abc"def"/>。
 * Bugfix: [WEBKIT] 点击粗体后丢失光标。
+* Bugfix: [OPERA] 切换到代码模式后不显示部分工具栏图标。
 
 ver 4.0.3 (2011-11-04)
 * Bugfix: [IE] 残留range.dump()调试代码，导致粘贴时报错。
