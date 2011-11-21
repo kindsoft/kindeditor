@@ -2636,7 +2636,7 @@ _extend(KCmd, {
 		var self = this, sel = self.sel, range = self.range.cloneRange(),
 			sc = range.startContainer, so = range.startOffset,
 			ec = range.endContainer, eo = range.endOffset,
-			doc = _getDoc(sc), win = self.win, rng;
+			doc = _getDoc(sc), win = self.win, rng, hasU200b = false;
 		if (hasDummy && sc.nodeType == 1 && range.collapsed) {
 			if (_IE) {
 				var dummy = K('<span>&nbsp;</span>', doc);
@@ -2655,6 +2655,7 @@ _extend(KCmd, {
 				var children = sc.childNodes;
 				if (K(sc).isInline() || so > 0 && K(children[so - 1]).isInline() || children[so] && K(children[so]).isInline()) {
 					range.insertNode(doc.createTextNode('\u200B'));
+					hasU200b = true;
 				}
 			}
 		}
@@ -2664,6 +2665,9 @@ _extend(KCmd, {
 				rng.select();
 			} catch(e) {}
 		} else {
+			if (hasU200b) {
+				range.collapse(false);
+			}
 			rng = range.get(true);
 			sel.removeAllRanges();
 			sel.addRange(rng);
