@@ -412,12 +412,14 @@
 	padding: 2px 5px;
 	text-align: left;
 	overflow: hidden;
+	zoom: 1;
 }
 .ke-toolbar-icon {
 	background-repeat: no-repeat;
 	font-size: 0;
 	line-height: 0;
 	overflow: hidden;
+	display: block;
 }
 .ke-toolbar-icon-url {
 	background-image: url(default.png);
@@ -430,6 +432,8 @@
 	line-height: 0;
 	overflow: hidden;
 	cursor: pointer;
+	display: block;
+	float: left;
 }
 .ke-toolbar .ke-on {
 	border: 1px solid #5690D2;
@@ -452,6 +456,13 @@
 	font-size: 0;
 	line-height: 0;
 	overflow: hidden;
+	display: block;
+	float: left;
+}
+.ke-toolbar .ke-hr {
+	overflow: hidden;
+	height: 1px;
+	clear: both;
 }
 /* edit */
 .ke-edit {
