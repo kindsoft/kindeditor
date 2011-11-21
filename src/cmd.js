@@ -381,21 +381,15 @@ _extend(KCmd, {
 	},
 	remove : function(map) {
 		var self = this, doc = self.doc, range = self.range;
-		//collapsed == true
-		if (range.collapsed) {
-			self.split(true, map);
-			range.collapse(true);
-			return self;
-		}
 		range.enlarge();
-		//<p><strong><em>[123456789]</em></strong></p>, remove strong
+		// <p><strong><em>[123456789]</em></strong></p>, remove strong
 		if (range.startOffset === 0) {
 			var ksc = K(range.startContainer), parent;
 			while ((parent = ksc.parent()) && parent.isStyle() && parent.children().length == 1) {
 				ksc = parent;
 			}
 			range.setStart(ksc[0], 0);
-			//<p style="color:red;">[abcd</p>, remove style
+			// <p style="color:red;">[abcd</p>, remove style
 			ksc = K(range.startContainer);
 			if (ksc.isBlock()) {
 				_removeAttrOrCss(ksc, map);
@@ -405,14 +399,39 @@ _extend(KCmd, {
 				_removeAttrOrCss(kscp, map);
 			}
 		}
-		//split range
+		// collapsed == true
+		if (range.collapsed) {
+			self.split(true, map);
+			// remove empty element
+			var sc = range.startContainer, so = range.startOffset;
+			range.dump();
+			if (so > 0) {
+				var startBefore = K(sc.childNodes[so - 1]);
+				if (startBefore && _isEmptyNode(startBefore)) {
+					startBefore.remove();
+					range.setStart(sc, so - 1);
+				}
+			}
+			var startAfter = K(sc.childNodes[so]);
+			if (startAfter && _isEmptyNode(startAfter)) {
+				startAfter.remove();
+			}
+			// <strong>|</strong>
+			if (_isEmptyNode(sc)) {
+				range.startBefore(sc);
+				sc.remove();
+			}
+			range.collapse(true);
+			return self;
+		}
+		// split range
 		self.split(true, map);
 		self.split(false, map);
-		//insert dummy element
+		// insert dummy element
 		var startDummy = doc.createElement('span'), endDummy = doc.createElement('span');
 		range.cloneRange().collapse(false).insertNode(endDummy);
 		range.cloneRange().collapse(true).insertNode(startDummy);
-		//select element
+		// select element
 		var nodeList = [], cmpStart = false;
 		K(range.commonAncestor()).scan(function(node) {
 			if (!cmpStart && node == startDummy) {
@@ -426,10 +445,10 @@ _extend(KCmd, {
 				nodeList.push(node);
 			}
 		});
-		//remove dummy element
+		// remove dummy element
 		K(startDummy).remove();
 		K(endDummy).remove();
-		//remove empty element
+		// remove empty element
 		var sc = range.startContainer, so = range.startOffset,
 			ec = range.endContainer, eo = range.endOffset;
 		if (so > 0) {
@@ -441,8 +460,8 @@ _extend(KCmd, {
 					range.setEnd(ec, eo - 1);
 				}
 			}
-			//<b>abc[</b><b>def]</b><b>ghi</b>，分割后HTML变成
-			//<b>abc</b>[<b></b><b>def</b>]<b>ghi</b> 
+			// <b>abc[</b><b>def]</b><b>ghi</b>，分割后HTML变成
+			// <b>abc</b>[<b></b><b>def</b>]<b>ghi</b> 
 			var startAfter = K(sc.childNodes[so]);
 			if (startAfter && _isEmptyNode(startAfter)) {
 				startAfter.remove();
@@ -456,7 +475,7 @@ _extend(KCmd, {
 			endAfter.remove();
 		}
 		var bookmark = range.createBookmark(true);
-		//remove attributes or styles
+		// remove attributes or styles
 		_each(nodeList, function(i, node) {
 			_removeAttrOrCss(K(node), map);
 		});

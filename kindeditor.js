@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.3 (2011-11-18)
+* @version 4.0.3 (2011-11-21)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.3 (2011-11-18)',
+var _VERSION = '4.0.3 (2011-11-21)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -2769,11 +2769,6 @@ _extend(KCmd, {
 	},
 	remove : function(map) {
 		var self = this, doc = self.doc, range = self.range;
-		if (range.collapsed) {
-			self.split(true, map);
-			range.collapse(true);
-			return self;
-		}
 		range.enlarge();
 		if (range.startOffset === 0) {
 			var ksc = K(range.startContainer), parent;
@@ -2789,6 +2784,28 @@ _extend(KCmd, {
 			if (kscp && kscp.isBlock()) {
 				_removeAttrOrCss(kscp, map);
 			}
+		}
+		if (range.collapsed) {
+			self.split(true, map);
+			var sc = range.startContainer, so = range.startOffset;
+			range.dump();
+			if (so > 0) {
+				var startBefore = K(sc.childNodes[so - 1]);
+				if (startBefore && _isEmptyNode(startBefore)) {
+					startBefore.remove();
+					range.setStart(sc, so - 1);
+				}
+			}
+			var startAfter = K(sc.childNodes[so]);
+			if (startAfter && _isEmptyNode(startAfter)) {
+				startAfter.remove();
+			}
+			if (_isEmptyNode(sc)) {
+				range.startBefore(sc);
+				sc.remove();
+			}
+			range.collapse(true);
+			return self;
 		}
 		self.split(true, map);
 		self.split(false, map);
