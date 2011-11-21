@@ -843,6 +843,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 				if (key === 'style' && val === '') {
 					return;
 				}
+				val = val.replace(/"/g, '&quot;');
 				attr += ' ' + key + '="' + val + '"';
 			});
 		}
@@ -2785,20 +2786,21 @@ _extend(KCmd, {
 				_removeAttrOrCss(kscp, map);
 			}
 		}
+		var sc, so;
 		if (range.collapsed) {
 			self.split(true, map);
-			var sc = range.startContainer, so = range.startOffset;
-			range.dump();
+			sc = range.startContainer;
+			so = range.startOffset;
 			if (so > 0) {
-				var startBefore = K(sc.childNodes[so - 1]);
-				if (startBefore && _isEmptyNode(startBefore)) {
-					startBefore.remove();
+				var sb = K(sc.childNodes[so - 1]);
+				if (sb && _isEmptyNode(sb)) {
+					sb.remove();
 					range.setStart(sc, so - 1);
 				}
 			}
-			var startAfter = K(sc.childNodes[so]);
-			if (startAfter && _isEmptyNode(startAfter)) {
-				startAfter.remove();
+			var sa = K(sc.childNodes[so]);
+			if (sa && _isEmptyNode(sa)) {
+				sa.remove();
 			}
 			if (_isEmptyNode(sc)) {
 				range.startBefore(sc);
@@ -2827,8 +2829,9 @@ _extend(KCmd, {
 		});
 		K(startDummy).remove();
 		K(endDummy).remove();
-		var sc = range.startContainer, so = range.startOffset,
-			ec = range.endContainer, eo = range.endOffset;
+		sc = range.startContainer;
+		so = range.startOffset;
+		var ec = range.endContainer, eo = range.endOffset;
 		if (so > 0) {
 			var startBefore = K(sc.childNodes[so - 1]);
 			if (startBefore && _isEmptyNode(startBefore)) {

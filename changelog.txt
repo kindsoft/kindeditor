@@ -13,6 +13,7 @@ ver 4.0.4
 * Bugfix: 单独调用上传按钮时，无法与旁边输入框对齐。
 * Bugfix: [WEBKIT] 在图片、视频、flash等前一个光标处右键，在不选中节点的状态下也能弹出修改属性。
 * Bugfix: [IE] 编辑器无内容，加粗，切换到代码模式，再回到可视化模式，加粗，JS报错。
+* Bugfix: [IE] 插入<input value="abc&quot;def"/>，会自动变为 <input value="abc"def"/>。
 
 ver 4.0.3 (2011-11-04)
 * Bugfix: [IE] 残留range.dump()调试代码，导致粘贴时报错。

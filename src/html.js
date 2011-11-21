@@ -280,6 +280,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 				if (key === 'style' && val === '') {
 					return;
 				}
+				val = val.replace(/"/g, '&quot;');
 				attr += ' ' + key + '="' + val + '"';
 			});
 		}
