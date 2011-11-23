@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.3 (2011-11-21)
+* @version 4.0.3 (2011-11-23)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.3 (2011-11-21)',
+var _VERSION = '4.0.3 (2011-11-23)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4051,7 +4051,7 @@ _extend(KUploadButton, {
 			try {
 				data = K.json(str);
 			} catch (e) {
-				self.options.afterError.call(self, str);
+				self.options.afterError.call(self, '<!doctype html><html>' + doc.body.parentNode.innerHTML + '</html>');
 			}
 			if (data) {
 				self.options.afterUpload.call(self, data);
@@ -5176,6 +5176,21 @@ KEditor.prototype = {
 				parentDialog = self.dialogs[self.dialogs.length - 1];
 			firstDialog.setMaskIndex(parentDialog.z - 1);
 		}
+		return self;
+	},
+	errorDialog : function(html) {
+		var self = this;
+		var dialog = self.createDialog({
+			width : 750,
+			title : self.lang('uploadError'),
+			body : '<div style="padding:10px 20px;"><iframe frameborder="0" style="width:708px;height:400px;"></iframe></div>'
+		});
+		var iframe = K('iframe', dialog.div), doc = K.iframeDoc(iframe);
+		doc.open();
+		doc.write(html);
+		doc.close();
+		K(doc.body).css('background-color', '#FFF');
+		iframe[0].contentWindow.focus();
 		return self;
 	}
 };
