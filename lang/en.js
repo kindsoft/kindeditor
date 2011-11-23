@@ -103,6 +103,7 @@ KindEditor.lang({
 	pasteError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+V) instead.',
 	ajaxLoading : 'Loading ...',
 	uploadLoading : 'Uploading ...',
+	uploadError : 'Upload Error',
 	'plainpaste.comment' : 'Use keyboard shortcut(Ctrl+V) to paste the text into the window.',
 	'wordpaste.comment' : 'Use keyboard shortcut(Ctrl+V) to paste the text into the window.',
 	'link.url' : 'URL',

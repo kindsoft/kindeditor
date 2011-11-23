@@ -52,7 +52,7 @@ _extend(KUploadButton, {
 			try {
 				data = K.json(str);
 			} catch (e) {
-				self.options.afterError.call(self, str);
+				self.options.afterError.call(self, '<!doctype html><html>' + doc.body.parentNode.innerHTML + '</html>');
 			}
 			if (data) {
 				self.options.afterUpload.call(self, data);

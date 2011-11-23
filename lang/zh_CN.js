@@ -105,6 +105,7 @@ KindEditor.lang({
 	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。',
 	ajaxLoading : '加载中，请稍候 ...',
 	uploadLoading : '上传中，请稍候 ...',
+	uploadError : '上传错误',
 	'plainpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
 	'wordpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
 	'link.url' : 'URL',

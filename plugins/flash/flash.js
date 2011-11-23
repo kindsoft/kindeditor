@@ -99,6 +99,10 @@ KindEditor.plugin('flash', function(K) {
 						} else {
 							alert(data.message);
 						}
+					},
+					afterError : function(html) {
+						dialog.hideLoading();
+						self.errorDialog(html);
 					}
 				});
 				uploadbutton.fileBox.change(function(e) {
