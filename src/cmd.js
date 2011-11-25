@@ -758,6 +758,7 @@ _extend(KCmd, {
 	},
 	createlink : function(url, type) {
 		var self = this, doc = self.doc, range = self.range;
+		range.shrink();
 		self.select();
 		var a = self.commonNode({ a : '*' });
 		if (a && !range.isControl()) {

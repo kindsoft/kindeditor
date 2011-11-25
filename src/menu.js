@@ -23,7 +23,7 @@ _extend(KMenu, KWidget, {
 			leftDiv = K('<div class="ke-inline-block ke-menu-item-left"></div>'),
 			rightDiv = K('<div class="ke-inline-block ke-menu-item-right"></div>'),
 			height = _addUnit(item.height),
-			iconClass = item.iconClass;
+			iconClass = _undef(item.iconClass, '');
 		self.div.append(itemDiv);
 		if (height) {
 			itemDiv.css('height', height);
@@ -60,7 +60,9 @@ _extend(KMenu, KWidget, {
 		if (item.checked) {
 			iconClass = 'ke-icon-checked';
 		}
-		leftDiv.html('<span class="ke-inline-block ke-toolbar-icon ke-toolbar-icon-url ' + iconClass + '"></span>');
+		if (iconClass !== '') {
+			leftDiv.html('<span class="ke-inline-block ke-toolbar-icon ke-toolbar-icon-url ' + iconClass + '"></span>');
+		}
 		rightDiv.html(item.title);
 		return self;
 	},
