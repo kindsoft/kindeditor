@@ -253,6 +253,10 @@ function _removeBookmarkTag(html) {
 	return _trim(html.replace(/<span [^>]*id="?__kindeditor_bookmark_\w+_\d+__"?[^>]*><\/span>/ig, ''));
 }
 
+function _removeTempTag(html) {
+	return html.replace(/<div[^>]+class="?__kindeditor_paste__"?[^>]*>[\s\S]*?<\/div>/ig, '');
+}
+
 function _addBookmarkToStack(stack, bookmark) {
 	if (stack.length === 0) {
 		stack.push(bookmark);
@@ -734,7 +738,7 @@ KEditor.prototype = {
 		var self = this;
 		mode = (mode || 'html').toLowerCase();
 		if (mode === 'html') {
-			return self.html().length;
+			return _removeBookmarkTag(_removeTempTag(self.html())).length;
 		}
 		if (mode === 'text') {
 			return self.text().replace(/<(?:img|embed).*?>/ig, 'K').replace(/\r\n|\n|\r/g, '').length;
@@ -792,7 +796,8 @@ KEditor.prototype = {
 		checkSize = _undef(checkSize, true);
 		var self = this, edit = self.edit,
 			body = edit.doc.body,
-			html = body.innerHTML, bookmark;
+			html = _removeTempTag(body.innerHTML), bookmark;
+
 		if (checkSize && self._undoStack.length > 0) {
 			var prev = self._undoStack[self._undoStack.length - 1];
 			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
@@ -803,11 +808,11 @@ KEditor.prototype = {
 		if (edit.designMode && !self._firstAddBookmark) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
-			bookmark.html = body.innerHTML;
+			bookmark.html = html;
 			range.moveToBookmark(bookmark);
 		} else {
 			bookmark = {
-				html : body.innerHTML
+				html : html
 			};
 		}
 		self._firstAddBookmark = false;

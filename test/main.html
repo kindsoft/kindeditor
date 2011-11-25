@@ -221,6 +221,8 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 				<option value="">附件列表</option>
 			</select>
 			<br />
+			HTML计数：<span id="J_count1"></span>
+			<br />
 			<textarea id="insertHtml" style="width:90%;"><!-- comment test --><strong>abcd</strong></textarea>
 			<br />
 			<input type="button" id="create1" value="Create #1" />
@@ -265,6 +267,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 						//editor2.focus();
 					//},
 					afterChange : function() {
+						K('#J_count1').html(this.count());
 						//console.log('1');
 					},
 					afterUpload : function(url) {
