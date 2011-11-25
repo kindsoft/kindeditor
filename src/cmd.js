@@ -233,7 +233,7 @@ _extend(KCmd, {
 	},
 	select : function(hasDummy) {
 		hasDummy = _undef(hasDummy, true);
-		var self = this, sel = self.sel, range = self.range.cloneRange(),
+		var self = this, sel = self.sel, range = self.range.cloneRange().shrink(),
 			sc = range.startContainer, so = range.startOffset,
 			ec = range.endContainer, eo = range.endOffset,
 			doc = _getDoc(sc), win = self.win, rng, hasU200b = false;
@@ -758,7 +758,6 @@ _extend(KCmd, {
 	},
 	createlink : function(url, type) {
 		var self = this, doc = self.doc, range = self.range;
-		range.shrink();
 		self.select();
 		var a = self.commonNode({ a : '*' });
 		if (a && !range.isControl()) {
