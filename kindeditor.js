@@ -297,7 +297,7 @@ K.options = {
 		],
 		pre : ['class'],
 		hr : ['class', '.page-break-after'],
-		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
+		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
 	},
 	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
 };
