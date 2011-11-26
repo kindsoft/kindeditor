@@ -440,7 +440,7 @@ indentChar
 :ref:`wellFormatMode` 为true时，HTML代码缩进字符。
 
 * 数据类型: String
-* 默认值: \t
+* 默认值: "\\t"
 
 .. index:: cssPath
 
