@@ -117,6 +117,9 @@ _extend(KWidget, {
 		if (options.cls) {
 			self.div.addClass(options.cls);
 		}
+		if (options.shadowMode) {
+			self.div.addClass('ke-shadow');
+		}
 		if (options.css) {
 			self.div.css(options.css);
 		}

@@ -281,6 +281,7 @@ KindEditor.plugin('table', function(K) {
 						selectedColor : K(this).html(),
 						colors : self.colorTable,
 						noColor : self.lang('noColor'),
+						shadowMode : self.shadowMode,
 						click : function(color) {
 							setColor(box, color);
 							removePicker();
@@ -469,6 +470,7 @@ KindEditor.plugin('table', function(K) {
 						selectedColor : K(this).html(),
 						colors : self.colorTable,
 						noColor : self.lang('noColor'),
+						shadowMode : self.shadowMode,
 						click : function(color) {
 							setColor(box, color);
 							removePicker();

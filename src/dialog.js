@@ -18,7 +18,9 @@ function KDialog(options) {
 _extend(KDialog, KWidget, {
 	init : function(options) {
 		var self = this;
+		var shadowMode = options.shadowMode;
 		options.z = options.z || 811213;
+		options.shadowMode = false;
 		KDialog.parent.init.call(self, options);
 		var title = options.title,
 			body = K(options.body, self.doc),
@@ -26,12 +28,16 @@ _extend(KDialog, KWidget, {
 			yesBtn = options.yesBtn,
 			noBtn = options.noBtn,
 			closeBtn = options.closeBtn,
-			shadowMode = _undef(options.shadowMode, true),
 			showMask = _undef(options.showMask, true);
 
 		self.div.addClass('ke-dialog').bind('click,mousedown', function(e){
 			e.stopPropagation();
-		}).addClass('ke-dialog-' + (shadowMode ? '' : 'no-') + 'shadow');
+		});
+
+		if (shadowMode) {
+			var shadowDiv = K('<div class="ke-dialog-shadow"></div>');
+			self.div.append(shadowDiv);
+		}
 
 		var headerDiv = K('<div class="ke-dialog-header"></div>');
 		self.div.append(headerDiv);
@@ -63,6 +69,8 @@ _extend(KDialog, KWidget, {
 		if (self.height) {
 			bodyDiv.height(_removeUnit(self.height) - headerDiv.height() - footerDiv.height());
 		}
+		self.div.width(self.div.width());
+		self.div.height(self.div.height());
 		self.mask = null;
 		if (showMask) {
 			var docEl = _docElement(self.doc),

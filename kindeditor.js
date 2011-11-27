@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.3 (2011-11-25)
+* @version 4.0.3 (2011-11-28)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.3 (2011-11-25)',
+var _VERSION = '4.0.3 (2011-11-28)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3319,6 +3319,9 @@ _extend(KWidget, {
 		if (options.cls) {
 			self.div.addClass(options.cls);
 		}
+		if (options.shadowMode) {
+			self.div.addClass('ke-shadow');
+		}
 		if (options.css) {
 			self.div.css(options.css);
 		}
@@ -4098,7 +4101,9 @@ function KDialog(options) {
 _extend(KDialog, KWidget, {
 	init : function(options) {
 		var self = this;
+		var shadowMode = options.shadowMode;
 		options.z = options.z || 811213;
+		options.shadowMode = false;
 		KDialog.parent.init.call(self, options);
 		var title = options.title,
 			body = K(options.body, self.doc),
@@ -4106,11 +4111,14 @@ _extend(KDialog, KWidget, {
 			yesBtn = options.yesBtn,
 			noBtn = options.noBtn,
 			closeBtn = options.closeBtn,
-			shadowMode = _undef(options.shadowMode, true),
 			showMask = _undef(options.showMask, true);
 		self.div.addClass('ke-dialog').bind('click,mousedown', function(e){
 			e.stopPropagation();
-		}).addClass('ke-dialog-' + (shadowMode ? '' : 'no-') + 'shadow');
+		});
+		if (shadowMode) {
+			var shadowDiv = K('<div class="ke-dialog-shadow"></div>');
+			self.div.append(shadowDiv);
+		}
 		var headerDiv = K('<div class="ke-dialog-header"></div>');
 		self.div.append(headerDiv);
 		headerDiv.html(title);
@@ -4141,6 +4149,8 @@ _extend(KDialog, KWidget, {
 		if (self.height) {
 			bodyDiv.height(_removeUnit(self.height) - headerDiv.height() - footerDiv.height());
 		}
+		self.div.width(self.div.width());
+		self.div.height(self.div.height());
 		self.mask = null;
 		if (showMask) {
 			var docEl = _docElement(self.doc),
@@ -4423,7 +4433,8 @@ function _bindContextmenuEvent() {
 					x : pos.x + e.clientX,
 					y : pos.y + e.clientY,
 					width : maxWidth,
-					css : { visibility: 'hidden' }
+					css : { visibility: 'hidden' },
+					shadowMode : self.shadowMode
 				});
 			_each(items, function() {
 				if (this.title) {
@@ -5113,6 +5124,7 @@ KEditor.prototype = {
 			pos = knode.pos();
 		options.x = pos.x;
 		options.y = pos.y + knode.height();
+		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		if (options.selectedColor !== undefined) {
 			options.cls = 'ke-colorpicker-' + self.themeType;
 			options.noColor = self.lang('noColor');

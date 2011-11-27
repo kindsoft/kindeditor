@@ -119,7 +119,8 @@ function _bindContextmenuEvent() {
 					x : pos.x + e.clientX,
 					y : pos.y + e.clientY,
 					width : maxWidth,
-					css : { visibility: 'hidden' }
+					css : { visibility: 'hidden' },
+					shadowMode : self.shadowMode
 				});
 			_each(items, function() {
 				if (this.title) {
@@ -853,6 +854,7 @@ KEditor.prototype = {
 			pos = knode.pos();
 		options.x = pos.x;
 		options.y = pos.y + knode.height();
+		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		if (options.selectedColor !== undefined) {
 			options.cls = 'ke-colorpicker-' + self.themeType;
 			options.noColor = self.lang('noColor');
