@@ -634,7 +634,7 @@
 	width: 100%;
 	height: 100%;
 	box-shadow: 3px 3px 7px #A0A0A0;
-	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=7);
+	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=6);
 	background-color: #F0F0EE;
 }
 .ke-dialog-header {
