@@ -19,8 +19,8 @@
 	visibility: hidden;
 }
 .ke-shadow {
-	box-shadow: 2px 2px 5px #A0A0A0;
-	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=5);
+	box-shadow: 1px 1px 3px #A0A0A0;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=3);
 	background-color: #F0F0EE;
 }
 .ke-menu a,
