@@ -5612,7 +5612,7 @@ _plugin('core', function(K) {
 			return '<a name="' + unescape(imgAttrs['data-ke-name']) + '"></a>';
 		})
 		.replace(/<div\s+[^>]*data-ke-script-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
-			return '<script' + unescape(attr) + '>' + code + '</script>';
+			return '<script' + unescape(attr) + '>' + unescape(code) + '</script>';
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, '$1' + src + '$2');
@@ -5639,7 +5639,7 @@ _plugin('core', function(K) {
 			return '<img class="ke-anchor" src="' + self.themesPath + 'common/anchor.gif" data-ke-name="' + escape(attrs.name) + '" />';
 		})
 		.replace(/<script([^>]*)>([\s\S]*?)<\/script>/ig, function(full, attr, code) {
-			return '<div class="ke-script" data-ke-script-attr="' + escape(attr) + '">' + code + '</div>';
+			return '<div class="ke-script" data-ke-script-attr="' + escape(attr) + '">' + escape(code) + '</div>';
 		})
 		.replace(/(<[^>]*)(href|src)="([^"]*)"([^>]*>)/ig, function(full, start, key, src, end) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
