@@ -20,6 +20,8 @@
 }
 .ke-shadow {
 	box-shadow: 1px 1px 3px #A0A0A0;
+	-moz-box-shadow: 1px 1px 3px #A0A0A0;
+	-webkit-box-shadow: 1px 1px 3px #A0A0A0;
 	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=3);
 	background-color: #F0F0EE;
 }
@@ -634,6 +636,8 @@
 	width: 100%;
 	height: 100%;
 	box-shadow: 3px 3px 7px #A0A0A0;
+	-moz-box-shadow: 3px 3px 7px #A0A0A0;
+	-webkit-box-shadow: 3px 3px 7px #A0A0A0;
 	filter: progid:DXImageTransform.Microsoft.Shadow(color='#A0A0A0', Direction=135, Strength=6);
 	background-color: #F0F0EE;
 }
