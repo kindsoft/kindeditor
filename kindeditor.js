@@ -4115,12 +4115,14 @@ _extend(KDialog, KWidget, {
 		self.div.addClass('ke-dialog').bind('click,mousedown', function(e){
 			e.stopPropagation();
 		});
-		if (shadowMode) {
-			var shadowDiv = K('<div class="ke-dialog-shadow"></div>');
-			self.div.append(shadowDiv);
+		var contentDiv = K('<div class="ke-dialog-content"></div>').appendTo(self.div);
+		if (_IE && _V < 7) {
+			self.iframeMask = K('<iframe src="about:blank" class="ke-dialog-shadow"></iframe>').appendTo(self.div);
+		} else if (shadowMode) {
+			K('<div class="ke-dialog-shadow"></div>').appendTo(self.div);
 		}
 		var headerDiv = K('<div class="ke-dialog-header"></div>');
-		self.div.append(headerDiv);
+		contentDiv.append(headerDiv);
 		headerDiv.html(title);
 		self.closeIcon = K('<span class="ke-dialog-icon-close" title="' + closeBtn.name + '"></span>').click(closeBtn.click);
 		headerDiv.append(self.closeIcon);
@@ -4129,11 +4131,11 @@ _extend(KDialog, KWidget, {
 			beforeDrag : options.beforeDrag
 		});
 		var bodyDiv = K('<div class="ke-dialog-body"></div>');
-		self.div.append(bodyDiv);
+		contentDiv.append(bodyDiv);
 		bodyDiv.append(body);
 		var footerDiv = K('<div class="ke-dialog-footer"></div>');
 		if (previewBtn || yesBtn || noBtn) {
-			self.div.append(footerDiv);
+			contentDiv.append(footerDiv);
 		}
 		_each([
 			{ btn : previewBtn, name : 'preview' },
@@ -4164,11 +4166,6 @@ _extend(KDialog, KWidget, {
 				width : docWidth,
 				height : docHeight
 			});
-			if (_IE && _V < 7) {
-				self.iframeMask = K('<iframe src="about:blank" style="position:absolute;top:0;left:0;z-index:' +
-					(self.z - 2) + ';width:' + docWidth + 'px;height:' + docHeight +
-					'px;filter:alpha(opacity=0)"></iframe>').appendTo(document.body);
-			}
 		}
 		self.autoPos(self.div.width(), self.div.height());
 		self.footerDiv = footerDiv;
@@ -4178,7 +4175,6 @@ _extend(KDialog, KWidget, {
 	setMaskIndex : function(z) {
 		var self = this;
 		self.mask.div.css('z-index', z);
-		self.iframeMask && self.iframeMask.css('z-index', z - 1);
 	},
 	showLoading : function(msg) {
 		msg = _undef(msg, '');

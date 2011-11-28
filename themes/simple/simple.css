@@ -103,6 +103,8 @@
 	position: absolute;
 	margin: 0;
 	padding: 0;
+}
+.ke-dialog-simple .ke-dialog-content {
 	color: #333;
 	background-color: #FFF;
 }
@@ -118,7 +120,14 @@
 	font: 14px/1 "sans serif",tahoma,verdana,helvetica;
 	font-weight: bold;
 	color: #222222;
+	background-color: #FFF;
 	cursor: move;
+}
+.ke-dialog-simple .ke-dialog-body {
+	background-color: #FFF;
+}
+.ke-dialog-simple .ke-dialog-footer {
+	background-color: #FFF;
 }
 /* tabs */
 .ke-dialog-simple .ke-tabs {
