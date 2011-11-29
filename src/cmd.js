@@ -764,24 +764,31 @@ _extend(KCmd, {
 			range.selectNode(a.get());
 			self.select();
 		}
-		if (range.collapsed) {
-			var html = '<a href="' + _escape(url) + '" data-ke-src="' + _escape(url) + '" ';
-			if (type) {
-				html += ' target="' + _escape(type) + '"';
-			}
-			html += '>' + _escape(url) + '</a>';
-			self.inserthtml(html);
-		} else {
-			_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
-			K('a[href="__kindeditor_temp_url__"]', doc).each(function() {
-				K(this).attr('href', url).attr('data-ke-src', url);
-				if (type) {
-					K(this).attr('target', type);
-				} else {
-					K(this).removeAttr('target');
-				}
-			});
+		var html = '<a href="' + _escape(url) + '" data-ke-src="' + _escape(url) + '" ';
+		if (type) {
+			html += ' target="' + _escape(type) + '"';
 		}
+		if (range.collapsed) {
+			html += '>' + _escape(url) + '</a>';
+			return self.inserthtml(html);
+		}
+		if (range.isControl()) {
+			var node = K(range.startContainer.childNodes[range.startOffset]);
+			html += '></a>';
+			node.after(K(html, doc));
+			node.next().append(node);
+			range.selectNode(node[0]);
+			return self.select();
+		}
+		_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
+		K('a[href="__kindeditor_temp_url__"]', doc).each(function() {
+			K(this).attr('href', url).attr('data-ke-src', url);
+			if (type) {
+				K(this).attr('target', type);
+			} else {
+				K(this).removeAttr('target');
+			}
+		});
 		return self;
 	},
 	unlink : function() {
