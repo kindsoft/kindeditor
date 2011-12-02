@@ -229,4 +229,5 @@ function _widget(options) {
 	return new KWidget(options);
 }
 
+K.WidgetClass = KWidget;
 K.widget = _widget;
