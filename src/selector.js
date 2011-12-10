@@ -20,7 +20,7 @@ function _getAttr(el, key) {
 	if (_IE && _V < 8 && el.nodeName.toLowerCase() != 'script') {
 		var div = el.ownerDocument.createElement('div');
 		div.appendChild(el.cloneNode(false));
-		var list = _getAttrList(div.innerHTML.toLowerCase());
+		var list = _getAttrList(_unescape(div.innerHTML));
 		if (key in list) {
 			val = list[key];
 		}

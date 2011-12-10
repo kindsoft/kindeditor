@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.4 (2011-12-02)
+* @version 4.0.4 (2011-12-10)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.4 (2011-12-02)',
+var _VERSION = '4.0.4 (2011-12-10)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -946,7 +946,7 @@ function _getAttr(el, key) {
 	if (_IE && _V < 8 && el.nodeName.toLowerCase() != 'script') {
 		var div = el.ownerDocument.createElement('div');
 		div.appendChild(el.cloneNode(false));
-		var list = _getAttrList(div.innerHTML.toLowerCase());
+		var list = _getAttrList(_unescape(div.innerHTML));
 		if (key in list) {
 			val = list[key];
 		}

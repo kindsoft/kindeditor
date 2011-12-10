@@ -149,7 +149,7 @@ test("html",function(){
 	equals(node.html(), 'xxx');
 	equals(node.html('bbb').html(), 'bbb');
 	equals(K('<textarea></textarea>').html('abc').html(), 'abc');
-	equals(node.html('<p><hr></p>').html(), '<hr />');
+	equals(node.html('<p><br></p>').html(), '<p><br /></p>');
 	equals(node.html('<script></script>').html(), '<script></script>');
 	node.remove();
 });
