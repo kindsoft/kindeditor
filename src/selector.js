@@ -14,10 +14,15 @@ function _contains(nodeA, nodeB) {
 	return false;
 }
 
+var _getSetAttrDiv = document.createElement('div');
+_getSetAttrDiv.setAttribute('className', 't');
+var _GET_SET_ATTRIBUTE = _getSetAttrDiv.className !== 't';
+
 function _getAttr(el, key) {
 	key = key.toLowerCase();
 	var val = null;
-	if (_IE && _V < 8 && el.nodeName.toLowerCase() != 'script') {
+	// IE6,IE7,IE=EmulateIE7
+	if (!_GET_SET_ATTRIBUTE && el.nodeName.toLowerCase() != 'script') {
 		var div = el.ownerDocument.createElement('div');
 		div.appendChild(el.cloneNode(false));
 		var list = _getAttrList(_unescape(div.innerHTML));

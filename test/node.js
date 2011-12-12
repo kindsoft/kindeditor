@@ -36,6 +36,7 @@ test('attr/removeAttr', function() {
 	equals(K('#test-data-01').attr('class'), 'test-class');
 	equals(K('<div></div>').attr('class', 'aaa').attr('class'), 'aaa');
 	equals(K('<div></div>').removeAttr('class').attr('class'), '');
+	equals(K('<div style="color:red;"></div>').attr('style'), 'color:red;');
 });
 
 test("hasClass/addClass/removeClass", function() {
