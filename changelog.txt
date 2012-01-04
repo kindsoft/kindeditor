@@ -6,6 +6,8 @@
 ver 4.0.5
 * Bugfix: 页面添加 content="IE=EmulateIE7" 后，修改颜色、行距之类的操作全部失效。
 * Bugfix: 后退（Ctrl+Z）时光标错乱。
+* Bugfix: 通过粘贴纯文本框粘贴时，所有空格都变成&nbsp;。
+* Bugfix: pasteType参数为1时，粘贴内容，多个空格变成一个空格。
 
 ver 4.0.4 (2011-12-11)
 * 新增: 阿拉伯语语言包。

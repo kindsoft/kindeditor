@@ -25,7 +25,7 @@ KindEditor.plugin('plainpaste', function(K) {
 					click : function(e) {
 						var html = textarea.val();
 						html = K.escape(html);
-						html = html.replace(/ /g, '&nbsp;');
+						html = html.replace(/ {2}/g, ' &nbsp;');
 						if (self.newlineTag == 'p') {
 							html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
 						} else {
