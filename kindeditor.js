@@ -1,11 +1,11 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2011 kindsoft.net
+* Copyright (C) 2006-2012 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.4 (2011-12-12)
+* @version 4.0.4 (2012-01-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.4 (2011-12-12)',
+var _VERSION = '4.0.4 (2012-01-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5086,7 +5086,7 @@ KEditor.prototype = {
 		if (edit.designMode && !self._firstAddBookmark) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
-			bookmark.html = html;
+			bookmark.html = _removeTempTag(body.innerHTML);
 			range.moveToBookmark(bookmark);
 		} else {
 			bookmark = {

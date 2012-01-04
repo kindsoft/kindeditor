@@ -809,7 +809,7 @@ KEditor.prototype = {
 		if (edit.designMode && !self._firstAddBookmark) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
-			bookmark.html = html;
+			bookmark.html = _removeTempTag(body.innerHTML);
 			range.moveToBookmark(bookmark);
 		} else {
 			bookmark = {
