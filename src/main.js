@@ -541,6 +541,7 @@ KEditor.prototype = {
 				return self.beforeSetHtml(html);
 			},
 			afterSetHtml : function() {
+				self.edit = edit = this;
 				self.afterSetHtml();
 			},
 			afterCreate : function() {
