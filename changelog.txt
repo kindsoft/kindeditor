@@ -9,6 +9,7 @@ ver 4.0.5
 * Bugfix: 通过粘贴纯文本框粘贴时，所有空格都变成&nbsp;。
 * Bugfix: pasteType参数为1时，粘贴内容，多个空格变成一个空格。
 * Bugfix: [FF] 上传图片后，总是出现正在加载的样式。
+* Bugfix: [WEBKIT] event.layerX and event.layerY are broken and deprecated in WebKit.
 
 ver 4.0.4 (2011-12-11)
 * 新增: 阿拉伯语语言包。
