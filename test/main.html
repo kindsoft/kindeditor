@@ -39,7 +39,6 @@
 		<script src="../lang/en.js"></script>
 		<script src="../plugins/emoticons/emoticons.js"></script>
 		<script src="../plugins/flash/flash.js"></script>
-		<script src="../plugins/image/image.js"></script>
 		<script src="../plugins/link/link.js"></script>
 		<script src="../plugins/media/media.js"></script>
 		<script src="../plugins/plainpaste/plainpaste.js"></script>
@@ -100,6 +99,7 @@
 			<input type="button" id="loadPlugin1" value="Load Plugin #1" />
 			<input type="submit" name="button" value="Submit" />
 			<input type="reset" name="button" value="Reset" />
+			<input type="text" id="url" value="" /> <input type="button" id="image" value="选择图片" />
 		</form>
 		<script>
 			KindEditor.DEBUG = true;
@@ -202,6 +202,25 @@
 				});
 				K('#remove2').click(function(e) {
 					editor2.remove();
+				});
+				
+				var editor3 = K.editor({
+					basePath : '../',
+					themesPath : '../themes/',
+					pluginsPath : '../plugins/',
+					langPath : '../lang/',
+					allowFileManager : true
+				});
+				K('#image').click(function() {
+					editor3.loadPlugin('image', function() {
+						editor3.plugin.imageDialog({
+							imageUrl : K('#url').val(),
+							clickFn : function(url, title, width, height, border, align) {
+								K('#url').val(url);
+								editor3.hideDialog();
+							}
+						});
+					});
 				});
 			});
 		</script>

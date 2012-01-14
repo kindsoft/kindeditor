@@ -24,6 +24,7 @@ var _VERSION = '4.0.4 (2012-01-14)',
 	_WEBKIT = _ua.indexOf('applewebkit') > -1,
 	_OPERA = _ua.indexOf('opera') > -1,
 	_MOBILE = _ua.indexOf('mobile') > -1,
+	_IOS = /ipad|iphone|ipod/.test(_ua),
 	_QUIRKS = document.compatMode != 'CSS1Compat',
 	_matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua),
 	_V = _matches ? _matches[1] : '0',
@@ -4630,7 +4631,7 @@ function KEditor(options) {
 	setOption('height', _undef(self.height, self.minHeight));
 	setOption('width', _addUnit(self.width));
 	setOption('height', _addUnit(self.height));
-	if (_MOBILE) {
+	if (_MOBILE && (!_IOS || _V < 534)) {
 		self.designMode = false;
 	}
 	var se = K(self.srcElement || '<textarea/>');
@@ -5300,9 +5301,6 @@ _plugin('core', function(K) {
 		}
 	}
 	self.clickToolbar('source', function() {
-		if (_MOBILE) {
-			return;
-		}
 		if (self.edit.designMode) {
 			self.toolbar.disableAll(true);
 			self.edit.design(false);

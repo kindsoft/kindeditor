@@ -328,7 +328,7 @@ function KEditor(options) {
 	setOption('height', _undef(self.height, self.minHeight));
 	setOption('width', _addUnit(self.width));
 	setOption('height', _addUnit(self.height));
-	if (_MOBILE) {
+	if (_MOBILE && (!_IOS || _V < 534)) {
 		self.designMode = false;
 	}
 	var se = K(self.srcElement || '<textarea/>');
@@ -1050,9 +1050,6 @@ _plugin('core', function(K) {
 	}
 	// source
 	self.clickToolbar('source', function() {
-		if (_MOBILE) {
-			return;
-		}
 		if (self.edit.designMode) {
 			self.toolbar.disableAll(true);
 			self.edit.design(false);
