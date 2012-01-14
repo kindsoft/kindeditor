@@ -18,7 +18,7 @@ function KDialog(options) {
 _extend(KDialog, KWidget, {
 	init : function(options) {
 		var self = this;
-		var shadowMode = options.shadowMode;
+		var shadowMode = _undef(options.shadowMode, true);
 		options.z = options.z || 811213;
 		options.shadowMode = false;
 		KDialog.parent.init.call(self, options);

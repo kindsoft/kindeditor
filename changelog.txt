@@ -12,6 +12,7 @@ ver 4.0.5
 * Bugfix: [WEBKIT] event.layerX and event.layerY are broken and deprecated in WebKit.
 * Bugfix: pasteType为1（纯文本粘贴模式）时，粘贴的内容会换行。
 * Bugfix: 在iOS5上无法使用编辑器。
+* Bugfix: 单独调用dialog时默认不显示阴影。
 
 ver 4.0.4 (2011-12-11)
 * 新增: 阿拉伯语语言包。
