@@ -1308,6 +1308,9 @@ _plugin('core', function(K) {
 				K('span.Apple-style-span', div).remove(true);
 				K('meta', div).remove();
 			}
+			//if (div.first().isBlock()) {
+			//	div.first().remove(true);
+			//}
 			var html = div[0].innerHTML;
 			div.remove();
 			if (html === '') {
@@ -1332,7 +1335,9 @@ _plugin('core', function(K) {
 				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/ {2}/g, ' &nbsp;');
 				if (self.newlineTag == 'p') {
-					html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
+					if (/\n/.test(html)) {
+						html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
+					}
 				} else {
 					html = html.replace(/\n/g, '<br />$&');
 				}
