@@ -254,7 +254,7 @@ KindEditor.plugin('image', function(K) {
 				imageAlign : img ? img.attr('align') : '',
 				clickFn : function(url, title, width, height, border, align) {
 					self.exec('insertimage', url, title, width, height, border, align);
-					// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
+					// Bugfix: [Firefox] 涓婁紶鍥剧墖鍚庯紝鎬绘槸鍑虹幇姝ｅ湪鍔犺浇鐨勬牱寮忥紝闇�瑕佸欢杩熸墽琛宧ideDialog
 					setTimeout(function() {
 						self.hideDialog().focus();
 					}, 0);
