@@ -4,6 +4,19 @@
 .. contents::
 	:depth: 2
 
+ver 4.0.5 (2012-01-15)
+-----------------------------------------------------------------
+* Bugfix: 页面添加 content="IE=EmulateIE7" 后，修改颜色、行距之类的操作全部失效。
+* Bugfix: 后退（Ctrl+Z）时光标错乱。
+* Bugfix: 通过粘贴纯文本框粘贴时，所有空格都变成&nbsp;。
+* Bugfix: pasteType参数为1时，粘贴内容，多个空格变成一个空格。
+* Bugfix: [FF] 上传图片后，总是出现正在加载的样式。
+* Bugfix: [WEBKIT] event.layerX and event.layerY are broken and deprecated in WebKit.
+* Bugfix: pasteType为1（纯文本粘贴模式）时，粘贴的内容会换行。
+* Bugfix: 在iOS5上无法使用编辑器。
+* Bugfix: 单独调用dialog时默认不显示阴影。
+* Bugfix: 初始化编辑器时，在afterChange回调函数里无法得到this.edit对象。
+
 ver 4.0.4 (2011-12-11)
 -----------------------------------------------------------------
 * 新增: 阿拉伯语语言包。
