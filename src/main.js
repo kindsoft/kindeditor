@@ -2,6 +2,9 @@
 var _plugins = {};
 
 function _plugin(name, fn) {
+	if (name === undefined) {
+		return _plugins;
+	}
 	if (!fn) {
 		return _plugins[name];
 	}
@@ -1006,6 +1009,7 @@ if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);
 }
 
+K.EditorClass = KEditor;
 K.editor = _editor;
 K.create = _create;
 K.plugin = _plugin;

@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-01-15)
+* @version 4.0.5 (2012-01-25)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-01-15)',
+var _VERSION = '4.0.5 (2012-01-25)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4340,6 +4340,9 @@ K.loadStyle = _loadStyle;
 K.ajax = _ajax;
 var _plugins = {};
 function _plugin(name, fn) {
+	if (name === undefined) {
+		return _plugins;
+	}
 	if (!fn) {
 		return _plugins[name];
 	}
@@ -5263,6 +5266,7 @@ function _create(expr, options) {
 if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);
 }
+K.EditorClass = KEditor;
 K.editor = _editor;
 K.create = _create;
 K.plugin = _plugin;

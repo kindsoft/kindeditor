@@ -14,7 +14,6 @@ K.range(mixed)
 
 * 参数:
 	* document|range mixed: document或原生range
-	* element root: DOM根元素，在root范围内选择DOM元素
 * 返回: KRange对象
 
 示例:
