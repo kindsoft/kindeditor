@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-01-25)
+* @version 4.0.5 (2012-02-07)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-01-25)',
+var _VERSION = '4.0.5 (2012-02-07)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4049,7 +4049,7 @@ _extend(KUploadButton, {
 		self.button = button;
 		self.iframe = K('iframe', div);
 		self.form = K('form', div);
-		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common').width());
+		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common', div).width());
 		self.options = options;
 	},
 	submit : function() {

@@ -12,6 +12,7 @@ KindEditor.plugin('image', function(K) {
 		allowImageUpload = K.undef(self.allowImageUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
+		imageTabIndex = K.undef(self.imageTabIndex, 1),
 		imgPath = self.pluginsPath + 'image/images/',
 		lang = self.lang(name + '.');
 
@@ -123,10 +124,7 @@ KindEditor.plugin('image', function(K) {
 		var tabs;
 		if (allowImageUpload) {
 			tabs = K.tabs({
-				src : K('.tabs', div),
-				afterSelect : function(i) {
-			
-				}
+				src : K('.tabs', div)
 			});
 			tabs.add({
 				title : lang.remoteImage,
@@ -136,7 +134,7 @@ KindEditor.plugin('image', function(K) {
 				title : lang.localImage,
 				panel : K('.tab2', div)
 			});
-			tabs.select(0);
+			tabs.select(imageTabIndex);
 		} else {
 			K('.tab1', div).show();
 		}
@@ -239,8 +237,10 @@ KindEditor.plugin('image', function(K) {
 				return false;
 			}
 		});
-		urlBox[0].focus();
-		urlBox[0].select();
+		if (imageTabIndex === 0) {
+			urlBox[0].focus();
+			urlBox[0].select();
+		}
 		return dialog;
 	};
 	self.plugin.image = {

@@ -33,7 +33,7 @@ _extend(KUploadButton, {
 		self.button = button;
 		self.iframe = K('iframe', div);
 		self.form = K('form', div);
-		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common').width());
+		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common', div).width());
 		self.options = options;
 	},
 	submit : function() {
