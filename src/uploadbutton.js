@@ -49,6 +49,8 @@ _extend(KUploadButton, {
 			} else {
 				str = doc.body.innerHTML;
 			}
+			// Bugfix: [IE] 上传图片后，进度条一直处于加载状态。
+			iframe[0].src = 'javascript:false';
 			try {
 				data = K.json(str);
 			} catch (e) {
@@ -71,6 +73,9 @@ _extend(KUploadButton, {
 		if (self.fileBox) {
 			self.fileBox.unbind();
 		}
+		// Bugfix: [IE] 上传图片后，进度条一直处于加载状态。
+		self.iframe[0].src = 'javascript:false';
+		self.iframe.remove();
 		self.div.remove();
 		self.button.show();
 		return self;

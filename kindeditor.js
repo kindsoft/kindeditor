@@ -4065,6 +4065,7 @@ _extend(KUploadButton, {
 			} else {
 				str = doc.body.innerHTML;
 			}
+			iframe[0].src = 'javascript:false';
 			try {
 				data = K.json(str);
 			} catch (e) {
@@ -4087,6 +4088,8 @@ _extend(KUploadButton, {
 		if (self.fileBox) {
 			self.fileBox.unbind();
 		}
+		self.iframe[0].src = 'javascript:false';
+		self.iframe.remove();
 		self.div.remove();
 		self.button.show();
 		return self;
@@ -4214,6 +4217,10 @@ _extend(KDialog, KWidget, {
 		self.footerDiv.unbind();
 		self.bodyDiv.unbind();
 		self.headerDiv.unbind();
+		K('iframe', self.div).each(function() {
+			this.src = 'javascript:false';
+			K(this).remove();
+		});
 		KDialog.parent.remove.call(self);
 		return self;
 	}
