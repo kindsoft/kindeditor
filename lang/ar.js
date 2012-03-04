@@ -87,6 +87,7 @@ KindEditor.lang({
 	tablecoldelete : 'حذف العمود',
 	tablerowdelete : 'حذف الصف',
 	noColor : 'إفتراضي',
+	pleaseSelectFile : 'Please select file.',
 	invalidImg : "الرجاء إدخال رابط صحيح.\nالملفات المسموح بها: jpg,gif,bmp,png",
 	invalidMedia : "الرجاء إدخال رابط صحيح.\nالملفات المسموح بها: swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb",
 	invalidWidth : "العرض يجب أن يكون رقم.",

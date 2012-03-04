@@ -76,6 +76,10 @@ KindEditor.plugin('image', function(K) {
 				click : function(e) {
 					// insert local image
 					if (tabs && tabs.selectedIndex === 1) {
+						if (uploadbutton.fileBox.val() == '') {
+							alert(self.lang('pleaseSelectFile'));
+							return;
+						}
 						dialog.showLoading(self.lang('uploadLoading'));
 						uploadbutton.submit();
 						localUrlBox.val('');

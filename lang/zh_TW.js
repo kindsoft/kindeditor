@@ -85,6 +85,7 @@ KindEditor.lang({
 	tablecoldelete : '删除列',
 	tablerowdelete : '删除欄',
 	noColor : '自動',
+	pleaseSelectFile : '請選擇文件。',
 	invalidImg : "請輸入有效的URL。\n只允許jpg,gif,bmp,png格式。",
 	invalidMedia : "請輸入有效的URL。\n只允許swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。",
 	invalidWidth : "寬度必須是數字。",

@@ -86,6 +86,7 @@ KindEditor.lang({
 	tablecoldelete : 'Delete column',
 	tablerowdelete : 'Delete row',
 	noColor : 'Default',
+	pleaseSelectFile : 'Please select file.',
 	invalidImg : "Please type valid URL.\nAllowed file extension: jpg,gif,bmp,png",
 	invalidMedia : "Please type valid URL.\nAllowed file extension: swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb",
 	invalidWidth : "The width must be number.",
