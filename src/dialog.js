@@ -117,6 +117,7 @@ _extend(KDialog, KWidget, {
 		self.iframeMask && self.iframeMask.remove();
 		self.closeIcon.unbind();
 		K('input', self.div).unbind();
+		K('button', self.div).unbind();
 		self.footerDiv.unbind();
 		self.bodyDiv.unbind();
 		self.headerDiv.unbind();
