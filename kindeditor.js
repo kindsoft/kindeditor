@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-02-07)
+* @version 4.0.5 (2012-03-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-02-07)',
+var _VERSION = '4.0.5 (2012-03-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4214,6 +4214,7 @@ _extend(KDialog, KWidget, {
 		self.iframeMask && self.iframeMask.remove();
 		self.closeIcon.unbind();
 		K('input', self.div).unbind();
+		K('button', self.div).unbind();
 		self.footerDiv.unbind();
 		self.bodyDiv.unbind();
 		self.headerDiv.unbind();
@@ -5299,7 +5300,9 @@ _plugin('core', function(K) {
 		if (hasForm) {
 			el.bind('submit', function(e) {
 				self.sync();
-				self.edit.textarea.remove();
+				K(window).bind('unload', function() {
+					self.edit.textarea.remove();
+				});
 			});
 			var resetBtn = K('[type="reset"]', el);
 			resetBtn.click(function() {
