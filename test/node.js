@@ -1,6 +1,6 @@
 module('node');
 
-test('K(html)',function(){
+test('K(html)', function(){
 	var node = K('<div class="abc" style="font-size:12px;"></div>abc<p></p>');
 	equals(node.name, 'div');
 	equals(node.length, 3);
@@ -10,7 +10,7 @@ test('K(html)',function(){
 	equals(K('@1 2 ').get().nodeValue, '1 2 ');
 });
 
-test('K(selector)',function(){
+test('K(selector)', function(){
 	var node = K('p > strong');
 	equals(node.name, 'strong');
 	equals(node.get(1).nodeName.toLowerCase(), 'strong');
@@ -18,11 +18,16 @@ test('K(selector)',function(){
 	equals(node.length, 3);
 });
 
-test('K(node)',function(){
+test('K(node)', function(){
 	var node = K(document.createTextNode('abc'), document.createElement('div'));
 	equals(node.name, '#text');
 	equals(node.get(1).nodeName.toLowerCase(), 'div');
 	equals(node.length, 2);
+});
+
+test('eq', function() {
+	var div = K('div');
+	ok(div.eq(0)[0] === div[0]);
 });
 
 test('attr/removeAttr', function() {

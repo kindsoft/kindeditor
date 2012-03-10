@@ -189,6 +189,12 @@ _extend(KNode, {
 		}
 		return this[i || 0];
 	},
+	eq : function(i) {
+		if (this.length < 1) {
+			return null;
+		}
+		return new KNode([this[i]]);
+	},
 	hasClass : function(cls) {
 		if (this.length < 1) {
 			return false;
