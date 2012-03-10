@@ -10,6 +10,13 @@
 KindEditor.plugin('quickformat', function(K) {
 	var self = this, name = 'quickformat',
 		blockMap = K.toMap('blockquote,center,div,h1,h2,h3,h4,h5,h6,p');
+	function getFirstChild(knode) {
+		var child = knode.first();
+		while (child && child.first()) {
+			child = child.first();
+		}
+		return child;
+	}
 	self.clickToolbar(name, function() {
 		self.focus();
 		var doc = self.edit.doc,
@@ -19,17 +26,20 @@ KindEditor.plugin('quickformat', function(K) {
 			bookmark = range.createBookmark(true);
 		while(child) {
 			next = child.next();
-			if (blockMap[child.name]) {
-				child.html(child.html().replace(/^(\s|&nbsp;|　)+/ig, ''));
-				child.css('text-indent', '2em');
-			} else {
-				subList.push(child);
-			}
-			if (!next || (blockMap[next.name] || blockMap[child.name] && !blockMap[next.name])) {
-				if (subList.length > 0) {
-					nodeList.push(subList);
+			var firstChild = getFirstChild(child);
+			if (!firstChild || firstChild.name != 'img') {
+				if (blockMap[child.name]) {
+					child.html(child.html().replace(/^(\s|&nbsp;|　)+/ig, ''));
+					child.css('text-indent', '2em');
+				} else {
+					subList.push(child);
 				}
-				subList = [];
+				if (!next || (blockMap[next.name] || blockMap[child.name] && !blockMap[next.name])) {
+					if (subList.length > 0) {
+						nodeList.push(subList);
+					}
+					subList = [];
+				}
 			}
 			child = next;
 		}
