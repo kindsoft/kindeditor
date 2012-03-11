@@ -14,6 +14,7 @@ ver 4.0.6
 * Bugfix: [IE] 上传图片后，进度条一直处于加载状态。
 * Bugfix: [IE] 上传文件失败后，进度条一直处于加载状态。
 * Bugfix: form添加onsubmit="return false;"，提交表单，编辑器转到代码模式就出错。
+* Bugfix: [FF] 按下全屏按钮，恢复到原来大小后没有滚动条。
 
 ver 4.0.5 (2012-01-15)
 * Bugfix: 页面添加 content="IE=EmulateIE7" 后，修改颜色、行距之类的操作全部失效。

@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-03-10)
+* @version 4.0.5 (2012-03-11)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-03-10)',
+var _VERSION = '4.0.5 (2012-03-11)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4793,13 +4793,16 @@ KEditor.prototype = {
 				'overflow' : 'hidden'
 			});
 			K(document.body.parentNode).css('overflow', 'hidden');
+			self._fullscreenExecuted = true;
 		} else {
-			if (self._scrollPos) {
+			if (self._fullscreenExecuted) {
 				K(document.body).css({
 					'height' : '',
 					'overflow' : ''
 				});
 				K(document.body.parentNode).css('overflow', '');
+			}
+			if (self._scrollPos) {
 				window.scrollTo(self._scrollPos.x, self._scrollPos.y);
 			}
 		}

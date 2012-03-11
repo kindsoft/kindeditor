@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>KindEditor Test</title>
-		<link rel="stylesheet" href="http://kindeditor.googlecode.com/svn/branches/4.0/themes/default/default.css" />
-		<script src="http://kindeditor.googlecode.com/svn/branches/4.0/kindeditor.js"></script>
+		<script src="http://www.kindsoft.net/ke4/kindeditor-min.js"></script>
 		<script>
 			//document.domain = 'domain.com';
+			KindEditor.basePath = 'http://domain.com/kindeditor/trunk/';
 			KindEditor.ready(function(K) {
 				K.create('#editor1');
 			});

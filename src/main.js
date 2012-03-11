@@ -485,14 +485,17 @@ KEditor.prototype = {
 				'overflow' : 'hidden'
 			});
 			K(document.body.parentNode).css('overflow', 'hidden');
+			self._fullscreenExecuted = true;
 		} else {
-			// 恢复文档高度
-			if (self._scrollPos) {
+			if (self._fullscreenExecuted) {
+				// 恢复文档高度
 				K(document.body).css({
 					'height' : '',
 					'overflow' : ''
 				});
 				K(document.body.parentNode).css('overflow', '');
+			}
+			if (self._scrollPos) {
 				window.scrollTo(self._scrollPos.x, self._scrollPos.y);
 			}
 		}
