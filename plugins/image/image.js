@@ -12,16 +12,17 @@ KindEditor.plugin('image', function(K) {
 		allowImageUpload = K.undef(self.allowImageUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
-		imageTabIndex = K.undef(self.imageTabIndex, 1),
+		imageTabIndex = K.undef(self.imageTabIndex, 0),
 		imgPath = self.pluginsPath + 'image/images/',
 		lang = self.lang(name + '.');
 
 	self.plugin.imageDialog = function(options) {
-		var imageUrl = K.undef(options.imageUrl, 'http://'),
+		var imageUrl = options.imageUrl,
 			imageWidth = K.undef(options.imageWidth, ''),
 			imageHeight = K.undef(options.imageHeight, ''),
 			imageTitle = K.undef(options.imageTitle, ''),
 			imageAlign = K.undef(options.imageAlign, ''),
+			tabIndex = options.tabIndex,
 			clickFn = options.clickFn;
 		var html = [
 			'<div style="padding:10px 20px;">',
@@ -138,7 +139,7 @@ KindEditor.plugin('image', function(K) {
 				title : lang.localImage,
 				panel : K('.tab2', div)
 			});
-			tabs.select(imageTabIndex);
+			tabs.select(tabIndex);
 		} else {
 			K('.tab1', div).show();
 		}
@@ -243,7 +244,7 @@ KindEditor.plugin('image', function(K) {
 				return false;
 			}
 		});
-		if (imageTabIndex === 0) {
+		if (tabIndex === 0) {
 			urlBox[0].focus();
 			urlBox[0].select();
 		}
@@ -258,6 +259,7 @@ KindEditor.plugin('image', function(K) {
 				imageHeight : img ? img.height() : '',
 				imageTitle : img ? img.attr('title') : '',
 				imageAlign : img ? img.attr('align') : '',
+				tabIndex: img ? 0 : imageTabIndex,
 				clickFn : function(url, title, width, height, border, align) {
 					self.exec('insertimage', url, title, width, height, border, align);
 					// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
