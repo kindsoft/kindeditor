@@ -213,14 +213,16 @@ KindEditor.plugin('image', function(K) {
 		}
 		refreshBtn.click(function(e) {
 			var tempImg = K('<img src="' + urlBox.val() + '" />', document).css({
-					position : 'absolute',
-					visibility : 'hidden',
-					top : 0,
-					left : '-1000px'
-				});
+				position : 'absolute',
+				visibility : 'hidden',
+				top : 0,
+				left : '-1000px'
+			});
+			tempImg.bind('load', function() {
+				setSize(tempImg.width(), tempImg.height());
+				tempImg.remove();
+			});
 			K(document.body).append(tempImg);
-			setSize(tempImg.width(), tempImg.height());
-			tempImg.remove();
 		});
 		widthBox.change(function(e) {
 			if (originalWidth > 0) {
