@@ -347,7 +347,12 @@ function _ready(fn) {
 		_bind(document, 'DOMContentLoaded', readyFunc);
 	} else if (document.attachEvent) {
 		_bind(document, 'readystatechange', ieReadyStateFunc);
-		if (document.documentElement.doScroll && window.frameElement === undefined) {
+		// 在跨域的frame里调用会报错
+		var toplevel = false;
+		try {
+			toplevel = window.frameElement == null;
+		} catch(e) {}
+		if (document.documentElement.doScroll && toplevel) {
 			ieReadyFunc();
 		}
 	}
