@@ -117,11 +117,11 @@ KindEditor.plugin('image', function(K) {
 				}
 			},
 			beforeRemove : function() {
-				viewServerBtn.remove();
-				widthBox.remove();
-				heightBox.remove();
-				refreshBtn.remove();
-				uploadbutton.remove();
+				viewServerBtn.unbind();
+				widthBox.unbind();
+				heightBox.unbind();
+				refreshBtn.unbind();
+				//uploadbutton.remove();
 			}
 		}),
 		div = dialog.div;
@@ -157,6 +157,7 @@ KindEditor.plugin('image', function(K) {
 			button : K('.ke-upload-button', div)[0],
 			fieldName : 'imgFile',
 			url : K.addParam(uploadJson, 'dir=image'),
+			width: 60,
 			afterUpload : function(data) {
 				dialog.hideLoading();
 				if (data.error === 0) {

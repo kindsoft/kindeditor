@@ -122,7 +122,7 @@ _extend(KDialog, KWidget, {
 		self.bodyDiv.unbind();
 		self.headerDiv.unbind();
 		K('iframe', self.div).each(function() {
-			this.src = 'javascript:false';
+			//this.src = 'javascript:false';
 			K(this).remove();
 		});
 		KDialog.parent.remove.call(self);

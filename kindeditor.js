@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-03-11)
+* @version 4.0.5 (2012-03-14)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-03-11)',
+var _VERSION = '4.0.5 (2012-03-14)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -568,7 +568,11 @@ function _ready(fn) {
 		_bind(document, 'DOMContentLoaded', readyFunc);
 	} else if (document.attachEvent) {
 		_bind(document, 'readystatechange', ieReadyStateFunc);
-		if (document.documentElement.doScroll && window.frameElement === undefined) {
+		var toplevel = false;
+		try {
+			toplevel = window.frameElement == null;
+		} catch(e) {}
+		if (document.documentElement.doScroll && toplevel) {
 			ieReadyFunc();
 		}
 	}
@@ -4027,6 +4031,7 @@ function KUploadButton(options) {
 	this.init(options);
 }
 _extend(KUploadButton, {
+	_canSubmit : true,
 	init : function(options) {
 		var self = this,
 			button = K(options.button),
@@ -4054,14 +4059,23 @@ _extend(KUploadButton, {
 		self.button = button;
 		self.iframe = K('iframe', div);
 		self.form = K('form', div);
-		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common', div).width());
+		var width = options.width || K('.ke-button-common', div).width();
+		self.fileBox = K('.ke-upload-file', div).width(width);
 		self.options = options;
 	},
 	submit : function() {
 		var self = this,
 			iframe = self.iframe;
+		if (!this._canSubmit) {
+			return self;
+		}
 		iframe.bind('load', function() {
 			iframe.unbind();
+			var tempForm = document.createElement('form');
+			self.fileBox.before(tempForm);
+			K(tempForm).append(self.fileBox);
+			tempForm.reset();
+			K(tempForm).remove(true);
 			var doc = K.iframeDoc(iframe),
 				pre = doc.getElementsByTagName('pre')[0],
 				str = '', data;
@@ -4076,16 +4090,13 @@ _extend(KUploadButton, {
 			} catch (e) {
 				self.options.afterError.call(self, '<!doctype html><html>' + doc.body.parentNode.innerHTML + '</html>');
 			}
+			this._canSubmit = true;
 			if (data) {
 				self.options.afterUpload.call(self, data);
 			}
 		});
+		this._canSubmit = false;
 		self.form[0].submit();
-		var tempForm = document.createElement('form');
-		self.fileBox.before(tempForm);
-		K(tempForm).append(self.fileBox);
-		tempForm.reset();
-		K(tempForm).remove(true);
 		return self;
 	},
 	remove : function() {
@@ -4093,7 +4104,6 @@ _extend(KUploadButton, {
 		if (self.fileBox) {
 			self.fileBox.unbind();
 		}
-		self.iframe[0].src = 'javascript:false';
 		self.iframe.remove();
 		self.div.remove();
 		self.button.show();
@@ -4224,7 +4234,6 @@ _extend(KDialog, KWidget, {
 		self.bodyDiv.unbind();
 		self.headerDiv.unbind();
 		K('iframe', self.div).each(function() {
-			this.src = 'javascript:false';
 			K(this).remove();
 		});
 		KDialog.parent.remove.call(self);

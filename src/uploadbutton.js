@@ -3,6 +3,7 @@ function KUploadButton(options) {
 	this.init(options);
 }
 _extend(KUploadButton, {
+	_canSubmit : true,
 	init : function(options) {
 		var self = this,
 			button = K(options.button),
@@ -33,14 +34,25 @@ _extend(KUploadButton, {
 		self.button = button;
 		self.iframe = K('iframe', div);
 		self.form = K('form', div);
-		self.fileBox = K('.ke-upload-file', div).width(K('.ke-button-common', div).width());
+		var width = options.width || K('.ke-button-common', div).width();
+		self.fileBox = K('.ke-upload-file', div).width(width);
 		self.options = options;
 	},
 	submit : function() {
 		var self = this,
 			iframe = self.iframe;
+		if (!this._canSubmit) {
+			return self;
+		}
 		iframe.bind('load', function() {
 			iframe.unbind();
+			// 清空file
+			var tempForm = document.createElement('form');
+			self.fileBox.before(tempForm);
+			K(tempForm).append(self.fileBox);
+			tempForm.reset();
+			K(tempForm).remove(true);
+
 			var doc = K.iframeDoc(iframe),
 				pre = doc.getElementsByTagName('pre')[0],
 				str = '', data;
@@ -56,16 +68,13 @@ _extend(KUploadButton, {
 			} catch (e) {
 				self.options.afterError.call(self, '<!doctype html><html>' + doc.body.parentNode.innerHTML + '</html>');
 			}
+			this._canSubmit = true;
 			if (data) {
 				self.options.afterUpload.call(self, data);
 			}
 		});
+		this._canSubmit = false;
 		self.form[0].submit();
-		var tempForm = document.createElement('form');
-		self.fileBox.before(tempForm);
-		K(tempForm).append(self.fileBox);
-		tempForm.reset();
-		K(tempForm).remove(true);
 		return self;
 	},
 	remove : function() {
@@ -74,7 +83,7 @@ _extend(KUploadButton, {
 			self.fileBox.unbind();
 		}
 		// Bugfix: [IE] 上传图片后，进度条一直处于加载状态。
-		self.iframe[0].src = 'javascript:false';
+		//self.iframe[0].src = 'javascript:false';
 		self.iframe.remove();
 		self.div.remove();
 		self.button.show();
