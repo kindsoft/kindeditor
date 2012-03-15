@@ -12,7 +12,6 @@ KindEditor.plugin('image', function(K) {
 		allowImageUpload = K.undef(self.allowImageUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
-		imageTabIndex = K.undef(self.imageTabIndex, 0),
 		imgPath = self.pluginsPath + 'image/images/',
 		lang = self.lang(name + '.');
 
@@ -260,7 +259,7 @@ KindEditor.plugin('image', function(K) {
 				imageHeight : img ? img.height() : '',
 				imageTitle : img ? img.attr('title') : '',
 				imageAlign : img ? img.attr('align') : '',
-				tabIndex: img ? 0 : imageTabIndex,
+				tabIndex: img ? 0 : K.undef(self.imageTabIndex, 0),
 				clickFn : function(url, title, width, height, border, align) {
 					self.exec('insertimage', url, title, width, height, border, align);
 					// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
