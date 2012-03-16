@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-03-14)
+* @version 4.0.5 (2012-03-16)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-03-14)',
+var _VERSION = '4.0.5 (2012-03-16)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3067,7 +3067,7 @@ _extend(KCmd, {
 		this.remove(map);
 		return this.select();
 	},
-	inserthtml : function(val) {
+	inserthtml : function(val, quickMode) {
 		var self = this, range = self.range;
 		if (val === '') {
 			return self;
@@ -3101,7 +3101,7 @@ _extend(KCmd, {
 			range.collapse(false);
 			self.select(false);
 		}
-		if (_IE) {
+		if (_IE && quickMode) {
 			try {
 				pasteHtml(range, val);
 			} catch(e) {
@@ -5602,7 +5602,7 @@ _plugin('core', function(K) {
 					html = html.replace(/\n/g, '<br />$&');
 				}
 			}
-			self.insertHtml(html);
+			self.insertHtml(html, true);
 		}
 		K(doc.body).bind('paste', function(e){
 			if (self.pasteType === 0) {

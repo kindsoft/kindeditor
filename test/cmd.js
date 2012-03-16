@@ -546,3 +546,17 @@ test('cmd.inserthtml', function() {
 	equals(div.html().replace(/\n/, ''), '1<strong>abcd</strong>234');
 	div.remove();
 });
+
+test('cmd.insertimage', function() {
+	//1
+	var div = K('<div><p align="center">123</p><p align="center"><img style="margin-right:10px;" height="100" width="100" /></p><p align="center">123</p></div>');
+	K(document.body).append(div);
+	range = K.range(document);
+	var img = K('img', div);
+	range.selectNode(img[0]);
+	cmd = K.cmd(range);
+	var url = 'http://www.kindsoft.net/images/logo.png';
+	cmd.insertimage(url);
+	equals(K('img', div).attr('src'), url);
+	div.remove();
+});

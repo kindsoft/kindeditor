@@ -682,7 +682,7 @@ _extend(KCmd, {
 		this.remove(map);
 		return this.select();
 	},
-	inserthtml : function(val) {
+	inserthtml : function(val, quickMode) {
 		var self = this, range = self.range;
 		if (val === '') {
 			return self;
@@ -718,7 +718,7 @@ _extend(KCmd, {
 			range.collapse(false);
 			self.select(false);
 		}
-		if (_IE) {
+		if (_IE && quickMode) {
 			try {
 				pasteHtml(range, val);
 			} catch(e) {

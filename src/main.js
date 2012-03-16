@@ -1349,7 +1349,7 @@ _plugin('core', function(K) {
 					html = html.replace(/\n/g, '<br />$&');
 				}
 			}
-			self.insertHtml(html);
+			self.insertHtml(html, true);
 		}
 		K(doc.body).bind('paste', function(e){
 			if (self.pasteType === 0) {
