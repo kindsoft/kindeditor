@@ -4315,7 +4315,8 @@ function _loadScript(url, fn) {
 	};
 }
 function _chopQuery(url) {
-	return url.substr(0, url.indexOf('?'));
+	var index = url.indexOf('?');
+	return index > 0 ? url.substr(0, index) : url;
 }
 function _loadStyle(url) {
 	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),

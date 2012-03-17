@@ -9,9 +9,11 @@
 			KindEditor.ready(function(K) {
 				var colorpicker;
 				K('#colorpicker').bind('click', function(e) {
+					e.stopPropagation();
 					if (colorpicker) {
 						colorpicker.remove();
 						colorpicker = null;
+						return;
 					}
 					var colorpickerPos = K('#colorpicker').pos();
 					colorpicker = K.colorpicker({
@@ -26,6 +28,12 @@
 							colorpicker = null;
 						}
 					});
+				});
+				K(document).click(function() {
+					if (colorpicker) {
+						colorpicker.remove();
+						colorpicker = null;
+					}
 				});
 			});
 		</script>

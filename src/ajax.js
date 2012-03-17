@@ -18,7 +18,8 @@ function _loadScript(url, fn) {
 
 // 移除URL里的GET参数
 function _chopQuery(url) {
-	return url.substr(0, url.indexOf('?'));
+	var index = url.indexOf('?');
+	return index > 0 ? url.substr(0, index) : url;
 }
 
 function _loadStyle(url) {
