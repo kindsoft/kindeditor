@@ -48,7 +48,7 @@ KindEditor.plugin('image', function(K) {
 			'<label for="keWidth" style="width:60px;">' + lang.size + '</label>',
 			lang.width + ' <input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="" maxlength="4" /> ',
 			lang.height + ' <input type="text" class="ke-input-text ke-input-number" name="height" value="" maxlength="4" /> ',
-			'<img class="ke-refresh-btn" src="' + imgPath + 'refresh.gif" width="16" height="16" alt="" style="cursor:pointer;" />',
+			'<img class="ke-refresh-btn" src="' + imgPath + 'refresh.png" width="16" height="16" alt="" style="cursor:pointer;" title="' + lang.resetSize + '" />',
 			'</div>',
 			//align
 			'<div class="ke-dialog-row">',
