@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-03-16)
+* @version 4.0.5 (2012-03-17)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-03-16)',
+var _VERSION = '4.0.5 (2012-03-17)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4661,7 +4661,7 @@ function KEditor(options) {
 	}
 	var se = K(self.srcElement || '<textarea/>');
 	self.srcElement = se;
-	self.initContent = _elementVal(se);
+	self.initContent = '';
 	self.plugin = {};
 	self.isCreated = false;
 	self.isLoading = false;
@@ -4898,7 +4898,9 @@ KEditor.prototype = {
 					self.readonly();
 				}
 				self.isCreated = true;
-				self.initContent = self.html();
+				if (self.initContent === '') {
+					self.initContent = self.html();
+				}
 				self.afterCreate();
 				if (self.options.afterCreate) {
 					self.options.afterCreate.call(self);
@@ -5306,7 +5308,10 @@ _plugin('core', function(K) {
 			self.options.afterChange.call(self);
 		}
 	});
-	if (self.syncType == 'form') {
+	self.afterCreate(function() {
+		if (self.syncType != 'form') {
+			return;
+		}
 		var el = K(self.srcElement), hasForm = false;
 		while ((el = el.parent())) {
 			if (el.name == 'form') {
@@ -5331,7 +5336,7 @@ _plugin('core', function(K) {
 				resetBtn.unbind();
 			});
 		}
-	}
+	});
 	self.clickToolbar('source', function() {
 		if (self.edit.designMode) {
 			self.toolbar.disableAll(true);

@@ -18,6 +18,7 @@ ver 4.0.6
 * Bugfix: [FF] 按下全屏按钮，恢复到原来大小后没有滚动条。
 * Bugfix: 自动获取图片尺寸时，有时候得到的尺寸不准确。
 * Bugfix: [IE] 在跨域的frame里调用编辑器，会出现权限错误。
+* Bugfix: 全屏后form失去自动提交，reset功能也失效。
 
 ver 4.0.5 (2012-01-15)
 * Bugfix: 页面添加 content="IE=EmulateIE7" 后，修改颜色、行距之类的操作全部失效。

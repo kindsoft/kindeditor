@@ -336,7 +336,7 @@ function KEditor(options) {
 	}
 	var se = K(self.srcElement || '<textarea/>');
 	self.srcElement = se;
-	self.initContent = _elementVal(se);
+	self.initContent = '';
 	self.plugin = {};
 	self.isCreated = false;
 	self.isLoading = false;
@@ -587,7 +587,9 @@ KEditor.prototype = {
 					self.readonly();
 				}
 				self.isCreated = true;
-				self.initContent = self.html();
+				if (self.initContent === '') {
+					self.initContent = self.html();
+				}
 				self.afterCreate();
 				if (self.options.afterCreate) {
 					self.options.afterCreate.call(self);
@@ -1031,7 +1033,10 @@ _plugin('core', function(K) {
 		}
 	});
 	// sync
-	if (self.syncType == 'form') {
+	self.afterCreate(function() {
+		if (self.syncType != 'form') {
+			return;
+		}
 		var el = K(self.srcElement), hasForm = false;
 		while ((el = el.parent())) {
 			if (el.name == 'form') {
@@ -1057,7 +1062,7 @@ _plugin('core', function(K) {
 				resetBtn.unbind();
 			});
 		}
-	}
+	});
 	// source
 	self.clickToolbar('source', function() {
 		if (self.edit.designMode) {
