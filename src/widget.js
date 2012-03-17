@@ -73,7 +73,7 @@ function _drag(options) {
 		if (self.setCapture) {
 			self.setCapture();
 		}
-		// 拖动时不因该阻止冒泡
+		// 拖动时不应该阻止冒泡
 		//e.stop();
 	});
 }

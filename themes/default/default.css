@@ -653,7 +653,6 @@
 	border-bottom: 1px solid #CFCFCF;
 	height: 25px;
 	line-height: 25px;
-	overflow: hidden;
 	text-align: left;
 	font-size: 12px;
 	color: #222222;
@@ -661,15 +660,13 @@
 }
 .ke-dialog-icon-close {
 	display: block;
-	background-position: 0px -688px;
+	background: url(default.png) no-repeat scroll 0px -688px;
 	width: 16px;
 	height: 16px;
 	position: absolute;
 	right: 6px;
 	top: 6px;
 	cursor: pointer;
-	background-image: url(default.png);
-	overflow: hidden;
 }
 .ke-dialog-body {
 	font: 12px/1.5 "sans serif",tahoma,verdana,helvetica;
