@@ -16,13 +16,18 @@ function _loadScript(url, fn) {
 	};
 }
 
+// 移除URL里的GET参数
+function _chopQuery(url) {
+	return url.substr(0, url.indexOf('?'));
+}
+
 function _loadStyle(url) {
 	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
 		link = document.createElement('link'),
-		absoluteUrl = _formatUrl(url, 'absolute');
+		absoluteUrl = _chopQuery(_formatUrl(url, 'absolute'));
 	var links = K('link[rel="stylesheet"]', head);
 	for (var i = 0, len = links.length; i < len; i++) {
-		if (_formatUrl(links[i].href, 'absolute') === absoluteUrl) {
+		if (_chopQuery(_formatUrl(links[i].href, 'absolute')) === absoluteUrl) {
 			return;
 		}
 	}

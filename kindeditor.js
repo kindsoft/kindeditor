@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.5 (2012-03-17)
+* @version 4.0.5 (2012-03-18)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.5 (2012-03-17)',
+var _VERSION = '4.0.5 (2012-03-18)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4314,13 +4314,16 @@ function _loadScript(url, fn) {
 		}
 	};
 }
+function _chopQuery(url) {
+	return url.substr(0, url.indexOf('?'));
+}
 function _loadStyle(url) {
 	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
 		link = document.createElement('link'),
-		absoluteUrl = _formatUrl(url, 'absolute');
+		absoluteUrl = _chopQuery(_formatUrl(url, 'absolute'));
 	var links = K('link[rel="stylesheet"]', head);
 	for (var i = 0, len = links.length; i < len; i++) {
-		if (_formatUrl(links[i].href, 'absolute') === absoluteUrl) {
+		if (_chopQuery(_formatUrl(links[i].href, 'absolute')) === absoluteUrl) {
 			return;
 		}
 	}
