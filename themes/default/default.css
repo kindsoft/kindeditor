@@ -767,6 +767,7 @@
 	overflow: visible;
 	display: inline-block;
 	vertical-align: top;
+	cursor: pointer;
 }
 .ke-button-outer {
 	background-position: 0 -25px;
