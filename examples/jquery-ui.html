@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>With jQuery UI</title>
+		<style>
+			body {
+				font-size: 12px;
+			}
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+			#J_editorDialog {
+				display: none;
+			}
+		</style>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
+		<script charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			$(function() {
+				$('#J_openDialog').click(function() {
+					var editor;
+					$('#J_editorDialog').dialog({
+						title : 'KindEditor',
+						width : 700,
+						open : function(event, ui) {
+							// 打开Dialog后创建编辑器
+							editor = KindEditor.create('textarea[name="content"]', {
+								resizeType : 1
+							});
+						},
+						beforeClose : function(event, ui) {
+							// 关闭Dialog前移除编辑器
+							if (editor) {
+								editor.remove();
+							}
+						}
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h3>在jQuery UI Dialog里打开编辑器</h3>
+		<div id="J_editorDialog">
+			<textarea name="content" style="width:100%;height:200px;"></textarea>
+		</div>
+		<button type="button" id="J_openDialog">打开Dialog</button>
+	</body>
+</html>
