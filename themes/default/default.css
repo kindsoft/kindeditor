@@ -648,11 +648,14 @@
 .ke-dialog-header {
 	border:0;
 	margin:0;
-	background-color: #F0F0EE;
-	border-bottom: 1px solid #CCC;
-	padding: 8px 10px;
+	padding: 0 10px;
+	background: url(background.png) repeat scroll 0 0 #F0F0EE;
+	border-bottom: 1px solid #CFCFCF;
+	height: 25px;
+	line-height: 25px;
+	overflow: hidden;
 	text-align: left;
-	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
+	font-size: 12px;
 	color: #222222;
 	cursor: move;
 }
@@ -662,8 +665,8 @@
 	width: 16px;
 	height: 16px;
 	position: absolute;
-	right: 8px;
-	top: 8px;
+	right: 6px;
+	top: 6px;
 	cursor: pointer;
 	background-image: url(default.png);
 	overflow: hidden;
@@ -760,16 +763,16 @@
 	opacity:0.5;
 }
 .ke-button-common {
-	background: url(bg.gif) no-repeat scroll 0 0 transparent;
+	background: url(background.png) no-repeat scroll 0 -25px transparent;
 	cursor: pointer;
-	height: 25px;
-	line-height: 25px;
+	height: 23px;
+	line-height: 23px;
 	overflow: visible;
 	display: inline-block;
 	vertical-align: top;
 }
 .ke-button-outer {
-	background-position: 0 0;
+	background-position: 0 -25px;
 	padding: 0;
 	position: relative;
 	display: -moz-inline-stack;
@@ -779,7 +782,7 @@
 	*display: inline;
 }
 .ke-button {
-	background-position: right 0;
+	background-position: right -25px;
 	padding: 0 12px;
 	margin: 0;
 	font-family: "sans serif",tahoma,verdana,helvetica;
