@@ -652,10 +652,9 @@
 	background: url(background.png) repeat scroll 0 0 #F0F0EE;
 	border-bottom: 1px solid #CFCFCF;
 	height: 25px;
-	line-height: 25px;
+	font: 12px/25px "sans serif",tahoma,verdana,helvetica;
 	text-align: left;
-	font-size: 12px;
-	color: #222222;
+	color: #222;
 	cursor: move;
 }
 .ke-dialog-icon-close {
