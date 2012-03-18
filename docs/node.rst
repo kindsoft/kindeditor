@@ -249,6 +249,24 @@ get([i])
 	div1 = K('#id div').get(0);
 	div2 = K('#id div').get(1);
 
+.. index:: eq
+
+.. _KNode.eq:
+
+eq(i)
+--------------------------------------------------------
+将KNode对象转换成length为1的KNode对象。
+
+* 参数:
+	* int i: The index of the element in the KNode object.
+* 返回: KNode
+
+示例:
+
+.. sourcecode:: js
+
+	K('div').eq(2).addClass('blue');
+
 .. index:: hasClass
 
 .. _KNode.hasClass:

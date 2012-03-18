@@ -637,6 +637,21 @@ true时显示视音频上传按钮。
 * 数据类型: Boolean
 * 默认值: true
 
+.. index:: allowFileUpload
+
+.. _allowFileUpload:
+
+allowFileUpload
+--------------------------------------------------------
+true时显示文件上传按钮。
+
+* 数据类型: Boolean
+* 默认值: true
+
+.. note::
+
+	4.0.6版本开始支持。
+
 .. index:: allowFileManager
 
 .. _allowFileManager:
@@ -663,4 +678,17 @@ fontSizeTable
 
 	['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px']
 
+.. index:: imageTabIndex
 
+.. _imageTabIndex:
+
+imageTabIndex
+--------------------------------------------------------
+图片弹出层的默认显示标签索引。
+
+* 数据类型: Int
+* 默认值: 0
+
+.. note::
+
+	4.0.6版本开始支持。
