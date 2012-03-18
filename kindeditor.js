@@ -4031,7 +4031,6 @@ function KUploadButton(options) {
 	this.init(options);
 }
 _extend(KUploadButton, {
-	_canSubmit : true,
 	init : function(options) {
 		var self = this,
 			button = K(options.button),
@@ -4066,9 +4065,6 @@ _extend(KUploadButton, {
 	submit : function() {
 		var self = this,
 			iframe = self.iframe;
-		if (!this._canSubmit) {
-			return self;
-		}
 		iframe.bind('load', function() {
 			iframe.unbind();
 			var tempForm = document.createElement('form');
@@ -4090,12 +4086,10 @@ _extend(KUploadButton, {
 			} catch (e) {
 				self.options.afterError.call(self, '<!doctype html><html>' + doc.body.parentNode.innerHTML + '</html>');
 			}
-			this._canSubmit = true;
 			if (data) {
 				self.options.afterUpload.call(self, data);
 			}
 		});
-		this._canSubmit = false;
 		self.form[0].submit();
 		return self;
 	},
