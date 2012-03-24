@@ -16,7 +16,7 @@ function _loadScript(url, fn) {
 	};
 }
 
-// 移除URL里的GET参数
+// 绉婚櫎URL閲岀殑GET鍙傛暟
 function _chopQuery(url) {
 	var index = url.indexOf('?');
 	return index > 0 ? url.substr(0, index) : url;

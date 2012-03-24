@@ -67,7 +67,7 @@ KindEditor.plugin('table', function(K) {
 		//insert or modify table
 		prop : function(isInsert) {
 			var html = [
-				'<div style="padding:10px 20px;">',
+				'<div style="padding:20px;">',
 				//rows, cols
 				'<div class="ke-dialog-row">',
 				'<label for="keRows" style="width:90px;">' + lang.cells + '</label>',
@@ -120,7 +120,6 @@ KindEditor.plugin('table', function(K) {
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
-				height : 300,
 				title : self.lang(name),
 				body : html,
 				beforeRemove : function() {
@@ -338,7 +337,7 @@ KindEditor.plugin('table', function(K) {
 		//modify cell
 		cellprop : function() {
 			var html = [
-				'<div style="padding:10px 20px;">',
+				'<div style="padding:20px;">',
 				//width, height
 				'<div class="ke-dialog-row">',
 				'<label for="keWidth" style="width:90px;">' + lang.size + '</label>',
@@ -386,7 +385,6 @@ KindEditor.plugin('table', function(K) {
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
-				height : 220,
 				title : self.lang('tablecell'),
 				body : html,
 				beforeRemove : function() {

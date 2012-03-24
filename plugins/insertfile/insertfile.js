@@ -19,7 +19,7 @@ KindEditor.plugin('insertfile', function(K) {
 			fileTitle = K.undef(options.fileTitle, ''),
 			clickFn = options.clickFn;
 		var html = [
-			'<div style="padding:10px 20px;">',
+			'<div style="padding:20px;">',
 			'<div class="ke-dialog-row">',
 			'<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
 			'<input type="text" id="keUrl" name="url" class="ke-input-text" style="width:160px;" /> &nbsp;',
@@ -40,7 +40,6 @@ KindEditor.plugin('insertfile', function(K) {
 		var dialog = self.createDialog({
 			name : name,
 			width : 450,
-			height : 180,
 			title : self.lang(name),
 			body : html,
 			yesBtn : {

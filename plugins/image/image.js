@@ -25,7 +25,7 @@ KindEditor.plugin('image', function(K) {
 			tabIndex = K.undef(options.tabIndex, 0),
 			clickFn = options.clickFn;
 		var html = [
-			'<div style="padding:10px 20px;">',
+			'<div style="padding:20px;">',
 			//tabs
 			'<div class="tabs"></div>',
 			//url or file
@@ -64,7 +64,7 @@ KindEditor.plugin('image', function(K) {
 			'</div>',
 			'</div>'
 		].join('');
-		var dialogWidth = allowImageUpload ? 450 : 400;
+		var dialogWidth = allowImageUpload ? 450 : 400,
 			dialogHeight = allowImageUpload ? 300 : 250;
 		var dialog = self.createDialog({
 			name : name,
@@ -126,10 +126,22 @@ KindEditor.plugin('image', function(K) {
 		}),
 		div = dialog.div;
 
+		var urlBox = K('[name="url"]', div),
+			localUrlBox = K('[name="localUrl"]', div),
+			viewServerBtn = K('[name="viewServer"]', div),
+			widthBox = K('[name="width"]', div),
+			heightBox = K('[name="height"]', div),
+			refreshBtn = K('.ke-refresh-btn', div),
+			titleBox = K('[name="title"]', div),
+			alignBox = K('[name="align"]');
+
 		var tabs;
 		if (allowImageUpload) {
 			tabs = K.tabs({
-				src : K('.tabs', div)
+				src : K('.tabs', div),
+				afterSelect : function(i) {
+					refreshBtn[i == 0 ? 'show' : 'hide']('');
+				}
 			});
 			tabs.add({
 				title : lang.remoteImage,
@@ -143,15 +155,6 @@ KindEditor.plugin('image', function(K) {
 		} else {
 			K('.tab1', div).show();
 		}
-
-		var urlBox = K('[name="url"]', div),
-			localUrlBox = K('[name="localUrl"]', div),
-			viewServerBtn = K('[name="viewServer"]', div),
-			widthBox = K('[name="width"]', div),
-			heightBox = K('[name="height"]', div),
-			refreshBtn = K('.ke-refresh-btn', div),
-			titleBox = K('[name="title"]', div),
-			alignBox = K('[name="align"]');
 
 		var uploadbutton = K.uploadbutton({
 			button : K('.ke-upload-button', div)[0],

@@ -127,7 +127,7 @@ KindEditor.lang({
 	'image.remoteImage' : '远程图片',
 	'image.localImage' : '本地上传',
 	'image.remoteUrl' : '图片地址',
-	'image.localUrl' : '图片地址',
+	'image.localUrl' : '上传文件',
 	'image.size' : '图片大小',
 	'image.width' : '宽',
 	'image.height' : '高',

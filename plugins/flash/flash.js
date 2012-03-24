@@ -15,7 +15,7 @@ KindEditor.plugin('flash', function(K) {
 	self.plugin.flash = {
 		edit : function() {
 			var html = [
-				'<div style="padding:10px 20px;">',
+				'<div style="padding:20px;">',
 				//url
 				'<div class="ke-dialog-row">',
 				'<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
@@ -40,7 +40,6 @@ KindEditor.plugin('flash', function(K) {
 			var dialog = self.createDialog({
 				name : name,
 				width : 450,
-				height : 200,
 				title : self.lang(name),
 				body : html,
 				yesBtn : {

@@ -651,8 +651,8 @@
 	padding: 0 10px;
 	background: url(background.png) repeat scroll 0 0 #F0F0EE;
 	border-bottom: 1px solid #CFCFCF;
-	height: 25px;
-	font: 12px/25px "sans serif",tahoma,verdana,helvetica;
+	height: 24px;
+	font: 12px/24px "sans serif",tahoma,verdana,helvetica;
 	text-align: left;
 	color: #222;
 	cursor: move;
