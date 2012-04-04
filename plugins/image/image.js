@@ -75,6 +75,10 @@ KindEditor.plugin('image', function(K) {
 			yesBtn : {
 				name : self.lang('yes'),
 				click : function(e) {
+					// Bugfix: http://code.google.com/p/kindeditor/issues/detail?id=319
+					if (dialog.isLoading) {
+						return;
+					}
 					// insert local image
 					if (tabs && tabs.selectedIndex === 1) {
 						if (uploadbutton.fileBox.val() == '') {

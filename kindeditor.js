@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.0.6 (2012-04-04)
+* @version 4.0.6 (2012-04-05)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.0.6 (2012-04-04)',
+var _VERSION = '4.0.6 (2012-04-05)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4195,6 +4195,7 @@ _extend(KDialog, KWidget, {
 		self.footerDiv = footerDiv;
 		self.bodyDiv = bodyDiv;
 		self.headerDiv = headerDiv;
+		self.isLoading = false;
 	},
 	setMaskIndex : function(z) {
 		var self = this;
@@ -4207,11 +4208,13 @@ _extend(KDialog, KWidget, {
 			.width(body.width()).height(body.height())
 			.css('top', self.headerDiv.height() + 'px');
 		body.css('visibility', 'hidden').after(self.loading);
+		self.isLoading = true;
 		return self;
 	},
 	hideLoading : function() {
 		this.loading && this.loading.remove();
 		this.bodyDiv.css('visibility', 'visible');
+		this.isLoading = false;
 		return this;
 	},
 	remove : function() {

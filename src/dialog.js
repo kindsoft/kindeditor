@@ -89,6 +89,7 @@ _extend(KDialog, KWidget, {
 		self.footerDiv = footerDiv;
 		self.bodyDiv = bodyDiv;
 		self.headerDiv = headerDiv;
+		self.isLoading = false;
 	},
 	setMaskIndex : function(z) {
 		var self = this;
@@ -101,11 +102,13 @@ _extend(KDialog, KWidget, {
 			.width(body.width()).height(body.height())
 			.css('top', self.headerDiv.height() + 'px');
 		body.css('visibility', 'hidden').after(self.loading);
+		self.isLoading = true;
 		return self;
 	},
 	hideLoading : function() {
 		this.loading && this.loading.remove();
 		this.bodyDiv.css('visibility', 'visible');
+		this.isLoading = false;
 		return this;
 	},
 	remove : function() {
