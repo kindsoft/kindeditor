@@ -671,6 +671,7 @@
 	font: 12px/1.5 "sans serif",tahoma,verdana,helvetica;
 	text-align: left;
 	overflow: hidden;
+	width: 100%;
 }
 .ke-dialog-body textarea {
 	display: block;
@@ -745,6 +746,7 @@
 	text-align: right;
 	padding:0 0 5px 0;
 	background-color: #FFF;
+	width: 100%;
 }
 .ke-dialog-preview,
 .ke-dialog-yes {
