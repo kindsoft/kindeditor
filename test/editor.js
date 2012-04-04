@@ -16,6 +16,8 @@ KindEditor.ready(function (K) {
 		equals(editor.html(), '');
 		editor.html('<div class="aaa bbb ccc">abc</div>');
 		equals(editor.html(), '<div class="aaa bbb ccc">abc</div>');
+		editor.html('<p>　abc</p>');
+		equals(editor.html(), '<p>　abc</p>');
 	});
 
 	test("editor.text", function() {
