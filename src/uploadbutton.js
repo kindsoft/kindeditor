@@ -10,29 +10,30 @@ _extend(KUploadButton, {
 			url = options.url || '',
 			title = button.val(),
 			cls = button[0].className || '',
-			target = 'kindeditor_upload_iframe_' + new Date().getTime();
+			target = options.target || 'kindeditor_upload_iframe_' + new Date().getTime();
 		options.afterError = options.afterError || function(str) {
 			alert(str);
 		};
 
 		var html = [
 			'<div class="ke-inline-block ' + cls + '">',
-			'<iframe name="' + target + '" style="display:none;"></iframe>',
-			'<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + url + '">',
+			(options.target ? '' : '<iframe name="' + target + '" style="display:none;"></iframe>'),
+			(options.form ? '<div class="ke-upload-area">' : '<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + url + '">'),
 			'<span class="ke-button-common">',
 			'<input type="button" class="ke-button-common ke-button" value="' + title + '" />',
 			'</span>',
 			'<input type="file" class="ke-upload-file" name="' + fieldName + '" tabindex="-1" />',
-			'</form></div>'].join('');
+			(options.form ? '</div>' : '</form>'),
+			'</div>'].join('');
 
 		var div = K(html, button.doc);
 		button.hide();
 		button.before(div);
-		
+
 		self.div = div;
 		self.button = button;
-		self.iframe = K('iframe', div);
-		self.form = K('form', div);
+		self.iframe = options.target ? K('iframe[name="' + target + '"]') : K('iframe', div);
+		self.form = options.form ? K(options.form) : K('form', div);
 		var width = options.width || K('.ke-button-common', div).width();
 		self.fileBox = K('.ke-upload-file', div).width(width);
 		self.options = options;
