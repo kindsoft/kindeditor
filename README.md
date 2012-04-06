@@ -12,7 +12,7 @@ KindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG
 
 ## Examples
 
-	http://kindeditor.googlecode.com/svn/trunk/examples/multi-language.html
+http://www.kindsoft.net/ke4/examples/multi-language.html
 
 ## Getting started
 
