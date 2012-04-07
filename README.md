@@ -2,13 +2,13 @@
 KindEditor
 =================================================
 
-KindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG HTML editor written by JavaScript?, easy to integrate with all of server side language such as Java, .NET, PHP, ASP, Python, Perl and Ruby.
+KindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG HTML editor, easy to integrate with all of server side language such as Java, .NET, PHP, ASP, Python, Perl and Ruby.
 
 ## Features
 
 * Lightweight: Only 28KB after gziped.
-* Cross browser: IE6-IE9, Firefox, Chrome, Safari and Opera.
-* Customizable: Change themes and plugins, block defined elements.
+* Cross browser: Supports IE6-IE9, Firefox, Chrome, Safari and Opera.
+* Customizable: Easy to change themes and plugins.
 
 ## Examples
 
