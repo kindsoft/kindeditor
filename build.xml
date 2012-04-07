@@ -8,7 +8,7 @@
 	<property name="filename" value="kindeditor"/>
 	<property name="version" value="4.1"/>
 	<property name="charset" value="utf-8"/>
-	<property name="dist" value="dist/${filename}-4.1"/>
+	<property name="dist" value="dist/${filename}-${version}"/>
 
 	<target name="merge">
 		<tstamp>
@@ -112,18 +112,25 @@
 		<mkdir dir="dist"/>
 		<delete dir="${dist}"/>
 		<delete file="${dist}.zip"/>
-		<exec executable="svn">
-			<arg line="export . ${dist}"/>
-		</exec>
-		<copy file="${filename}-min.js" todir="${dist}"/>
-		<delete dir="${dist}/test"/>
-		<delete dir="${dist}/benchmark"/>
-		<delete dir="${dist}/lib"/>
-		<delete dir="${dist}/docs"/>
-		<delete dir="${dist}/src"/>
-		<delete file="${dist}/build.xml"/>
-		<delete file="${dist}/changelog.txt"/>
-		<zip destfile="${dist}.zip" basedir="${dist}"/>
+		<mkdir dir="${dist}"/>
+		<copy todir="${dist}">
+			<fileset dir=".">
+				<include name="asp.net/**"/>
+				<include name="asp/**"/>
+				<include name="attached"/>
+				<include name="examples/**"/>
+				<include name="jsp/**"/>
+				<include name="lang/**"/>
+				<include name="php/**"/>
+				<include name="plugins/**"/>
+				<include name="themes/**"/>
+				<include name="kindeditor*.js"/>
+				<include name="license.txt"/>
+			</fileset>
+		</copy>
+		<zip destfile="${dist}.zip">
+			<zipfileset dir="${dist}" prefix="${filename}-${version}"/>
+		</zip>
 	</target>
 
 </project>
