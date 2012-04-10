@@ -85,15 +85,32 @@ class KindEditorDriver {
 	// input editor content
 	public function input($val) {
 		$id = 'ke-edit-iframe';
-		// set iframe ID
 		$this->script("KindEditor('.ke-edit-iframe').eq(0).attr('id', '$id');");
 		$this->selector("#$id");
 		$this->session->frame(array('id' => $id));
 		$this->keys($val);
+		return $this;
+	}
+
+	// drag element
+	public function drag($x, $y) {
+		//$id = 'document-body';
+		//$this->script("KindEditor('body').attr('id', '$id');");
+
+		$this->mouseover();
+		$this->session->buttondown("");
+		$this->session->moveto(array(
+			//'element' => $id,
+			'xoffset' => $x,
+			'yoffset' => $y,
+		));
+		$this->session->buttonup("");
+		return $this;
 	}
 
 	public function close() {
 		$this->session->close();
+		return $this;
 	}
 
 }

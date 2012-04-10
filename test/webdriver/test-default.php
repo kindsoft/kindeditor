@@ -19,4 +19,4 @@ $driver->clickToolbar('removeformat');
 $driver->input('123');
 equals($driver->html(), '<strong>hello<span style="font-size:24px;">abc</span></strong>123');
 
-//$driver->close();
+$driver->close();
