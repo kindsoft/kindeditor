@@ -7,8 +7,9 @@ class KindEditorDriver {
 	public $webDriver;
 	public $session;
 	public $element;
+	public $baseUrl = 'http://localhost/github-kindsoft/kindeditor/';
 
-	public function __construct($url, $browser = 'internet explorer', $serverUrl = 'http://localhost:4444/wd/hub') {
+	public function __construct($url = '', $browser = 'internet explorer', $serverUrl = 'http://localhost:4444/wd/hub') {
 
 		$options = getopt('', array(
 			"browser:",
@@ -17,13 +18,18 @@ class KindEditorDriver {
 
 		$this->webDriver = new WebDriver($serverUrl);
 		$this->session = $this->webDriver->session($browser);
-		if (strpos($url, 'http://') !== 0) {
-			$url = 'http://localhost/github-kindsoft/kindeditor/' . $url;
+		if ($url !== '') {
+			if (strpos($url, 'http://') !== 0) {
+				$url = $this->baseUrl . $url;
+			}
+			$this->session->open($url);
 		}
-		$this->session->open($url);
 	}
 
 	public function open($url) {
+		if (strpos($url, 'http://') !== 0) {
+			$url = $this->baseUrl . $url;
+		}
 		$this->session->open($url);
 		return $this;
 	}

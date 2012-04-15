@@ -327,6 +327,13 @@ function KEditor(options) {
 			setOption(key, val);
 		}
 	});
+	var se = K(self.srcElement || '<textarea/>');
+	if (!self.width) {
+		self.width = se[0].style.width || se.width();
+	}
+	if (!self.height) {
+		self.height = se[0].style.height || se.height();
+	}
 	setOption('width', _undef(self.width, self.minWidth));
 	setOption('height', _undef(self.height, self.minHeight));
 	setOption('width', _addUnit(self.width));
@@ -334,7 +341,6 @@ function KEditor(options) {
 	if (_MOBILE && (!_IOS || _V < 534)) {
 		self.designMode = false;
 	}
-	var se = K(self.srcElement || '<textarea/>');
 	self.srcElement = se;
 	self.initContent = '';
 	self.plugin = {};
@@ -962,6 +968,8 @@ function _editor(options) {
 	return new KEditor(options);
 }
 
+_instances = [];
+
 /**
 	@example
 	K.create('textarea');
@@ -990,21 +998,22 @@ function _create(expr, options) {
 	if (!knode) {
 		return;
 	}
+	if (knode.length > 1) {
+		knode.each(function() {
+			_create(this, options);
+		});
+		return _instances[0];
+	}
 	options.srcElement = knode[0];
-	if (!options.width) {
-		options.width = knode[0].style.width || knode.width();
-	}
-	if (!options.height) {
-		options.height = knode[0].style.height || knode.height();
-	}
 	var editor = new KEditor(options);
+	_instances.push(editor);
 	// create editor
 	if (_language[editor.langType]) {
 		return create(editor);
 	}
 	// create editor after load lang file
 	_loadScript(editor.langPath + editor.langType + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
-		return create(editor);
+		create(editor);
 	});
 	return editor;
 }
@@ -1017,6 +1026,7 @@ if (_IE && _V < 7) {
 K.EditorClass = KEditor;
 K.editor = _editor;
 K.create = _create;
+K.instances = _instances;
 K.plugin = _plugin;
 K.lang = _lang;
 

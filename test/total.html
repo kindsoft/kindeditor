@@ -31,41 +31,22 @@
 		<script>
 			//document.domain = 'domain.com';
 			KindEditor.ready(function(K) {
-				window.editor = K.create('textarea[name=editor1]', {
-					allowFileManager : true
-				});
-				K('#create1').click(function(e) {
-					editor.create();
-				});
-				K('#remove1').click(function(e) {
-					editor.remove();
-				});
-			});
-			KindEditor.ready(function(K) {
-				var editor2 = K.create('textarea[name=editor2]', {
+				window.editor = K.create('textarea', {
+					allowFileManager : true,
 					langType : 'en'
 				});
+				K('#create1').click(function(e) {
+					K.instances[0].create();
+				});
+				K('#remove1').click(function(e) {
+					K.instances[0].remove();
+				});
 				K('#create2').click(function(e) {
-					editor2.create();
+					K.instances[1].create();
 				});
 				
 				K('#remove2').click(function(e) {
-					editor2.remove();
-				});
-			});
-			KindEditor.ready(function(K) {
-				var editor2 = K.create('textarea[name=editor3]', {
-					langType : 'en'
-				});
-			});
-			KindEditor.ready(function(K) {
-				var editor2 = K.create('textarea[name=editor4]', {
-					langType : 'en'
-				});
-			});
-			KindEditor.ready(function(K) {
-				var editor2 = K.create('textarea[name=editor5]', {
-					langType : 'en'
+					K.instances[1].remove();
 				});
 			});
 		</script>

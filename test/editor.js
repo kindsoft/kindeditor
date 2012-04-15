@@ -7,6 +7,10 @@ KindEditor.ready(function (K) {
 		wellFormatMode : false
 	});
 
+	test("K.instances", function() {
+		ok(editor == K.instances[0]);
+	});
+
 	test("editor.html", function() {
 		editor.html('<h3>abc</h3>');
 		equals(editor.html(), '<h3>abc</h3>');
