@@ -112,10 +112,15 @@ function KNode(node) {
 _extend(KNode, {
 	init : function(node) {
 		var self = this;
+		node = _isArray(node) ? node : [node];
+		var length = 0;
 		for (var i = 0, len = node.length; i < len; i++) {
-			self[i] = node[i].constructor === KNode ? node[i][0] : node[i];
+			if (node[i]) {
+				self[i] = node[i].constructor === KNode ? node[i][0] : node[i];
+				length++;
+			}
 		}
-		self.length = node.length;
+		self.length = length;
 		self.doc = _getDoc(self[0]);
 		self.name = _getNodeName(self[0]);
 		self.type = self.length > 0 ? self[0].nodeType : null;
@@ -193,7 +198,7 @@ _extend(KNode, {
 		if (this.length < 1) {
 			return null;
 		}
-		return new KNode([this[i]]);
+		return this[i] ? new KNode(this[i]) : null;
 	},
 	hasClass : function(cls) {
 		if (this.length < 1) {
@@ -343,7 +348,7 @@ _extend(KNode, {
 		if (this.length < 1) {
 			return new KNode([]);
 		}
-		return new KNode([this[0].cloneNode(bool)]);
+		return new KNode(this[0].cloneNode(bool));
 	},
 	append : function(expr) {
 		this.each(function() {
@@ -465,28 +470,28 @@ _extend(KNode, {
 			return null;
 		}
 		var node = this[0].parentNode;
-		return node ? new KNode([node]) : null;
+		return node ? new KNode(node) : null;
 	},
 	children : function() {
 		if (this.length < 1) {
-			return [];
+			return new KNode([]);
 		}
 		var list = [], child = this[0].firstChild;
 		while (child) {
 			if (child.nodeType != 3 || _trim(child.nodeValue) !== '') {
-				list.push(new KNode([child]));
+				list.push(child);
 			}
 			child = child.nextSibling;
 		}
-		return list;
+		return new KNode(list);
 	},
 	first : function() {
 		var list = this.children();
-		return list.length > 0 ? list[0] : null;
+		return list.length > 0 ? list.eq(0) : null;
 	},
 	last : function() {
 		var list = this.children();
-		return list.length > 0 ? list[list.length - 1] : null;
+		return list.length > 0 ? list.eq(list.length - 1) : null;
 	},
 	index : function() {
 		if (this.length < 1) {
@@ -504,14 +509,14 @@ _extend(KNode, {
 			return null;
 		}
 		var node = this[0].previousSibling;
-		return node ? new KNode([node]) : null;
+		return node ? new KNode(node) : null;
 	},
 	next : function() {
 		if (this.length < 1) {
 			return null;
 		}
 		var node = this[0].nextSibling;
-		return node ? new KNode([node]) : null;
+		return node ? new KNode(node) : null;
 	},
 	scan : function(fn, order) {
 		if (this.length < 1) {

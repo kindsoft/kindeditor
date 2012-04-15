@@ -25,6 +25,11 @@ test('K(node)', function(){
 	equals(node.length, 2);
 });
 
+test('get', function() {
+	var div = K('div');
+	ok(div.get(0) === div[0]);
+});
+
 test('eq', function() {
 	var div = K('div');
 	ok(div.eq(0)[0] === div[0]);
@@ -164,4 +169,11 @@ test("outer",function(){
 	var node = K('<div>xxx</div>');
 	equals(node.outer(), '<div>xxx</div>');
 	equals(node.addClass('aaa').outer(), '<div class="aaa">xxx</div>');
+});
+
+test("chidren",function(){
+	var node = K('<div><span>abc</span>123</div>');
+	equals(node.children().length, 2);
+	equals(node.children().name, 'span');
+	equals(K('<div></div>').children().length, 0);
 });

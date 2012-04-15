@@ -400,7 +400,7 @@ _extend(KRange, {
 		}
 		var children = knode.children();
 		if (children.length > 0) {
-			return this.setStartBefore(children[0][0]).setEndAfter(children[children.length - 1][0]);
+			return this.setStartBefore(children[0]).setEndAfter(children[children.length - 1]);
 		}
 		return this.setStart(node, 0).setEnd(node, 0);
 	},
@@ -610,10 +610,10 @@ _extend(KRange, {
 			}
 			var left, right, child, offset;
 			if (pos > 0) {
-				left = children[pos - 1];
+				left = children.eq(pos - 1);
 			}
 			if (pos < children.length) {
-				right = children[pos];
+				right = children.eq(pos);
 			}
 			if (left && left.type == 3) {
 				child = left[0];
