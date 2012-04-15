@@ -867,13 +867,13 @@ children()
 取得第一个node的子节点列表。
 
 * 参数: 无
-* 返回: array<KNode>
+* 返回: KNode
 
 示例:
 
 .. sourcecode:: js
 
-	var nodeArray = K('#id').children();
+	K('#id').children().css('color', 'red');
 
 .. index:: first
 

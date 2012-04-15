@@ -10,7 +10,7 @@
 
 K.create(expr [, options])
 --------------------------------------------------------
-创建编辑器，返回KEditor对象。
+创建编辑器，返回KEditor对象。4.1版本开始expr支持多个textarea，之前版本只在第一个textarea上创建。
 
 * 参数:
 	* mixed expr: element或选择器
