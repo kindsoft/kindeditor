@@ -2,10 +2,7 @@
 
 require_once dirname(__FILE__) . '/KindEditorDriver.php';
 
-$driver = new KindEditorDriver('http://www.kindsoft.net/ke4/examples/dialog.html');
-
-// open dialog
-$driver->selector('#create1')->click();
+$driver = new KindEditorDriver('test/dialog.html');
 
 // drag dialog
 $prevTop = intval($driver->script("return KindEditor('.ke-dialog').css('top')"));

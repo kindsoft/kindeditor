@@ -17,6 +17,9 @@ class KindEditorDriver {
 
 		$this->webDriver = new WebDriver($serverUrl);
 		$this->session = $this->webDriver->session($browser);
+		if (strpos($url, 'http://') !== 0) {
+			$url = 'http://localhost/github-kindsoft/kindeditor/' . $url;
+		}
 		$this->session->open($url);
 	}
 

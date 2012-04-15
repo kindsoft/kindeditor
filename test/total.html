@@ -31,14 +31,14 @@
 		<script>
 			//document.domain = 'domain.com';
 			KindEditor.ready(function(K) {
-				var editor1 = K.create('textarea[name=editor1]', {
+				window.editor = K.create('textarea[name=editor1]', {
 					allowFileManager : true
 				});
 				K('#create1').click(function(e) {
-					editor1.create();
+					editor.create();
 				});
 				K('#remove1').click(function(e) {
-					editor1.remove();
+					editor.remove();
 				});
 			});
 			KindEditor.ready(function(K) {
