@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1 (2012-04-16)
+* @version 4.1 (2012-04-17)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1 (2012-04-16)',
+var _VERSION = '4.1 (2012-04-17)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3459,9 +3459,14 @@ function _iframeDoc(iframe) {
 	iframe = _get(iframe);
 	return iframe.contentDocument || iframe.contentWindow.document;
 }
+var html, _direction = '';
+if ((html = document.getElementsByTagName('html'))) {
+	_direction = html[0].dir;
+}
 function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	var arr = [
-		'<html><head><meta charset="utf-8" /><title>KindEditor</title>',
+		(_direction === '' ? '<html>' : '<html dir="' + _direction + '">'),
+		'<head><meta charset="utf-8" /><title>KindEditor</title>',
 		'<style>',
 		'html {margin:0;padding:0;}',
 		'body {margin:0;padding:5px;}',

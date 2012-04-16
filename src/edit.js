@@ -4,9 +4,15 @@ function _iframeDoc(iframe) {
 	return iframe.contentDocument || iframe.contentWindow.document;
 }
 
+var html, _direction = '';
+if ((html = document.getElementsByTagName('html'))) {
+	_direction = html[0].dir;
+}
+
 function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	var arr = [
-		'<html><head><meta charset="utf-8" /><title>KindEditor</title>',
+		(_direction === '' ? '<html>' : '<html dir="' + _direction + '">'),
+		'<head><meta charset="utf-8" /><title>KindEditor</title>',
 		'<style>',
 		'html {margin:0;padding:0;}',
 		'body {margin:0;padding:5px;}',
