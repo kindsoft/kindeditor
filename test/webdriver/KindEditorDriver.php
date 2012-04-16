@@ -7,6 +7,7 @@ class KindEditorDriver {
 	public $webDriver;
 	public $session;
 	public $element;
+	public $timeout = 30;
 	public $baseUrl = 'http://localhost/github-kindsoft/kindeditor/';
 
 	public function __construct($url = '', $browser = 'internet explorer', $serverUrl = 'http://localhost:4444/wd/hub') {
@@ -35,18 +36,24 @@ class KindEditorDriver {
 	}
 
 	public function selector($selector, $index = 0) {
-		if ($index > 0) {
-			$elements = $this->session->elements('css selector', $selector);
-			$this->element = $elements[$index];
-		} else {
-			$this->element = $this->session->element('css selector', $selector);
+		$endTime = time() + $this->timeout;
+		while (true) {
+			try {
+				if ($index > 0) {
+					$elements = $this->session->elements('css selector', $selector);
+					$this->element = $elements[$index];
+				} else {
+					$this->element = $this->session->element('css selector', $selector);
+				}
+				return $this;
+			} catch (NoSuchElementWebDriverError $e) {
+			}
+			sleep(1);
+			if (time() > $endTime) {
+				break;
+			}
 		}
-		return $this;
-	}
-
-	public function xpath($xpath) {
-		$this->element = $this->session->element('xpath', $xpath);
-		return $this;
+		throw new TimeOutWebDriverError('The element could not be found', '');
 	}
 
 	public function value($val) {
