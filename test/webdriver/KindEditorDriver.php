@@ -57,12 +57,12 @@ class KindEditorDriver {
 	}
 
 	public function value($val) {
-		$this->element->value(array('value' => str_split($val)));
+		$this->element->value(array('value' => strSplitUnicode($val)));
 		return $this;
 	}
 
 	public function keys($val) {
-		$this->session->keys(array('value' => str_split($val)));
+		$this->session->keys(array('value' => strSplitUnicode($val)));
 		return $this;
 	}
 
@@ -129,6 +129,18 @@ class KindEditorDriver {
 		return $this;
 	}
 
+}
+
+function strSplitUnicode($str, $l = 1) {
+	if ($l > 0) {
+		$ret = array();
+		$len = mb_strlen($str, "UTF-8");
+		for ($i = 0; $i < $len; $i += $l) {
+			$ret[] = mb_substr($str, $i, $l, "UTF-8");
+		}
+		return $ret;
+	}
+	return preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
 }
 
 function equals($a, $b) {
