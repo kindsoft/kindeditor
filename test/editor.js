@@ -7,8 +7,14 @@ KindEditor.ready(function (K) {
 		wellFormatMode : false
 	});
 
+	var editor2 = K.create('#content2', {
+		basePath : '../',
+		wellFormatMode : false
+	});
+
 	test("K.instances", function() {
 		ok(editor == K.instances[0]);
+		ok(editor2 == K.instances[1]);
 	});
 
 	test("editor.html", function() {
@@ -22,6 +28,8 @@ KindEditor.ready(function (K) {
 		equals(editor.html(), '<div class="aaa bbb ccc">abc</div>');
 		editor.html('<p>　abc</p>');
 		equals(editor.html(), '<p>　abc</p>');
+		editor.html('<noscript><img src="" /></noscript>');
+		equals(editor.html(), '<noscript><img src="" /></noscript>');
 	});
 
 	test("editor.text", function() {

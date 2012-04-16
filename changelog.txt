@@ -13,6 +13,7 @@ ver 4.1
 * Bugfix: FF、Chrome、Opera等行首全角空格被过滤，只有IE没问题。
 * Bugfix: 图片正在上传时，连续点击确定按钮，会重复提交表单。
 * Bugfix: [WEBKIT] BR换行需要两次回车才能换行。
+* Bugfix: noscript里的HTML代码会被转移字符。
 
 ver 4.0.6 (2012-03-18)
 * 新增: imageTabIndex初始化参数，可设置插入图片弹出层的默认显示标签。

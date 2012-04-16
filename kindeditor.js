@@ -3475,6 +3475,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'p {margin:5px 0;}',
 		'table {border-collapse:collapse;}',
 		'img {border:0;}',
+		'noscript {display:none;}',
 		'table.ke-zeroborder td {border:1px dotted #AAA;}',
 		'img.ke-flash {',
 		'	border:1px solid #AAA;',
@@ -3505,7 +3506,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'	width:16px;',
 		'	height:16px;',
 		'}',
-		'.ke-script {',
+		'.ke-script, .ke-noscript {',
 		'	display:none;',
 		'	font-size:0;',
 		'	width:0;',
@@ -5669,7 +5670,10 @@ _plugin('core', function(K) {
 		});
 	});
 	self.beforeGetHtml(function(html) {
-		return html.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
+		return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {
+			return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;
+		})
+		.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
 			var imgAttrs = _getAttrList(full),
 				styles = _getCssList(imgAttrs.style || ''),
 				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
@@ -5683,6 +5687,9 @@ _plugin('core', function(K) {
 		})
 		.replace(/<div\s+[^>]*data-ke-script-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
 			return '<script' + unescape(attr) + '>' + unescape(code) + '</script>';
+		})
+		.replace(/<div\s+[^>]*data-ke-noscript-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
+			return '<noscript' + unescape(attr) + '>' + unescape(code) + '</noscript>';
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, '$1' + src + '$2');
@@ -5710,6 +5717,9 @@ _plugin('core', function(K) {
 		})
 		.replace(/<script([^>]*)>([\s\S]*?)<\/script>/ig, function(full, attr, code) {
 			return '<div class="ke-script" data-ke-script-attr="' + escape(attr) + '">' + escape(code) + '</div>';
+		})
+		.replace(/<noscript([^>]*)>([\s\S]*?)<\/noscript>/ig, function(full, attr, code) {
+			return '<div class="ke-noscript" data-ke-noscript-attr="' + escape(attr) + '">' + escape(code) + '</div>';
 		})
 		.replace(/(<[^>]*)(href|src)="([^"]*)"([^>]*>)/ig, function(full, start, key, src, end) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
