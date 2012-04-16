@@ -150,7 +150,7 @@ function _bindNewlineEvent() {
 	if (_GECKO && _V < 3 && newlineTag !== 'p') {
 		return;
 	}
-	if (_OPERA) {
+	if (_OPERA && _V < 9) {
 		return;
 	}
 	var brSkipTagMap = _toMap('h1,h2,h3,h4,h5,h6,pre,li'),
@@ -178,7 +178,7 @@ function _bindNewlineEvent() {
 		// br
 		if (newlineTag === 'br' && !brSkipTagMap[tagName]) {
 			e.preventDefault();
-			self.insertHtml('<br />');
+			self.insertHtml('<br />' + (_IE && _V < 9 ? '' : '\u200B'));
 			return;
 		}
 		// p
