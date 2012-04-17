@@ -11,9 +11,9 @@ KindEditor.plugin('insertfile', function(K) {
 	var self = this, name = 'insertfile',
 		allowFileUpload = K.undef(self.allowFileUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
+		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
 		lang = self.lang(name + '.');
-	
 	self.plugin.fileDialog = function(options) {
 		var fileUrl = K.undef(options.fileUrl, 'http://'),
 			fileTitle = K.undef(options.fileTitle, ''),
@@ -73,7 +73,10 @@ KindEditor.plugin('insertfile', function(K) {
 				afterUpload : function(data) {
 					dialog.hideLoading();
 					if (data.error === 0) {
-						var url = K.formatUrl(data.url, 'absolute');
+						var url = data.url;
+						if (formatUploadUrl) {
+							url = K.formatUrl(url, 'absolute');
+						}
 						urlBox.val(url);
 						if (self.afterUpload) {
 							self.afterUpload.call(self, url);

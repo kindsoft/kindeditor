@@ -11,6 +11,7 @@ KindEditor.plugin('image', function(K) {
 	var self = this, name = 'image',
 		allowImageUpload = K.undef(self.allowImageUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
+		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
 		imageTabIndex = K.undef(self.imageTabIndex, 0),
 		imgPath = self.pluginsPath + 'image/images/',
@@ -178,7 +179,10 @@ KindEditor.plugin('image', function(K) {
 			afterUpload : function(data) {
 				dialog.hideLoading();
 				if (data.error === 0) {
-					var url = K.formatUrl(data.url, 'absolute');
+					var url = data.url;
+					if (formatUploadUrl) {
+						url = K.formatUrl(url, 'absolute');
+					}
 					clickFn.call(self, url, '', '', '', 0, '');
 					if (self.afterUpload) {
 						self.afterUpload.call(self, url);

@@ -109,6 +109,7 @@
 					designMode : true,
 					allowFileManager : true,
 					fullscreenMode : false,
+					formatUploadUrl : false,
 					newlineTag : 'p',
 					pasteType : 2,
 					//afterTab : function() {
@@ -186,6 +187,7 @@
 				var editor2 = K.create(K('textarea[name=content2]').get(), {
 					basePath : '../',
 					langType : 'en',
+					formatUploadUrl : false,
 					afterTab : function() {
 						K('#uploadFile')[0].focus();
 					}

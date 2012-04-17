@@ -11,6 +11,7 @@ KindEditor.plugin('media', function(K) {
 	var self = this, name = 'media', lang = self.lang(name + '.'),
 		allowMediaUpload = K.undef(self.allowMediaUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
+		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php');
 	self.plugin.media = {
 		edit : function() {
@@ -97,7 +98,10 @@ KindEditor.plugin('media', function(K) {
 					afterUpload : function(data) {
 						dialog.hideLoading();
 						if (data.error === 0) {
-							var url = K.formatUrl(data.url, 'absolute');
+							var url = data.url;
+							if (formatUploadUrl) {
+								url = K.formatUrl(url, 'absolute');
+							}
 							urlBox.val(url);
 							if (self.afterUpload) {
 								self.afterUpload.call(self, url);

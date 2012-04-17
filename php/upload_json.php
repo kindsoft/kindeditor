@@ -12,8 +12,6 @@ require_once 'JSON.php';
 $php_path = dirname(__FILE__) . '/';
 $php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
-
-
 //文件保存目录路径
 $save_path = $php_path . '../attached/';
 //文件保存目录URL
@@ -26,9 +24,40 @@ $ext_arr = array(
 	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
 );
 //最大文件大小
-$max_size = 1000000;
+$max_size = 10000000;
 
 $save_path = realpath($save_path) . '/';
+
+//PHP上传失败
+if (!empty($_FILES['imgFile']['error'])) {
+	switch($_FILES['imgFile']['error']){
+		case '1':
+			$error = '超过php.ini允许的大小。';
+			break;
+		case '2':
+			$error = '超过表单允许的大小。';
+			break;
+		case '3':
+			$error = '图片只有部分被上传。';
+			break;
+		case '4':
+			$error = '请选择图片。';
+			break;
+		case '6':
+			$error = '找不到临时目录。';
+			break;
+		case '7':
+			$error = '写文件到硬盘出错。';
+			break;
+		case '8':
+			$error = 'File upload stopped by extension。';
+			break;
+		case '999':
+		default:
+			$error = '未知错误。';
+	}
+	alert($error);
+}
 
 //有上传文件时
 if (empty($_FILES) === false) {
@@ -52,7 +81,7 @@ if (empty($_FILES) === false) {
 	}
 	//检查是否已上传
 	if (@is_uploaded_file($tmp_name) === false) {
-		alert("临时文件可能不是上传文件。");
+		alert("上传失败。");
 	}
 	//检查文件大小
 	if ($file_size > $max_size) {
