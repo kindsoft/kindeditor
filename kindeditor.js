@@ -243,6 +243,7 @@ K.options = {
 	pasteType : 2,
 	dialogAlignType : 'page',
 	useContextmenu : true,
+	fullscreenShortcut : true,
 	bodyClass : 'ke-content',
 	indentChar : '\t',
 	cssPath : '',
@@ -5379,25 +5380,27 @@ _plugin('core', function(K) {
 	self.clickToolbar('fullscreen', function() {
 		self.fullscreen();
 	});
-	var loaded = false;
-	self.afterCreate(function() {
-		K(self.edit.doc, self.edit.textarea).keyup(function(e) {
-			if (e.which == 27) {
-				setTimeout(function() {
-					self.fullscreen();
-				}, 0);
+	if (self.fullscreenShortcut) {
+		var loaded = false;
+		self.afterCreate(function() {
+			K(self.edit.doc, self.edit.textarea).keyup(function(e) {
+				if (e.which == 27) {
+					setTimeout(function() {
+						self.fullscreen();
+					}, 0);
+				}
+			});
+			if (loaded) {
+				if (_IE && !self.designMode) {
+					return;
+				}
+				self.focus();
+			}
+			if (!loaded) {
+				loaded = true;
 			}
 		});
-		if (loaded) {
-			if (_IE && !self.designMode) {
-				return;
-			}
-			self.focus();
-		}
-		if (!loaded) {
-			loaded = true;
-		}
-	});
+	}
 	_each('undo,redo'.split(','), function(i, name) {
 		if (shortcutKeys[name]) {
 			self.afterCreate(function() {

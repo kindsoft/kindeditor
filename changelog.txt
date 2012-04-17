@@ -5,6 +5,7 @@
 #######################################################################
 ver 4.1
 * 新增: formatUploadUrl初始化参数，false时不会自动格式化上传后的URL。
+* 新增: fullscreenShortcut初始化参数，false时禁用ESC全屏快捷键。
 * 改善: uploadbutton新增form、target参数，上传图片时可提交其它控件。
 * 改善: K().children()直接返回KNode对象，原来是返回Array<KNode>。
 * 改善: K.create()支持多个textarea，新增KindEditor.instances。

@@ -1095,27 +1095,29 @@ _plugin('core', function(K) {
 	self.clickToolbar('fullscreen', function() {
 		self.fullscreen();
 	});
-	var loaded = false;
-	self.afterCreate(function() {
-		K(self.edit.doc, self.edit.textarea).keyup(function(e) {
-			if (e.which == 27) {
-				// bugfix: 在opera 11上无法全屏，必须用setTimeout
-				setTimeout(function() {
-					self.fullscreen();
-				}, 0);
+	if (self.fullscreenShortcut) {
+		var loaded = false;
+		self.afterCreate(function() {
+			K(self.edit.doc, self.edit.textarea).keyup(function(e) {
+				if (e.which == 27) {
+					// bugfix: 在opera 11上无法全屏，必须用setTimeout
+					setTimeout(function() {
+						self.fullscreen();
+					}, 0);
+				}
+			});
+			if (loaded) {
+				// bugfix: 在IE上在代码模式下切换全屏出现奇怪现象
+				if (_IE && !self.designMode) {
+					return;
+				}
+				self.focus();
+			}
+			if (!loaded) {
+				loaded = true;
 			}
 		});
-		if (loaded) {
-			// bugfix: 在IE上在代码模式下切换全屏出现奇怪现象
-			if (_IE && !self.designMode) {
-				return;
-			}
-			self.focus();
-		}
-		if (!loaded) {
-			loaded = true;
-		}
-	});
+	}
 	// undo, redo
 	_each('undo,redo'.split(','), function(i, name) {
 		if (shortcutKeys[name]) {
