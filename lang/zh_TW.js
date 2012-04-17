@@ -135,6 +135,7 @@ KindEditor.lang({
 	'image.leftAlign' : '向左對齊',
 	'image.rightAlign' : '向右對齊',
 	'image.imgTitle' : '影像說明',
+	'image.upload' : '瀏覽...',
 	'image.viewServer' : '瀏覽...',
 	'filemanager.emptyFolder' : '空文件夾',
 	'filemanager.moveup' : '至上一級文件夾',

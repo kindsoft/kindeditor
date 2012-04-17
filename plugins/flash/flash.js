@@ -114,7 +114,6 @@ KindEditor.plugin('flash', function(K) {
 				});
 			} else {
 				K('.ke-upload-button', div).hide();
-				urlBox.width(250);
 			}
 
 			if (allowFileManager) {

@@ -135,6 +135,7 @@ KindEditor.lang({
 	'image.leftAlign' : 'Left',
 	'image.rightAlign' : 'Right',
 	'image.imgTitle' : 'Title',
+	'image.upload' : 'Browse',
 	'image.viewServer' : 'Browse',
 	'filemanager.emptyFolder' : 'Blank',
 	'filemanager.moveup' : 'Parent folder',

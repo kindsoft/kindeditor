@@ -136,6 +136,7 @@ KindEditor.lang({
 	'image.leftAlign' : 'اليسار',
 	'image.rightAlign' : 'اليمين',
 	'image.imgTitle' : 'العنوان',
+	'image.upload' : 'أستعراض',
 	'image.viewServer' : 'أستعراض',
 	'filemanager.emptyFolder' : 'فارغ',
 	'filemanager.moveup' : 'المجلد الأب',
