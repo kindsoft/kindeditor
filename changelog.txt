@@ -15,7 +15,8 @@ ver 4.1
 * Bugfix: [IE9] 上传图片的弹出窗口，最下方的“确定”“取消”会错位，跑到跟“图片说明”文本框的后面。
 * Bugfix: FF、Chrome、Opera等行首全角空格被过滤，只有IE没问题。
 * Bugfix: 图片正在上传时，连续点击确定按钮，会重复提交表单。
-* Bugfix: [WEBKIT] BR换行需要两次回车才能换行。
+* Bugfix: [WEBKIT] 在BR换行模式下，需要两次回车才能换行。
+* Bugfix: [IE9] 在BR换行模式下，在编辑器中回车之后，光标仍然还在本行，不会移动到下一行。
 * Bugfix: noscript里的HTML代码会被转移字符。
 
 ver 4.0.6 (2012-03-18)
