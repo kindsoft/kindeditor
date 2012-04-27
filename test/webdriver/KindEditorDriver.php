@@ -20,10 +20,7 @@ class KindEditorDriver {
 		$this->webDriver = new WebDriver($serverUrl);
 		$this->session = $this->webDriver->session($browser);
 		if ($url !== '') {
-			if (strpos($url, 'http://') !== 0) {
-				$url = $this->baseUrl . $url;
-			}
-			$this->session->open($url);
+			$this->open($url);
 		}
 	}
 
