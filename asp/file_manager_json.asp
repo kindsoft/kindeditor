@@ -117,7 +117,7 @@ Next
 ReDim fileList(fileCount)
 i = 0
 For Each file in folder.Files
-	fileExt = mid(file.name, InStrRev(file.name, ".") + 1)
+	fileExt = lcase(mid(file.name, InStrRev(file.name, ".") + 1))
 	isDir = False
 	hasFile = False
 	filesize = file.size
