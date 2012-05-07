@@ -403,6 +403,11 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-icon-multiimage {
+	background-position: 0px -1232px;
+	width: 16px;
+	height: 16px;
+}
 /* container */
 .ke-container {
 	display: block;
@@ -850,7 +855,7 @@
 	font: 12px/1 "sans serif",tahoma,verdana,helvetica;
 	border-bottom:1px solid #A0A0A0;
 	padding-left:5px;
-	margin-bottom:10px;
+	margin-bottom:20px;
 }
 .ke-tabs-ul  {
 	list-style-image:none;
@@ -964,7 +969,7 @@
 	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
 	border-style: solid;
 	border-width: 1px;
-	width: 470px;
+	width: auto;
 	height: 370px;
 	padding: 5px;
 }
@@ -1028,4 +1033,46 @@
 }
 .ke-plugin-template .ke-right {
 	float: right;
+}
+/* swfupload */
+.ke-swfupload-top {
+	margin-bottom: 10px;
+}
+.ke-swfupload-button {
+	height: 23px;
+	line-height: 23px;
+}
+.ke-swfupload-desc {
+	margin-left: 10px;
+	height: 23px;
+	line-height: 23px;
+}
+.ke-swfupload-body {
+	overflow: scroll;
+	background-color:#FFFFFF;
+	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
+	border-style: solid;
+	border-width: 1px;
+	width: auto;
+	height: 370px;
+	padding: 5px;
+}
+.ke-swfupload-body .ke-item {
+	width: 100px;
+	margin: 5px;
+}
+.ke-swfupload-body .ke-photo {
+	border: 1px solid #DDDDDD;
+	background-color:#FFFFFF;
+	padding: 10px;
+}
+.ke-swfupload-body .ke-name {
+	width: 100px;
+	text-align: center;
+	overflow: hidden;
+	height:16px;
+}
+.ke-swfupload-body .ke-on {
+	border: 1px solid #5690D2;
+	background-color: #E9EFF6;
 }

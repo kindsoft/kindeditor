@@ -23,7 +23,7 @@ KindEditor.plugin('filemanager', function(K) {
 		}
 	}
 	self.plugin.filemanagerDialog = function(options) {
-		var width = K.undef(options.width, 520),
+		var width = K.undef(options.width, 650),
 			height = K.undef(options.height, 510),
 			dirName = K.undef(options.dirName, ''),
 			viewType = K.undef(options.viewType, 'VIEW').toUpperCase(), // "LIST" or "VIEW"

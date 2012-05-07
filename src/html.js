@@ -366,6 +366,29 @@ function _mediaImg(blankPath, attrs) {
 	return html;
 }
 
+// Simple JavaScript Templating
+// John Resig - http://ejohn.org/ - MIT Licensed
+// http://ejohn.org/blog/javascript-micro-templating/
+function _tmpl(str, data) {
+	// Figure out if we're getting a template, or if we need to
+	// load the template - and be sure to cache the result.
+	var fn = new Function("obj",
+		"var p=[],print=function(){p.push.apply(p,arguments);};" +
+		// Introduce the data as local variables using with(){}
+		"with(obj){p.push('" +
+		// Convert the template into pure JavaScript
+		str.replace(/[\r\t\n]/g, " ")
+			.split("<%").join("\t")
+			.replace(/((^|%>)[^\t]*)'/g, "$1\r")
+			.replace(/\t=(.*?)%>/g, "',$1,'")
+			.split("\t").join("');")
+			.split("%>").join("p.push('")
+			.split("\r").join("\\'")
+		+ "');}return p.join('');");
+	// Provide some basic currying to the user
+	return data ? fn(data) : fn;
+}
+
 K.formatUrl = _formatUrl;
 K.formatHtml = _formatHtml;
 K.getCssList = _getCssList;
@@ -375,3 +398,4 @@ K.mediaAttrs = _mediaAttrs;
 K.mediaEmbed = _mediaEmbed;
 K.mediaImg = _mediaImg;
 K.clearMsWord = _clearMsWord;
+K.tmpl = _tmpl;
