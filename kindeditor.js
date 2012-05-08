@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1 (2012-04-17)
+* @version 4.1 (2012-05-09)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1 (2012-04-17)',
+var _VERSION = '4.1 (2012-05-09)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -252,13 +252,14 @@ K.options = {
 	minHeight : 100,
 	minChangeSize : 5,
 	items : [
-		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'cut', 'copy', 'paste',
+		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
 		'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
-		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'map', 'code', 'pagebreak', 'anchor', 'link', 'unlink', '|', 'about'
+		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'map', 'pagebreak',
+		'anchor', 'link', 'unlink', '|', 'about'
 	],
 	noDisableItems : ['source', 'fullscreen'],
 	colorTable : [
@@ -926,6 +927,19 @@ function _mediaImg(blankPath, attrs) {
 	html += 'data-ke-tag="' + escape(srcTag) + '" alt="" />';
 	return html;
 }
+function _tmpl(str, data) {
+	var fn = new Function("obj",
+		"var p=[],print=function(){p.push.apply(p,arguments);};" +
+		"with(obj){p.push('" +
+		str.replace(/[\r\t\n]/g, " ")
+			.split("<%").join("\t")
+			.replace(/((^|%>)[^\t]*)'/g, "$1\r")
+			.replace(/\t=(.*?)%>/g, "',$1,'")
+			.split("\t").join("');")
+			.split("%>").join("p.push('")
+			.split("\r").join("\\'") + "');}return p.join('');");
+	return data ? fn(data) : fn;
+}
 K.formatUrl = _formatUrl;
 K.formatHtml = _formatHtml;
 K.getCssList = _getCssList;
@@ -935,6 +949,7 @@ K.mediaAttrs = _mediaAttrs;
 K.mediaEmbed = _mediaEmbed;
 K.mediaImg = _mediaImg;
 K.clearMsWord = _clearMsWord;
+K.tmpl = _tmpl;
 function _contains(nodeA, nodeB) {
 	if (nodeA.nodeType == 9 && nodeB.nodeType != 9) {
 		return true;

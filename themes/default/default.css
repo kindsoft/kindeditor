@@ -886,6 +886,27 @@
 	background-color: #FFF;
 	color: #000;
 }
+/* progressbar */
+.ke-progressbar {
+	position: relative;
+}
+.ke-progressbar-bar {
+	height: 15px;
+	width: 100px;
+	border: 1px solid #6FA5DB;
+}
+.ke-progressbar-bar-inner {
+	width: 0;
+	height: 15px;
+	background-color: #6FA5DB;
+	overflow: hidden;
+}
+.ke-progressbar-percent {
+	position: absolute;
+	top: 0;
+	left: 40%;
+}
+
 /* emoticons */
 .ke-plugin-emoticons {
 	position: relative;
@@ -1036,7 +1057,9 @@
 }
 /* swfupload */
 .ke-swfupload-top {
+	position: relative;
 	margin-bottom: 10px;
+	_width: 608px;
 }
 .ke-swfupload-button {
 	height: 23px;
@@ -1046,6 +1069,11 @@
 	margin-left: 10px;
 	height: 23px;
 	line-height: 23px;
+}
+.ke-swfupload-startupload {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 .ke-swfupload-body {
 	overflow: scroll;
@@ -1065,6 +1093,15 @@
 	border: 1px solid #DDDDDD;
 	background-color:#FFFFFF;
 	padding: 10px;
+}
+.ke-swfupload-body .ke-title  {
+	margin: 5px 0;
+}
+.ke-swfupload-body .ke-action, .ke-swfupload-body .ke-message  {
+	width: 100px;
+	text-align: center;
+	overflow: hidden;
+	height:17px;
 }
 .ke-swfupload-body .ke-name {
 	width: 100px;

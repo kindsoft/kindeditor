@@ -14,14 +14,14 @@ function KSWFUpload(options) {
 	this.init(options);
 }
 _extend(KSWFUpload, {
-	urlList : [],
-	divCache : {},
 	init : function(options) {
 		var self = this;
 		options.afterError = options.afterError || function(str) {
 			alert(str);
 		};
 		self.options = options;
+		self.progressbars = {};
+		// template
 		self.div = K(options.container).html([
 			'<div class="ke-swfupload">',
 			'<div class="ke-swfupload-top">',
@@ -29,6 +29,9 @@ _extend(KSWFUpload, {
 			'<input type="button" value="Browse" />',
 			'</div>',
 			'<div class="ke-inline-block ke-swfupload-desc">' + options.uploadDesc + '</div>',
+			'<span class="ke-button-common ke-button-outer ke-swfupload-startupload">',
+			'<input type="button" class="ke-button-common ke-button" value="' + options.startButtonValue + '" />',
+			'</span>',
 			'</div>',
 			'<div class="ke-swfupload-body"></div>',
 			'</div>'
@@ -73,60 +76,80 @@ _extend(KSWFUpload, {
 				}
 				alert(errorName);
 			},
-			file_dialog_complete_handler : function() {
-				this.startUpload();
+			upload_start_handler : function(file) {
+				var self = this;
+				var itemDiv = K('div[data-id="' + file.id + '"]', self.bodyDiv);
+				K('.ke-title', itemDiv).hide();
+				K('.ke-progressbar', itemDiv).show();
 			},
 			upload_progress_handler : function(file, bytesLoaded, bytesTotal) {
-				//var percentDiv = divHash[file.id][1];
-				//var width = Math.round(file.percentUploaded / 100 * 70);
-				//percentDiv.style.width = width + 'px';
+				var percent = Math.round(bytesLoaded * 100 / bytesTotal);
+				var progressbar = self.progressbars[file.id];
+				progressbar.bar.css('width', percent + 'px');
+				progressbar.percent.html(percent + '%');
 			},
 			upload_error_handler : function(file, errorCode, message) {
-				console.log(file);
-				//if (file) {
-					//var arr = getErrorDiv(file, '上传失败');
-				//}
+				if (file) {
+					var itemDiv = K('div[data-id="' + file.id + '"]', self.bodyDiv).eq(0);
+					K('.ke-title', itemDiv).hide();
+					K('.ke-message', itemDiv).css('color', 'red').show().html('上传失败');
+				}
 			},
 			upload_success_handler : function(file, serverData) {
-				console.log(file, serverData);
-				var data;
+				var itemDiv = K('div[data-id="' + file.id + '"]', self.bodyDiv).eq(0);
+				var data = {};
 				try {
 					data = K.json(serverData);
 				} catch (e) {
 					self.options.afterError.call(this, '<!doctype html><html>' + serverData + '</html>');
 				}
 				if (data.error !== 0) {
-					alert(data.message);
+					K('.ke-title', itemDiv).hide();
+					K('.ke-message', itemDiv).css('color', 'red')
+						.show().html(K.DEBUG ? K.escape(data.message) : '上传失败');
 					return;
 				}
 				file.url = data.url;
-				self.appendFile(file);
-				self.urlList.push(file.url);
+				K('.ke-img', itemDiv).attr('src', file.url).attr('data-status', file.filestatus);
+				K('.ke-title', itemDiv).hide();
+				K('.ke-action', itemDiv).show();
 			}
 		};
 		self.swfu = new SWFUpload(settings);
+
+		K('.ke-swfupload-startupload input', self.div).click(function() {
+			self.swfu.startUpload();
+		});
 	},
-	clearFiles : function() {
+	getUrlList : function() {
+		var list = [];
+		K('.ke-img', self.bodyDiv).each(function() {
+			var img = K(this);
+			var url = img.attr('src');
+			var status = img.attr('data-status');
+			if (status == SWFUpload.FILE_STATUS.COMPLETE) {
+				list.push(url);
+			}
+		});
+		return list;
+	},
+	removeFile : function(fileId) {
 		var self = this;
-		K('.ke-photo', self.bodyDiv).unbind();
-		self.divCache = {};
-		self.urlList = [];
-		self.bodyDiv.html('');
+		self.swfu.cancelUpload(fileId);
+		var itemDiv = K('div[data-id="' + fileId + '"]', self.bodyDiv);
+		K('.ke-photo', itemDiv).unbind();
+		itemDiv.remove();
+	},
+	removeFiles : function() {
+		var self = this;
+		K('.ke-item', self.bodyDiv).each(function() {
+			self.removeFile(K(this).attr('data-id'));
+		});
 	},
 	appendFile : function(file) {
 		var self = this;
-		console.log(file);
-		var div;
-		// replace DIV
-		if (self.divCache[file.id]) {
-			div = self.divCache[file.id];
-			div.attr('data-status', file.filestatus);
-			K('.ke-img', div).attr('src', file.url);
-			return;
-		}
-		// append DIV
-		div = self.divCache[file.id] = K('<div class="ke-inline-block ke-item"></div>');
-		self.bodyDiv.append(div);
+		var itemDiv = K('<div class="ke-inline-block ke-item" data-id="' + file.id + '"></div>');
+		self.bodyDiv.append(itemDiv);
 		var photoDiv = K('<div class="ke-inline-block ke-photo"></div>')
 			.mouseover(function(e) {
 				K(this).addClass('ke-on');
@@ -134,24 +157,26 @@ _extend(KSWFUpload, {
 			.mouseout(function(e) {
 				K(this).removeClass('ke-on');
 			});
-		div.append(photoDiv);
-		/*
-		SWFUpload.FILE_STATUS = {
-			QUEUED		 : -1,
-			IN_PROGRESS	 : -2,
-			ERROR		 : -3,
-			COMPLETE	 : -4,
-			CANCELLED	 : -5
-		};
-		*/
-		div.attr('data-status', file.filestatus);
-		var img = K('<img src="' + file.url + '" class="ke-img" width="80" height="80" alt="' + file.name + '" />');
+		itemDiv.append(photoDiv);
+
+		var img = K('<img src="' + file.url + '" class="ke-img" data-status="' + file.filestatus + '" width="80" height="80" alt="' + file.name + '" />');
 		photoDiv.append(img);
-		div.append('<div class="ke-name" title="' + file.name + '">' + file.name + '</div>');
+		var progressDiv = K('<div class="ke-title ke-progressbar" style="display:none;"><div class="ke-progressbar-bar"><div class="ke-progressbar-bar-inner"></div></div><div class="ke-progressbar-percent">0%</div></div>');
+		itemDiv.append(progressDiv);
+		var actionDiv = K('<div class="ke-title ke-action" style="display:none;"><a href="javascript:;" class="ke-insert-btn">插入</a> &nbsp; <a href="javascript:;" class="ke-remove-btn">删除</a></div>');
+		itemDiv.append(actionDiv);
+		var messageDiv = K('<div class="ke-title ke-message">等待上传</div>');
+		itemDiv.append(messageDiv);
+		itemDiv.append('<div class="ke-name">' + file.name + '</div>');
+
+		self.progressbars[file.id] = {
+			bar : K('.ke-progressbar-bar-inner', progressDiv),
+			percent : K('.ke-progressbar-percent', progressDiv)
+		};
 	},
 	remove : function() {
+		self.removeFiles();
 		self.swfu.destroy();
-		self.clearFiles();
 		self.div.html('');
 	}
 });
@@ -168,9 +193,9 @@ KindEditor.plugin('multiimage', function(K) {
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
 		imgPath = self.pluginsPath + 'multiimage/images/',
 		addImageButtonUrl = K.undef(self.addImageButtonUrl, imgPath + 'add-images.png'),
-		imageSizeLimit = K.undef(self.imageSizeLimit, '1MB'),
+		imageSizeLimit = K.undef(self.imageSizeLimit, '100MB'),
 		imageFileTypes = K.undef(self.imageFileTypes, '*.jpg;*.gif;*.png'),
-		imageUploadLimit = K.undef(self.imageUploadLimit, 2),
+		imageUploadLimit = K.undef(self.imageUploadLimit, 20),
 		lang = self.lang(name + '.');
 
 	self.plugin.multiImageDialog = function(options) {
@@ -191,13 +216,13 @@ KindEditor.plugin('multiimage', function(K) {
 			previewBtn : {
 				name : lang.insertAll,
 				click : function(e) {
-					clickFn.call(self, swfupload.urlList);
+					clickFn.call(self, swfupload.getUrlList());
 				}
 			},
 			yesBtn : {
 				name : lang.clearAll,
 				click : function(e) {
-					swfupload.clearFiles();
+					swfupload.removeFiles();
 				}
 			}
 		}),
@@ -247,6 +272,7 @@ KindEditor.plugin('multiimage', function(K) {
 		});
 	});
 });
+
 
 /**
  * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
@@ -1228,3 +1254,101 @@ SWFUpload.Console.writeLine = function (message) {
 		alert("Exception: " + ex.name + " Message: " + ex.message);
 	}
 };
+
+/*
+	Queue Plug-in
+
+	Features:
+		*Adds a cancelQueue() method for cancelling the entire queue.
+		*All queued files are uploaded when startUpload() is called.
+		*If false is returned from uploadComplete then the queue upload is stopped.
+		 If false is not returned (strict comparison) then the queue upload is continued.
+		*Adds a QueueComplete event that is fired when all the queued files have finished uploading.
+		 Set the event handler with the queue_complete_handler setting.
+
+	*/
+
+if (typeof(SWFUpload) === "function") {
+	SWFUpload.queue = {};
+
+	SWFUpload.prototype.initSettings = (function (oldInitSettings) {
+		return function () {
+			if (typeof(oldInitSettings) === "function") {
+				oldInitSettings.call(this);
+			}
+
+			this.queueSettings = {};
+
+			this.queueSettings.queue_cancelled_flag = false;
+			this.queueSettings.queue_upload_count = 0;
+
+			this.queueSettings.user_upload_complete_handler = this.settings.upload_complete_handler;
+			this.queueSettings.user_upload_start_handler = this.settings.upload_start_handler;
+			this.settings.upload_complete_handler = SWFUpload.queue.uploadCompleteHandler;
+			this.settings.upload_start_handler = SWFUpload.queue.uploadStartHandler;
+
+			this.settings.queue_complete_handler = this.settings.queue_complete_handler || null;
+		};
+	})(SWFUpload.prototype.initSettings);
+
+	SWFUpload.prototype.startUpload = function (fileID) {
+		this.queueSettings.queue_cancelled_flag = false;
+		this.callFlash("StartUpload", [fileID]);
+	};
+
+	SWFUpload.prototype.cancelQueue = function () {
+		this.queueSettings.queue_cancelled_flag = true;
+		this.stopUpload();
+
+		var stats = this.getStats();
+		while (stats.files_queued > 0) {
+			this.cancelUpload();
+			stats = this.getStats();
+		}
+	};
+
+	SWFUpload.queue.uploadStartHandler = function (file) {
+		var returnValue;
+		if (typeof(this.queueSettings.user_upload_start_handler) === "function") {
+			returnValue = this.queueSettings.user_upload_start_handler.call(this, file);
+		}
+
+		// To prevent upload a real "FALSE" value must be returned, otherwise default to a real "TRUE" value.
+		returnValue = (returnValue === false) ? false : true;
+
+		this.queueSettings.queue_cancelled_flag = !returnValue;
+
+		return returnValue;
+	};
+
+	SWFUpload.queue.uploadCompleteHandler = function (file) {
+		var user_upload_complete_handler = this.queueSettings.user_upload_complete_handler;
+		var continueUpload;
+
+		if (file.filestatus === SWFUpload.FILE_STATUS.COMPLETE) {
+			this.queueSettings.queue_upload_count++;
+		}
+
+		if (typeof(user_upload_complete_handler) === "function") {
+			continueUpload = (user_upload_complete_handler.call(this, file) === false) ? false : true;
+		} else if (file.filestatus === SWFUpload.FILE_STATUS.QUEUED) {
+			// If the file was stopped and re-queued don't restart the upload
+			continueUpload = false;
+		} else {
+			continueUpload = true;
+		}
+
+		if (continueUpload) {
+			var stats = this.getStats();
+			if (stats.files_queued > 0 && this.queueSettings.queue_cancelled_flag === false) {
+				this.startUpload();
+			} else if (this.queueSettings.queue_cancelled_flag === false) {
+				this.queueEvent("queue_complete_handler", [this.queueSettings.queue_upload_count]);
+				this.queueSettings.queue_upload_count = 0;
+			} else {
+				this.queueSettings.queue_cancelled_flag = false;
+				this.queueSettings.queue_upload_count = 0;
+			}
+		}
+	};
+}
