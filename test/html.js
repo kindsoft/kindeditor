@@ -36,6 +36,8 @@ test("formatUrl", function() {
 	equals(K.formatUrl(K.query("#test07").value, "domain", 'http://kindsoft.net', '/'), 'mailto:test@test.com');
 	equals(K.formatUrl(K.query("#test07").value), 'mailto:test@test.com');
 
+	equals(K.formatUrl('http://static.domain.com/img//123.png'), 'http://static.domain.com/img/123.png');
+
 });
 
 test("formatHtml", function() {

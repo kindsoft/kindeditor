@@ -48,6 +48,9 @@ function _formatCss(css) {
 
 function _formatUrl(url, mode, host, pathname) {
 	mode = _undef(mode, '').toLowerCase();
+	// 移除连续斜线，比如，http://localhost/upload/file/201205//maincus.swf
+	url = url.replace(/([^:])\/\//g, '$1/');
+
 	if (_inArray(mode, ['absolute', 'relative', 'domain']) < 0) {
 		return url;
 	}
