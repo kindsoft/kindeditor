@@ -13,7 +13,7 @@
 function KSWFUpload(options) {
 	this.init(options);
 }
-_extend(KSWFUpload, {
+K.extend(KSWFUpload, {
 	init : function(options) {
 		var self = this;
 		options.afterError = options.afterError || function(str) {
