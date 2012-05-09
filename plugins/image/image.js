@@ -282,7 +282,11 @@ KindEditor.plugin('image', function(K) {
 			});
 		},
 		'delete' : function() {
-			self.plugin.getSelectedImage().remove();
+			var target = self.plugin.getSelectedImage();
+			if (target.parent().name == 'a') {
+				target = target.parent();
+			}
+			target.remove();
 		}
 	};
 	self.clickToolbar(name, self.plugin.image.edit);
