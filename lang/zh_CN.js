@@ -149,6 +149,8 @@ KindEditor.lang({
 	'multiimage.zeroByteFile' : '无法上传空文件。',
 	'multiimage.invalidFiletype' : '文件类型不正确。',
 	'multiimage.unknownError' : '发生异常，无法上传。',
+	'multiimage.pending' : '等待上传',
+	'multiimage.uploadError' : '上传失败',
 	'filemanager.emptyFolder' : '空文件夹',
 	'filemanager.moveup' : '移到上一级文件夹',
 	'filemanager.viewType' : '显示方式：',

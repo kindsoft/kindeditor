@@ -37,6 +37,12 @@ K.extend(KSWFUpload, {
 			'</div>'
 		].join(''));
 		self.bodyDiv = K('.ke-swfupload-body', self.div);
+
+		function showError(itemDiv, msg) {
+			K('.ke-status > div', itemDiv).hide();
+			K('.ke-message', itemDiv).addClass('ke-error').show().html(K.escape(msg));
+		}
+
 		var settings = {
 			debug : false,
 			upload_url : options.uploadUrl,
@@ -44,8 +50,8 @@ K.extend(KSWFUpload, {
 			file_post_name : options.filePostName,
 			button_placeholder : K('.ke-swfupload-button > input', self.div)[0],
 			button_image_url: options.buttonImageUrl,
-			button_width: 72,
-			button_height: 23,
+			button_width: options.buttonWidth,
+			button_height: options.buttonHeight,
 			button_cursor : SWFUpload.CURSOR.HAND,
 			file_types : options.fileTypes,
 			file_types_description : options.fileTypesDesc,
@@ -74,25 +80,24 @@ K.extend(KSWFUpload, {
 						errorName = options.unknownError;
 						break;
 				}
-				alert(errorName);
+				K.DEBUG && alert(errorName);
 			},
 			upload_start_handler : function(file) {
 				var self = this;
 				var itemDiv = K('div[data-id="' + file.id + '"]', self.bodyDiv);
-				K('.ke-title', itemDiv).hide();
+				K('.ke-status > div', itemDiv).hide();
 				K('.ke-progressbar', itemDiv).show();
 			},
 			upload_progress_handler : function(file, bytesLoaded, bytesTotal) {
 				var percent = Math.round(bytesLoaded * 100 / bytesTotal);
 				var progressbar = self.progressbars[file.id];
-				progressbar.bar.css('width', percent + 'px');
+				progressbar.bar.css('width', Math.round(percent * 80 / 100) + 'px');
 				progressbar.percent.html(percent + '%');
 			},
 			upload_error_handler : function(file, errorCode, message) {
-				if (file) {
+				if (file && file.filestatus == SWFUpload.FILE_STATUS.ERROR) {
 					var itemDiv = K('div[data-id="' + file.id + '"]', self.bodyDiv).eq(0);
-					K('.ke-title', itemDiv).hide();
-					K('.ke-message', itemDiv).css('color', 'red').show().html('上传失败');
+					showError(itemDiv, self.options.errorMessage);
 				}
 			},
 			upload_success_handler : function(file, serverData) {
@@ -104,15 +109,12 @@ K.extend(KSWFUpload, {
 					self.options.afterError.call(this, '<!doctype html><html>' + serverData + '</html>');
 				}
 				if (data.error !== 0) {
-					K('.ke-title', itemDiv).hide();
-					K('.ke-message', itemDiv).css('color', 'red')
-						.show().html(K.DEBUG ? K.escape(data.message) : '上传失败');
+					showError(itemDiv, K.DEBUG ? data.message : self.options.errorMessage);
 					return;
 				}
 				file.url = data.url;
 				K('.ke-img', itemDiv).attr('src', file.url).attr('data-status', file.filestatus);
-				K('.ke-title', itemDiv).hide();
-				K('.ke-action', itemDiv).show();
+				K('.ke-status > div', itemDiv).hide();
 			}
 		};
 		self.swfu = new SWFUpload(settings);
@@ -138,6 +140,7 @@ K.extend(KSWFUpload, {
 		self.swfu.cancelUpload(fileId);
 		var itemDiv = K('div[data-id="' + fileId + '"]', self.bodyDiv);
 		K('.ke-photo', itemDiv).unbind();
+		K('.ke-delete', itemDiv).unbind();
 		itemDiv.remove();
 	},
 	removeFiles : function() {
@@ -161,23 +164,28 @@ K.extend(KSWFUpload, {
 
 		var img = K('<img src="' + file.url + '" class="ke-img" data-status="' + file.filestatus + '" width="80" height="80" alt="' + file.name + '" />');
 		photoDiv.append(img);
-		var progressDiv = K('<div class="ke-title ke-progressbar" style="display:none;"><div class="ke-progressbar-bar"><div class="ke-progressbar-bar-inner"></div></div><div class="ke-progressbar-percent">0%</div></div>');
-		itemDiv.append(progressDiv);
-		var actionDiv = K('<div class="ke-title ke-action" style="display:none;"><a href="javascript:;" class="ke-insert-btn">插入</a> &nbsp; <a href="javascript:;" class="ke-remove-btn">删除</a></div>');
-		itemDiv.append(actionDiv);
-		var messageDiv = K('<div class="ke-title ke-message">等待上传</div>');
-		itemDiv.append(messageDiv);
+		K('<span class="ke-delete"></span>').appendTo(photoDiv).click(function() {
+			self.removeFile(file.id);
+		});
+		var statusDiv = K('<div class="ke-status"></div>').appendTo(photoDiv);
+		// progressbar
+		K(['<div class="ke-progressbar">',
+			'<div class="ke-progressbar-bar"><div class="ke-progressbar-bar-inner"></div></div>',
+			'<div class="ke-progressbar-percent">0%</div></div>'].join('')).hide().appendTo(statusDiv);
+		// message
+		K('<div class="ke-message">' + self.options.pendingMessage + '</div>').appendTo(statusDiv);
+
 		itemDiv.append('<div class="ke-name">' + file.name + '</div>');
 
 		self.progressbars[file.id] = {
-			bar : K('.ke-progressbar-bar-inner', progressDiv),
-			percent : K('.ke-progressbar-percent', progressDiv)
+			bar : K('.ke-progressbar-bar-inner', photoDiv),
+			percent : K('.ke-progressbar-percent', photoDiv)
 		};
 	},
 	remove : function() {
-		self.removeFiles();
-		self.swfu.destroy();
-		self.div.html('');
+		this.removeFiles();
+		this.swfu.destroy();
+		this.div.html('');
 	}
 });
 
@@ -192,8 +200,7 @@ KindEditor.plugin('multiimage', function(K) {
 		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
 		imgPath = self.pluginsPath + 'multiimage/images/',
-		addImageButtonUrl = K.undef(self.addImageButtonUrl, imgPath + 'add-images.png'),
-		imageSizeLimit = K.undef(self.imageSizeLimit, '100MB'),
+		imageSizeLimit = K.undef(self.imageSizeLimit, '1MB'),
 		imageFileTypes = K.undef(self.imageFileTypes, '*.jpg;*.gif;*.png'),
 		imageUploadLimit = K.undef(self.imageUploadLimit, 20),
 		lang = self.lang(name + '.');
@@ -224,13 +231,18 @@ KindEditor.plugin('multiimage', function(K) {
 				click : function(e) {
 					swfupload.removeFiles();
 				}
+			},
+			beforeRemove : function() {
+				swfupload.remove();
 			}
 		}),
 		div = dialog.div;
 
 		var swfupload = K.swfupload({
 			container : K('.swfupload', div),
-			buttonImageUrl : addImageButtonUrl,
+			buttonImageUrl : imgPath + (self.langType == 'zh_CN' ? 'select-files-zh_CN.png' : 'select-files-en.png'),
+			buttonWidth : self.langType == 'zh_CN' ? 72 : 88,
+			buttonHeight : 23,
 			fileIconUrl : imgPath + 'image.png',
 			uploadDesc : uploadDesc,
 			startButtonValue : lang.startUpload,
@@ -246,6 +258,8 @@ KindEditor.plugin('multiimage', function(K) {
 			zeroByteFile : lang.zeroByteFile,
 			invalidFiletype : lang.invalidFiletype,
 			unknownError : lang.unknownError,
+			pendingMessage : lang.pending,
+			errorMessage : lang.uploadError,
 			afterError : function(html) {
 				self.errorDialog(html);
 			}

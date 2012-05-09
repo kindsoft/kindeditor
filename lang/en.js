@@ -147,6 +147,8 @@ KindEditor.lang({
 	'multiimage.zeroByteFile' : 'Zero byte file.',
 	'multiimage.invalidFiletype' : 'Invalid file type.',
 	'multiimage.unknownError' : 'Unknown upload error.',
+	'multiimage.pending' : 'Pending ...',
+	'multiimage.uploadError' : 'Upload error',
 	'filemanager.emptyFolder' : 'Blank',
 	'filemanager.moveup' : 'Parent folder',
 	'filemanager.viewType' : 'Display: ',

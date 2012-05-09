@@ -891,13 +891,14 @@
 	position: relative;
 }
 .ke-progressbar-bar {
-	height: 15px;
-	width: 100px;
 	border: 1px solid #6FA5DB;
+	width: 80px;
+	height: 5px;
+	margin: 10px 10px 0 10px;
 }
 .ke-progressbar-bar-inner {
 	width: 0;
-	height: 15px;
+	height: 5px;
 	background-color: #6FA5DB;
 	overflow: hidden;
 }
@@ -905,6 +906,83 @@
 	position: absolute;
 	top: 0;
 	left: 40%;
+	display: none;
+}
+/* swfupload */
+.ke-swfupload-top {
+	position: relative;
+	margin-bottom: 10px;
+	_width: 608px;
+}
+.ke-swfupload-button {
+	height: 23px;
+	line-height: 23px;
+}
+.ke-swfupload-desc {
+	padding: 0 10px;
+	height: 23px;
+	line-height: 23px;
+}
+.ke-swfupload-startupload {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.ke-swfupload-body {
+	overflow: scroll;
+	background-color:#FFFFFF;
+	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
+	border-style: solid;
+	border-width: 1px;
+	width: auto;
+	height: 370px;
+	padding: 5px;
+}
+.ke-swfupload-body .ke-item {
+	width: 100px;
+	margin: 5px;
+}
+.ke-swfupload-body .ke-photo {
+	position: relative;
+	border: 1px solid #DDDDDD;
+	background-color:#FFFFFF;
+	padding: 10px;
+}
+.ke-swfupload-body .ke-delete {
+	display: block;
+	background: url(default.png) no-repeat scroll 0px -688px;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	cursor: pointer;
+}
+.ke-swfupload-body .ke-status  {
+	position: absolute;
+	left: 0;
+	bottom: 5px;
+	width: 100px;
+	height: 17px;
+}
+.ke-swfupload-body .ke-message  {
+	width: 100px;
+	text-align: center;
+	overflow: hidden;
+	height:17px;
+}
+.ke-swfupload-body .ke-error  {
+	color: red;
+}
+.ke-swfupload-body .ke-name {
+	width: 100px;
+	text-align: center;
+	overflow: hidden;
+	height:16px;
+}
+.ke-swfupload-body .ke-on {
+	border: 1px solid #5690D2;
+	background-color: #E9EFF6;
 }
 
 /* emoticons */
@@ -1054,62 +1132,4 @@
 }
 .ke-plugin-template .ke-right {
 	float: right;
-}
-/* swfupload */
-.ke-swfupload-top {
-	position: relative;
-	margin-bottom: 10px;
-	_width: 608px;
-}
-.ke-swfupload-button {
-	height: 23px;
-	line-height: 23px;
-}
-.ke-swfupload-desc {
-	margin-left: 10px;
-	height: 23px;
-	line-height: 23px;
-}
-.ke-swfupload-startupload {
-	position: absolute;
-	top: 0;
-	right: 0;
-}
-.ke-swfupload-body {
-	overflow: scroll;
-	background-color:#FFFFFF;
-	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
-	border-style: solid;
-	border-width: 1px;
-	width: auto;
-	height: 370px;
-	padding: 5px;
-}
-.ke-swfupload-body .ke-item {
-	width: 100px;
-	margin: 5px;
-}
-.ke-swfupload-body .ke-photo {
-	border: 1px solid #DDDDDD;
-	background-color:#FFFFFF;
-	padding: 10px;
-}
-.ke-swfupload-body .ke-title  {
-	margin: 5px 0;
-}
-.ke-swfupload-body .ke-action, .ke-swfupload-body .ke-message  {
-	width: 100px;
-	text-align: center;
-	overflow: hidden;
-	height:17px;
-}
-.ke-swfupload-body .ke-name {
-	width: 100px;
-	text-align: center;
-	overflow: hidden;
-	height:16px;
-}
-.ke-swfupload-body .ke-on {
-	border: 1px solid #5690D2;
-	background-color: #E9EFF6;
 }
