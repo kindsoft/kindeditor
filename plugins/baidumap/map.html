@@ -20,8 +20,7 @@
 				var gc = new BMap.Geocoder();
 				gc.getLocation(point, function(rs){
 					var addComp = rs.addressComponents;
-					var address = [addComp.province, addComp.city, addComp.district,
-							addComp.street, addComp.streetNumber].join('');
+					var address = [addComp.city].join('');
 					parent.document.getElementById("kindeditor_plugin_map_address").value = address;
 				});
 			}
