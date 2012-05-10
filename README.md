@@ -42,4 +42,4 @@ For more information, please visit http://kindsoft.net/docs/ (Chinese)
 
 * Timon Lin
 * daif alotaibi (http://daif.net/) : Arabic Translation
-¡Á fisker (https://github.com/fisker) : QQ style theme
+* fisker (https://github.com/fisker) : QQ style theme
