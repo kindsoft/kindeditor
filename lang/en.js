@@ -54,6 +54,7 @@ KindEditor.lang({
 	filemanager : 'File Manager',
 	code : 'Insert code',
 	map : 'Google Maps',
+	baidumap : 'Baidu Maps',
 	lineheight : 'Line height',
 	clearhtml : 'Clear HTML code',
 	pagebreak : 'Insert Page Break',
@@ -190,6 +191,8 @@ KindEditor.lang({
 	'table.backgroundColor' : 'Background',
 	'map.address' : 'Address: ',
 	'map.search' : 'Search',
+	'baidumap.address' : 'Address: ',
+	'baidumap.search' : 'Search',
 	'anchor.name' : 'Anchor name',
 	'formatblock.formatBlock' : {
 		h1 : 'Heading 1',

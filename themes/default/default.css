@@ -328,6 +328,11 @@
 	width: 16px;
 	height: 16px;
 }
+.ke-icon-baidumap {
+	background-position: 0px -976px;
+	width: 16px;
+	height: 16px;
+}
 .ke-icon-lineheight {
 	background-position: 0px -992px;
 	width: 16px;
@@ -954,8 +959,8 @@
 	width: 16px;
 	height: 16px;
 	position: absolute;
-	right: 2px;
-	top: 2px;
+	right: 0;
+	top: 0;
 	cursor: pointer;
 }
 .ke-swfupload-body .ke-status  {

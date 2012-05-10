@@ -53,6 +53,7 @@ KindEditor.lang({
 	fileManager : '瀏覽伺服器',
 	code : '插入程式代碼',
 	map : 'Google地圖',
+	baidumap : 'Baidu地圖',
 	lineheight : '行距',
 	clearhtml : '清理HTML代碼',
 	pagebreak : '插入分頁符號',
@@ -190,6 +191,8 @@ KindEditor.lang({
 	'table.backgroundColor' : '背景顏色',
 	'map.address' : '住所: ',
 	'map.search' : '尋找',
+	'baidumap.address' : '住所: ',
+	'baidumap.search' : '尋找',
 	'anchor.name' : '錨點名稱',
 	'formatblock.formatBlock' : {
 		h1 : '標題 1',

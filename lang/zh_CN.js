@@ -54,6 +54,7 @@ KindEditor.lang({
 	filemanager : '文件空间',
 	code : '插入程序代码',
 	map : 'Google地图',
+	baidumap : '百度地图',
 	lineheight : '行距',
 	clearhtml : '清理HTML代码',
 	pagebreak : '插入分页符',
@@ -192,6 +193,8 @@ KindEditor.lang({
 	'table.backgroundColor' : '背景颜色',
 	'map.address' : '地址: ',
 	'map.search' : '搜索',
+	'baidumap.address' : '地址: ',
+	'baidumap.search' : '搜索',
 	'anchor.name' : '锚点名称',
 	'formatblock.formatBlock' : {
 		h1 : '标题 1',

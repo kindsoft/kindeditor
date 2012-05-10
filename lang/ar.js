@@ -55,6 +55,7 @@ KindEditor.lang({
 	filemanager : 'مدير الملفات',
 	code : 'إدراج نص برمجي',
 	map : 'خرائط قووقل',
+	baidumap : 'خرائط قووقل',
 	lineheight : 'إرتفاع السطر',
 	clearhtml : 'مسح كود HTML',
 	pagebreak : 'إدراج فاصل صفحات',
@@ -191,6 +192,8 @@ KindEditor.lang({
 	'table.backgroundColor' : 'الخلفية',
 	'map.address' : 'العنوان: ',
 	'map.search' : 'بحث',
+	'baidumap.address' : 'العنوان: ',
+	'baidumap.search' : 'بحث',
 	'anchor.name' : 'إسم الرابط',
 	'formatblock.formatBlock' : {
 		h1 : 'عنوان 1',
