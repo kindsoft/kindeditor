@@ -4,6 +4,30 @@
 .. contents::
 	:depth: 2
 
+ver 4.1 (2012-05-12)
+-----------------------------------------------------------------
+* 新增: 批量图片上传功能（multiimage）。
+* 新增：地图默认用百度地图（baidumap）。
+* 新增: QQ邮箱风格（贡献者：https://github.com/fisker）。
+* 新增: formatUploadUrl初始化参数，false时不会自动格式化上传后的URL。
+* 新增: fullscreenShortcut初始化参数，false时禁用ESC全屏快捷键。
+* 改善: uploadbutton新增form、target参数，上传图片时可提交其它控件。
+* 改善: K().children()直接返回KNode对象，原来是返回Array<KNode>。
+* 改善: K.create()支持多个textarea，新增KindEditor.instances。
+* 改善: Opera 最新版本支持BR换行。
+* 改善: 当前页面的语言方向为rtl时，编辑区域也自动设置rtl。
+* 改善: PHP写入临时文件失败，提示详细错误。
+* Bugfix: [IE9] 上传图片的弹出窗口，最下方的“确定”“取消”会错位，跑到跟“图片说明”文本框的后面。
+* Bugfix: FF、Chrome、Opera等行首全角空格被过滤，只有IE没问题。
+* Bugfix: 图片正在上传时，连续点击确定按钮，会重复提交表单。
+* Bugfix: [WEBKIT] 在BR换行模式下，需要两次回车才能换行。
+* Bugfix: [IE9] 在BR换行模式下，在编辑器中回车之后，光标仍然还在本行，不会移动到下一行。
+* Bugfix: noscript里的HTML代码会被转移字符。
+* Bugfix: [ASP] 文件管理对大小写敏感，大写的文件扩展名会识别不出图片。
+* Bugfix: 浏览文件窗口里的目录和文件图标被拉伸，看起来比较模糊。
+* Bugfix: 带有超链接的图片删除以后，源代码里面还有A标签。
+* Bugfix: 通过文件管理器插入本地附件时，URL可能出现连续两个斜线。
+
 ver 4.0.6 (2012-03-18)
 -----------------------------------------------------------------
 * 新增: imageTabIndex初始化参数，可设置插入图片弹出层的默认显示标签。

@@ -5,7 +5,6 @@ KindEditor 4.x 文档
 	:maxdepth: 1
 
 	usage
-	upgrade
 	option
 	theme
 	plugin
@@ -25,6 +24,7 @@ KindEditor 4.x 文档
 	tabs
 	uploadbutton
 	editor
+	upgrade
 	changelog
 
 * :ref:`search`

@@ -27,11 +27,3 @@ KindEditor在默认情况下自动寻找textarea所属的form元素，找到form
 	// 将编辑器的HTML数据同步到textarea
 	editor.sync();
 
-上传图片为什么出现"服务器发生故障。"？
---------------------------------------------------------
-
-出现这个提示的根本原因是没有正确返回JSON数据。具体原因有很多，uploadJson参数设置错误，upload_json.xxx程序出错都会出现这个提示。
-
-这时用Firefox的Firebug插件调试比较方便，上传图片后在Firebug的"网络" > "HTML"里能看到"POST upload_json.xxx"，正常情况下HTTP状态为200，并返回正确的JSON格式，如图所示。
-
-.. image:: _static/firebug_upload_json.gif

@@ -10,7 +10,9 @@
 
 K.create(expr [, options])
 --------------------------------------------------------
-创建编辑器，返回KEditor对象。4.1版本开始expr支持多个textarea，之前版本只在第一个textarea上创建。
+创建编辑器，返回第一个KEditor对象。4.1版本开始expr支持多个textarea，之前版本只在第一个textarea上创建。
+
+创建编辑器后可以用 KindEditor.instances 数组取得已创建的所有KEditor对象。
 
 * 参数:
 	* mixed expr: element或选择器
@@ -21,8 +23,10 @@ K.create(expr [, options])
 .. sourcecode:: js
 
 	// 1
+	// editor 等于 KindEditor.instances[0]
 	editor = K.create('textarea[name="content"]');
 	editor.html('HTML code');
+
 	// 2
 	editor = K.create('#editor_id', {
 		filterMode : true,

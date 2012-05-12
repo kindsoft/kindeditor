@@ -692,3 +692,33 @@ imageTabIndex
 .. note::
 
 	4.0.6版本开始支持。
+
+.. index:: formatUploadUrl
+
+.. _formatUploadUrl:
+
+formatUploadUrl
+--------------------------------------------------------
+false时不会自动格式化上传后的URL。
+
+* 数据类型: Boolean
+* 默认值: true
+
+.. note::
+
+	4.1版本开始支持。
+
+.. index:: fullscreenShortcut
+
+.. _fullscreenShortcut:
+
+fullscreenShortcut
+--------------------------------------------------------
+false时禁用ESC全屏快捷键。
+
+* 数据类型: Boolean
+* 默认值: true
+
+.. note::
+
+	4.1版本开始支持。
