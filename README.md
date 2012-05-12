@@ -52,8 +52,8 @@ http://code.google.com/p/kindeditor/downloads/list
 	html = K('#editor_id').val(); // KindEditor Node API
 	html = $('#editor_id').val(); // jQuery API
 
-	// …Ë÷√HTMLƒ⁄»›
-	editor.html('HTMLƒ⁄»›');
+	// Put HTML data to KindEditor
+	editor.html('HTML code');
 	```
 
 For more information, please visit http://kindsoft.net/docs/ (Chinese)
