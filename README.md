@@ -26,35 +26,35 @@ http://code.google.com/p/kindeditor/downloads/list
 
 3. Insert the following code fragment into your page.
 
-```html
-<link href="/kindeditor/themes/default/default.css" rel="stylesheet" />
-<script charset="utf-8" src="/kindeditor/kindeditor-min.js"></script>
-<script charset="utf-8" src="/kindeditor/lang/en.js"></script>
-<script>
-	KindEditor.ready(function(K) {
-		window.editor = K.create('#editor_id', {
-			langType : 'en'
+	```html
+	<link href="/kindeditor/themes/default/default.css" rel="stylesheet" />
+	<script charset="utf-8" src="/kindeditor/kindeditor-min.js"></script>
+	<script charset="utf-8" src="/kindeditor/lang/en.js"></script>
+	<script>
+		KindEditor.ready(function(K) {
+			window.editor = K.create('#editor_id', {
+				langType : 'en'
+			});
 		});
-	});
-</script>
-<textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
-```
+	</script>
+	<textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
+	```
 
 4. Fetch HTML data.
 
-```javascript
-// Fetch HTML data
-html = editor.html();
+	```javascript
+	// Fetch HTML data
+	html = editor.html();
 
-// Synchronize HTML data to the textarea
-editor.sync();
-html = document.getElementById('editor_id').value; // Native API
-html = K('#editor_id').val(); // KindEditor Node API
-html = $('#editor_id').val(); // jQuery API
+	// Synchronize HTML data to the textarea
+	editor.sync();
+	html = document.getElementById('editor_id').value; // Native API
+	html = K('#editor_id').val(); // KindEditor Node API
+	html = $('#editor_id').val(); // jQuery API
 
-// 设置HTML内容
-editor.html('HTML内容');
-```
+	// 设置HTML内容
+	editor.html('HTML内容');
+	```
 
 For more information, please visit http://kindsoft.net/docs/ (Chinese)
 
