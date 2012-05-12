@@ -14,7 +14,11 @@ KindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG
 
 http://www.kindsoft.net/ke4/examples/multi-language.html
 
-## Getting started
+## Installation
+
+1. Download the latest version of the editor.
+
+2. Insert the following code fragment into your page.
 
 	<link href="/path/to/themes/default/default.css" rel="stylesheet" />
 	<script charset="utf-8" src="/path/to/kindeditor-min.js"></script>
