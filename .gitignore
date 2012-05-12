@@ -10,4 +10,5 @@ Thumbs.db
 .svn/
 *.swp
 dist/
+_build/
 attached/*
