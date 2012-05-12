@@ -21,17 +21,17 @@ http://www.kindsoft.net/ke4/examples/multi-language.html
 2. Insert the following code fragment into your page.
 
 ```html
-	<link href="/path/to/themes/default/default.css" rel="stylesheet" />
-	<script charset="utf-8" src="/path/to/kindeditor-min.js"></script>
-	<script charset="utf-8" src="/path/to/lang/en.js"></script>
-	<script>
-		KindEditor.ready(function(K) {
-			window.editor = K.create('#editor_id', {
-				langType : 'en'
-			});
+<link href="/path/to/themes/default/default.css" rel="stylesheet" />
+<script charset="utf-8" src="/path/to/kindeditor-min.js"></script>
+<script charset="utf-8" src="/path/to/lang/en.js"></script>
+<script>
+	KindEditor.ready(function(K) {
+		window.editor = K.create('#editor_id', {
+			langType : 'en'
 		});
-	</script>
-	<textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
+	});
+</script>
+<textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
 ```
 
 For more information, please visit http://kindsoft.net/docs/ (Chinese)
