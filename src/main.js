@@ -1330,11 +1330,14 @@ _plugin('core', function(K) {
 					K(this).after('<br />').remove(true);
 				});
 				K('span.Apple-style-span', div).remove(true);
+				// Bugfix: https://github.com/kindsoft/kindeditor/issues/8
+				K('span[style]', div).each(function() {
+					if (K(this).css('white-space') == 'nowrap') {
+						//K(this).remove(true);
+					}
+				});
 				K('meta', div).remove();
 			}
-			//if (div.first().isBlock()) {
-			//	div.first().remove(true);
-			//}
 			var html = div[0].innerHTML;
 			div.remove();
 			if (html === '') {
