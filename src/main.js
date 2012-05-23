@@ -230,7 +230,7 @@ function _bindTabEvent() {
 			}
 			var cmd = self.cmd, range = cmd.range;
 			range.shrink();
-			// Bugfix #271: 回车，按下tab键，光标在下一行显示	
+			// Bugfix #271: 回车，按下tab键，光标在下一行显示
 			if (range.collapsed && range.startContainer.nodeType == 1) {
 				range.insertNode(K('@&nbsp;', doc)[0]);
 				cmd.select();
@@ -1330,10 +1330,11 @@ _plugin('core', function(K) {
 					K(this).after('<br />').remove(true);
 				});
 				K('span.Apple-style-span', div).remove(true);
+				K('span.Apple-tab-span', div).remove(true);
 				// Bugfix: https://github.com/kindsoft/kindeditor/issues/8
 				K('span[style]', div).each(function() {
 					if (K(this).css('white-space') == 'nowrap') {
-						//K(this).remove(true);
+						K(this).remove(true);
 					}
 				});
 				K('meta', div).remove();
