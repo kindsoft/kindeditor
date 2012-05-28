@@ -58,6 +58,16 @@ http://code.google.com/p/kindeditor/downloads/list
 
 For more information, please visit http://kindsoft.net/docs/ (Chinese)
 
+## Build code
+
+`ant`
+
+Will combine, preprocess and minify the codes in the src directory into kindeditor.js and kindeditor-min.js.
+
+`ant release`
+
+Will create a zip file of the current repository code. The zip file will be placed in the dist directory.
+
 ## Compatible
 
 * Internet Explorer 6.0+
