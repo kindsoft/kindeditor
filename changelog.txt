@@ -5,7 +5,8 @@
 #######################################################################
 
 ver 4.1.1
-* Bugfix: Chrome下粘贴内容代码中出现white-space:nowrap导致不换行。
+* Bugfix: [Chrome] 粘贴内容代码中出现white-space:nowrap导致不换行。
+* Bugfix: [IE6] 本地图片上传按钮错位。
 
 ver 4.1 (2012-05-12)
 * 新增: 批量图片上传功能（multiimage）。

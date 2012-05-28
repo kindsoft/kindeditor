@@ -837,6 +837,9 @@
 	zoom: 1;
 	*display: inline;
 }
+.ke-upload-button {
+	position: relative;
+}
 .ke-upload-area {
 	position: relative;
 	overflow: hidden;
