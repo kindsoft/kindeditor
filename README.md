@@ -43,16 +43,20 @@ http://code.google.com/p/kindeditor/downloads/list
 4. Fetch HTML data.
 
 	```javascript
-	// Fetch HTML data
 	html = editor.html();
+	```
 
-	// Synchronize HTML data to the textarea
+5. Synchronize HTML data to the textarea
+	```javascript
 	editor.sync();
+
 	html = document.getElementById('editor_id').value; // Native API
 	html = K('#editor_id').val(); // KindEditor Node API
 	html = $('#editor_id').val(); // jQuery API
+	```
 
-	// Put HTML data to KindEditor
+6. Set HTML data to KindEditor
+	```javascript
 	editor.html('HTML code');
 	```
 
