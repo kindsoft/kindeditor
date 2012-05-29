@@ -12,6 +12,7 @@ KindEditor.plugin('flash', function(K) {
 		allowFlashUpload = K.undef(self.allowFlashUpload, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
 		formatUploadUrl = K.undef(self.formatUploadUrl, true),
+		extraParams = K.undef(self.extraFileUploadParams, {}),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php');
 	self.plugin.flash = {
 		edit : function() {
@@ -86,6 +87,7 @@ KindEditor.plugin('flash', function(K) {
 				var uploadbutton = K.uploadbutton({
 					button : K('.ke-upload-button', div)[0],
 					fieldName : 'imgFile',
+					extraParams : extraParams,
 					url : K.addParam(uploadJson, 'dir=flash'),
 					afterUpload : function(data) {
 						dialog.hideLoading();
