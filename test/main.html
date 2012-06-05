@@ -113,6 +113,10 @@
 					fullscreenShortcut : false,
 					newlineTag : 'p',
 					pasteType : 2,
+					extraFileUploadParams : {
+						'testParam1' : 'a',
+						'testParam2' : 'b'
+					},
 					//afterTab : function() {
 						//editor2.focus();
 					//},
@@ -179,10 +183,10 @@
 				});
 				K('#loadPlugin1').click(function(e) {
 					editor1.loadPlugin('template', function() {
-						
+
 					});
 					editor1.loadPlugin('template', function() {
-						
+
 					});
 				});
 				var editor2 = K.create(K('textarea[name=content2]').get(), {
@@ -195,12 +199,12 @@
 				});
 				K('#create2').click(function(e) {
 					editor2.create();
-					
+
 				});
 				K('#remove2').click(function(e) {
 					editor2.remove();
 				});
-				
+
 				var editor3 = K.editor({
 					basePath : '../',
 					themesPath : '../themes/',

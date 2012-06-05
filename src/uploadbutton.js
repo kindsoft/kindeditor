@@ -9,17 +9,24 @@ _extend(KUploadButton, {
 			fieldName = options.fieldName || 'file',
 			url = options.url || '',
 			title = button.val(),
+			extraParams = options.extraParams || {},
 			cls = button[0].className || '',
 			target = options.target || 'kindeditor_upload_iframe_' + new Date().getTime();
 		options.afterError = options.afterError || function(str) {
 			alert(str);
 		};
 
+		var hiddenElements = [];
+		for(var k in extraParams){
+			hiddenElements.push('<input type="hidden" name="' + k + '" value="' + extraParams[k] + '" />');
+		}
+
 		var html = [
 			'<div class="ke-inline-block ' + cls + '">',
 			(options.target ? '' : '<iframe name="' + target + '" style="display:none;"></iframe>'),
 			(options.form ? '<div class="ke-upload-area">' : '<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + url + '">'),
 			'<span class="ke-button-common">',
+			hiddenElements.join(''),
 			'<input type="button" class="ke-button-common ke-button" value="' + title + '" />',
 			'</span>',
 			'<input type="file" class="ke-upload-file" name="' + fieldName + '" tabindex="-1" />',
