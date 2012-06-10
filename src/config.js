@@ -15,7 +15,7 @@ K.basePath = _getBasePath();
 K.options = {
 	designMode : true,
 	fullscreenMode : false,
-	filterMode : false,
+	filterMode : true,
 	wellFormatMode : true,
 	shadowMode : true,
 	loadStyleMode : true,

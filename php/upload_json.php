@@ -1,10 +1,10 @@
 <?php
 /**
  * KindEditor PHP
- * 
+ *
  * 本PHP程序是演示程序，建议不要直接在实际项目中使用。
  * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
- * 
+ *
  */
 
 require_once 'JSON.php';
@@ -124,7 +124,7 @@ if (empty($_FILES) === false) {
 	}
 	@chmod($file_path, 0644);
 	$file_url = $save_url . $new_file_name;
-	
+
 	header('Content-type: text/html; charset=UTF-8');
 	$json = new Services_JSON();
 	echo $json->encode(array('error' => 0, 'url' => $file_url));
@@ -137,4 +137,3 @@ function alert($msg) {
 	echo $json->encode(array('error' => 1, 'message' => $msg));
 	exit;
 }
-?>

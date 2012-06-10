@@ -1,14 +1,14 @@
 <?php
 /**
  * KindEditor PHP
- * 
+ *
  * 本PHP程序是演示程序，建议不要直接在实际项目中使用。
  * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
- * 
+ *
  */
 
 require_once 'JSON.php';
- 
+
 $php_path = dirname(__FILE__) . '/';
 $php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
@@ -135,4 +135,3 @@ $result['file_list'] = $file_list;
 header('Content-type: application/json; charset=UTF-8');
 $json = new Services_JSON();
 echo $json->encode($result);
-?>

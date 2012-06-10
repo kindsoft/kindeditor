@@ -4,10 +4,12 @@
 #
 #######################################################################
 
-ver 4.1.1
+ver 4.1.1 (2012-06-10)
 * 新增: extraFileUploadParams初始化参数，文件上传时，支持添加别的参数一并传到服务器。
+* 变更: filterMode默认值改成true，根据htmlTags配置过滤HTML代码。
 * Bugfix: [Chrome] 粘贴内容代码中出现white-space:nowrap导致不换行。
 * Bugfix: [IE6] 本地图片上传按钮错位。
+* Bugfix: 开启过滤模式后，预览内容显示KindEditor。
 
 ver 4.1 (2012-05-12)
 * 新增: 批量图片上传功能（multiimage）。
