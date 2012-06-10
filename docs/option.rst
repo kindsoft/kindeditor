@@ -70,14 +70,14 @@ items
 .. sourcecode:: js
 
 	[
-		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'cut', 'copy', 'paste',
+		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
 		'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
 		'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
 		'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
-		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'map', 'code', 'pagebreak',
-		'link', 'unlink', '|', 'about'
+		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+		'anchor', 'link', 'unlink', '|', 'about'
 	]
 
 ==========================	=====================
@@ -123,13 +123,15 @@ fullscreen					全屏显示
 about						关于
 print						打印
 code						插入程序代码
-map							地图
+map							Google地图
+baidumap					百度地图
 lineheight					行距
 clearhtml					清理HTML代码
 pagebreak					插入分页符
 quickformat					一键排版
 insertfile					插入文件
 template					插入模板
+anchor						插入锚点
 ==========================	=====================
 
 .. index:: noDisableItems
@@ -149,10 +151,14 @@ noDisableItems
 
 filterMode
 --------------------------------------------------------
-true时过滤HTML代码，false时允许输入任何代码。
+true时根据 :ref:`htmlTags` 过滤HTML代码，false时允许输入任何代码。
 
 * 数据类型: Boolean
-* 默认值: false
+* 默认值: true
+
+.. note::
+
+	4.1.1版本开始默认值为true。
 
 .. index:: htmlTags
 
@@ -182,22 +188,23 @@ htmlTags
 			'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
 			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
 			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
-			'.width', '.height'
+			'.width', '.height', '.border-collapse'
 		],
 		'td,th': [
 			'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
 			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
-			'.font-style', '.text-decoration', '.vertical-align', '.background'
+			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
 		a : ['href', 'target', 'name'],
 		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
-		img : ['src', 'width', 'height', 'border', 'alt', 'title', '.width', '.height'],
+		img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
 		],
 		pre : ['class'],
-		'hr,br,tbody,tr,strong,b,sub,sup,em,i,u,strike' : []
+		hr : ['class', '.page-break-after'],
+		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
 	}
 
 .. index:: wellFormatMode
@@ -722,3 +729,23 @@ false时禁用ESC全屏快捷键。
 .. note::
 
 	4.1版本开始支持。
+
+.. _extraFileUploadParams:
+
+extraFileUploadParams
+--------------------------------------------------------
+上传图片、Flash、视音频、文件时，支持添加别的参数一并传到服务器。
+
+* 数据类型: Array
+* 默认值: {}
+
+.. sourcecode:: js
+
+	KindEditor.ready(function(K) {
+		K.create('#id', {
+			extraFileUploadParams : {
+				item_id : 1000,
+				category_id : 1
+			}
+		});
+	});

@@ -208,8 +208,8 @@ attr(obj)
 .. sourcecode:: js
 
 	K('#id img').attr({
-		'width' => '100px',
-		'border' => 1
+		'width' : '100px',
+		'border' : 1
 	});
 
 .. index:: removeAttr
@@ -342,7 +342,7 @@ html(val)
 --------------------------------------------------------
 设置所有node的innerHTML。
 
-* 参数: 
+* 参数:
 	* string val: HTML字符串
 * 返回: KNode
 
@@ -459,9 +459,9 @@ css(obj)
 .. sourcecode:: js
 
 	K('#id div').css({
-		'width' => '100px',
-		'height' => '50px',
-		'padding' => '10px'
+		'width' : '100px',
+		'height' : '50px',
+		'padding' : '10px'
 	});
 
 .. index:: width
@@ -608,7 +608,7 @@ clone(bool)
 --------------------------------------------------------
 复制第一个node，并返回第一个node的KNode。
 
-* 参数: 
+* 参数:
 	* boolean bool: true时复制所有子节点，false时只复制父节点
 * 返回: 新的KNode
 
@@ -626,7 +626,7 @@ append(expr)
 --------------------------------------------------------
 element添加一个子节点。
 
-* 参数: 
+* 参数:
 	*  string|node expr: DOM元素、选择器表达式、HTML代码
 * 返回: KNode
 
@@ -645,7 +645,7 @@ before(expr)
 --------------------------------------------------------
 node的前面添加一个节点。
 
-* 参数: 
+* 参数:
 	*  string|node expr: DOM元素、选择器表达式、HTML代码
 * 返回: KNode
 
@@ -664,7 +664,7 @@ after(expr)
 --------------------------------------------------------
 node的后面添加一个节点。
 
-* 参数: 
+* 参数:
 	*  string|node expr: DOM元素、选择器表达式、HTML代码
 * 返回: KNode
 
@@ -683,7 +683,7 @@ replaceWith(expr)
 --------------------------------------------------------
 替换node。
 
-* 参数: 
+* 参数:
 	*  string|node expr: DOM元素、选择器表达式、HTML代码
 * 返回: KNode
 
@@ -702,7 +702,7 @@ remove([keepChilds])
 --------------------------------------------------------
 删除node。
 
-* 参数: 
+* 参数:
 	*  boolean keepChilds: 是否保留子节点，true或false，默认值为false
 * 返回: KNode
 
@@ -720,7 +720,7 @@ show([val])
 --------------------------------------------------------
 显示element。
 
-* 参数: 
+* 参数:
 	*  string val: display的值，默认值为block
 * 返回: KNode
 
@@ -829,7 +829,7 @@ contains(otherNode)
 --------------------------------------------------------
 判断第一个element是否包含指定node。
 
-* 参数: 
+* 参数:
 	* node otherNode: 任意节点
 * 返回: boolean
 
