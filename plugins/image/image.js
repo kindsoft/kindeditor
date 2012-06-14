@@ -189,7 +189,10 @@ KindEditor.plugin('image', function(K) {
 					if (formatUploadUrl) {
 						url = K.formatUrl(url, 'absolute');
 					}
-					clickFn.call(self, url, '', '', '', 0, '');
+					// clickFn.call(self, url, '', '', '', 0, '');
+					K(".ke-dialog-row #remoteUrl").val(url);
+					K(".ke-tabs-li")[0].click();
+					K(".ke-refresh-btn").click();
 					if (self.afterUpload) {
 						self.afterUpload.call(self, url);
 					}
