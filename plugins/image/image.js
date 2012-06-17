@@ -16,6 +16,7 @@ KindEditor.plugin('image', function(K) {
 		imageTabIndex = K.undef(self.imageTabIndex, 0),
 		imgPath = self.pluginsPath + 'image/images/',
 		extraParams = K.undef(self.extraFileUploadParams, {}),
+		fillDescAfterUploadImage = K.undef(self.fillDescAfterUploadImage, false),
 		lang = self.lang(name + '.');
 
 	self.plugin.imageDialog = function(options) {
@@ -189,12 +190,15 @@ KindEditor.plugin('image', function(K) {
 					if (formatUploadUrl) {
 						url = K.formatUrl(url, 'absolute');
 					}
-					// clickFn.call(self, url, '', '', '', 0, '');
-					K(".ke-dialog-row #remoteUrl").val(url);
-					K(".ke-tabs-li")[0].click();
-					K(".ke-refresh-btn").click();
 					if (self.afterUpload) {
 						self.afterUpload.call(self, url);
+					}
+					if (!fillDescAfterUploadImage) {
+						clickFn.call(self, url, '', '', '', 0, '');	
+					} else {
+						K(".ke-dialog-row #remoteUrl").val(url);
+						K(".ke-tabs-li")[0].click();
+						K(".ke-refresh-btn").click();
 					}
 				} else {
 					alert(data.message);
