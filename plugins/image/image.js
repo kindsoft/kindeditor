@@ -194,11 +194,11 @@ KindEditor.plugin('image', function(K) {
 						self.afterUpload.call(self, url);
 					}
 					if (!fillDescAfterUploadImage) {
-						clickFn.call(self, url, '', '', '', 0, '');	
+						clickFn.call(self, url, '', '', '', 0, '');
 					} else {
-						K(".ke-dialog-row #remoteUrl").val(url);
-						K(".ke-tabs-li")[0].click();
-						K(".ke-refresh-btn").click();
+						K(".ke-dialog-row #remoteUrl", div).val(url);
+						K(".ke-tabs-li", div)[0].click();
+						K(".ke-refresh-btn", div).click();
 					}
 				} else {
 					alert(data.message);
