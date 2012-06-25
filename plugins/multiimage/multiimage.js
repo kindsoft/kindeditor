@@ -276,6 +276,9 @@ KindEditor.plugin('multiimage', function(K) {
 				var html = '';
 				K.each(urlList, function(i, url) {
 					html += '<img src="' + K.escape(url) + '" data-ke-src="' + K.escape(url) + '" alt="" /><br />';
+					if (self.afterUpload) {
+						self.afterUpload.call(self, url);
+					}
 				});
 				self.insertHtml(html);
 				// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
