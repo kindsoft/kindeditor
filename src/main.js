@@ -193,6 +193,9 @@ function _bindNewlineEvent() {
 		if (newlineTag == 'br') {
 			return;
 		}
+		if (_GECKO) {
+			return;
+		}
 		self.cmd.selection();
 		var tagName = getAncestorTagName(self.cmd.range);
 		if (tagName == 'marquee' || tagName == 'select') {
