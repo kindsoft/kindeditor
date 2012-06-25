@@ -308,13 +308,16 @@ KindEditor.plugin('multiimage', function(K) {
 /* ******************* */
 /* Constructor & Init  */
 /* ******************* */
-var SWFUpload;
 
-if (SWFUpload == undefined) {
-	SWFUpload = function (settings) {
-		this.initSWFUpload(settings);
-	};
+(function() {
+
+if (window.SWFUpload) {
+	return;
 }
+
+window.SWFUpload = function (settings) {
+	this.initSWFUpload(settings);
+};
 
 SWFUpload.prototype.initSWFUpload = function (settings) {
 	try {
@@ -1369,3 +1372,5 @@ if (typeof(SWFUpload) === "function") {
 		}
 	};
 }
+
+})();

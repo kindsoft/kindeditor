@@ -3,10 +3,12 @@
 # KindEditor 变更记录
 #
 #######################################################################
+
 ver 4.1.2
 * 新增: fillDescAfterUploadImage初始化参数，true时图片上传成功后切换到图片编辑标签。
 * Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
 * Bugfix: 批量上传无法执行afterUpload这个回调，普通上传可以执行。
+* Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。
 
 ver 4.1.1 (2012-06-10)
 * 新增: extraFileUploadParams初始化参数，文件上传时，支持添加别的参数一并传到服务器。
