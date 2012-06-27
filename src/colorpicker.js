@@ -75,4 +75,5 @@ function _colorpicker(options) {
 	return new KColorPicker(options);
 }
 
+K.ColorPickerClass = KColorPicker;
 K.colorpicker = _colorpicker;

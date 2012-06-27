@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.1 (2012-06-25)
+* @version 4.1.1 (2012-06-27)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.1 (2012-06-25)',
+var _VERSION = '4.1.1 (2012-06-27)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -1745,6 +1745,7 @@ K = function(expr, root) {
 _each(_K, function(key, val) {
 	K[key] = val;
 });
+K.NodeClass = KNode;
 window.KindEditor = K;
 var _START_TO_START = 0,
 	_START_TO_END = 1,
@@ -2451,6 +2452,7 @@ function _range(mixed) {
 	}
 	return new KRange(mixed);
 }
+K.RangeClass = KRange;
 K.range = _range;
 K.START_TO_START = _START_TO_START;
 K.START_TO_END = _START_TO_END;
@@ -3248,6 +3250,7 @@ function _cmd(mixed) {
 	}
 	return new KCmd(mixed);
 }
+K.CmdClass = KCmd;
 K.cmd = _cmd;
 function _drag(options) {
 	var moveEl = options.moveEl,
@@ -3772,6 +3775,7 @@ _extend(KEdit, KWidget, {
 function _edit(options) {
 	return new KEdit(options);
 }
+K.EditClass = KEdit;
 K.edit = _edit;
 K.iframeDoc = _iframeDoc;
 function _selectToolbar(name, fn) {
@@ -3900,6 +3904,7 @@ _extend(KToolbar, KWidget, {
 function _toolbar(options) {
 	return new KToolbar(options);
 }
+K.ToolbarClass = KToolbar;
 K.toolbar = _toolbar;
 function KMenu(options) {
 	this.init(options);
@@ -3980,6 +3985,7 @@ _extend(KMenu, KWidget, {
 function _menu(options) {
 	return new KMenu(options);
 }
+K.MenuClass = KMenu;
 K.menu = _menu;
 function KColorPicker(options) {
 	this.init(options);
@@ -4054,6 +4060,7 @@ _extend(KColorPicker, KWidget, {
 function _colorpicker(options) {
 	return new KColorPicker(options);
 }
+K.ColorPickerClass = KColorPicker;
 K.colorpicker = _colorpicker;
 function KUploadButton(options) {
 	this.init(options);
@@ -4142,6 +4149,7 @@ _extend(KUploadButton, {
 function _uploadbutton(options) {
 	return new KUploadButton(options);
 }
+K.UploadButtonClass = KUploadButton;
 K.uploadbutton = _uploadbutton;
 function _createButton(arg) {
 	arg = arg || {};
@@ -4275,6 +4283,7 @@ _extend(KDialog, KWidget, {
 function _dialog(options) {
 	return new KDialog(options);
 }
+K.DialogClass = KDialog;
 K.dialog = _dialog;
 function _tabs(options) {
 	var self = _widget(options),

@@ -320,5 +320,6 @@ function _edit(options) {
 	return new KEdit(options);
 }
 
+K.EditClass = KEdit;
 K.edit = _edit;
 K.iframeDoc = _iframeDoc;

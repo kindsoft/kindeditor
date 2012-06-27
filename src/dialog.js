@@ -137,4 +137,5 @@ function _dialog(options) {
 	return new KDialog(options);
 }
 
+K.DialogClass = KDialog;
 K.dialog = _dialog;

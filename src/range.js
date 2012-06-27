@@ -772,6 +772,7 @@ function _range(mixed) {
 	return new KRange(mixed);
 }
 
+K.RangeClass = KRange;
 K.range = _range;
 K.START_TO_START = _START_TO_START;
 K.START_TO_END = _START_TO_END;

@@ -132,4 +132,5 @@ function _toolbar(options) {
 	return new KToolbar(options);
 }
 
+K.ToolbarClass = KToolbar;
 K.toolbar = _toolbar;

@@ -97,5 +97,6 @@ function _uploadbutton(options) {
 	return new KUploadButton(options);
 }
 
+K.UploadButtonClass = KUploadButton;
 K.uploadbutton = _uploadbutton;
 

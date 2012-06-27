@@ -81,4 +81,5 @@ function _menu(options) {
 	return new KMenu(options);
 }
 
+K.MenuClass = KMenu;
 K.menu = _menu;

@@ -850,4 +850,5 @@ function _cmd(mixed) {
 	return new KCmd(mixed);
 }
 
+K.CmdClass = KCmd;
 K.cmd = _cmd;
