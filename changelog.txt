@@ -10,6 +10,7 @@ ver 4.1.2
 * Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
 * Bugfix: 批量上传无法执行afterUpload这个回调，普通上传可以执行。
 * Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。
+* Bugfix: IE8怪异模式下先打开弹出框关闭，用滚轮到顶或到底，会出现脚本错误。
 
 ver 4.1.1 (2012-06-10)
 * 新增: extraFileUploadParams初始化参数，文件上传时，支持添加别的参数一并传到服务器。

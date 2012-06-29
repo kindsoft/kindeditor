@@ -191,7 +191,7 @@ _extend(KWidget, {
 	},
 	remove : function() {
 		var self = this;
-		if (_IE && _V < 7) {
+		if (_IE && _V < 7 || _QUIRKS) {
 			K(self.win).unbind('scroll');
 		}
 		self.div.remove();
