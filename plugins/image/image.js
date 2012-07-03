@@ -221,6 +221,9 @@ KindEditor.plugin('image', function(K) {
 						clickFn : function(url, title) {
 							if (self.dialogs.length > 1) {
 								K('[name="url"]', div).val(url);
+								if (self.afterSelectFile) {
+									self.afterSelectFile.call(self, url);
+								}
 								self.hideDialog();
 							}
 						}

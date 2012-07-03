@@ -127,6 +127,10 @@
 					afterUpload : function(url) {
 						var select = K('#uploadFile')[0];
 						select.options.add(new Option(url, url));
+					},
+					afterSelectFile : function(url) {
+						var select = K('#uploadFile')[0];
+						select.options.add(new Option(url, url));
 					}
 				});
 				K('#create1').click(function(e) {
