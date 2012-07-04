@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.1 (2012-07-03)
+* @version 4.1.1 (2012-07-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.1 (2012-07-03)',
+var _VERSION = '4.1.1 (2012-07-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3098,9 +3098,6 @@ _extend(KCmd, {
 		if (val === '') {
 			return self;
 		}
-		if (_inPreElement(K(range.startContainer))) {
-			return self;
-		}
 		function pasteHtml(range, val) {
 			val = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + val;
 			var rng = range.get();
@@ -5131,12 +5128,12 @@ KEditor.prototype = {
 		}
 		return self;
 	},
-	insertHtml : function(val) {
+	insertHtml : function(val, quickMode) {
 		if (!this.isCreated) {
 			return this;
 		}
 		val = this.beforeSetHtml(val);
-		this.exec('inserthtml', val);
+		this.exec('inserthtml', val, quickMode);
 		return this;
 	},
 	appendHtml : function(val) {
