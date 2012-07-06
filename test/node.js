@@ -177,3 +177,20 @@ test("chidren",function(){
 	equals(node.children().name, 'span');
 	equals(K('<div></div>').children().length, 0);
 });
+
+test('show/hide',function(){
+	var node = K('<div/>');
+	equals(node.show().outer(), '<div></div>');
+	equals(node.hide().outer(), '<div style="display:none;"></div>');
+	equals(node.show().outer(), '<div></div>');
+
+	node = K('<div style="display:inline;"/>');
+	equals(node.show().outer(), '<div style="display:inline;"></div>');
+	equals(node.hide().outer(), '<div style="display:none;"></div>');
+	equals(node.show().outer(), '<div style="display:inline;"></div>');
+
+	node = K('<div style="display:block;"/>');
+	equals(node.show().outer(), '<div style="display:block;"></div>');
+	equals(node.hide().outer(), '<div style="display:none;"></div>');
+	equals(node.show().outer(), '<div style="display:block;"></div>');
+});

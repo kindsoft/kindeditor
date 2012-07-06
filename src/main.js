@@ -1021,6 +1021,16 @@ function _create(expr, options) {
 	return editor;
 }
 
+K.remove = function(expr) {
+	var el = K(expr);
+	K.each(_instances, function(i, editor) {
+		if (editor && editor.srcElement[0] == el[0]) {
+			editor.remove();
+			_instances.splice(i, 1);
+		}
+	});
+};
+
 // 解决IE6浏览器重复下载背景图片的问题
 if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);

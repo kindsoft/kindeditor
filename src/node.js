@@ -428,10 +428,22 @@ _extend(KNode, {
 		return self;
 	},
 	show : function(val) {
-		return this.css('display', val === undefined ? 'block' : val);
+		var self = this;
+		if (val === undefined) {
+			val = self._originDisplay || '';
+		}
+		if (self.css('display') != 'none') {
+			return self;
+		}
+		return self.css('display', val);
 	},
 	hide : function() {
-		return this.css('display', 'none');
+		var self = this;
+		if (self.length < 1) {
+			return self;
+		}
+		self._originDisplay = self[0].style.display;
+		return self.css('display', 'none');
 	},
 	outer : function() {
 		var self = this;
