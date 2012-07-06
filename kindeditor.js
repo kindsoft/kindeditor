@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.1 (2012-07-04)
+* @version 4.1.1 (2012-07-06)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.1 (2012-07-04)',
+var _VERSION = '4.1.1 (2012-07-06)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -1583,10 +1583,22 @@ _extend(KNode, {
 		return self;
 	},
 	show : function(val) {
-		return this.css('display', val === undefined ? 'block' : val);
+		var self = this;
+		if (val === undefined) {
+			val = self._originDisplay || '';
+		}
+		if (self.css('display') != 'none') {
+			return self;
+		}
+		return self.css('display', val);
 	},
 	hide : function() {
-		return this.css('display', 'none');
+		var self = this;
+		if (self.length < 1) {
+			return self;
+		}
+		self._originDisplay = self[0].style.display;
+		return self.css('display', 'none');
 	},
 	outer : function() {
 		var self = this;
@@ -1738,6 +1750,9 @@ K = function(expr, root) {
 	}
 	if (expr && expr.constructor === KNode) {
 		return expr;
+	}
+	if (expr.toArray) {
+		expr = expr.toArray();
 	}
 	if (_isArray(expr)) {
 		return newNode(expr);
@@ -5345,6 +5360,15 @@ function _create(expr, options) {
 	});
 	return editor;
 }
+K.remove = function(expr) {
+	var el = K(expr);
+	K.each(_instances, function(i, editor) {
+		if (editor && editor.srcElement[0] == el[0]) {
+			editor.remove();
+			_instances.splice(i, 1);
+		}
+	});
+};
 if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);
 }

@@ -604,6 +604,10 @@ K = function(expr, root) {
 	if (expr && expr.constructor === KNode) {
 		return expr;
 	}
+	// jQuery object
+	if (expr.toArray) {
+		expr = expr.toArray();
+	}
 	// Native NodeList
 	if (_isArray(expr)) {
 		return newNode(expr);
