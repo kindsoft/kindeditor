@@ -13,6 +13,7 @@ ver 4.1.2
 * Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。
 * Bugfix: IE8怪异模式下先打开弹出框关闭，用滚轮到顶或到底，会出现脚本错误。
 * Bugfix: 图片src为图片数据（base64 data）时，无法正常显示。
+* Bugfix: 在pre标签里无法粘贴内容。
 * Bugfix: KNode.show()和hide()，display都变成block。
 
 ver 4.1.1 (2012-06-10)

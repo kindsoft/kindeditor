@@ -687,9 +687,9 @@ _extend(KCmd, {
 		if (val === '') {
 			return self;
 		}
-		if (_inPreElement(K(range.startContainer))) {
-			return self;
-		}
+		//if (_inPreElement(K(range.startContainer))) {
+		//	return self;
+		//}
 		// IE专用，优化性能
 		function pasteHtml(range, val) {
 			val = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + val;

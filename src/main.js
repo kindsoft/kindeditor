@@ -782,12 +782,12 @@ KEditor.prototype = {
 		}
 		return self;
 	},
-	insertHtml : function(val) {
+	insertHtml : function(val, quickMode) {
 		if (!this.isCreated) {
 			return this;
 		}
 		val = this.beforeSetHtml(val);
-		this.exec('inserthtml', val);
+		this.exec('inserthtml', val, quickMode);
 		return this;
 	},
 	appendHtml : function(val) {
