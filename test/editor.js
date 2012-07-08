@@ -4,11 +4,13 @@ KindEditor.ready(function (K) {
 
 	var editor = K.create('#content1', {
 		basePath : '../',
+		filterMode : false,
 		wellFormatMode : false
 	});
 
 	var editor2 = K.create('#content2', {
 		basePath : '../',
+		filterMode : false,
 		wellFormatMode : false
 	});
 
