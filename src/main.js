@@ -998,7 +998,7 @@ function _create(expr, options) {
 		return editor.create();
 	}
 	var knode = K(expr);
-	if (!knode) {
+	if (!knode || knode.length === 0) {
 		return;
 	}
 	if (knode.length > 1) {
