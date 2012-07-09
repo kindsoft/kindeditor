@@ -8,6 +8,8 @@ ver 4.1.2
 * 新增: fillDescAfterUploadImage初始化参数，true时图片上传成功后切换到图片编辑标签。
 * 新增: afterSelectFile初始化参数，从图片空间选择后执行的回调函数。
 * 新增: K.NodeClass,K.RangeClass,K.CmdClass,K.EditClass,K.MenuClass等接口。
+* 新增: K.remove(expr)函数，可移除多个编辑器。
+* 新增: K()函数可以直接传入jQuery对象。
 * Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
 * Bugfix: 批量上传无法执行afterUpload这个回调，普通上传可以执行。
 * Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。

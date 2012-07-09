@@ -22,6 +22,7 @@
 		<input type="button" id="create2" value="Create #2" />
 		<input type="button" id="remove1" value="Remove #1" />
 		<input type="button" id="remove2" value="Remove #2" />
+		<input type="button" id="removeAll" value="Remove all" />
 		<input type="reset" name="button" value="Reset" />
 		<!-- <iframe src="http://www.kindsoft.net/"></iframe> -->
 		<script src="../kindeditor.js"></script>
@@ -30,10 +31,13 @@
 		
 		<script>
 			//document.domain = 'domain.com';
+			window.editor = K.create('textarea', {
+				allowFileManager : true,
+				langType : 'en'
+			});
 			KindEditor.ready(function(K) {
-				window.editor = K.create('textarea', {
-					allowFileManager : true,
-					langType : 'en'
+				K('#removeAll').click(function(e) {
+					K.remove('textarea');
 				});
 				K('#create1').click(function(e) {
 					K.instances[0].create();

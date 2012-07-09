@@ -1022,12 +1022,14 @@ function _create(expr, options) {
 }
 
 K.remove = function(expr) {
-	var el = K(expr);
-	K.each(_instances, function(i, editor) {
-		if (editor && editor.srcElement[0] == el[0]) {
-			editor.remove();
-			_instances.splice(i, 1);
-		}
+	K(expr).each(function(i, el) {
+		K.each(_instances, function(j, editor) {
+			if (editor && editor.srcElement[0] == el) {
+				editor.remove();
+				_instances.splice(j, 1);
+				return false;
+			}
+		});
 	});
 };
 
