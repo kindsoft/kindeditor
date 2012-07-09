@@ -31,11 +31,11 @@
 		
 		<script>
 			//document.domain = 'domain.com';
-			window.editor = K.create('textarea', {
-				allowFileManager : true,
-				langType : 'en'
-			});
 			KindEditor.ready(function(K) {
+				window.editor = K.create('textarea', {
+					allowFileManager : true,
+					langType : 'en'
+				});
 				K('#removeAll').click(function(e) {
 					K.remove('textarea');
 				});
