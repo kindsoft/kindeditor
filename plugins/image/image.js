@@ -101,7 +101,7 @@ KindEditor.plugin('image', function(K) {
 						return;
 					}
 					// insert local image
-					if (tabs && tabs.selectedIndex === 1) {
+					if (showLocal && showRemote && tabs && tabs.selectedIndex === 1 || !showRemote) {
 						if (uploadbutton.fileBox.val() == '') {
 							alert(self.lang('pleaseSelectFile'));
 							return;
