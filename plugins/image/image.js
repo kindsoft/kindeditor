@@ -25,6 +25,8 @@ KindEditor.plugin('image', function(K) {
 			imageHeight = K.undef(options.imageHeight, ''),
 			imageTitle = K.undef(options.imageTitle, ''),
 			imageAlign = K.undef(options.imageAlign, ''),
+			showRemote = K.undef(options.showRemote, true),
+			showLocal = K.undef(options.showLocal, true),
 			tabIndex = K.undef(options.tabIndex, 0),
 			clickFn = options.clickFn;
 		var target = 'kindeditor_upload_iframe_' + new Date().getTime();
@@ -83,8 +85,8 @@ KindEditor.plugin('image', function(K) {
 			//local upload - end
 			'</div>'
 		].join('');
-		var dialogWidth = allowImageUpload ? 450 : 400,
-			dialogHeight = allowImageUpload ? 300 : 250;
+		var dialogWidth = showLocal || allowFileManager ? 450 : 400,
+			dialogHeight = showLocal && showRemote ? 300 : 250;
 		var dialog = self.createDialog({
 			name : name,
 			width : dialogWidth,
@@ -158,7 +160,7 @@ KindEditor.plugin('image', function(K) {
 			alignBox = K('.tab1 [name="align"]', div);
 
 		var tabs;
-		if (allowImageUpload) {
+		if (showRemote && showLocal) {
 			tabs = K.tabs({
 				src : K('.tabs', div),
 				afterSelect : function(i) {}
@@ -172,8 +174,10 @@ KindEditor.plugin('image', function(K) {
 				panel : K('.tab2', div)
 			});
 			tabs.select(tabIndex);
-		} else {
+		} else if (showRemote) {
 			K('.tab1', div).show();
+		} else if (showLocal) {
+			K('.tab2', div).show();
 		}
 
 		var uploadbutton = K.uploadbutton({
@@ -287,6 +291,8 @@ KindEditor.plugin('image', function(K) {
 				imageHeight : img ? img.height() : '',
 				imageTitle : img ? img.attr('title') : '',
 				imageAlign : img ? img.attr('align') : '',
+				showRemote : true,
+				showLocal : allowImageUpload,
 				tabIndex: img ? 0 : imageTabIndex,
 				clickFn : function(url, title, width, height, border, align) {
 					self.exec('insertimage', url, title, width, height, border, align);
