@@ -125,8 +125,6 @@ _extend(KNode, {
 		self.name = _getNodeName(self[0]);
 		self.type = self.length > 0 ? self[0].nodeType : null;
 		self.win = _getWin(self[0]);
-		//private properties
-		self._data = {};
 	},
 	each : function(fn) {
 		var self = this;
@@ -320,10 +318,16 @@ _extend(KNode, {
 	},
 	data : function(key, val) {
 		var self = this;
+		key = 'kindeditor_data_' + key;
 		if (val === undefined) {
-			return self._data[key];
+			if (self.length < 1) {
+				return null;
+			}
+			return self[0][key];
 		}
-		self._data[key] = val;
+		this.each(function() {
+			this[key] = val;
+		});
 		return self;
 	},
 	pos : function() {
@@ -424,7 +428,6 @@ _extend(KNode, {
 			delete self[i];
 		});
 		self.length = 0;
-		self._data = {};
 		return self;
 	},
 	show : function(val) {

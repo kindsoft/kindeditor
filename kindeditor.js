@@ -1282,7 +1282,6 @@ _extend(KNode, {
 		self.name = _getNodeName(self[0]);
 		self.type = self.length > 0 ? self[0].nodeType : null;
 		self.win = _getWin(self[0]);
-		self._data = {};
 	},
 	each : function(fn) {
 		var self = this;
@@ -1476,10 +1475,16 @@ _extend(KNode, {
 	},
 	data : function(key, val) {
 		var self = this;
+		key = 'kindeditor_data_' + key;
 		if (val === undefined) {
-			return self._data[key];
+			if (self.length < 1) {
+				return null;
+			}
+			return self[0][key];
 		}
-		self._data[key] = val;
+		this.each(function() {
+			this[key] = val;
+		});
 		return self;
 	},
 	pos : function() {
@@ -1580,7 +1585,6 @@ _extend(KNode, {
 			delete self[i];
 		});
 		self.length = 0;
-		self._data = {};
 		return self;
 	},
 	show : function(val) {
@@ -3273,9 +3277,7 @@ function _drag(options) {
 		clickEl = options.clickEl || moveEl,
 		beforeDrag = options.beforeDrag,
 		iframeFix = options.iframeFix === undefined ? true : options.iframeFix;
-	var docs = [document],
-		poss = [{ x : 0, y : 0}],
-		listeners = [];
+	var docs = [document];
 	if (iframeFix) {
 		K('iframe').each(function() {
 			var doc;
@@ -3286,57 +3288,47 @@ function _drag(options) {
 				doc = null;
 			}
 			if (doc) {
+				var pos = K(this).pos();
+				K(doc).data('pos-x', pos.x);
+				K(doc).data('pos-y', pos.y);
 				docs.push(doc);
-				poss.push(K(this).pos());
 			}
 		});
 	}
 	clickEl.mousedown(function(e) {
+		e.stopPropagation();
 		var self = clickEl.get(),
 			x = _removeUnit(moveEl.css('left')),
 			y = _removeUnit(moveEl.css('top')),
 			width = moveEl.width(),
 			height = moveEl.height(),
 			pageX = e.pageX,
-			pageY = e.pageY,
-			dragging = true;
+			pageY = e.pageY;
 		if (beforeDrag) {
 			beforeDrag();
 		}
-		_each(docs, function(i, doc) {
-			function moveListener(e) {
-				if (dragging) {
-					var diffX = _round(poss[i].x + e.pageX - pageX),
-						diffY = _round(poss[i].y + e.pageY - pageY);
-					moveFn.call(clickEl, x, y, width, height, diffX, diffY);
-				}
-				e.stop();
+		function moveListener(e) {
+			e.preventDefault();
+			var kdoc = K(_getDoc(e.target));
+			var diffX = _round((kdoc.data('pos-x') || 0) + e.pageX - pageX);
+			var diffY = _round((kdoc.data('pos-y') || 0) + e.pageY - pageY);
+			moveFn.call(clickEl, x, y, width, height, diffX, diffY);
+		}
+		function selectListener(e) {
+			e.preventDefault();
+		}
+		function upListener(e) {
+			e.preventDefault();
+			K(docs).unbind('mousemove', moveListener)
+				.unbind('mouseup', upListener)
+				.unbind('selectstart', selectListener);
+			if (self.releaseCapture) {
+				self.releaseCapture();
 			}
-			function selectListener(e) {
-				e.stop();
-			}
-			function upListener(e) {
-				dragging = false;
-				if (self.releaseCapture) {
-					self.releaseCapture();
-				}
-				_each(listeners, function() {
-					K(this.doc).unbind('mousemove', this.move)
-						.unbind('mouseup', this.up)
-						.unbind('selectstart', this.select);
-				});
-				e.stop();
-			}
-			K(doc).mousemove(moveListener)
-				.mouseup(upListener)
-				.bind('selectstart', selectListener);
-			listeners.push({
-				doc : doc,
-				move : moveListener,
-				up : upListener,
-				select : selectListener
-			});
-		});
+		}
+		K(docs).mousemove(moveListener)
+			.mouseup(upListener)
+			.bind('selectstart', selectListener);
 		if (self.setCapture) {
 			self.setCapture();
 		}

@@ -194,3 +194,13 @@ test('show/hide',function(){
 	equals(node.hide().outer(), '<div style="display:none;"></div>');
 	equals(node.show().outer(), '<div style="display:block;"></div>');
 });
+
+test("data", function(){
+	K(document).data('abc', '123');
+	K('body').data('abc', '1234');
+	K('body div').data('abc', '12345');
+
+	equals(K(document).data('abc'), '123');
+	equals(K('body').data('abc'), '1234');
+	equals(K('body div').data('abc'), '12345');
+});

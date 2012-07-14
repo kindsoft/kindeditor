@@ -11,7 +11,6 @@ ver 4.1.2
 * 新增: K.remove(expr)函数，可移除多个编辑器。
 * 新增: K()函数可以直接传入jQuery对象。
 * 新增: plugin.imageDialog(options)添加showLocal和showRemote参数，值为false时分别隐藏网络图片和本地上传。
-* 改善: K.create函数未找到目标textarea时不会报错。
 * Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
 * Bugfix: 批量上传无法执行afterUpload这个回调，普通上传可以执行。
 * Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。
@@ -20,6 +19,9 @@ ver 4.1.2
 * Bugfix: 在pre标签里无法粘贴内容。
 * Bugfix: KNode.show()和hide()，display都变成block。
 * Bugfix: 版权标识&copy;来回切换代码模式后变成(C)。
+* Bugfix: 重新创建KNode后，data方法无法取得数据。
+* Bugfix: K.create函数未找到目标textarea时报错。
+* Bugfix: 右下角拖动，松开鼠标后还可以继续拖动。
 
 ver 4.1.1 (2012-06-10)
 * 新增: extraFileUploadParams初始化参数，文件上传时，支持添加别的参数一并传到服务器。
