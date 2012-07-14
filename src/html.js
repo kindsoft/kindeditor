@@ -132,6 +132,9 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	// <p></p> to <p><br /></p>
 	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
 	html = html.replace(/\u200B/g, '');
+	// &copy;
+	html = html.replace(/\u00A9/g, '&copy;');
+
 	var htmlTagMap = {};
 	if (htmlTags) {
 		// 展开htmlTags里的key
