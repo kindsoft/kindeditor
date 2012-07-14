@@ -494,6 +494,9 @@ KindEditor.plugin('table', function(K) {
 				row = self.plugin.getSelectedRow()[0],
 				cell = self.plugin.getSelectedCell()[0],
 				index = cell.cellIndex + offset;
+			// 取得第一行的index
+			index += table.rows[0].cells.length - row.cells.length;
+
 			for (var i = 0, len = table.rows.length; i < len; i++) {
 				var newRow = table.rows[i],
 					newCell = newRow.insertCell(index);
@@ -514,20 +517,36 @@ KindEditor.plugin('table', function(K) {
 		rowinsert : function(offset) {
 			var table = self.plugin.getSelectedTable()[0],
 				row = self.plugin.getSelectedRow()[0],
-				cell = self.plugin.getSelectedCell()[0],
-				newRow;
+				cell = self.plugin.getSelectedCell()[0];
+			var rowIndex = row.rowIndex;
 			if (offset === 1) {
-				newRow = table.insertRow(row.rowIndex + (cell.rowSpan - 1) + offset);
-			} else {
-				newRow = table.insertRow(row.rowIndex);
+				rowIndex = row.rowIndex + (cell.rowSpan - 1) + offset;
 			}
+			var newRow = table.insertRow(rowIndex);
+
 			for (var i = 0, len = row.cells.length; i < len; i++) {
+				// 调整cell个数
+				if (row.cells[i].rowSpan > 1) {
+					len -= row.cells[i].rowSpan - 1;
+				}
 				var newCell = newRow.insertCell(i);
 				// copy colspan
 				if (offset === 1 && row.cells[i].colSpan > 1) {
 					newCell.colSpan = row.cells[i].colSpan;
 				}
 				newCell.innerHTML = K.IE ? '' : '<br />';
+			}
+			// 调整rowspan
+			for (var j = rowIndex; j >= 0; j--) {
+				var cells = table.rows[j].cells;
+				if (cells.length > i) {
+					for (var k = cell.cellIndex; k >= 0; k--) {
+						if (cells[k].rowSpan > 1) {
+							cells[k].rowSpan += 1;
+						}
+					}
+					break;
+				}
 			}
 			self.cmd.range.selectNodeContents(cell).collapse(true);
 			self.cmd.select();

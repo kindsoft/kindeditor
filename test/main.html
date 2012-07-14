@@ -50,6 +50,7 @@
 		<script src="../plugins/map/map.js"></script>
 		<script src="../plugins/lineheight/lineheight.js"></script>
 		<script src="../plugins/clearhtml/clearhtml.js"></script>
+		<script src="../plugins/table/table.js"></script>
 	</head>
 	<body>
 		<h1 id="type">KindEditor Main Test</h1>
@@ -57,7 +58,64 @@
 		<tr>
 		<td align="center">
 		<form method="post" action="../php/demo.php">
-			<textarea name="content1" cols="100" rows="20" style="width:100%;height:10px;"><pre>abc</pre></textarea>
+			<textarea name="content1" cols="100" rows="20" style="width:100%;height:10px;"><table style="width:100%;" border="1" cellspacing="0" cellpadding="2">
+	<tbody>
+		<tr>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				<br />
+			</td>
+			<td>
+				<br />
+			</td>
+			<td>
+				<br />
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				<br />
+			</td>
+		</tr>
+		<tr>
+			<td rowspan="2">
+				&nbsp;
+			</td>
+			<td>
+				<br />
+			</td>
+			<td rowspan="2">
+				<br />
+			</td>
+			<td>
+				<br />
+			</td>
+			<td>
+				&nbsp;1
+			</td>
+			<td>
+				<br />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<br />
+			</td>
+			<td>
+				<br />
+			</td>
+			<td>
+				&nbsp;2
+			</td>
+			<td>
+				<br />
+			</td>
+		</tr>
+	</tbody>
+</table></textarea>
 			<br />
 			<textarea name="content2" cols="100" rows="20" style="width:700px;height:200px;"></textarea>
 			<br />
