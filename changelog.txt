@@ -22,6 +22,7 @@ ver 4.1.2
 * Bugfix: 重新创建KNode后，data方法无法取得数据。
 * Bugfix: K.create函数未找到目标textarea时报错。
 * Bugfix: 右下角拖动，松开鼠标后还可以继续拖动。
+* Bugfix: 右键编辑表格，插入行和列时有时候错乱。
 
 ver 4.1.1 (2012-06-10)
 * 新增: extraFileUploadParams初始化参数，文件上传时，支持添加别的参数一并传到服务器。
