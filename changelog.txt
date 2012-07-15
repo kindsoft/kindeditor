@@ -11,6 +11,7 @@ ver 4.1.2
 * 新增: K.remove(expr)函数，可移除多个编辑器。
 * 新增: K()函数可以直接传入jQuery对象。
 * 新增: plugin.imageDialog(options)添加showLocal和showRemote参数，值为false时分别隐藏网络图片和本地上传。
+* 变更: fullscreenShortcut默认值改成false，默认不启用ESC快捷键全屏。
 * Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
 * Bugfix: 批量上传无法执行afterUpload这个回调，普通上传可以执行。
 * Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。

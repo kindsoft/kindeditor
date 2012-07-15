@@ -32,7 +32,7 @@ K.options = {
 	pasteType : 2, // 0:none, 1:text, 2:HTML
 	dialogAlignType : 'page', // page, editor
 	useContextmenu : true,
-	fullscreenShortcut : true,
+	fullscreenShortcut : false,
 	bodyClass : 'ke-content',
 	indentChar : '\t', // \t, "  "
 	cssPath : '', //String or Array
