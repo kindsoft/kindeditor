@@ -1021,15 +1021,27 @@ function _create(expr, options) {
 	return editor;
 }
 
-K.remove = function(expr) {
+function _eachEditor(expr, fn) {
 	K(expr).each(function(i, el) {
 		K.each(_instances, function(j, editor) {
 			if (editor && editor.srcElement[0] == el) {
-				editor.remove();
-				_instances.splice(j, 1);
+				fn.call(editor, j, editor);
 				return false;
 			}
 		});
+	});
+}
+
+K.remove = function(expr) {
+	_eachEditor(expr, function(i) {
+		this.remove();
+		_instances.splice(i, 1);
+	});
+};
+
+K.sync = function(expr) {
+	_eachEditor(expr, function() {
+		this.sync();
 	});
 };
 

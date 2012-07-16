@@ -5,11 +5,12 @@
 #######################################################################
 
 ver 4.1.2
+* 新增: K.remove(expr)函数，可移除多个编辑器，expr为选择器或DOM对象。
+* 新增: K.sync(expr)函数，可同步多个编辑器，expr为选择器或DOM对象。
+* 新增: K.create(expr)、K(expr)等函数可以直接传入jQuery对象。
 * 新增: fillDescAfterUploadImage初始化参数，true时图片上传成功后切换到图片编辑标签。
 * 新增: afterSelectFile初始化参数，从图片空间选择后执行的回调函数。
 * 新增: K.NodeClass,K.RangeClass,K.CmdClass,K.EditClass,K.MenuClass等接口。
-* 新增: K.remove(expr)函数，可移除多个编辑器。
-* 新增: K()函数可以直接传入jQuery对象。
 * 新增: plugin.imageDialog(options)添加showLocal和showRemote参数，值为false时分别隐藏网络图片和本地上传。
 * 变更: fullscreenShortcut默认值改成false，默认不启用ESC快捷键全屏。
 * Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
