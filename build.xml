@@ -5,6 +5,8 @@
 	</description>
 
 	<property name="src" value="src"/>
+	<property name="lang" value="lang"/>
+	<property name="plugins" value="plugins"/>
 	<property name="filename" value="kindeditor"/>
 	<property name="version" value="4.1.1"/>
 	<property name="charset" value="utf-8"/>
@@ -101,6 +103,45 @@
 			<arg line="-jar lib/closure-compiler.jar --js=${filename}.js --js_output_file=${filename}-min.js"/>
 		</exec>
 		<replaceregexp file="${filename}-min.js"
+			match="^"
+			replace="/* KindEditor ${version} (${ymd}), Copyright (C) kindsoft.net, Licence: http://www.kindsoft.net/license.php */"
+			encoding="${charset}"
+			byline="false"
+		/>
+	</target>
+
+	<target name="all" depends="merge">
+		<concat destfile="${filename}-all.js"
+			encoding="${charset}"
+			outputencoding="${charset}">
+			<fileset file="${filename}.js"/>
+			<fileset file="${lang}/zh_CN.js"/>
+			<fileset file="${plugins}/anchor/anchor.js"/>
+			<fileset file="${plugins}/baidumap/baidumap.js"/>
+			<fileset file="${plugins}/clearhtml/clearhtml.js"/>
+			<fileset file="${plugins}/code/code.js"/>
+			<fileset file="${plugins}/emoticons/emoticons.js"/>
+			<fileset file="${plugins}/filemanager/filemanager.js"/>
+			<fileset file="${plugins}/flash/flash.js"/>
+			<fileset file="${plugins}/image/image.js"/>
+			<fileset file="${plugins}/insertfile/insertfile.js"/>
+			<fileset file="${plugins}/lineheight/lineheight.js"/>
+			<fileset file="${plugins}/link/link.js"/>
+			<fileset file="${plugins}/map/map.js"/>
+			<fileset file="${plugins}/media/media.js"/>
+			<fileset file="${plugins}/multiimage/multiimage.js"/>
+			<fileset file="${plugins}/pagebreak/pagebreak.js"/>
+			<fileset file="${plugins}/plainpaste/plainpaste.js"/>
+			<fileset file="${plugins}/preview/preview.js"/>
+			<fileset file="${plugins}/quickformat/quickformat.js"/>
+			<fileset file="${plugins}/table/table.js"/>
+			<fileset file="${plugins}/template/template.js"/>
+			<fileset file="${plugins}/wordpaste/wordpaste.js"/>
+		</concat>
+		<exec executable="java">
+			<arg line="-jar lib/closure-compiler.jar --js=${filename}-all.js --js_output_file=${filename}-all-min.js"/>
+		</exec>
+		<replaceregexp file="${filename}-all-min.js"
 			match="^"
 			replace="/* KindEditor ${version} (${ymd}), Copyright (C) kindsoft.net, Licence: http://www.kindsoft.net/license.php */"
 			encoding="${charset}"
