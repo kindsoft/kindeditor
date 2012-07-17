@@ -13,6 +13,7 @@ KindEditor.plugin('media', function(K) {
 		allowFileManager = K.undef(self.allowFileManager, false),
 		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		extraParams = K.undef(self.extraFileUploadParams, {}),
+		filePostName = K.undef(self.filePostName, 'imgFile'),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php');
 	self.plugin.media = {
 		edit : function() {
@@ -94,7 +95,7 @@ KindEditor.plugin('media', function(K) {
 			if (allowMediaUpload) {
 				var uploadbutton = K.uploadbutton({
 					button : K('.ke-upload-button', div)[0],
-					fieldName : 'imgFile',
+					fieldName : filePostName,
 					extraParams : extraParams,
 					url : K.addParam(uploadJson, 'dir=media'),
 					afterUpload : function(data) {

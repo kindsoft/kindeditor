@@ -16,6 +16,7 @@ KindEditor.plugin('image', function(K) {
 		imageTabIndex = K.undef(self.imageTabIndex, 0),
 		imgPath = self.pluginsPath + 'image/images/',
 		extraParams = K.undef(self.extraFileUploadParams, {}),
+		filePostName = K.undef(self.filePostName, 'imgFile'),
 		fillDescAfterUploadImage = K.undef(self.fillDescAfterUploadImage, false),
 		lang = self.lang(name + '.');
 
@@ -182,7 +183,7 @@ KindEditor.plugin('image', function(K) {
 
 		var uploadbutton = K.uploadbutton({
 			button : K('.ke-upload-button', div)[0],
-			fieldName : 'imgFile',
+			fieldName : filePostName,
 			url : K.addParam(uploadJson, 'dir=image'),
 			form : K('.ke-form', div),
 			target : target,

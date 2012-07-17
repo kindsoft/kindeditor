@@ -203,6 +203,7 @@ KindEditor.plugin('multiimage', function(K) {
 		imageSizeLimit = K.undef(self.imageSizeLimit, '1MB'),
 		imageFileTypes = K.undef(self.imageFileTypes, '*.jpg;*.gif;*.png'),
 		imageUploadLimit = K.undef(self.imageUploadLimit, 20),
+		filePostName = K.undef(self.filePostName, 'imgFile'),
 		lang = self.lang(name + '.');
 
 	self.plugin.multiImageDialog = function(options) {
@@ -248,7 +249,7 @@ KindEditor.plugin('multiimage', function(K) {
 			startButtonValue : lang.startUpload,
 			uploadUrl : K.addParam(uploadJson, 'dir=image'),
 			flashUrl : imgPath + 'swfupload.swf',
-			filePostName : 'imgFile',
+			filePostName : filePostName,
 			fileTypes : '*.jpg;*.jpeg;*.gif;*.png;*.bmp',
 			fileTypesDesc : 'Image Files',
 			fileUploadLimit : imageUploadLimit,
