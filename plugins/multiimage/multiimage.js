@@ -57,6 +57,7 @@ K.extend(KSWFUpload, {
 			file_types_description : options.fileTypesDesc,
 			file_upload_limit : options.fileUploadLimit,
 			file_size_limit : options.fileSizeLimit,
+			post_params : options.postParams,
 			file_queued_handler : function(file) {
 				file.url = self.options.fileIconUrl;
 				self.appendFile(file);
@@ -252,7 +253,8 @@ KindEditor.plugin('multiimage', function(K) {
 			fileTypes : '*.jpg;*.jpeg;*.gif;*.png;*.bmp',
 			fileTypesDesc : 'Image Files',
 			fileUploadLimit : imageUploadLimit,
-			fileSizeLimit : imageSizeLimit,
+			fileSizeLimit : imageSizeLimit,			
+                        postParams :  K.undef(self.extraFileUploadParams, {}),
 			queueLimitExceeded : lang.queueLimitExceeded,
 			fileExceedsSizeLimit : lang.fileExceedsSizeLimit,
 			zeroByteFile : lang.zeroByteFile,
