@@ -191,7 +191,7 @@ KindEditor.plugin('image', function(K) {
 						url = K.formatUrl(url, 'absolute');
 					}
 					if (self.afterUpload) {
-						self.afterUpload.call(self, url);
+						self.afterUpload.call(self, url, data, name);
 					}
 					if (!fillDescAfterUploadImage) {
 						clickFn.call(self, url, '', '', '', 0, '');	
