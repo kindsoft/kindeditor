@@ -81,7 +81,7 @@ KindEditor.plugin('insertfile', function(K) {
 						}
 						urlBox.val(url);
 						if (self.afterUpload) {
-							self.afterUpload.call(self, url);
+							self.afterUpload.call(self, url, data, name);
 						}
 						alert(self.lang('uploadSuccess'));
 					} else {
