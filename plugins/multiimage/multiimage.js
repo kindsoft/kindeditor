@@ -114,7 +114,7 @@ K.extend(KSWFUpload, {
 					return;
 				}
 				file.url = data.url;
-				K('.ke-img', itemDiv).attr('src', file.url).attr('data-status', file.filestatus);
+				K('.ke-img', itemDiv).attr('src', file.url).attr('data-status', file.filestatus).data('data', data);
 				K('.ke-status > div', itemDiv).hide();
 			}
 		};
@@ -128,10 +128,9 @@ K.extend(KSWFUpload, {
 		var list = [];
 		K('.ke-img', self.bodyDiv).each(function() {
 			var img = K(this);
-			var url = img.attr('src');
 			var status = img.attr('data-status');
 			if (status == SWFUpload.FILE_STATUS.COMPLETE) {
-				list.push(url);
+				list.push(img.data('data'));
 			}
 		});
 		return list;
@@ -276,14 +275,12 @@ KindEditor.plugin('multiimage', function(K) {
 				if (urlList.length === 0) {
 					return;
 				}
-				var html = '';
-				K.each(urlList, function(i, url) {
-					html += '<img src="' + K.escape(url) + '" data-ke-src="' + K.escape(url) + '" alt="" /><br />';
+				K.each(urlList, function(i, data) {
 					if (self.afterUpload) {
-						self.afterUpload.call(self, url);
+						self.afterUpload.call(self, data.url, data, 'multiimage');
 					}
+					self.exec('insertimage', data.url, data.title, data.width, data.height, data.border, data.align);
 				});
-				self.insertHtml(html);
 				// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
 				setTimeout(function() {
 					self.hideDialog().focus();

@@ -196,10 +196,10 @@ KindEditor.plugin('image', function(K) {
 						url = K.formatUrl(url, 'absolute');
 					}
 					if (self.afterUpload) {
-						self.afterUpload.call(self, url);
+						self.afterUpload.call(self, url, data, name);
 					}
 					if (!fillDescAfterUploadImage) {
-						clickFn.call(self, url, '', '', '', 0, '');
+						clickFn.call(self, url, data.title, data.width, data.height, data.border, data.align);
 					} else {
 						K(".ke-dialog-row #remoteUrl", div).val(url);
 						K(".ke-tabs-li", div)[0].click();

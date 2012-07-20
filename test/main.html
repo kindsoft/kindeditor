@@ -182,9 +182,11 @@
 						K('#J_count1').html(this.count());
 						//console.log('1');
 					},
-					afterUpload : function(url) {
+					afterUpload : function(url, data, name) {
 						var select = K('#uploadFile')[0];
 						select.options.add(new Option(url, url));
+						console.log(data);
+						console.log(name);
 					},
 					afterSelectFile : function(url) {
 						var select = K('#uploadFile')[0];
