@@ -16,6 +16,7 @@ K.create(expr [, options])
 
 * 参数:
 	* mixed expr: element或选择器
+	* object options: :doc:`option`
 * 返回: KEditor
 
 示例:
@@ -32,6 +33,62 @@ K.create(expr [, options])
 		filterMode : true,
 		langType : 'en'
 	});
+
+.. note ::
+
+	4.1.2版本开始expr可以直接传入jQuery对象。
+
+.. index:: remove
+
+.. _K.remove:
+
+K.remove(expr)
+--------------------------------------------------------
+移除多个编辑器。
+
+* 参数:
+	* mixed expr: element或选择器
+* 返回: undefined
+
+示例:
+
+.. sourcecode:: js
+
+	// 移除ID为editor_id的编辑器
+	K.remove('#editor_id');
+
+	// 移除class为editor-class的编辑器
+	K.remove('.editor-class');
+
+.. note ::
+
+	4.1.2版本开始支持。
+
+.. index:: sync
+
+.. _K.sync:
+
+K.sync(expr)
+--------------------------------------------------------
+同步多个编辑器。
+
+* 参数:
+	* mixed expr: element或选择器
+* 返回: undefined
+
+示例:
+
+.. sourcecode:: js
+
+	// 同步ID为editor_id的编辑器
+	K.remove('#editor_id');
+
+	// 同步class为editor的编辑器
+	K.remove('.editor');
+
+.. note ::
+
+	4.1.2版本开始支持。
 
 .. index:: remove
 
@@ -270,7 +327,7 @@ sync()
 .. sourcecode:: js
 
 	editor.sync();
-	
+
 .. index:: exec
 
 .. _KEditor.exec:

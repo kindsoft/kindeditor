@@ -724,11 +724,13 @@ fullscreenShortcut
 false时禁用ESC全屏快捷键。
 
 * 数据类型: Boolean
-* 默认值: true
+* 默认值: false
 
 .. note::
 
-	4.1版本开始支持。
+	4.1版本开始支持，从4.1.2版本开始默认值为false。
+
+.. index:: extraFileUploadParams
 
 .. _extraFileUploadParams:
 
@@ -749,3 +751,52 @@ extraFileUploadParams
 			}
 		});
 	});
+
+.. note::
+
+	4.1.1版本开始支持。
+
+.. index:: filePostName
+
+.. _filePostName:
+
+filePostName
+--------------------------------------------------------
+指定上传文件form名称。
+
+* 数据类型: String
+* 默认值: imgFile
+
+.. note::
+
+	4.1.2版本开始支持。
+
+.. index:: fillDescAfterUploadImage
+
+.. _fillDescAfterUploadImage:
+
+fillDescAfterUploadImage
+--------------------------------------------------------
+true时图片上传成功后切换到图片编辑标签，false时插入图片后关闭弹出框。
+
+* 数据类型: Boolean
+* 默认值: false
+
+.. note::
+
+	4.1.2版本开始支持。
+
+.. index:: afterSelectFile
+
+.. _afterSelectFile:
+
+afterSelectFile
+--------------------------------------------------------
+从图片空间选择文件后执行的回调函数。
+
+* 数据类型: Function
+* 默认值: 无
+
+.. note::
+
+	4.1.2版本开始支持。

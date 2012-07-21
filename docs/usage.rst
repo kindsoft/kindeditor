@@ -84,7 +84,7 @@
 
 .. note ::
 
-	* KindEditor的可视化操作在新创建的iframe上执行，代码模式下的textarea框也是新创建的，所以最后提交前需要将HTML数据同步到原来的textarea，editor.sync()函数会完成这个动作。
+	* KindEditor的可视化操作在新创建的iframe上执行，代码模式下的textarea框也是新创建的，所以最后提交前需要执行 :ref:`KEditor.sync` 将HTML数据设置到原来的textarea。
 	* KindEditor在默认情况下自动寻找textarea所属的form元素，找到form后onsubmit事件里添加sync函数，所以用form方式提交数据，不需要手动执行sync()函数。
 
 
