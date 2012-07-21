@@ -17,8 +17,8 @@
 							clickFn : function(urlList) {
 								var div = K('#J_imageView');
 								div.html('');
-								K.each(urlList, function(i, url) {
-									div.append('<img src="' + url + '">');
+								K.each(urlList, function(i, data) {
+									div.append('<img src="' + data.url + '">');
 								});
 								editor.hideDialog();
 							}
