@@ -4,6 +4,32 @@
 .. contents::
 	:depth: 2
 
+ver 4.1.2 (2012-07-21)
+-----------------------------------------------------------------
+* 新增: K.remove(expr)函数，可移除多个编辑器，expr为选择器或DOM对象。
+* 新增: K.sync(expr)函数，可同步多个编辑器，expr为选择器或DOM对象。
+* 新增: K.create(expr)、K(expr)等函数可以直接传入jQuery对象。
+* 新增: filePostName初始化参数，可指定上传文件form名称。
+* 新增: fillDescAfterUploadImage初始化参数，true时图片上传成功后切换到图片编辑标签。
+* 新增: afterSelectFile初始化参数，从图片空间选择后执行的回调函数。
+* 新增: K.NodeClass,K.RangeClass,K.CmdClass,K.EditClass,K.MenuClass等接口。
+* 新增: plugin.imageDialog(options)添加showLocal和showRemote参数，值为false时分别隐藏网络图片和本地上传。
+* 新增: afterUpload新增data和name参数，分别为后端返回的JSON数据和插件名称。
+* 变更: fullscreenShortcut默认值改成false，默认不启用ESC快捷键全屏。
+* 改善: 多图上传时，允许用户post自定义参数到服务器。
+* Bugfix: [Firefox] 居中后输入几个文字回车换行，内容被全选。
+* Bugfix: 批量上传无法执行afterUpload这个回调，普通上传可以执行。
+* Bugfix: 页面中存在其它SWFUpload，批量上传出现冲突。
+* Bugfix: IE8怪异模式下先打开弹出框关闭，用滚轮到顶或到底，会出现脚本错误。
+* Bugfix: 图片src为图片数据（base64 data）时，无法正常显示。
+* Bugfix: 在pre标签里无法粘贴内容。
+* Bugfix: KNode.show()和hide()，display都变成block。
+* Bugfix: 版权标识&copy;来回切换代码模式后变成(C)。
+* Bugfix: 重新创建KNode后，data方法无法取得数据。
+* Bugfix: K.create函数未找到目标textarea时报错。
+* Bugfix: 右下角拖动，松开鼠标后还可以继续拖动。
+* Bugfix: 右键编辑表格，插入行和列时有时候错乱。
+
 ver 4.1.1 (2012-06-10)
 -----------------------------------------------------------------
 * 新增: extraFileUploadParams初始化参数，文件上传时，支持添加别的参数一并传到服务器。
