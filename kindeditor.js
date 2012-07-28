@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.2 (2012-07-21)
+* @version 4.1.2 (2012-07-28)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.2 (2012-07-21)',
+var _VERSION = '4.1.2 (2012-07-28)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5068,7 +5068,7 @@ KEditor.prototype = {
 				self.container.css('width', _addUnit(width));
 			}
 		}
-		if (height !== null) {
+		if (height !== null && self.toolbar.div && self.statusbar) {
 			height = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
 			if (height > 0 && _removeUnit(height) > self.minHeight) {
 				self.edit.setHeight(height);

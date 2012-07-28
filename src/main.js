@@ -713,7 +713,7 @@ KEditor.prototype = {
 				self.container.css('width', _addUnit(width));
 			}
 		}
-		if (height !== null) {
+		if (height !== null && self.toolbar.div && self.statusbar) {
 			height = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
 			if (height > 0 && _removeUnit(height) > self.minHeight) {
 				self.edit.setHeight(height);
