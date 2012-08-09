@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.2 (2012-07-28)
+* @version 4.1.2 (2012-08-09)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.2 (2012-07-28)',
+var _VERSION = '4.1.2 (2012-08-09)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -75,7 +75,7 @@ function _inString(val, str, delimiter) {
 }
 function _addUnit(val, unit) {
 	unit = unit || 'px';
-	return val && /^\d+$/.test(val) ? val + 'px' : val;
+	return val && /^\d+$/.test(val) ? val + unit : val;
 }
 function _removeUnit(val) {
 	var match;

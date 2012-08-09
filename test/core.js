@@ -88,6 +88,7 @@ test('addUnit', function() {
 	equals(K.addUnit(100), '100px');
 	equals(K.addUnit('100px'), '100px');
 	equals(K.addUnit('100%'), '100%');
+	equals(K.addUnit(100, 'em'), '100em');
 });
 
 test('removeUnit', function() {
