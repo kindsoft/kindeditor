@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.2 (2012-08-09)
+* @version 4.1.2 (2012-08-10)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.2 (2012-08-09)',
+var _VERSION = '4.1.2 (2012-08-10)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5330,6 +5330,7 @@ function _create(expr, options) {
 		_each(_plugins, function(name, fn) {
 			fn.call(editor, KindEditor);
 		});
+		editor.srcElement.data('kindeditor', 'true');
 		return editor.create();
 	}
 	var knode = K(expr);
@@ -5341,6 +5342,9 @@ function _create(expr, options) {
 			_create(this, options);
 		});
 		return _instances[0];
+	}
+	if (knode.data('kindeditor')) {
+		return;
 	}
 	options.srcElement = knode[0];
 	var editor = new KEditor(options);
@@ -5365,6 +5369,7 @@ function _eachEditor(expr, fn) {
 }
 K.remove = function(expr) {
 	_eachEditor(expr, function(i) {
+		this.srcElement.data('kindeditor', '');
 		this.remove();
 		_instances.splice(i, 1);
 	});
