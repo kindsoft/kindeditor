@@ -9,6 +9,7 @@ ver 4.1.3
 * Bugfix: [IE] 只显示本地上传Tab时，打开图片弹出框报错。
 * Bugfix: 点击全屏后再切换回来，有时候出现JS错误。
 * Bugfix: K.addUnit(val, unit)第二个参数不起作用。
+* Bugfix: &会转义成&amp;这样超链接就不能访问。
 
 ver 4.1.2 (2012-07-21)
 * 新增: K.remove(expr)函数，可移除多个编辑器，expr为选择器或DOM对象。
