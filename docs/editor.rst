@@ -81,10 +81,10 @@ K.sync(expr)
 .. sourcecode:: js
 
 	// 同步ID为editor_id的编辑器
-	K.remove('#editor_id');
+	K.sync('#editor_id');
 
 	// 同步class为editor的编辑器
-	K.remove('.editor');
+	K.sync('.editor');
 
 .. note ::
 
