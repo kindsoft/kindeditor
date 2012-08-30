@@ -32,6 +32,8 @@ KindEditor.ready(function (K) {
 		equals(editor.html(), '<p>　abc</p>');
 		editor.html('<noscript><img src="" /></noscript>');
 		equals(editor.html(), '<noscript><img src="" /></noscript>');
+		editor.html('<a href="test.php?id=1&name=test">test</a>');
+		equals(editor.html(), '<a href="test.php?id=1&name=test">test</a>');
 	});
 
 	test("editor.text", function() {
