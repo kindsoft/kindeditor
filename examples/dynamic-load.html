@@ -14,18 +14,14 @@
 		<script charset="utf-8" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 		<script>
 			$(function() {
-				var editor;
 				$('input[name=load]').click(function() {
 					$.getScript('../kindeditor-min.js', function() {
 						KindEditor.basePath = '../';
-						editor = KindEditor.create('textarea[name="content"]');
+						KindEditor.create('textarea[name="content"]');
 					});
 				});
 				$('input[name=remove]').click(function() {
-					if (editor) {
-						editor.remove();
-						editor = null;
-					}
+					KindEditor.remove('textarea[name="content"]');
 				});
 			});
 		</script>

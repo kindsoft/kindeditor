@@ -25,21 +25,18 @@
 		<script>
 			$(function() {
 				$('#J_openDialog').click(function() {
-					var editor;
 					$('#J_editorDialog').dialog({
 						title : 'KindEditor',
 						width : 700,
 						open : function(event, ui) {
 							// 打开Dialog后创建编辑器
-							editor = KindEditor.create('textarea[name="content"]', {
+							KindEditor.create('textarea[name="content"]', {
 								resizeType : 1
 							});
 						},
 						beforeClose : function(event, ui) {
 							// 关闭Dialog前移除编辑器
-							if (editor) {
-								editor.remove();
-							}
+							KindEditor.remove('textarea[name="content"]');
 						}
 					});
 				});
