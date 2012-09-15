@@ -10,14 +10,15 @@ function _drag(options) {
 
 	if (iframeFix) {
 		K('iframe').each(function() {
-			var doc;
 			// 判断是否跨域
+			var src = _formatUrl(this.src || '', 'absolute');
+			if (/^https?:\/\//.test(src)) {
+				return;
+			}
+			var doc;
 			try {
 				doc = _iframeDoc(this);
-				K(doc);
-			} catch(e) {
-				doc = null;
-			}
+			} catch(e) {}
 			if (doc) {
 				var pos = K(this).pos();
 				K(doc).data('pos-x', pos.x);
