@@ -15,6 +15,8 @@
 	<body>
 		<input type="button" id="create" name="create" value="Create" />
 		<input type="button" id="remove" name="remove" value="Remove" />
+		<a href="leak.html?id=123">刷新</a>
+		<a href="javascript:history.back(-1);">返回上一步</a>
 		<script>
 			var knode, jnode, node;
 			$('#create').bind('click', function(e) {
