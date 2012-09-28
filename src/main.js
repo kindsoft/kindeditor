@@ -1466,7 +1466,9 @@ _plugin('core', function(K) {
 			return '<noscript' + unescape(attr) + '>' + unescape(code) + '</noscript>';
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
-			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, '$1' + unescape(src) + '$2');
+			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
+				return $1 + unescape(src) + $2;
+			});
 			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
 			return full;
 		})

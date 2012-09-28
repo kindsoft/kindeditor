@@ -22,18 +22,27 @@ KindEditor.ready(function (K) {
 	test("editor.html", function() {
 		editor.html('<h3>abc</h3>');
 		equals(editor.html(), '<h3>abc</h3>');
+
 		editor.html('<div class="aaa bbb ccc">abc</div>');
 		equals(editor.html(), '<div class="aaa bbb ccc">abc</div>');
+
 		editor.html('');
 		equals(editor.html(), '');
+
 		editor.html('<div class="aaa bbb ccc">abc</div>');
 		equals(editor.html(), '<div class="aaa bbb ccc">abc</div>');
+
 		editor.html('<p>　abc</p>');
 		equals(editor.html(), '<p>　abc</p>');
+
 		editor.html('<noscript><img src="" /></noscript>');
 		equals(editor.html(), '<noscript><img src="" /></noscript>');
+
 		editor.html('<a href="test.php?id=1&name=test">test</a>');
 		equals(editor.html(), '<a href="test.php?id=1&name=test">test</a>');
+
+		editor.html('<a href="$abc$$">test</a>');
+		equals(editor.html(), '<a href="$abc$$">test</a>');
 	});
 
 	test("editor.text", function() {
