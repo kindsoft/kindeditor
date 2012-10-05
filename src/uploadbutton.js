@@ -50,7 +50,7 @@ _extend(KUploadButton, {
 			iframe = self.iframe;
 		iframe.bind('load', function() {
 			iframe.unbind();
-			// Çå¿Õfile
+			// æ¸…ç©ºfile
 			var tempForm = document.createElement('form');
 			self.fileBox.before(tempForm);
 			K(tempForm).append(self.fileBox);
@@ -65,7 +65,7 @@ _extend(KUploadButton, {
 			} else {
 				str = doc.body.innerHTML;
 			}
-			// Bugfix: [IE] ÉÏ´«Í¼Æ¬ºó£¬½ø¶ÈÌõÒ»Ö±´¦ÓÚ¼ÓÔØ×´Ì¬¡£
+			// Bugfix: [IE] ä¸Šä¼ å›¾ç‰‡åï¼Œè¿›åº¦æ¡ä¸€ç›´å¤„äºåŠ è½½çŠ¶æ€ã€‚
 			iframe[0].src = 'javascript:false';
 			try {
 				data = K.json(str);
@@ -84,7 +84,7 @@ _extend(KUploadButton, {
 		if (self.fileBox) {
 			self.fileBox.unbind();
 		}
-		// Bugfix: [IE] ÉÏ´«Í¼Æ¬ºó£¬½ø¶ÈÌõÒ»Ö±´¦ÓÚ¼ÓÔØ×´Ì¬¡£
+		// Bugfix: [IE] ä¸Šä¼ å›¾ç‰‡åï¼Œè¿›åº¦æ¡ä¸€ç›´å¤„äºåŠ è½½çŠ¶æ€ã€‚
 		//self.iframe[0].src = 'javascript:false';
 		self.iframe.remove();
 		self.div.remove();
