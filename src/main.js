@@ -455,6 +455,12 @@ KEditor.prototype = {
 		if (self.isCreated) {
 			return self;
 		}
+
+		if (self.srcElement.data('kindeditor')) {
+			return self;
+		}
+		self.srcElement.data('kindeditor', 'true');
+
 		if (fullscreenMode) {
 			_docElement().style.overflow = 'hidden';
 		} else {
@@ -689,6 +695,9 @@ KEditor.prototype = {
 			return self;
 		}
 		self.beforeRemove();
+
+		self.srcElement.data('kindeditor', '');
+
 		if (self.menu) {
 			self.hideMenu();
 		}
@@ -995,7 +1004,6 @@ function _create(expr, options) {
 		_each(_plugins, function(name, fn) {
 			fn.call(editor, KindEditor);
 		});
-		editor.srcElement.data('kindeditor', 'true');
 		return editor.create();
 	}
 	var knode = K(expr);
@@ -1007,9 +1015,6 @@ function _create(expr, options) {
 			_create(this, options);
 		});
 		return _instances[0];
-	}
-	if (knode.data('kindeditor')) {
-		return;
 	}
 	options.srcElement = knode[0];
 	var editor = new KEditor(options);
@@ -1038,7 +1043,6 @@ function _eachEditor(expr, fn) {
 
 K.remove = function(expr) {
 	_eachEditor(expr, function(i) {
-		this.srcElement.data('kindeditor', '');
 		this.remove();
 		_instances.splice(i, 1);
 	});

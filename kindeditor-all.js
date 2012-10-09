@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.3 (2012-09-28)
+* @version 4.1.3 (2012-10-10)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.3 (2012-09-28)',
+var _VERSION = '4.1.3 (2012-10-10)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4827,6 +4827,10 @@ KEditor.prototype = {
 		if (self.isCreated) {
 			return self;
 		}
+		if (self.srcElement.data('kindeditor')) {
+			return self;
+		}
+		self.srcElement.data('kindeditor', 'true');
 		if (fullscreenMode) {
 			_docElement().style.overflow = 'hidden';
 		} else {
@@ -5045,6 +5049,7 @@ KEditor.prototype = {
 			return self;
 		}
 		self.beforeRemove();
+		self.srcElement.data('kindeditor', '');
 		if (self.menu) {
 			self.hideMenu();
 		}
@@ -5331,7 +5336,6 @@ function _create(expr, options) {
 		_each(_plugins, function(name, fn) {
 			fn.call(editor, KindEditor);
 		});
-		editor.srcElement.data('kindeditor', 'true');
 		return editor.create();
 	}
 	var knode = K(expr);
@@ -5343,9 +5347,6 @@ function _create(expr, options) {
 			_create(this, options);
 		});
 		return _instances[0];
-	}
-	if (knode.data('kindeditor')) {
-		return;
 	}
 	options.srcElement = knode[0];
 	var editor = new KEditor(options);
@@ -5370,7 +5371,6 @@ function _eachEditor(expr, fn) {
 }
 K.remove = function(expr) {
 	_eachEditor(expr, function(i) {
-		this.srcElement.data('kindeditor', '');
 		this.remove();
 		_instances.splice(i, 1);
 	});
