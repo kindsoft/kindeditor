@@ -43,6 +43,9 @@ KindEditor.ready(function (K) {
 
 		editor.html('<a href="$abc$$">test</a>');
 		equals(editor.html(), '<a href="$abc$$">test</a>');
+
+		editor.html('<img src="http://localhost/minglsjy.33/trunk/index.php?r=file/pic&f=24&t=1" />');
+		equals(editor.html(), '<img src="http://localhost/minglsjy.33/trunk/index.php?r=file/pic&f=24&t=1" />');
 	});
 
 	test("editor.text", function() {
