@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.3 (2012-10-10)
+* @version 4.1.3 (2012-10-13)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.3 (2012-10-10)',
+var _VERSION = '4.1.3 (2012-10-13)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -270,37 +270,38 @@ K.options = {
 	],
 	fontSizeTable : ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'],
 	htmlTags : {
-		font : ['color', 'size', 'face', '.background-color'],
+		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
 		span : [
-			'.color', '.background-color', '.font-size', '.font-family', '.background',
+			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
 		],
 		div : [
-			'align', '.border', '.margin', '.padding', '.text-align', '.color',
+			'id', 'class', 'align', '.border', '.margin', '.padding', '.text-align', '.color',
 			'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
 			'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
 		],
 		table: [
-			'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+			'id', 'class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
 			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
 			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
 			'.width', '.height', '.border-collapse'
 		],
 		'td,th': [
-			'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+			'id', 'class', 'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
 			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
 			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
-		a : ['href', 'target', 'name'],
-		embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
-		img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
+		a : ['id', 'class', 'href', 'target', 'name'],
+		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
-			'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
 			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
 		],
-		pre : ['class'],
-		hr : ['class', '.page-break-after'],
-		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
+		pre : ['id', 'class'],
+		hr : ['id', 'class', '.page-break-after'],
+		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : ['id', 'class'],
+		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height']
 	},
 	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
 };
@@ -6016,6 +6017,7 @@ KindEditor.lang({
 	'map.search' : '搜索',
 	'baidumap.address' : '地址: ',
 	'baidumap.search' : '搜索',
+	'baidumap.insertDynamicMap' : '插入动态地图',
 	'anchor.name' : '锚点名称',
 	'formatblock.formatBlock' : {
 		h1 : '标题 1',
@@ -6112,19 +6114,29 @@ KindEditor.plugin('anchor', function(K) {
 
 KindEditor.plugin('baidumap', function(K) {
 	var self = this, name = 'baidumap', lang = self.lang(name + '.');
+	var mapWidth = K.undef(self.mapWidth, 558);
+	var mapHeight = K.undef(self.mapHeight, 360);
 	self.clickToolbar(name, function() {
 		var html = ['<div style="padding:10px 20px;">',
-			'<div class="ke-dialog-row">',
+			'<div class="ke-header">',
+			// left start
+			'<div class="ke-left">',
 			lang.address + ' <input id="kindeditor_plugin_map_address" name="address" class="ke-input-text" value="" style="width:200px;" /> ',
 			'<span class="ke-button-common ke-button-outer">',
 			'<input type="button" name="searchBtn" class="ke-button-common ke-button" value="' + lang.search + '" />',
 			'</span>',
 			'</div>',
-			'<div class="ke-map" style="width:558px;height:360px;"></div>',
+			// right start
+			'<div class="ke-right">',
+			'<input type="checkbox" id="keInsertDynamicMap" name="insertDynamicMap" value="1" /> <label for="keInsertDynamicMap">' + lang.insertDynamicMap + '</label>',
+			'</div>',
+			'<div class="ke-clearfix"></div>',
+			'</div>',
+			'<div class="ke-map" style="width:' + mapWidth + 'px;height:' + mapHeight + 'px;"></div>',
 			'</div>'].join('');
 		var dialog = self.createDialog({
 			name : name,
-			width : 600,
+			width : mapWidth + 42,
 			title : self.lang(name),
 			body : html,
 			yesBtn : {
@@ -6134,14 +6146,19 @@ KindEditor.plugin('baidumap', function(K) {
 					var centerObj = map.getCenter();
 					var center = centerObj.lng + ',' + centerObj.lat;
 					var zoom = map.getZoom();
-					var url = ['http://api.map.baidu.com/staticimage',
+					var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/' : 'http://api.map.baidu.com/staticimage',
 						'?center=' + encodeURIComponent(center),
 						'&zoom=' + encodeURIComponent(zoom),
-						'&width=558',
-						'&height=360',
+						'&width=' + mapWidth,
+						'&height=' + mapHeight,
 						'&markers=' + encodeURIComponent(center),
 						'&markerStyles=' + encodeURIComponent('l,A')].join('');
-					self.exec('insertimage', url).hideDialog().focus();
+					if (checkbox[0].checked) {
+						self.insertHtml('<iframe src="' + url + '" frameborder="0" style="width:' + (mapWidth + 2) + 'px;height:' + (mapHeight + 2) + 'px;"></iframe>');
+					} else {
+						self.exec('insertimage', url);
+					}
+					self.hideDialog().focus();
 				}
 			},
 			beforeRemove : function() {
@@ -6155,8 +6172,9 @@ KindEditor.plugin('baidumap', function(K) {
 		var div = dialog.div,
 			addressBox = K('[name="address"]', div),
 			searchBtn = K('[name="searchBtn"]', div),
+			checkbox = K('[name="insertDynamicMap"]', dialog.div),
 			win, doc;
-		var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'baidumap/map.html" style="width:558px;height:360px;"></iframe>');
+		var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'baidumap/map.html" style="width:' + mapWidth + 'px;height:' + mapHeight + 'px;"></iframe>');
 		function ready() {
 			win = iframe[0].contentWindow;
 			doc = K.iframeDoc(iframe);
@@ -8994,14 +9012,17 @@ if (typeof(SWFUpload) === "function") {
 *******************************************************************************/
 
 KindEditor.plugin('pagebreak', function(K) {
-	var self = this, name = 'pagebreak';
+	var self = this;
+	var name = 'pagebreak';
+	var pagebreakHtml = K.undef(self.pagebreakHtml, '<hr style="page-break-after: always;" class="ke-pagebreak" />');
+
 	self.clickToolbar(name, function() {
 		var cmd = self.cmd, range = cmd.range;
 		self.focus();
 		range.enlarge(true);
 		cmd.split(true);
 		var tail = self.newlineTag == 'br' || K.WEBKIT ? '' : '<p id="__kindeditor_tail_tag__"></p>';
-		self.insertHtml('<hr style="page-break-after: always;" class="ke-pagebreak" />' + tail);
+		self.insertHtml(pagebreakHtml + tail);
 		if (tail !== '') {
 			var p = K('#__kindeditor_tail_tag__', self.edit.doc);
 			range.selectNodeContents(p[0]);
@@ -9884,7 +9905,7 @@ KindEditor.plugin('template', function(K) {
 	}
 	self.clickToolbar(name, function() {
 		var lang = self.lang(name + '.'),
-			arr = ['<div class="ke-plugin-template" style="padding:10px 20px;">',
+			arr = ['<div style="padding:10px 20px;">',
 				'<div class="ke-header">',
 				// left start
 				'<div class="ke-left">',

@@ -193,6 +193,7 @@ KindEditor.lang({
 	'map.search' : '尋找',
 	'baidumap.address' : '住所: ',
 	'baidumap.search' : '尋找',
+	'baidumap.insertDynamicMap' : '插入動態地圖',
 	'anchor.name' : '錨點名稱',
 	'formatblock.formatBlock' : {
 		h1 : '標題 1',

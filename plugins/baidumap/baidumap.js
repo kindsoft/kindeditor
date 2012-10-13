@@ -11,19 +11,29 @@
 
 KindEditor.plugin('baidumap', function(K) {
 	var self = this, name = 'baidumap', lang = self.lang(name + '.');
+	var mapWidth = K.undef(self.mapWidth, 558);
+	var mapHeight = K.undef(self.mapHeight, 360);
 	self.clickToolbar(name, function() {
 		var html = ['<div style="padding:10px 20px;">',
-			'<div class="ke-dialog-row">',
+			'<div class="ke-header">',
+			// left start
+			'<div class="ke-left">',
 			lang.address + ' <input id="kindeditor_plugin_map_address" name="address" class="ke-input-text" value="" style="width:200px;" /> ',
 			'<span class="ke-button-common ke-button-outer">',
 			'<input type="button" name="searchBtn" class="ke-button-common ke-button" value="' + lang.search + '" />',
 			'</span>',
 			'</div>',
-			'<div class="ke-map" style="width:558px;height:360px;"></div>',
+			// right start
+			'<div class="ke-right">',
+			'<input type="checkbox" id="keInsertDynamicMap" name="insertDynamicMap" value="1" /> <label for="keInsertDynamicMap">' + lang.insertDynamicMap + '</label>',
+			'</div>',
+			'<div class="ke-clearfix"></div>',
+			'</div>',
+			'<div class="ke-map" style="width:' + mapWidth + 'px;height:' + mapHeight + 'px;"></div>',
 			'</div>'].join('');
 		var dialog = self.createDialog({
 			name : name,
-			width : 600,
+			width : mapWidth + 42,
 			title : self.lang(name),
 			body : html,
 			yesBtn : {
@@ -33,14 +43,19 @@ KindEditor.plugin('baidumap', function(K) {
 					var centerObj = map.getCenter();
 					var center = centerObj.lng + ',' + centerObj.lat;
 					var zoom = map.getZoom();
-					var url = ['http://api.map.baidu.com/staticimage',
+					var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/' : 'http://api.map.baidu.com/staticimage',
 						'?center=' + encodeURIComponent(center),
 						'&zoom=' + encodeURIComponent(zoom),
-						'&width=558',
-						'&height=360',
+						'&width=' + mapWidth,
+						'&height=' + mapHeight,
 						'&markers=' + encodeURIComponent(center),
 						'&markerStyles=' + encodeURIComponent('l,A')].join('');
-					self.exec('insertimage', url).hideDialog().focus();
+					if (checkbox[0].checked) {
+						self.insertHtml('<iframe src="' + url + '" frameborder="0" style="width:' + (mapWidth + 2) + 'px;height:' + (mapHeight + 2) + 'px;"></iframe>');
+					} else {
+						self.exec('insertimage', url);
+					}
+					self.hideDialog().focus();
 				}
 			},
 			beforeRemove : function() {
@@ -54,8 +69,9 @@ KindEditor.plugin('baidumap', function(K) {
 		var div = dialog.div,
 			addressBox = K('[name="address"]', div),
 			searchBtn = K('[name="searchBtn"]', div),
+			checkbox = K('[name="insertDynamicMap"]', dialog.div),
 			win, doc;
-		var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'baidumap/map.html" style="width:558px;height:360px;"></iframe>');
+		var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'baidumap/map.html" style="width:' + mapWidth + 'px;height:' + mapHeight + 'px;"></iframe>');
 		function ready() {
 			win = iframe[0].contentWindow;
 			doc = K.iframeDoc(iframe);

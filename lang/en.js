@@ -193,6 +193,7 @@ KindEditor.lang({
 	'map.search' : 'Search',
 	'baidumap.address' : 'Address: ',
 	'baidumap.search' : 'Search',
+	'baidumap.insertDynamicMap' : 'Dynamic Map',
 	'anchor.name' : 'Anchor name',
 	'formatblock.formatBlock' : {
 		h1 : 'Heading 1',

@@ -194,6 +194,7 @@ KindEditor.lang({
 	'map.search' : 'بحث',
 	'baidumap.address' : 'العنوان: ',
 	'baidumap.search' : 'بحث',
+	'baidumap.insertDynamicMap' : 'Dynamic Map',
 	'anchor.name' : 'إسم الرابط',
 	'formatblock.formatBlock' : {
 		h1 : 'عنوان 1',

@@ -46,6 +46,9 @@ KindEditor.ready(function (K) {
 
 		editor.html('<img src="http://localhost/minglsjy.33/trunk/index.php?r=file/pic&f=24&t=1" />');
 		equals(editor.html(), '<img src="http://localhost/minglsjy.33/trunk/index.php?r=file/pic&f=24&t=1" />');
+
+		editor.html('<iframe src="http://localhost/minglsjy.33/trunk/index.php?r=file/pic&f=24&t=1"></iframe>');
+		equals(editor.html(), '<iframe src="http://localhost/minglsjy.33/trunk/index.php?r=file/pic&f=24&t=1"></iframe>');
 	});
 
 	test("editor.text", function() {

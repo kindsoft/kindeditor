@@ -635,6 +635,23 @@
 	margin: 0;
 	padding: 0;
 }
+.ke-dialog .ke-header {
+	width: 100%;
+	margin-bottom: 10px;
+}
+.ke-dialog .ke-header .ke-left {
+	float: left;
+}
+.ke-dialog .ke-header .ke-right {
+	float: right;
+}
+.ke-dialog .ke-header label {
+	margin-right: 0;
+	cursor: pointer;
+	font-weight: normal;
+	display: inline;
+	vertical-align: top;
+}
 .ke-dialog-content {
 	background-color: #FFF;
 	width: 100%;
@@ -1128,21 +1145,4 @@
 	width: 30%;
 	text-align: center;
 }
-/* template */
-.ke-plugin-template .ke-header {
-	width: 100%;
-	margin-bottom: 10px;
-}
-.ke-plugin-template label {
-	margin-right: 0;
-	cursor: pointer;
-	font-weight: normal;
-	display: inline;
-	vertical-align: top;
-}
-.ke-plugin-template .ke-left {
-	float: left;
-}
-.ke-plugin-template .ke-right {
-	float: right;
-}
+

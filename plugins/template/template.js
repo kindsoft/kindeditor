@@ -15,7 +15,7 @@ KindEditor.plugin('template', function(K) {
 	}
 	self.clickToolbar(name, function() {
 		var lang = self.lang(name + '.'),
-			arr = ['<div class="ke-plugin-template" style="padding:10px 20px;">',
+			arr = ['<div style="padding:10px 20px;">',
 				'<div class="ke-header">',
 				// left start
 				'<div class="ke-left">',

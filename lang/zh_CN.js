@@ -195,6 +195,7 @@ KindEditor.lang({
 	'map.search' : '搜索',
 	'baidumap.address' : '地址: ',
 	'baidumap.search' : '搜索',
+	'baidumap.insertDynamicMap' : '插入动态地图',
 	'anchor.name' : '锚点名称',
 	'formatblock.formatBlock' : {
 		h1 : '标题 1',
