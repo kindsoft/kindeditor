@@ -800,3 +800,19 @@ afterSelectFile
 .. note::
 
 	4.1.2版本开始支持。
+
+.. index:: pagebreakHtml
+
+.. _pagebreakHtml:
+
+pagebreakHtml
+--------------------------------------------------------
+可指定分页符HTML。
+
+* 数据类型: String
+* 默认值: `<hr style="page-break-after: always;" class="ke-pagebreak" />`
+
+.. note::
+
+	4.1.3版本开始支持。
+
