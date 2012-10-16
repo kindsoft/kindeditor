@@ -5,8 +5,9 @@
  * @author Longhao Luo
  * @url http://www.kindsoft.net/
  *
- * @src http://www.kindsoft.net/ke4/kindeditor-all.js
- * @min http://www.kindsoft.net/ke4/kindeditor-all-min.js
+ * @root https://raw.github.com/kindsoft/kindeditor/master/
+ * @src kindeditor-all.js
+ * @min kindeditor-all-min.js
  */
 
 define('#{{id}}', [], function(require) {

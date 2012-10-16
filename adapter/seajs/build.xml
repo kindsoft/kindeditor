@@ -1,0 +1,27 @@
+<project name="KindEditor-SeaJS" default="transport" basedir=".">
+
+	<description>
+		KindEditor for SeaJS build file
+	</description>
+
+	<property name="version" value="4.1.3"/>
+	<property name="charset" value="utf-8"/>
+	<property name="src" value="../../"/>
+	<property name="dist" value="${version}"/>
+
+	<target name="transport">
+		<exec executable="cmd" failonerror="true">
+			<arg line="/c spm transport transport.js --force"/>
+		</exec>
+		<delete dir="${dist}/plugins"/>
+		<delete dir="${dist}/themes"/>
+		<copy todir="${dist}" includeemptydirs="false">
+			<fileset dir="${src}">
+				<include name="plugins/**"/>
+				<include name="themes/**"/>
+				<exclude name="**/*.js"/>
+			</fileset>
+		</copy>
+	</target>
+
+</project>
