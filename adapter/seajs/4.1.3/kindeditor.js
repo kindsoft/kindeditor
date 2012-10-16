@@ -1,4 +1,4 @@
-define('#kindeditor\4.1.3\kindeditor', [], function(require) {
+define('#kindeditor\4.1.3\kindeditor', [], function(require, exports, module) {
 
 /* KindEditor 4.1.3 (2012-10-13), Copyright (C) kindsoft.net, Licence: http://www.kindsoft.net/license.php */(function(b,c){function g(a){if(!a)return!1;return Object.prototype.toString.call(a)==="[object Array]"}function l(a){if(!a)return!1;return Object.prototype.toString.call(a)==="[object Function]"}function f(a,d){for(var e=0,b=d.length;e<b;e++)if(a===d[e])return e;return-1}function i(a,d){if(g(a))for(var e=0,b=a.length;e<b;e++){if(d.call(a[e],e,a[e])===!1)break}else for(e in a)if(a.hasOwnProperty(e)&&d.call(a[e],e,a[e])===!1)break}function k(a){return a.replace(/(?:^[ \t\n\r]+)|(?:[ \t\n\r]+$)/g,"")}
 function j(a,d,e){e=e===c?",":e;return(e+d+e).indexOf(e+a+e)>=0}function n(a,d){d=d||"px";return a&&/^\d+$/.test(a)?a+d:a}function o(a){var d;return a&&(d=/(\d+)/.exec(a))?parseInt(d[1],10):0}function r(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}function s(a){return a.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&amp;/g,"&")}function p(a){var d=a.split("-"),a="";i(d,function(d,b){a+=d>0?b.charAt(0).toUpperCase()+
@@ -349,6 +349,8 @@ k=b("select",f.div),j=b('[name="replaceFlag"]',f.div),l=b("iframe",f.div);j[0].c
 KindEditor.plugin("wordpaste",function(b){var c=this;c.clickToolbar("wordpaste",function(){var g='<div style="padding:10px 20px;"><div style="margin-bottom:10px;">'+c.lang("wordpaste.").comment+'</div><iframe class="ke-textarea" frameborder="0" style="width:408px;height:260px;"></iframe></div>',g=c.createDialog({name:"wordpaste",width:450,title:c.lang("wordpaste"),body:g,yesBtn:{name:c.lang("yes"),click:function(){var f=l.body.innerHTML,f=b.clearMsWord(f,c.filterMode?c.htmlTags:b.options.htmlTags);
 c.insertHtml(f).hideDialog().focus()}}}).div,g=b("iframe",g),l=b.iframeDoc(g);if(!b.IE)l.designMode="on";l.open();l.write("<!doctype html><html><head><title>WordPaste</title></head>");l.write('<body style="background-color:#FFF;font-size:12px;margin:2px;">');b.IE||l.write("<br />");l.write("</body></html>");l.close();if(b.IE)l.body.contentEditable="true";g[0].contentWindow.focus()})});
 
+
+KindEditor.basePath = seajs.pluginSDK.util.dirname(module.realUri);
 
 return KindEditor;
 

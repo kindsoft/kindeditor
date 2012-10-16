@@ -10,9 +10,11 @@
  * @min kindeditor-all-min.js
  */
 
-define('#{{id}}', [], function(require) {
+define('#{{id}}', [], function(require, exports, module) {
 
 /*{{code}}*/
+
+KindEditor.basePath = seajs.pluginSDK.util.dirname(module.realUri);
 
 return KindEditor;
 

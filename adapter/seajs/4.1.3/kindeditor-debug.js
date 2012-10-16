@@ -1,4 +1,4 @@
-define('#kindeditor\4.1.3\kindeditor-debug', [], function(require) {
+define('#kindeditor\4.1.3\kindeditor-debug', [], function(require, exports, module) {
 
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
@@ -10000,6 +10000,8 @@ KindEditor.plugin('wordpaste', function(K) {
 	});
 });
 
+
+KindEditor.basePath = seajs.pluginSDK.util.dirname(module.realUri);
 
 return KindEditor;
 
