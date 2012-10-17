@@ -21,6 +21,7 @@ _extend(KDialog, KWidget, {
 		var shadowMode = _undef(options.shadowMode, true);
 		options.z = options.z || 811213;
 		options.shadowMode = false;
+		options.autoScroll = _undef(options.autoScroll, true);
 		KDialog.parent.init.call(self, options);
 		var title = options.title,
 			body = K(options.body, self.doc),

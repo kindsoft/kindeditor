@@ -905,7 +905,6 @@ KEditor.prototype = {
 	},
 	createDialog : function(options) {
 		var self = this, name = options.name;
-		options.autoScroll = _undef(options.autoScroll, true);
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		options.closeBtn = _undef(options.closeBtn, {
 			name : self.lang('close'),

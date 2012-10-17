@@ -110,7 +110,7 @@
 		/>
 	</target>
 
-	<target name="all" depends="merge">
+	<target name="all" depends="min">
 		<concat destfile="${filename}-all.js"
 			encoding="${charset}"
 			outputencoding="${charset}">
@@ -149,7 +149,7 @@
 		/>
 	</target>
 
-	<target name="zip" depends="min">
+	<target name="zip" depends="all">
 		<mkdir dir="dist"/>
 		<delete dir="${dist}"/>
 		<delete file="${dist}.zip"/>

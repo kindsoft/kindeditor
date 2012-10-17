@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.3 (2012-10-13)
+* @version 4.1.4 (2012-10-17)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.3 (2012-10-13)',
+var _VERSION = '4.1.4 (2012-10-17)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4180,6 +4180,7 @@ _extend(KDialog, KWidget, {
 		var shadowMode = _undef(options.shadowMode, true);
 		options.z = options.z || 811213;
 		options.shadowMode = false;
+		options.autoScroll = _undef(options.autoScroll, true);
 		KDialog.parent.init.call(self, options);
 		var title = options.title,
 			body = K(options.body, self.doc),
@@ -5255,7 +5256,6 @@ KEditor.prototype = {
 	},
 	createDialog : function(options) {
 		var self = this, name = options.name;
-		options.autoScroll = _undef(options.autoScroll, true);
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		options.closeBtn = _undef(options.closeBtn, {
 			name : self.lang('close'),
@@ -6146,7 +6146,7 @@ KindEditor.plugin('baidumap', function(K) {
 					var centerObj = map.getCenter();
 					var center = centerObj.lng + ',' + centerObj.lat;
 					var zoom = map.getZoom();
-					var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/' : 'http://api.map.baidu.com/staticimage',
+					var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/index.html' : 'http://api.map.baidu.com/staticimage',
 						'?center=' + encodeURIComponent(center),
 						'&zoom=' + encodeURIComponent(zoom),
 						'&width=' + mapWidth,
@@ -6943,7 +6943,6 @@ KindEditor.plugin('image', function(K) {
 		var uploadbutton = K.uploadbutton({
 			button : K('.ke-upload-button', div)[0],
 			fieldName : filePostName,
-			url : K.addParam(uploadJson, 'dir=image'),
 			form : K('.ke-form', div),
 			target : target,
 			width: 60,
