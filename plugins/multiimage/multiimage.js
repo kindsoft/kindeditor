@@ -1281,6 +1281,9 @@ SWFUpload.Console.writeLine = function (message) {
 	}
 };
 
+})();
+
+(function() {
 /*
 	Queue Plug-in
 
