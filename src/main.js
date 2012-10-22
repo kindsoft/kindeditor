@@ -284,7 +284,8 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	if (edit.designMode) {
+	// Bugfix: https://code.google.com/p/kindeditor/issues/detail?id=274
+	if (edit.designMode && !_WEBKIT) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -828,12 +829,13 @@ KEditor.prototype = {
 
 		if (checkSize && self._undoStack.length > 0) {
 			var prev = self._undoStack[self._undoStack.length - 1];
-			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
+			if (Math.abs(html.length - _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
 				return self;
 			}
 		}
 		// 第一次执行addBookmark时不执行range.createBookmark
-		if (edit.designMode && !self._firstAddBookmark) {
+		// Bugfix: https://code.google.com/p/kindeditor/issues/detail?id=274
+		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);

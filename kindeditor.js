@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-10-22)
+* @version 4.1.4 (2012-10-23)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-10-22)',
+var _VERSION = '4.1.4 (2012-10-23)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4668,7 +4668,7 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	if (edit.designMode) {
+	if (edit.designMode && !_WEBKIT) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -5180,11 +5180,11 @@ KEditor.prototype = {
 			html = _removeTempTag(body.innerHTML), bookmark;
 		if (checkSize && self._undoStack.length > 0) {
 			var prev = self._undoStack[self._undoStack.length - 1];
-			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
+			if (Math.abs(html.length - _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
 				return self;
 			}
 		}
-		if (edit.designMode && !self._firstAddBookmark) {
+		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);
