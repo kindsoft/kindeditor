@@ -1472,7 +1472,7 @@ _plugin('core', function(K) {
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
-				return $1 + unescape(src) + $2;
+				return $1 + _unescape(src) + $2;
 			});
 			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
 			return full;
@@ -1507,7 +1507,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + '"' + ' data-ke-src="' + escape(src) + '"' + end;
+			full = start + key + '="' + src + '"' + ' data-ke-src="' + _escape(src) + '"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {

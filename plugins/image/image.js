@@ -286,7 +286,7 @@ KindEditor.plugin('image', function(K) {
 		edit : function() {
 			var img = self.plugin.getSelectedImage();
 			self.plugin.imageDialog({
-				imageUrl : img ? unescape(img.attr('data-ke-src')) : 'http://',
+				imageUrl : img ? img.attr('data-ke-src') : 'http://',
 				imageWidth : img ? img.width() : '',
 				imageHeight : img ? img.height() : '',
 				imageTitle : img ? img.attr('title') : '',

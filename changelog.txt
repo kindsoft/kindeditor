@@ -10,6 +10,7 @@ ver 4.1.4
 * Bugfix: 点击图片属性、超级链接属性时，冒号变成%3A。
 * Bugfix: 当页面里面有jQuery的uploadify插件时，无法连续上传。
 * Bugfix: [WEBKIT] 有些输入法，稍微快速地连续输入时，光标位置错乱。
+* Bugfix: URL包含中文时，就会变成乱码。
 
 ver 4.1.3 (2012-10-14)
 * 新增: 百度地图可插入iframe动态地图。
