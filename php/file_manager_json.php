@@ -83,7 +83,7 @@ if ($handle = opendir($current_path)) {
 			$file_list[$i]['has_file'] = false;
 			$file_list[$i]['filesize'] = filesize($file);
 			$file_list[$i]['dir_path'] = '';
-			$file_ext = strtolower(pathinfo($file,PATHINFO_EXTENSION));
+			$file_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 			$file_list[$i]['is_photo'] = in_array($file_ext, $ext_arr);
 			$file_list[$i]['filetype'] = $file_ext;
 		}
