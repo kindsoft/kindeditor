@@ -81,7 +81,17 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 }
 
 function _elementVal(knode, val) {
-	return knode.hasVal() ? knode.val(val) : knode.html(val);
+	if (knode.hasVal()) {
+		if (val === undefined) {
+			var html = knode.val();
+			// 去除内容为空的p标签
+			// https://github.com/kindsoft/kindeditor/pull/52
+			html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
+			return html;
+		}
+		return knode.val(val);
+	}
+	return knode.html(val);
 }
 
 // create KEdit class
