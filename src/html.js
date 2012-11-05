@@ -1,4 +1,3 @@
-
 function _getCssList(css) {
 	var list = {},
 		reg = /\s*([\w\-]+)\s*:([^;]*)(;|$)/g,
@@ -129,6 +128,8 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	});
 	// <br/></p> to </p>
 	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
+	// 去除内容为空的p标签
+	html = html.replace(/(<(?:p|p\s[^>]*)>)[ ]*(<\/p>)/ig, '');
 	// <p></p> to <p><br /></p>
 	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
 	html = html.replace(/\u200B/g, '');
