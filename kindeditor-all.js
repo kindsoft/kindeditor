@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-10-17)
+* @version 4.1.4 (2012-11-06)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-10-17)',
+var _VERSION = '4.1.4 (2012-11-06)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3563,7 +3563,15 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	return arr.join('\n');
 }
 function _elementVal(knode, val) {
-	return knode.hasVal() ? knode.val(val) : knode.html(val);
+	if (knode.hasVal()) {
+		if (val === undefined) {
+			var html = knode.val();
+			html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
+			return html;
+		}
+		return knode.val(val);
+	}
+	return knode.html(val);
 }
 function KEdit(options) {
 	this.init(options);
@@ -4588,6 +4596,13 @@ function _bindNewlineEvent() {
 			return;
 		}
 		if (_GECKO) {
+			var root = self.cmd.commonAncestor('p');
+			var a = self.cmd.commonAncestor('a');
+			if (a.text() == '') {
+				a.remove(true);
+				self.cmd.range.selectNodeContents(root[0]).collapse(true);
+				self.cmd.select();
+			}
 			return;
 		}
 		self.cmd.selection();
@@ -4668,7 +4683,7 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	if (edit.designMode) {
+	if (edit.designMode && !_WEBKIT) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -5180,11 +5195,11 @@ KEditor.prototype = {
 			html = _removeTempTag(body.innerHTML), bookmark;
 		if (checkSize && self._undoStack.length > 0) {
 			var prev = self._undoStack[self._undoStack.length - 1];
-			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
+			if (Math.abs(html.length - _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
 				return self;
 			}
 		}
-		if (edit.designMode && !self._firstAddBookmark) {
+		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);
@@ -5771,7 +5786,7 @@ _plugin('core', function(K) {
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
-				return $1 + unescape(src) + $2;
+				return $1 + _unescape(src) + $2;
 			});
 			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
 			return full;
@@ -5805,7 +5820,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + '"' + ' data-ke-src="' + escape(src) + '"' + end;
+			full = start + key + '="' + src + '"' + ' data-ke-src="' + _escape(src) + '"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
@@ -8902,6 +8917,9 @@ SWFUpload.Console.writeLine = function (message) {
 	}
 };
 
+})();
+
+(function() {
 /*
 	Queue Plug-in
 

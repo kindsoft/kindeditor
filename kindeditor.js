@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-10-26)
+* @version 4.1.4 (2012-11-06)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-10-26)',
+var _VERSION = '4.1.4 (2012-11-06)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3563,7 +3563,15 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	return arr.join('\n');
 }
 function _elementVal(knode, val) {
-	return knode.hasVal() ? knode.val(val) : knode.html(val);
+	if (knode.hasVal()) {
+		if (val === undefined) {
+			var html = knode.val();
+			html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
+			return html;
+		}
+		return knode.val(val);
+	}
+	return knode.html(val);
 }
 function KEdit(options) {
 	this.init(options);
