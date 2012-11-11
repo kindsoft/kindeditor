@@ -4,14 +4,13 @@
 		KindEditor for SeaJS build file
 	</description>
 
-	<property name="version" value="4.1.4"/>
 	<property name="src" value="../../"/>
-	<property name="dist" value="${version}"/>
+	<property name="dist" value="dist"/>
 
 	<target name="transport">
 		<delete dir="${dist}"/>
 		<exec executable="cmd" failonerror="true">
-			<arg line="/c spm transport transport.js --force"/>
+			<arg line="/c spm transport transport.js --force --dev"/>
 		</exec>
 		<copy todir="${dist}" includeemptydirs="false">
 			<fileset dir="${src}">

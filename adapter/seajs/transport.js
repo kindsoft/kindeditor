@@ -1,11 +1,11 @@
 /**
  * @name kindeditor
- * @version 4.1.4
+ * @version dist
  * @description A WYSIWYG HTML editor.
  * @author Longhao Luo
  * @url http://www.kindsoft.net/
  *
- * @root https://raw.github.com/kindsoft/kindeditor/master/
+ * @root ../../
  * @src kindeditor-all.js
  * @min kindeditor-all-min.js
  */

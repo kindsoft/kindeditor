@@ -7,7 +7,7 @@ define('#kindeditor\4.1.4\kindeditor-debug', [], function(require, exports, modu
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-11-06)
+* @version 4.1.4 (2012-11-11)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-11-06)',
+var _VERSION = '4.1.4 (2012-11-11)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -252,7 +252,7 @@ K.options = {
 	cssData : '',
 	minWidth : 650,
 	minHeight : 100,
-	minChangeSize : 5,
+	minChangeSize : 50,
 	items : [
 		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
@@ -4685,7 +4685,7 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	if (edit.designMode && !_WEBKIT) {
+	if (edit.designMode) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -5201,7 +5201,7 @@ KEditor.prototype = {
 				return self;
 			}
 		}
-		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
+		if (edit.designMode && !self._firstAddBookmark) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);
@@ -6017,7 +6017,7 @@ KindEditor.lang({
 	'table.spacing' : '间距',
 	'table.align' : '对齐方式',
 	'table.textAlign' : '水平对齐',
-	'table.verticalAlign' : '垂直���齐',
+	'table.verticalAlign' : '垂直对齐',
 	'table.alignDefault' : '默认',
 	'table.alignLeft' : '左对齐',
 	'table.alignCenter' : '居中',
