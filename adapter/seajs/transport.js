@@ -1,6 +1,6 @@
 /**
  * @name kindeditor
- * @version 4.1.3
+ * @version 4.1.4
  * @description A WYSIWYG HTML editor.
  * @author Longhao Luo
  * @url http://www.kindsoft.net/

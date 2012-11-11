@@ -1,4 +1,4 @@
-define('#kindeditor\4.1.3\kindeditor-debug', [], function(require, exports, module) {
+define('#kindeditor\4.1.4\kindeditor-debug', [], function(require, exports, module) {
 
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
@@ -7,7 +7,7 @@ define('#kindeditor\4.1.3\kindeditor-debug', [], function(require, exports, modu
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.3 (2012-10-13)
+* @version 4.1.4 (2012-11-06)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.3 (2012-10-13)',
+var _VERSION = '4.1.4 (2012-11-06)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3565,7 +3565,15 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	return arr.join('\n');
 }
 function _elementVal(knode, val) {
-	return knode.hasVal() ? knode.val(val) : knode.html(val);
+	if (knode.hasVal()) {
+		if (val === undefined) {
+			var html = knode.val();
+			html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
+			return html;
+		}
+		return knode.val(val);
+	}
+	return knode.html(val);
 }
 function KEdit(options) {
 	this.init(options);
@@ -4182,6 +4190,7 @@ _extend(KDialog, KWidget, {
 		var shadowMode = _undef(options.shadowMode, true);
 		options.z = options.z || 811213;
 		options.shadowMode = false;
+		options.autoScroll = _undef(options.autoScroll, true);
 		KDialog.parent.init.call(self, options);
 		var title = options.title,
 			body = K(options.body, self.doc),
@@ -4589,6 +4598,13 @@ function _bindNewlineEvent() {
 			return;
 		}
 		if (_GECKO) {
+			var root = self.cmd.commonAncestor('p');
+			var a = self.cmd.commonAncestor('a');
+			if (a.text() == '') {
+				a.remove(true);
+				self.cmd.range.selectNodeContents(root[0]).collapse(true);
+				self.cmd.select();
+			}
 			return;
 		}
 		self.cmd.selection();
@@ -4669,7 +4685,7 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	if (edit.designMode) {
+	if (edit.designMode && !_WEBKIT) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -5181,11 +5197,11 @@ KEditor.prototype = {
 			html = _removeTempTag(body.innerHTML), bookmark;
 		if (checkSize && self._undoStack.length > 0) {
 			var prev = self._undoStack[self._undoStack.length - 1];
-			if (Math.abs(html.length -  _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
+			if (Math.abs(html.length - _removeBookmarkTag(prev.html).length) < self.minChangeSize) {
 				return self;
 			}
 		}
-		if (edit.designMode && !self._firstAddBookmark) {
+		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);
@@ -5257,7 +5273,6 @@ KEditor.prototype = {
 	},
 	createDialog : function(options) {
 		var self = this, name = options.name;
-		options.autoScroll = _undef(options.autoScroll, true);
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		options.closeBtn = _undef(options.closeBtn, {
 			name : self.lang('close'),
@@ -5773,7 +5788,7 @@ _plugin('core', function(K) {
 		})
 		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
-				return $1 + unescape(src) + $2;
+				return $1 + _unescape(src) + $2;
 			});
 			full = full.replace(/\s+data-ke-src="[^"]*"/i, '');
 			return full;
@@ -5807,7 +5822,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + '"' + ' data-ke-src="' + escape(src) + '"' + end;
+			full = start + key + '="' + src + '"' + ' data-ke-src="' + _escape(src) + '"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
@@ -6002,7 +6017,7 @@ KindEditor.lang({
 	'table.spacing' : '间距',
 	'table.align' : '对齐方式',
 	'table.textAlign' : '水平对齐',
-	'table.verticalAlign' : '垂直对齐',
+	'table.verticalAlign' : '垂直���齐',
 	'table.alignDefault' : '默认',
 	'table.alignLeft' : '左对齐',
 	'table.alignCenter' : '居中',
@@ -6014,7 +6029,7 @@ KindEditor.lang({
 	'table.border' : '边框',
 	'table.borderWidth' : '边框',
 	'table.borderColor' : '颜色',
-	'table.backgroundColor' : '���景颜色',
+	'table.backgroundColor' : '背景颜色',
 	'map.address' : '地址: ',
 	'map.search' : '搜索',
 	'baidumap.address' : '地址: ',
@@ -6148,7 +6163,7 @@ KindEditor.plugin('baidumap', function(K) {
 					var centerObj = map.getCenter();
 					var center = centerObj.lng + ',' + centerObj.lat;
 					var zoom = map.getZoom();
-					var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/' : 'http://api.map.baidu.com/staticimage',
+					var url = [checkbox[0].checked ? self.pluginsPath + 'baidumap/index.html' : 'http://api.map.baidu.com/staticimage',
 						'?center=' + encodeURIComponent(center),
 						'&zoom=' + encodeURIComponent(zoom),
 						'&width=' + mapWidth,
@@ -6945,7 +6960,6 @@ KindEditor.plugin('image', function(K) {
 		var uploadbutton = K.uploadbutton({
 			button : K('.ke-upload-button', div)[0],
 			fieldName : filePostName,
-			url : K.addParam(uploadJson, 'dir=image'),
 			form : K('.ke-form', div),
 			target : target,
 			width: 60,
@@ -8905,6 +8919,9 @@ SWFUpload.Console.writeLine = function (message) {
 	}
 };
 
+})();
+
+(function() {
 /*
 	Queue Plug-in
 
