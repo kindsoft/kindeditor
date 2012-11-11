@@ -250,7 +250,7 @@ K.options = {
 	cssData : '',
 	minWidth : 650,
 	minHeight : 100,
-	minChangeSize : 5,
+	minChangeSize : 50,
 	items : [
 		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
@@ -4683,7 +4683,7 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	if (edit.designMode && !_WEBKIT) {
+	if (edit.designMode) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -5199,7 +5199,7 @@ KEditor.prototype = {
 				return self;
 			}
 		}
-		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
+		if (edit.designMode && !self._firstAddBookmark) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);

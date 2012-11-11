@@ -39,7 +39,7 @@ K.options = {
 	cssData : '',
 	minWidth : 650,
 	minHeight : 100,
-	minChangeSize : 5,
+	minChangeSize : 50,
 	items : [
 		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',

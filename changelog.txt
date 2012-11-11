@@ -9,7 +9,6 @@ ver 4.1.4 (2012-11-11)
 * Bugfix: 服务器没有配置默认index.html时，百度动态地图无法加载。
 * Bugfix: 点击图片属性、超级链接属性时，冒号变成%3A。
 * Bugfix: 当页面里面有jQuery的uploadify插件时，无法连续上传。
-* Bugfix: [WEBKIT] 有些输入法，稍微快速地连续输入时，光标位置错乱。
 * Bugfix: URL包含中文时，就会变成乱码。
 * Bugfix: [Firefox] 编辑链接后回车换行，在新的段落输入内容带上面那个链接。
 * Bugfix: 繁体语言包缺少uploadSuccess属性。

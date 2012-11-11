@@ -291,8 +291,7 @@ function _undoToRedo(fromStack, toStack) {
 	if (fromStack.length === 0) {
 		return self;
 	}
-	// Bugfix: https://code.google.com/p/kindeditor/issues/detail?id=274
-	if (edit.designMode && !_WEBKIT) {
+	if (edit.designMode) {
 		range = self.cmd.range;
 		bookmark = range.createBookmark(true);
 		bookmark.html = body.innerHTML;
@@ -841,8 +840,7 @@ KEditor.prototype = {
 			}
 		}
 		// 第一次执行addBookmark时不执行range.createBookmark
-		// Bugfix: https://code.google.com/p/kindeditor/issues/detail?id=274
-		if (edit.designMode && !self._firstAddBookmark && !_WEBKIT) {
+		if (edit.designMode && !self._firstAddBookmark) {
 			var range = self.cmd.range;
 			bookmark = range.createBookmark(true);
 			bookmark.html = _removeTempTag(body.innerHTML);
