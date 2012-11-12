@@ -1388,6 +1388,8 @@ _plugin('core', function(K) {
 			}
 			// paste HTML
 			if (self.pasteType === 2) {
+				// 去除内容为空的p标签
+				html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
 				// paste from ms word
 				if (/schemas-microsoft-com|worddocument|mso-\w+/i.test(html)) {
 					html = _clearMsWord(html, self.filterMode ? self.htmlTags : K.options.htmlTags);
