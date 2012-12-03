@@ -273,6 +273,9 @@ _extend(KCmd, {
 			rng = range.get(true);
 			sel.removeAllRanges();
 			sel.addRange(rng);
+			// Bugfix: https://github.com/kindsoft/kindeditor/issues/54
+			var pos = K(rng.endContainer).pos();
+			win.scrollTo(pos.x, pos.y);
 		}
 		win.focus();
 		return self;
@@ -467,7 +470,7 @@ _extend(KCmd, {
 				}
 			}
 			// <b>abc[</b><b>def]</b><b>ghi</b>，分割后HTML变成
-			// <b>abc</b>[<b></b><b>def</b>]<b>ghi</b> 
+			// <b>abc</b>[<b></b><b>def</b>]<b>ghi</b>
 			var startAfter = K(sc.childNodes[so]);
 			if (startAfter && _isEmptyNode(startAfter)) {
 				startAfter.remove();
