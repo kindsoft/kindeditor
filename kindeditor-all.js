@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-12-09)
+* @version 4.1.4 (2012-12-10)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-12-09)',
+var _VERSION = '4.1.4 (2012-12-10)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3631,6 +3631,13 @@ _extend(KEdit, KWidget, {
 						cmd.selection(true);
 						cmd.range.selectNode(e.target);
 						cmd.select();
+					}
+				});
+			}
+			if (_IE) {
+				K(document).mousedown(function() {
+					if (cmd.range.isControl()) {
+						self.blur();
 					}
 				});
 			}

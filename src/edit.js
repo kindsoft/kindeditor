@@ -158,6 +158,14 @@ _extend(KEdit, KWidget, {
 					}
 				});
 			}
+			// Fix bug: https://github.com/kindsoft/kindeditor/issues/53
+			if (_IE) {
+				K(document).mousedown(function() {
+					if (cmd.range.isControl()) {
+						self.blur();
+					}
+				});
+			}
 			// [IE] bug: clear iframe when press backspase key
 			if (_IE) {
 				K(doc).keydown(function(e) {
