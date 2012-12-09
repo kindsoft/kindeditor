@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<title>KindEditor Test</title>
+	</head>
+	<body>
+		<h1 id="type">KindEditor Test</h1>
+		<div id="J_editorArea" style="display:none;">
+			<textarea name="editor1" cols="100" rows="20" style="width:800px;height:200px;"></textarea>
+		</div>
+		<input type="button" id="J_show" value="Show" />
+		<input type="button" id="J_hide" value="Hide" />
+		<script src="../src/core.js"></script>
+		<script src="../src/config.js"></script>
+		<script src="../src/event.js"></script>
+		<script src="../src/html.js"></script>
+		<script src="../src/selector.js"></script>
+		<script src="../src/node.js"></script>
+		<script src="../src/range.js"></script>
+		<script src="../src/cmd.js"></script>
+		<script src="../src/widget.js"></script>
+		<script src="../src/edit.js"></script>
+		<script src="../src/toolbar.js"></script>
+		<script src="../src/menu.js"></script>
+		<script src="../src/colorpicker.js"></script>
+		<script src="../src/uploadbutton.js"></script>
+		<script src="../src/dialog.js"></script>
+		<script src="../src/tabs.js"></script>
+		<script src="../src/ajax.js"></script>
+		<script src="../src/main.js"></script>
+		<script src="../lang/zh_CN.js"></script>
+		<script>
+			KindEditor.ready(function(K) {
+				K.create('textarea', {
+					loadStyleMode : false
+				});
+				K('#J_show').click(function(e) {
+					K('#J_editorArea').show();
+				});
+				K('#J_hide').click(function(e) {
+					K('#J_editorArea').hide();
+				});
+			});
+		</script>
+	</body>
+</html>
