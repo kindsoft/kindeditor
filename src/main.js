@@ -196,7 +196,7 @@ function _bindNewlineEvent() {
 		if (_GECKO) {
 			var root = self.cmd.commonAncestor('p');
 			var a = self.cmd.commonAncestor('a');
-			if (a.text() == '') {
+			if (a && a.text() == '') {
 				a.remove(true);
 				self.cmd.range.selectNodeContents(root[0]).collapse(true);
 				self.cmd.select();

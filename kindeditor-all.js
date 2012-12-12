@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-12-10)
+* @version 4.1.4 (2012-12-13)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-12-10)',
+var _VERSION = '4.1.4 (2012-12-13)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4608,7 +4608,7 @@ function _bindNewlineEvent() {
 		if (_GECKO) {
 			var root = self.cmd.commonAncestor('p');
 			var a = self.cmd.commonAncestor('a');
-			if (a.text() == '') {
+			if (a && a.text() == '') {
 				a.remove(true);
 				self.cmd.range.selectNodeContents(root[0]).collapse(true);
 				self.cmd.select();
