@@ -53,8 +53,9 @@ KindEditor.ready(function (K) {
 		editor.html('<a href="http://linux-wiki.cn/wiki/zh-hans/%E4%BD%BF%E7%94%A83G%E4%B8%8A%E7%BD%91%E5%8D%A1%E6%9">test</a>');
 		equals(editor.html(), '<a href="http://linux-wiki.cn/wiki/zh-hans/%E4%BD%BF%E7%94%A83G%E4%B8%8A%E7%BD%91%E5%8D%A1%E6%9">test</a>');
 
-		editor.html('<input checked="checked" type="radio" />');
-		equals(editor.html(), '<input checked="checked" type="radio" />');
+		editor.html('<input disabled="disabled" checked="checked" type="radio" />');
+		equals(editor.html(), '<input disabled="disabled" checked="checked" type="radio" />');
+
 	});
 
 	test("editor.text", function() {

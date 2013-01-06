@@ -263,6 +263,10 @@ _extend(KEdit, KWidget, {
 			if (self.beforeSetHtml) {
 				val = self.beforeSetHtml(val);
 			}
+			// IE9 Bugfix: https://github.com/kindsoft/kindeditor/issues/62
+			if (_IE && _V >= 9) {
+				val = val.replace(/(<.*?checked=")checked(".*>)/ig, '$1$2');
+			}
 			K(body).html(val);
 			if (self.afterSetHtml) {
 				self.afterSetHtml();
