@@ -1,11 +1,11 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2012 kindsoft.net
+* Copyright (C) 2006-2013 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-12-13)
+* @version 4.1.4 (2013-01-06)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-12-13)',
+var _VERSION = '4.1.4 (2013-01-06)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5711,6 +5711,9 @@ _plugin('core', function(K) {
 			if (html === '') {
 				return;
 			}
+			if (_WEBKIT) {
+				html = html.replace(/(<br>)\1/ig, '$1');
+			}
 			if (self.pasteType === 2) {
 				html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
 				if (/schemas-microsoft-com|worddocument|mso-\w+/i.test(html)) {
@@ -5721,15 +5724,15 @@ _plugin('core', function(K) {
 				}
 			}
 			if (self.pasteType === 1) {
+				html = html.replace(/&nbsp;/ig, ' ');
+				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/<br[^>]*>/ig, '\n');
 				html = html.replace(/<\/p><p[^>]*>/ig, '\n');
 				html = html.replace(/<[^>]+>/g, '');
-				html = html.replace(/&nbsp;/ig, ' ');
-				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/ {2}/g, ' &nbsp;');
 				if (self.newlineTag == 'p') {
 					if (/\n/.test(html)) {
-						html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
+						html = html.replace(/^/, '<p>').replace(/$/, '<br /></p>').replace(/\n/g, '<br /></p><p>');
 					}
 				} else {
 					html = html.replace(/\n/g, '<br />$&');

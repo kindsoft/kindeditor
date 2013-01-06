@@ -1388,6 +1388,10 @@ _plugin('core', function(K) {
 			if (html === '') {
 				return;
 			}
+			// Chrome纯文本粘贴问题
+			if (_WEBKIT) {
+				html = html.replace(/(<br>)\1/ig, '$1');
+			}
 			// paste HTML
 			if (self.pasteType === 2) {
 				// 去除内容为空的p标签
@@ -1402,15 +1406,15 @@ _plugin('core', function(K) {
 			}
 			// paste text
 			if (self.pasteType === 1) {
+				html = html.replace(/&nbsp;/ig, ' ');
+				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/<br[^>]*>/ig, '\n');
 				html = html.replace(/<\/p><p[^>]*>/ig, '\n');
 				html = html.replace(/<[^>]+>/g, '');
-				html = html.replace(/&nbsp;/ig, ' ');
-				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/ {2}/g, ' &nbsp;');
 				if (self.newlineTag == 'p') {
 					if (/\n/.test(html)) {
-						html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
+						html = html.replace(/^/, '<p>').replace(/$/, '<br /></p>').replace(/\n/g, '<br /></p><p>');
 					}
 				} else {
 					html = html.replace(/\n/g, '<br />$&');
