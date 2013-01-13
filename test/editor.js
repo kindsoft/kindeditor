@@ -56,6 +56,12 @@ KindEditor.ready(function (K) {
 		editor.html('<input disabled="disabled" checked="checked" type="radio" />');
 		equals(editor.html(), '<input disabled="disabled" checked="checked" type="radio" />');
 
+		editor.html('<input style="display:none;" type="file" />');
+		equals(editor.html(), '<input style="display:none;" type="file" />');
+
+		editor.html('<input type="file" />');
+		equals(editor.html(), '<input type="file" />');
+
 	});
 
 	test("editor.text", function() {
