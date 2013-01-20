@@ -416,6 +416,17 @@ true时弹出层(dialog)显示阴影。
 * 数据类型: Boolean
 * 默认值: true
 
+.. index:: zIndex
+
+.. _zIndex:
+
+zIndex
+--------------------------------------------------------
+指定弹出层的基准z-index。
+
+* 数据类型: Int
+* 默认值: 811213
+
 .. index:: useContextmenu
 
 .. _useContextmenu:
