@@ -25,7 +25,7 @@ window.KindPage = {};
 KindEditor.options.items = [
 	'undo', 'redo', 'print', 'cut', 'copy', 'paste-combo', 'align-combo', 'order-combo', 'indent-combo', 'script-combo',
 	'formatblock', 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold',
-	'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'insert-combo', 'selectall'
+	'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'insert-combo', 'emoticons', 'selectall'
 ];
 
 function _getSel() {
@@ -481,7 +481,6 @@ K.each({
 			'media' : '视频',
 			'table' : '表格',
 			'hr' : '横线',
-			'emoticons' : '表情',
 			'map' : '地图',
 			'anchor' : '锚点',
 			'link' : '链接',
