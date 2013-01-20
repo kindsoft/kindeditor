@@ -2733,8 +2733,10 @@ _extend(KCmd, {
 			rng = range.get(true);
 			sel.removeAllRanges();
 			sel.addRange(rng);
-			var pos = K(rng.endContainer).pos();
-			win.scrollTo(pos.x, pos.y);
+			if (doc !== document) {
+				var pos = K(rng.endContainer).pos();
+				win.scrollTo(pos.x, pos.y);
+			}
 		}
 		win.focus();
 		return self;

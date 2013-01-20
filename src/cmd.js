@@ -274,8 +274,10 @@ _extend(KCmd, {
 			sel.removeAllRanges();
 			sel.addRange(rng);
 			// Bugfix: https://github.com/kindsoft/kindeditor/issues/54
-			var pos = K(rng.endContainer).pos();
-			win.scrollTo(pos.x, pos.y);
+			if (doc !== document) {
+				var pos = K(rng.endContainer).pos();
+				win.scrollTo(pos.x, pos.y);
+			}
 		}
 		win.focus();
 		return self;
