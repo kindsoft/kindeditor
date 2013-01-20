@@ -23,11 +23,9 @@ Supported Browsers:
 window.KindPage = {};
 
 KindEditor.options.items = [
-	'undo', 'redo', 'print', 'cut', 'copy', 'paste-combo', 'align-combo', 'order-combo', 'indent-combo', 'subscript',
-	'superscript', 'selectall', '/',
-	'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-	'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
-	'flash', 'media', 'table', 'hr', 'emoticons', 'map', 'anchor', 'link', 'unlink'
+	'undo', 'redo', 'print', 'cut', 'copy', 'paste-combo', 'align-combo', 'order-combo', 'indent-combo', 'script-combo',
+	'formatblock', 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold',
+	'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'insert-combo', 'selectall'
 ];
 
 function _getSel() {
@@ -466,6 +464,28 @@ K.each({
 		method : {
 			'indent' : '向右缩进',
 			'outdent' : '向左缩进'
+		}
+	},
+	'script-combo' : {
+		name : '上下标',
+		method : {
+			'subscript' : '上标',
+			'superscript' : '下标'
+		}
+	},
+	'insert-combo' : {
+		name : '插入',
+		method : {
+			'image' : '图片',
+			'flash' : 'Flash',
+			'media' : '视频',
+			'table' : '表格',
+			'hr' : '横线',
+			'emoticons' : '表情',
+			'map' : '地图',
+			'anchor' : '锚点',
+			'link' : '链接',
+			'unlink' : '取消链接'
 		}
 	}
 }, function(pluginName, pluginData) {
