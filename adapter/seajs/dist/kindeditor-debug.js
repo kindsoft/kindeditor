@@ -2,12 +2,12 @@ define('#kindeditor\dist\kindeditor-debug', [], function(require, exports, modul
 
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2012 kindsoft.net
+* Copyright (C) 2006-2013 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.4 (2012-12-03)
+* @version 4.1.5 (2013-01-20)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.4 (2012-12-03)',
+var _VERSION = '4.1.5 (2013-01-20)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -253,6 +253,7 @@ K.options = {
 	minWidth : 650,
 	minHeight : 100,
 	minChangeSize : 50,
+	zIndex : 811213,
 	items : [
 		'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
 		'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
@@ -3539,7 +3540,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'	width:16px;',
 		'	height:16px;',
 		'}',
-		'.ke-script, .ke-noscript {',
+		'.ke-script, .ke-noscript, .ke-display-none {',
 		'	display:none;',
 		'	font-size:0;',
 		'	width:0;',
@@ -3636,6 +3637,13 @@ _extend(KEdit, KWidget, {
 				});
 			}
 			if (_IE) {
+				K(document).mousedown(function() {
+					if (cmd.range.isControl()) {
+						self.blur();
+					}
+				});
+			}
+			if (_IE) {
 				K(doc).keydown(function(e) {
 					if (e.which == 8) {
 						cmd.selection();
@@ -3723,6 +3731,9 @@ _extend(KEdit, KWidget, {
 			}
 			if (self.beforeSetHtml) {
 				val = self.beforeSetHtml(val);
+			}
+			if (_IE && _V >= 9) {
+				val = val.replace(/(<.*?checked=")checked(".*>)/ig, '$1$2');
 			}
 			K(body).html(val);
 			if (self.afterSetHtml) {
@@ -4602,7 +4613,7 @@ function _bindNewlineEvent() {
 		if (_GECKO) {
 			var root = self.cmd.commonAncestor('p');
 			var a = self.cmd.commonAncestor('a');
-			if (a.text() == '') {
+			if (a && a.text() == '') {
 				a.remove(true);
 				self.cmd.range.selectNodeContents(root[0]).collapse(true);
 				self.cmd.select();
@@ -5251,6 +5262,7 @@ KEditor.prototype = {
 			pos = knode.pos();
 		options.x = pos.x;
 		options.y = pos.y + knode.height();
+		options.z = self.options.zIndex;
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		if (options.selectedColor !== undefined) {
 			options.cls = 'ke-colorpicker-' + self.themeType;
@@ -5275,6 +5287,7 @@ KEditor.prototype = {
 	},
 	createDialog : function(options) {
 		var self = this, name = options.name;
+		options.z = self.options.zIndex;
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		options.closeBtn = _undef(options.closeBtn, {
 			name : self.lang('close'),
@@ -5703,6 +5716,9 @@ _plugin('core', function(K) {
 			if (html === '') {
 				return;
 			}
+			if (_WEBKIT) {
+				html = html.replace(/(<br>)\1/ig, '$1');
+			}
 			if (self.pasteType === 2) {
 				html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
 				if (/schemas-microsoft-com|worddocument|mso-\w+/i.test(html)) {
@@ -5713,15 +5729,15 @@ _plugin('core', function(K) {
 				}
 			}
 			if (self.pasteType === 1) {
+				html = html.replace(/&nbsp;/ig, ' ');
+				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/<br[^>]*>/ig, '\n');
 				html = html.replace(/<\/p><p[^>]*>/ig, '\n');
 				html = html.replace(/<[^>]+>/g, '');
-				html = html.replace(/&nbsp;/ig, ' ');
-				html = html.replace(/\n\s*\n/g, '\n');
 				html = html.replace(/ {2}/g, ' &nbsp;');
 				if (self.newlineTag == 'p') {
 					if (/\n/.test(html)) {
-						html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\n/g, '</p><p>');
+						html = html.replace(/^/, '<p>').replace(/$/, '<br /></p>').replace(/\n/g, '<br /></p><p>');
 					}
 				} else {
 					html = html.replace(/\n/g, '<br />$&');
@@ -5768,6 +5784,11 @@ _plugin('core', function(K) {
 		});
 	});
 	self.beforeGetHtml(function(html) {
+		if (_IE && _V <= 8) {
+			html = html.replace(/<div\s+[^>]*data-ke-input-tag="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, tag) {
+				return unescape(tag);
+			});
+		}
 		return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {
 			return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;
 		})
@@ -5801,6 +5822,16 @@ _plugin('core', function(K) {
 		});
 	});
 	self.beforeSetHtml(function(html) {
+		if (_IE && _V <= 8) {
+			html = html.replace(/<input[^>]*>|<(select|button)[^>]*>[\s\S]*?<\/\1>/ig, function(full) {
+				var attrs = _getAttrList(full);
+				var styles = _getCssList(attrs.style || '');
+				if (styles.display == 'none') {
+					return '<div class="ke-display-none" data-ke-input-tag="' + escape(full) + '"></div>';
+				}
+				return full;
+			});
+		}
 		return html.replace(/<embed[^>]*type="([^"]+)"[^>]*>(?:<\/embed>)?/ig, function(full) {
 			var attrs = _getAttrList(full);
 			attrs.src = _undef(attrs.src, '');
