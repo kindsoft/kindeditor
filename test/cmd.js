@@ -3,7 +3,7 @@ module('cmd');
 test('cmd.wrap', function() {
 	var p = K.query('#test-data-01 p'),
 		cloneP, div, strong, range, cmd;
-	
+
 	var div = K('<div></div>');
 	document.body.appendChild(div.get());
 	//1
@@ -531,6 +531,14 @@ test('cmd.execute', function() {
 	cmd = K.cmd(range);
 	cmd.removeformat();
 	same(range.html(), 'abcd');
+	div.html('');
+	//15
+	div.html('<img src="/kindeditor/plugins/emoticons/images/0.gif" /><strong>abc</strong>');
+	range = K.range(document);
+	range.selectNodeContents(div.last()[0]);
+	cmd = K.cmd(range);
+	cmd.bold();
+	equals(div.html(), '<img src="/kindeditor/plugins/emoticons/images/0.gif" />abc');
 	div.html('');
 });
 

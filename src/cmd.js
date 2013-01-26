@@ -129,7 +129,10 @@ function _getInnerNode(knode) {
 }
 //最里面的element为inline element时返回true
 function _isEmptyNode(knode) {
-	return knode.type == 1 && knode.html().replace(/<[^>]+>/g, '') === '';
+	if (knode.type != 1 || knode.isSingle()) {
+		return false;
+	}
+	return knode.html().replace(/<[^>]+>/g, '') === '';
 }
 //merge two wrapper
 //a : <span><strong></strong></span>
