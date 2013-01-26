@@ -158,16 +158,16 @@ _extend(KEdit, KWidget, {
 					}
 				});
 			}
-			// Fix bug: https://github.com/kindsoft/kindeditor/issues/53
 			if (_IE) {
+				// Fix bug: https://github.com/kindsoft/kindeditor/issues/53
 				K(document).mousedown(function() {
-					if (cmd.range.isControl()) {
+					var newRange = cmd.range.cloneRange();
+					newRange.shrink();
+					if (newRange.isControl()) {
 						self.blur();
 					}
 				});
-			}
-			// [IE] bug: clear iframe when press backspase key
-			if (_IE) {
+				// [IE] bug: clear iframe when press backspase key
 				K(doc).keydown(function(e) {
 					if (e.which == 8) {
 						cmd.selection();

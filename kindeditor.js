@@ -3641,12 +3641,12 @@ _extend(KEdit, KWidget, {
 			}
 			if (_IE) {
 				K(document).mousedown(function() {
-					if (cmd.range.isControl()) {
+					var newRange = cmd.range.cloneRange();
+					newRange.shrink();
+					if (newRange.isControl()) {
 						self.blur();
 					}
 				});
-			}
-			if (_IE) {
 				K(doc).keydown(function(e) {
 					if (e.which == 8) {
 						cmd.selection();
