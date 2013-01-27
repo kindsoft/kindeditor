@@ -28,6 +28,19 @@ KindEditor.options.items = [
 	'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'insert-combo', 'emoticons', 'selectall'
 ];
 
+// 输入文字的键值
+var _INPUT_KEY_MAP = K.toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
+// 移动光标的键值
+var _CURSORMOVE_KEY_MAP = K.toMap('33..40');
+// 输入文字或移动光标的键值
+var _CHANGE_KEY_MAP = {};
+K.each(_INPUT_KEY_MAP, function(key, val) {
+	_CHANGE_KEY_MAP[key] = val;
+});
+K.each(_CURSORMOVE_KEY_MAP, function(key, val) {
+	_CHANGE_KEY_MAP[key] = val;
+});
+
 function _getSel() {
 	return document.selection || window.getSelection();
 }
@@ -198,6 +211,9 @@ function _bindContextmenuEvent() {
 			e.preventDefault();
 			return;
 		}
+		if (!_isContentEditable(e.target)) {
+			return;
+		}
 		if (self._contextmenus.length === 0) {
 			return;
 		}
@@ -332,6 +348,10 @@ K.extend(Editor, K.EditorClass, {
 
 		_bindContextmenuEvent.call(self);
 		_bindNewlineEvent.call(self);
+		// update toolbar state
+		self.afterChange(function(e) {
+			self.updateState();
+		});
 		// select image
 		K(document).click(function(e) {
 			if (!_isContentEditable(e.target)) {
@@ -414,6 +434,24 @@ K.extend(Editor, K.EditorClass, {
 	},
 	blur : function() {
 		return this;
+	},
+	afterChange : function(fn) {
+		var self = this, doc = document, body = doc.body;
+		K(doc).keyup(function(e) {
+			if (!e.ctrlKey && !e.altKey && _CHANGE_KEY_MAP[e.which]) {
+				fn(e);
+			}
+		});
+		K(doc).mouseup(fn).contextmenu(fn);
+		K(window).blur(fn);
+		function timeoutHandler(e) {
+			setTimeout(function() {
+				fn(e);
+			}, 1);
+		}
+		K(body).bind('paste', timeoutHandler);
+		K(body).bind('cut', timeoutHandler);
+		return self;
 	}
 });
 
