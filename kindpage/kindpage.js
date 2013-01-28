@@ -350,6 +350,9 @@ K.extend(Editor, K.EditorClass, {
 		_bindNewlineEvent.call(self);
 		// update toolbar state
 		self.afterChange(function(e) {
+			if (!_isContentEditable(e.target)) {
+				return;
+			}
 			self.updateState();
 		});
 		// select image
