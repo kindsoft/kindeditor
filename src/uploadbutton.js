@@ -65,6 +65,8 @@ _extend(KUploadButton, {
 			} else {
 				str = doc.body.innerHTML;
 			}
+			// Bugfix: https://github.com/kindsoft/kindeditor/issues/81
+			str = _unescape(str);
 			// Bugfix: [IE] 上传图片后，进度条一直处于加载状态。
 			iframe[0].src = 'javascript:false';
 			try {
