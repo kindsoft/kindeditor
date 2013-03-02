@@ -49,7 +49,7 @@ KindEditor.lang({
 	emoticons : 'إدراج وجه ضاحك',
 	link : 'رابط',
 	unlink : 'إزالة الرابط',
-	fullscreen : 'محرر ملئ الشاشة(Esc)',
+	fullscreen : 'محرر ملئ الشاشة',
 	about : 'حول',
 	print : 'طباعة',
 	filemanager : 'مدير الملفات',

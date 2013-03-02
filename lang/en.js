@@ -48,7 +48,7 @@ KindEditor.lang({
 	emoticons : 'Insert emoticon',
 	link : 'Link',
 	unlink : 'Unlink',
-	fullscreen : 'Toggle fullscreen mode(Esc)',
+	fullscreen : 'Toggle fullscreen mode',
 	about : 'About',
 	print : 'Print',
 	filemanager : 'File Manager',

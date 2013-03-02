@@ -48,7 +48,7 @@ KindEditor.lang({
 	emoticons : '이모티콘 추가',
 	link : '링크',
 	unlink : '링크 제거',
-	fullscreen : '전체 화면 모드(Esc)',
+	fullscreen : '전체 화면 모드',
 	about : '이 에디터는...',
 	print : '인쇄',
 	filemanager : '파일 관리자',
