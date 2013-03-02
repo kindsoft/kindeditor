@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.5 (2013-01-26)
+* @version 4.1.5 (2013-03-03)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.5 (2013-01-26)',
+var _VERSION = '4.1.5 (2013-03-03)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5608,7 +5608,7 @@ _plugin('core', function(K) {
 			'</div>';
 		self.createDialog({
 			name : 'about',
-			width : 300,
+			width : 350,
 			title : self.lang('about'),
 			body : html
 		});
@@ -5924,7 +5924,7 @@ KindEditor.lang({
 	emoticons : '插入表情',
 	link : '超级链接',
 	unlink : '取消超级链接',
-	fullscreen : '全屏显示(Esc)',
+	fullscreen : '全屏显示',
 	about : '关于',
 	print : '打印(Ctrl+P)',
 	filemanager : '文件空间',
