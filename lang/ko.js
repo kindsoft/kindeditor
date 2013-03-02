@@ -233,4 +233,4 @@ KindEditor.lang({
 		'2.html' : '표',
 		'3.html' : '목록'
 	}
-}, 'ko_KR');
+}, 'ko');
