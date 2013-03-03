@@ -111,6 +111,7 @@ KindEditor.lang({
 	uploadError : '上传错误',
 	'plainpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
 	'wordpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
+	'code.pleaseInput' : '请输入程序代码。',
 	'link.url' : 'URL',
 	'link.linkType' : '打开类型',
 	'link.newWindow' : '新窗口',

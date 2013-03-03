@@ -110,6 +110,7 @@ KindEditor.lang({
 	uploadError : 'Upload Error',
 	'plainpaste.comment' : 'إستخدم إختصار لوحة المفاتيح (Ctrl+V) للصق داخل النافذة.',
 	'wordpaste.comment' : 'إستخدم إختصار لوحة المفاتيح (Ctrl+V) للصق داخل النافذة.',
+	'code.pleaseInput' : 'Please input code.',
 	'link.url' : 'الرابط',
 	'link.linkType' : 'الهدف',
 	'link.newWindow' : 'نافذة جديدة',

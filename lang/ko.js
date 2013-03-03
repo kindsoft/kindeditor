@@ -109,6 +109,7 @@ KindEditor.lang({
 	uploadError : '업로드 오류',
 	'plainpaste.comment' : '단축키(Ctrl+V)를 통하여 여기에 텍스트를 붙여넣으세요.',
 	'wordpaste.comment' : '단축키(Ctrl+V)를 통하여 여기에 워드 텍스트를 붙여넣으세요.',
+	'code.pleaseInput' : 'Please input code.',
 	'link.url' : '주소',
 	'link.linkType' : '창',
 	'link.newWindow' : '새 창',
