@@ -85,6 +85,7 @@
 			<input type="button" id="getHtml1" value="Get HTML #1" />
 			<input type="button" id="fullHtml1" value="Get Full HTML #1" />
 			<input type="button" id="setHtml1" value="Set HTML #1" />
+			<input type="button" id="empty1" value="Empty #1" />
 			<input type="button" id="getText1" value="Get Text #1" />
 			<input type="button" id="setText1" value="Set Text #1" />
 			<input type="button" id="selectedHtml1" value="Get Selected HTML #1" />
@@ -158,6 +159,9 @@
 				});
 				K('#setHtml1').click(function(e) {
 					editor1.html(K('#insertHtml').val());
+				});
+				K('#empty1').click(function(e) {
+					editor1.html('');
 				});
 				K('#getText1').click(function(e) {
 					alert(editor1.text());
