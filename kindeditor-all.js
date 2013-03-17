@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.5 (2013-03-03)
+* @version 4.1.5 (2013-03-17)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.5 (2013-03-03)',
+var _VERSION = '4.1.5 (2013-03-17)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3640,13 +3640,14 @@ _extend(KEdit, KWidget, {
 				});
 			}
 			if (_IE) {
-				K(document).mousedown(function() {
+				self._mousedownHandler = function() {
 					var newRange = cmd.range.cloneRange();
 					newRange.shrink();
 					if (newRange.isControl()) {
 						self.blur();
 					}
-				});
+				};
+				K(document).mousedown(self._mousedownHandler);
 				K(doc).keydown(function(e) {
 					if (e.which == 8) {
 						cmd.selection();
@@ -3707,6 +3708,9 @@ _extend(KEdit, KWidget, {
 		K(doc.body).unbind();
 		K(doc).unbind();
 		K(self.win).unbind();
+		if (self._mousedownHandler) {
+			K(document).unbind('mousedown', self._mousedownHandler);
+		}
 		_elementVal(self.srcElement, self.html());
 		self.srcElement.show();
 		doc.write('');
@@ -5988,6 +5992,7 @@ KindEditor.lang({
 	uploadError : '上传错误',
 	'plainpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
 	'wordpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
+	'code.pleaseInput' : '请输入程序代码。',
 	'link.url' : 'URL',
 	'link.linkType' : '打开类型',
 	'link.newWindow' : '新窗口',
@@ -6327,6 +6332,11 @@ KindEditor.plugin('code', function(K) {
 							code = textarea.val(),
 							cls = type === '' ? '' :  ' lang-' + type,
 							html = '<pre class="prettyprint' + cls + '">\n' + K.escape(code) + '</pre> ';
+						if (K.trim(code) === '') {
+							alert(lang.pleaseInput);
+							textarea[0].focus();
+							return;
+						}
 						self.insertHtml(html).hideDialog().focus();
 					}
 				}
@@ -7911,7 +7921,9 @@ KindEditor.plugin('multiimage', function(K) {
 			},
 			beforeRemove : function() {
 				// IE9 bugfix: https://github.com/kindsoft/kindeditor/issues/72
-				//swfupload.remove();
+				if (!K.IE || K.V <= 8) {
+					swfupload.remove();
+				}
 			}
 		}),
 		div = dialog.div;
