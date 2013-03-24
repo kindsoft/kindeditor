@@ -1,0 +1,6 @@
+{
+	"root": "gallery",
+	"output": {
+		"kindeditor.js": "."
+	}
+}

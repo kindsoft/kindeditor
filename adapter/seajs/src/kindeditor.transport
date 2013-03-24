@@ -1,0 +1,10 @@
+
+define(function(require, exports, module) {
+
+// @include https://raw.github.com/kindsoft/kindeditor/master/kindeditor-all.js
+
+KindEditor.basePath = seajs.pluginSDK.util.dirname(module.realUri);
+
+return KindEditor;
+
+});
