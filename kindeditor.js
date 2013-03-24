@@ -5132,7 +5132,7 @@ KEditor.prototype = {
 			return self.isCreated ? self.edit.html() : _elementVal(self.srcElement);
 		}
 		self.isCreated ? self.edit.html(val) : _elementVal(self.srcElement, val);
-		if (self.isCreated && val === '') {
+		if (self.isCreated) {
 			self.cmd.selection();
 		}
 		return self;
