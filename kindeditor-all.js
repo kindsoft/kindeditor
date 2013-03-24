@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.5 (2013-03-17)
+* @version 4.1.5 (2013-03-24)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.5 (2013-03-17)',
+var _VERSION = '4.1.5 (2013-03-24)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5132,6 +5132,9 @@ KEditor.prototype = {
 			return self.isCreated ? self.edit.html() : _elementVal(self.srcElement);
 		}
 		self.isCreated ? self.edit.html(val) : _elementVal(self.srcElement, val);
+		if (self.isCreated && val === '') {
+			self.cmd.selection();
+		}
 		return self;
 	},
 	fullHtml : function() {
@@ -7269,7 +7272,7 @@ KindEditor.plugin('insertfile', function(K) {
 	self.clickToolbar(name, function() {
 		self.plugin.fileDialog({
 			clickFn : function(url, title) {
-				var html = '<a href="' + url + '" data-ke-src="' + url + '" target="_blank">' + title + '</a>';
+				var html = '<a class="ke-insertfile" href="' + url + '" data-ke-src="' + url + '" target="_blank">' + title + '</a>';
 				self.insertHtml(html).hideDialog().focus();
 			}
 		});

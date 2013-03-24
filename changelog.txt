@@ -13,6 +13,7 @@ ver 4.1.6
 * Bugfix: 全屏ESC快捷键默认未开启，但图标提示还包含ESC。
 * Bugfix: 图片上传后的url包含&时会被转换成&amp;。
 * Bugfix: [IE] 移除编辑器后点击页面出现没有权限错误。
+* Bugfix: [IE] 输入几个文字，调用editor.html('')清空后，插入表情报错。
 
 ver 4.1.5 (2013-01-20)
 * 新增: zIndex初始化参数，可指定弹出层的z-index。
