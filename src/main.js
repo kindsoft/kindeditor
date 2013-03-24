@@ -623,8 +623,13 @@ KEditor.prototype = {
 			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
 			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
 
+		function fullscreenResizeHandler(e) {
+			if (self.isCreated) {
+				self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
+			}
+		}
 		// remove resize event
-		K(window).unbind('resize');
+		K(window).unbind('resize', fullscreenResizeHandler);
 		// reset size
 		function initResize() {
 			// Bugfix: 页面刷新后，与第一次访问加载的编译器高度不一致
@@ -632,32 +637,12 @@ KEditor.prototype = {
 				setTimeout(initResize, 100);
 				return;
 			}
-			self.resize(width, height);
+			self._resize(width, height);
 		}
 		initResize();
-		// 为了限制宽度和高度，包装self.resize
-		function newResize(width, height, updateProp) {
-			updateProp = _undef(updateProp, true);
-			if (width && width >= self.minWidth) {
-				self.resize(width, null);
-				if (updateProp) {
-					self.width = _addUnit(width);
-				}
-			}
-			if (height && height >= self.minHeight) {
-				self.resize(null, height);
-				if (updateProp) {
-					self.height = _addUnit(height);
-				}
-			}
-		}
 		// fullscreen mode
 		if (fullscreenMode) {
-			K(window).bind('resize', function(e) {
-				if (self.isCreated) {
-					newResize(_docElement().clientWidth, _docElement().clientHeight, false);
-				}
-			});
+			K(window).bind('resize', fullscreenResizeHandler);
 			toolbar.select('fullscreen');
 			statusbar.first().css('visibility', 'hidden');
 			statusbar.last().css('visibility', 'hidden');
@@ -674,7 +659,7 @@ KEditor.prototype = {
 					clickEl : statusbar,
 					moveFn : function(x, y, width, height, diffX, diffY) {
 						height += diffY;
-						newResize(null, height);
+						self.resize(null, height);
 					}
 				});
 			} else {
@@ -687,7 +672,7 @@ KEditor.prototype = {
 					moveFn : function(x, y, width, height, diffX, diffY) {
 						width += diffX;
 						height += diffY;
-						newResize(width, height);
+						self.resize(width, height);
 					}
 				});
 			} else {
@@ -722,7 +707,7 @@ KEditor.prototype = {
 		self.isCreated = false;
 		return self;
 	},
-	resize : function(width, height) {
+	_resize : function(width, height) {
 		var self = this;
 		if (width !== null) {
 			if (_removeUnit(width) > self.minWidth) {
@@ -736,6 +721,23 @@ KEditor.prototype = {
 			}
 		}
 		return self;
+	},
+	// 为了限制宽度和高度，包装self._resize
+	resize : function(width, height, updateProp) {
+		var self = this;
+		updateProp = _undef(updateProp, true);
+		if (width && width >= self.minWidth) {
+			self._resize(width, null);
+			if (updateProp) {
+				self.width = _addUnit(width);
+			}
+		}
+		if (height && height >= self.minHeight) {
+			self._resize(null, height);
+			if (updateProp) {
+				self.height = _addUnit(height);
+			}
+		}
 	},
 	select : function() {
 		this.isCreated && this.cmd.select();

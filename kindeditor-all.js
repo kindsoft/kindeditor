@@ -5016,36 +5016,22 @@ KEditor.prototype = {
 		statusbar.removeClass('statusbar').addClass('ke-statusbar')
 			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
 			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
-		K(window).unbind('resize');
+		function fullscreenResizeHandler(e) {
+			if (self.isCreated) {
+				self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
+			}
+		}
+		K(window).unbind('resize', fullscreenResizeHandler);
 		function initResize() {
 			if (statusbar.height() === 0) {
 				setTimeout(initResize, 100);
 				return;
 			}
-			self.resize(width, height);
+			self._resize(width, height);
 		}
 		initResize();
-		function newResize(width, height, updateProp) {
-			updateProp = _undef(updateProp, true);
-			if (width && width >= self.minWidth) {
-				self.resize(width, null);
-				if (updateProp) {
-					self.width = _addUnit(width);
-				}
-			}
-			if (height && height >= self.minHeight) {
-				self.resize(null, height);
-				if (updateProp) {
-					self.height = _addUnit(height);
-				}
-			}
-		}
 		if (fullscreenMode) {
-			K(window).bind('resize', function(e) {
-				if (self.isCreated) {
-					newResize(_docElement().clientWidth, _docElement().clientHeight, false);
-				}
-			});
+			K(window).bind('resize', fullscreenResizeHandler);
 			toolbar.select('fullscreen');
 			statusbar.first().css('visibility', 'hidden');
 			statusbar.last().css('visibility', 'hidden');
@@ -5061,7 +5047,7 @@ KEditor.prototype = {
 					clickEl : statusbar,
 					moveFn : function(x, y, width, height, diffX, diffY) {
 						height += diffY;
-						newResize(null, height);
+						self.resize(null, height);
 					}
 				});
 			} else {
@@ -5074,7 +5060,7 @@ KEditor.prototype = {
 					moveFn : function(x, y, width, height, diffX, diffY) {
 						width += diffX;
 						height += diffY;
-						newResize(width, height);
+						self.resize(width, height);
 					}
 				});
 			} else {
@@ -5107,7 +5093,7 @@ KEditor.prototype = {
 		self.isCreated = false;
 		return self;
 	},
-	resize : function(width, height) {
+	_resize : function(width, height) {
 		var self = this;
 		if (width !== null) {
 			if (_removeUnit(width) > self.minWidth) {
@@ -5121,6 +5107,22 @@ KEditor.prototype = {
 			}
 		}
 		return self;
+	},
+	resize : function(width, height, updateProp) {
+		var self = this;
+		updateProp = _undef(updateProp, true);
+		if (width && width >= self.minWidth) {
+			self._resize(width, null);
+			if (updateProp) {
+				self.width = _addUnit(width);
+			}
+		}
+		if (height && height >= self.minHeight) {
+			self._resize(null, height);
+			if (updateProp) {
+				self.height = _addUnit(height);
+			}
+		}
 	},
 	select : function() {
 		this.isCreated && this.cmd.select();
@@ -6837,6 +6839,7 @@ KindEditor.plugin('flash', function(K) {
 KindEditor.plugin('image', function(K) {
 	var self = this, name = 'image',
 		allowImageUpload = K.undef(self.allowImageUpload, true),
+		allowImageRemote = K.undef(self.allowImageRemote, true),
 		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
@@ -7118,7 +7121,7 @@ KindEditor.plugin('image', function(K) {
 				imageHeight : img ? img.height() : '',
 				imageTitle : img ? img.attr('title') : '',
 				imageAlign : img ? img.attr('align') : '',
-				showRemote : true,
+				showRemote : allowImageRemote,
 				showLocal : allowImageUpload,
 				tabIndex: img ? 0 : imageTabIndex,
 				clickFn : function(url, title, width, height, border, align) {
