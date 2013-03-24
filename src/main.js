@@ -637,7 +637,7 @@ KEditor.prototype = {
 				setTimeout(initResize, 100);
 				return;
 			}
-			self._resize(width, height);
+			self.resize(width, height, false);
 		}
 		initResize();
 		// fullscreen mode
@@ -707,37 +707,29 @@ KEditor.prototype = {
 		self.isCreated = false;
 		return self;
 	},
-	_resize : function(width, height) {
-		var self = this;
-		if (width !== null) {
-			if (_removeUnit(width) > self.minWidth) {
-				self.container.css('width', _addUnit(width));
-			}
-		}
-		if (height !== null && self.toolbar.div && self.statusbar) {
-			height = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
-			if (height > 0 && _removeUnit(height) > self.minHeight) {
-				self.edit.setHeight(height);
-			}
-		}
-		return self;
-	},
-	// 为了限制宽度和高度，包装self._resize
 	resize : function(width, height, updateProp) {
 		var self = this;
 		updateProp = _undef(updateProp, true);
-		if (width && width >= self.minWidth) {
-			self._resize(width, null);
+		if (width) {
+			if (!/%/.test(width)) {
+				width = _removeUnit(width);
+				width = width < self.minWidth ? self.minWidth : width;
+			}
+			self.container.css('width', _addUnit(width));
 			if (updateProp) {
 				self.width = _addUnit(width);
 			}
 		}
-		if (height && height >= self.minHeight) {
-			self._resize(null, height);
+		if (height) {
+			height = _removeUnit(height);
+			editHeight = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
+			editHeight = editHeight < self.minHeight ? self.minHeight : editHeight;
+			self.edit.setHeight(editHeight);
 			if (updateProp) {
 				self.height = _addUnit(height);
 			}
 		}
+		return self;
 	},
 	select : function() {
 		this.isCreated && this.cmd.select();
