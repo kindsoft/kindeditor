@@ -6,6 +6,7 @@
 
 ver 4.1.6
 * 新增: 韩国语语言包，感谢Github用户composite贡献。
+* 新增: allowImageRemote初始化参数，可隐藏网络图片标签。
 * 改善: 插入程序代码添加是否为空的判断。
 * Bugfix: [IE9] 在frame里调用编辑器，关闭批量上传dialog时浏览器会崩溃。
 * Bugfix: 插入图片后输入文字，文字加粗后取消加粗，图片会被删除。
