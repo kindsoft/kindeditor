@@ -748,7 +748,7 @@ KEditor.prototype = {
 		}
 		self.isCreated ? self.edit.html(val) : _elementVal(self.srcElement, val);
 		// Bugfix: http://www.kindsoft.net/view.php?bbsid=4&postid=6703&pagenum=1
-		if (self.isCreated && val === '') {
+		if (self.isCreated) {
 			self.cmd.selection();
 		}
 		return self;
