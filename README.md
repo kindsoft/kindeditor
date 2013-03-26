@@ -78,7 +78,7 @@ Will create a zip file of the current repository code. The zip file will be plac
 
 ## Compatible
 
-* Internet Explorer 6.0+
+* Internet Explorer 6+
 * Mozilla Firefox 3+
 * Chrome 3+
 * Safari 4+
@@ -89,3 +89,4 @@ Will create a zip file of the current repository code. The zip file will be plac
 * Timon Lin
 * daif alotaibi (http://daif.net/) : Arabic Translation
 * fisker (https://github.com/fisker) : QQ style theme
+* composite (https://github.com/composite) : Korean Translation
