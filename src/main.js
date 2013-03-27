@@ -623,13 +623,11 @@ KEditor.prototype = {
 			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
 			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
 
-		function fullscreenResizeHandler(e) {
-			if (self.isCreated) {
-				self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
-			}
-		}
 		// remove resize event
-		K(window).unbind('resize', fullscreenResizeHandler);
+		if (self._fullscreenResizeHandler) {
+			K(window).unbind('resize', self._fullscreenResizeHandler);
+			self._fullscreenResizeHandler = null;
+		}
 		// reset size
 		function initResize() {
 			// Bugfix: 页面刷新后，与第一次访问加载的编译器高度不一致
@@ -642,7 +640,12 @@ KEditor.prototype = {
 		initResize();
 		// fullscreen mode
 		if (fullscreenMode) {
-			K(window).bind('resize', fullscreenResizeHandler);
+			self._fullscreenResizeHandler = function(e) {
+				if (self.isCreated) {
+					self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
+				}
+			};
+			K(window).bind('resize', self._fullscreenResizeHandler);
 			toolbar.select('fullscreen');
 			statusbar.first().css('visibility', 'hidden');
 			statusbar.last().css('visibility', 'hidden');
