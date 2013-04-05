@@ -62,6 +62,9 @@ KindEditor.ready(function (K) {
 		editor.html('<input type="file" />');
 		equals(editor.html(), '<input type="file" />');
 
+		editor.html('<input type="text" />');
+		equals(editor.html(), '<input type="text" />');
+
 	});
 
 	test("editor.text", function() {

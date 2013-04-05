@@ -1468,6 +1468,13 @@ _plugin('core', function(K) {
 			html = html.replace(/<div\s+[^>]*data-ke-input-tag="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, tag) {
 				return unescape(tag);
 			});
+			// Bugfix: https://github.com/kindsoft/kindeditor/issues/88
+			html = html.replace(/(<input)((?:\s+[^>]*)?>)/ig, function($0, $1, $2) {
+				if (!/\s+type="[^"]+"/i.test($0)) {
+					return $1 + ' type="text"' + $2;
+				}
+				return $0;
+			});
 		}
 		return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {
 			return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;

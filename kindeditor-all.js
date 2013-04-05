@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.6 (2013-04-05)
+* @version 4.1.7 (2013-04-05)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.6 (2013-04-05)',
+var _VERSION = '4.1.7 (2013-04-05)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5796,6 +5796,12 @@ _plugin('core', function(K) {
 		if (_IE && _V <= 8) {
 			html = html.replace(/<div\s+[^>]*data-ke-input-tag="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, tag) {
 				return unescape(tag);
+			});
+			html = html.replace(/(<input)((?:\s+[^>]*)?>)/ig, function($0, $1, $2) {
+				if (!/\s+type="[^"]+"/i.test($0)) {
+					return $1 + ' type="text"' + $2;
+				}
+				return $0;
 			});
 		}
 		return html.replace(/(<(?:noscript|noscript\s[^>]*)>)([\s\S]*?)(<\/noscript>)/ig, function($0, $1, $2, $3) {

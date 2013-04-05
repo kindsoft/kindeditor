@@ -7,6 +7,7 @@
 ver 4.1.7
 * Bugfix: 取消全屏后没有恢复到原来大小，调整窗口大小后宽高变成全屏宽高。
 * Bugfix: [IE] 删除图片、Flash、视频后立即点击图片按钮出错。
+* Bugfix: [IE8] 源代码模块下输入<input type="text" />会丢失type属性。
 
 ver 4.1.6 (2013-03-24)
 * 新增: 韩国语语言包，感谢Github用户composite贡献。
