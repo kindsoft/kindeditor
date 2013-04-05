@@ -162,6 +162,8 @@ KindEditor.plugin('media', function(K) {
 		},
 		'delete' : function() {
 			self.plugin.getSelectedMedia().remove();
+			// [IE] 删除图片后立即点击图片按钮出错
+			self.addBookmark();
 		}
 	};
 	self.clickToolbar(name, self.plugin.media.edit);
