@@ -827,3 +827,17 @@ pagebreakHtml
 
 	4.1.3版本开始支持。
 
+.. index:: allowImageRemote
+
+.. _allowImageRemote:
+
+allowImageRemote
+--------------------------------------------------------
+true时显示网络图片标签，false时不显示。
+
+* 数据类型: Boolean
+* 默认值: true
+
+.. note::
+
+	4.1.6版本开始支持。

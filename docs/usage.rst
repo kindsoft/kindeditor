@@ -46,9 +46,8 @@
 	<script charset="utf-8" src="/editor/kindeditor.js"></script>
 	<script charset="utf-8" src="/editor/lang/zh_CN.js"></script>
 	<script>
-		var editor;
 		KindEditor.ready(function(K) {
-			editor = K.create('#editor_id');
+			window.editor = K.create('#editor_id');
 		});
 	</script>
 
@@ -86,7 +85,13 @@
 
 	* KindEditor的可视化操作在新创建的iframe上执行，代码模式下的textarea框也是新创建的，所以最后提交前需要执行 :ref:`KEditor.sync` 将HTML数据设置到原来的textarea。
 	* KindEditor在默认情况下自动寻找textarea所属的form元素，找到form后onsubmit事件里添加sync函数，所以用form方式提交数据，不需要手动执行sync()函数。
+	* KindEditor默认采用白名单过滤方式，可用 :ref:`htmlTags` 参数定义要保留的标签和属性。当然也可以用 :ref:`filterMode` 参数关闭过滤模式，保留所有标签。
 
+.. sourcecode:: js
 
+	// 关闭过滤模式，保留所有标签
+	KindEditor.options.filterMode = false;
 
-
+	KindEditor.ready(function(K)) {
+		K.create('#editor_id');
+	}
