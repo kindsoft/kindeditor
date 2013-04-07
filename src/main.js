@@ -1128,6 +1128,7 @@ _plugin('core', function(K) {
 			self.toolbar.disableAll(false);
 			self.edit.design(true);
 			self.toolbar.unselect('source');
+			self.cmd.selection();
 		}
 		self.designMode = self.edit.designMode;
 	});
