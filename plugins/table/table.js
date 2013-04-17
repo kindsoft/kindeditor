@@ -569,7 +569,7 @@ KindEditor.plugin('table', function(K) {
 			if (table.rows.length <= nextRowIndex) {
 				return;
 			}
-			var cellIndex = _getCellIndex(table, row, cell); // 下一行单元格的index
+			var cellIndex = cell.cellIndex; // 下一行单元格的index
 			if (nextRow.cells.length <= cellIndex) {
 				return;
 			}
