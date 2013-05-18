@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-04-21)
+* @version 4.1.7 (2013-05-18)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-04-21)',
+var _VERSION = '4.1.7 (2013-05-18)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -920,10 +920,14 @@ function _mediaImg(blankPath, attrs) {
 		type = attrs.type || _mediaType(attrs.src),
 		srcTag = _mediaEmbed(attrs),
 		style = '';
-	if (width > 0) {
+	if (/\D/.test(width)) {
+		style += 'width:' + width + ';';
+	} else if (width > 0) {
 		style += 'width:' + width + 'px;';
 	}
-	if (height > 0) {
+	if (/\D/.test(height)) {
+		style += 'height:' + height + ';';
+	} else if (height > 0) {
 		style += 'height:' + height + 'px;';
 	}
 	var html = '<img class="' + _mediaClass(type) + '" src="' + blankPath + '" ';
@@ -5809,11 +5813,19 @@ _plugin('core', function(K) {
 			return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;
 		})
 		.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
-			var imgAttrs = _getAttrList(full),
-				styles = _getCssList(imgAttrs.style || ''),
-				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
-			attrs.width = _undef(imgAttrs.width, _removeUnit(_undef(styles.width, '')));
-			attrs.height = _undef(imgAttrs.height, _removeUnit(_undef(styles.height, '')));
+			var imgAttrs = _getAttrList(full);
+			var styles = _getCssList(imgAttrs.style || '');
+			var attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
+			var width = _undef(styles.width, '');
+			var height = _undef(styles.height, '');
+			if (/px/i.test(width)) {
+				width = _removeUnit(width);
+			}
+			if (/px/i.test(height)) {
+				height = _removeUnit(height);
+			}
+			attrs.width = _undef(imgAttrs.width, width);
+			attrs.height = _undef(imgAttrs.height, height);
 			return _mediaEmbed(attrs);
 		})
 		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {

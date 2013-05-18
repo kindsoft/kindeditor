@@ -1481,11 +1481,19 @@ _plugin('core', function(K) {
 			return $1 + _unescape($2).replace(/\s+/g, ' ') + $3;
 		})
 		.replace(/<img[^>]*class="?ke-(flash|rm|media)"?[^>]*>/ig, function(full) {
-			var imgAttrs = _getAttrList(full),
-				styles = _getCssList(imgAttrs.style || ''),
-				attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
-			attrs.width = _undef(imgAttrs.width, _removeUnit(_undef(styles.width, '')));
-			attrs.height = _undef(imgAttrs.height, _removeUnit(_undef(styles.height, '')));
+			var imgAttrs = _getAttrList(full);
+			var styles = _getCssList(imgAttrs.style || '');
+			var attrs = _mediaAttrs(imgAttrs['data-ke-tag']);
+			var width = _undef(styles.width, '');
+			var height = _undef(styles.height, '');
+			if (/px/i.test(width)) {
+				width = _removeUnit(width);
+			}
+			if (/px/i.test(height)) {
+				height = _removeUnit(height);
+			}
+			attrs.width = _undef(imgAttrs.width, width);
+			attrs.height = _undef(imgAttrs.height, height);
 			return _mediaEmbed(attrs);
 		})
 		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {

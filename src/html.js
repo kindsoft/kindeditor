@@ -359,10 +359,14 @@ function _mediaImg(blankPath, attrs) {
 		type = attrs.type || _mediaType(attrs.src),
 		srcTag = _mediaEmbed(attrs),
 		style = '';
-	if (width > 0) {
+	if (/\D/.test(width)) {
+		style += 'width:' + width + ';';
+	} else if (width > 0) {
 		style += 'width:' + width + 'px;';
 	}
-	if (height > 0) {
+	if (/\D/.test(height)) {
+		style += 'height:' + height + ';';
+	} else if (height > 0) {
 		style += 'height:' + height + 'px;';
 	}
 	var html = '<img class="' + _mediaClass(type) + '" src="' + blankPath + '" ';
