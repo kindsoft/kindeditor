@@ -1128,7 +1128,14 @@ _plugin('core', function(K) {
 			self.toolbar.disableAll(false);
 			self.edit.design(true);
 			self.toolbar.unselect('source');
-			self.cmd.selection();
+			// Bugfix: http://www.kindsoft.net/view.php?bbsid=4&postid=7061&pagenum=1
+			if (_GECKO) {
+				setTimeout(function() {
+					self.cmd.selection();
+				}, 0);
+			} else {
+				self.cmd.selection();
+			}
 		}
 		self.designMode = self.edit.designMode;
 	});
