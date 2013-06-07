@@ -169,7 +169,7 @@ K.each(obj , fn)
 
 .. _trim:
 
-K.trim(obj , fn)
+K.trim(str)
 --------------------------------------------------------
 清除字符串两边的空白。
 
@@ -293,7 +293,7 @@ K.toCamel(val)
 将to-camel格式的字符串转换成toCamel格式。
 
 * 参数:
-	* string val: 
+	* string val:
 * 返回: string
 
 示例:

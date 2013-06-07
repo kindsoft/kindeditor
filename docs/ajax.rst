@@ -41,7 +41,7 @@ K.loadStyle(url)
 
 .. sourcecode:: js
 
-	K.loadScript('test.css');
+	K.loadStyle('test.css');
 
 .. index:: ajax
 

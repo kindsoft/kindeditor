@@ -336,7 +336,7 @@ html()
 
 .. sourcecode:: js
 
-	K('#id').html(val);
+	var html = K('#id').html();
 
 html(val)
 --------------------------------------------------------
