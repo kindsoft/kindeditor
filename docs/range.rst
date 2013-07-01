@@ -319,7 +319,7 @@ how参数的方向规则：
 	range1.selectNode(K('div#id')[0]);
 	var range2 = K.range(document);
 	range2.selectNode(K('div#id p')[0]);
-	var cmp = range1.compareBoundaryPoints(K.START_TO_START, range2.get());
+	var cmp = range1.compareBoundaryPoints(K.START_TO_START, range2);
 
 .. index:: cloneRange
 

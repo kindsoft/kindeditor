@@ -129,7 +129,7 @@ fire(type)
 .. sourcecode:: js
 
 	K('#id').fire('click');
-	K.click();
+	K('#id').click();
 
 .. index:: hasAttr
 

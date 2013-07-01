@@ -15,7 +15,7 @@ K.query(expr [, root])
 * 参数:
 	* string expr: 选择器表达式
 	* element root: 根元素，默认值为document
-* 返回: array
+* 返回: DOM元素
 
 .. sourcecode:: js
 
@@ -54,6 +54,6 @@ K.queryAll(expr [, root])
 
 .. sourcecode:: js
 
-	var divArray = K.query('#id div');
-	var spanArray = K.query('span.class', div);
+	var divArray = K.queryAll('#id div');
+	var spanArray = K.queryAll('span.class', div);
 
