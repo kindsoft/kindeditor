@@ -319,12 +319,19 @@ function _ctrl(el, key, fn) {
 	});
 }
 
+var _readyFinished = false;
+
 function _ready(fn) {
+	if (_readyFinished) {
+		fn(KindEditor);
+		return;
+	}
 	var loaded = false;
 	function readyFunc() {
 		if (!loaded) {
 			loaded = true;
 			fn(KindEditor);
+			_readyFinished = true;
 		}
 	}
 	function ieReadyFunc() {

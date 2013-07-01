@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-05-18)
+* @version 4.1.7 (2013-06-08)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-05-18)',
+var _VERSION = '4.1.7 (2013-06-08)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -544,12 +544,18 @@ function _ctrl(el, key, fn) {
 		}
 	});
 }
+var _readyFinished = false;
 function _ready(fn) {
+	if (_readyFinished) {
+		fn(KindEditor);
+		return;
+	}
 	var loaded = false;
 	function readyFunc() {
 		if (!loaded) {
 			loaded = true;
 			fn(KindEditor);
+			_readyFinished = true;
 		}
 	}
 	function ieReadyFunc() {
