@@ -117,6 +117,7 @@
 			<fileset file="${filename}.js"/>
 			<fileset file="${lang}/zh_CN.js"/>
 			<fileset file="${plugins}/anchor/anchor.js"/>
+			<fileset file="${plugins}/autoheight/autoheight.js"/>
 			<fileset file="${plugins}/baidumap/baidumap.js"/>
 			<fileset file="${plugins}/clearhtml/clearhtml.js"/>
 			<fileset file="${plugins}/code/code.js"/>
