@@ -1043,7 +1043,7 @@ function _eachEditor(expr, fn) {
 	K(expr).each(function(i, el) {
 		K.each(_instances, function(j, editor) {
 			if (editor && editor.srcElement[0] == el) {
-				fn.call(editor, j, editor);
+				fn.call(editor, j);
 				return false;
 			}
 		});
@@ -1060,6 +1060,24 @@ K.remove = function(expr) {
 K.sync = function(expr) {
 	_eachEditor(expr, function() {
 		this.sync();
+	});
+};
+
+K.html = function(expr, val) {
+	_eachEditor(expr, function() {
+		this.html(val);
+	});
+};
+
+K.insertHtml = function(expr, val) {
+	_eachEditor(expr, function() {
+		this.insertHtml(val);
+	});
+};
+
+K.appendHtml = function(expr, val) {
+	_eachEditor(expr, function() {
+		this.appendHtml(val);
 	});
 };
 

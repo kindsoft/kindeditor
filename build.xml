@@ -150,6 +150,18 @@
 		/>
 	</target>
 
+	<target name="tudou" depends="min">
+		<concat destfile="${filename}-tudou.js"
+			encoding="${charset}"
+			outputencoding="${charset}">
+			<fileset file="${filename}.js"/>
+			<fileset file="${lang}/zh_CN.js"/>
+			<fileset file="${plugins}/emoticons/emoticons.js"/>
+			<fileset file="${plugins}/image/image.js"/>
+			<fileset file="${plugins}/link/link.js"/>
+		</concat>
+	</target>
+
 	<target name="zip" depends="all">
 		<mkdir dir="dist"/>
 		<delete dir="${dist}"/>

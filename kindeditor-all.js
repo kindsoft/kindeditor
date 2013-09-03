@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-08-20)
+* @version 4.1.7 (2013-09-03)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-08-20)',
+var _VERSION = '4.1.7 (2013-09-03)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -5418,7 +5418,7 @@ function _eachEditor(expr, fn) {
 	K(expr).each(function(i, el) {
 		K.each(_instances, function(j, editor) {
 			if (editor && editor.srcElement[0] == el) {
-				fn.call(editor, j, editor);
+				fn.call(editor, j);
 				return false;
 			}
 		});
@@ -5433,6 +5433,21 @@ K.remove = function(expr) {
 K.sync = function(expr) {
 	_eachEditor(expr, function() {
 		this.sync();
+	});
+};
+K.html = function(expr, val) {
+	_eachEditor(expr, function() {
+		this.html(val);
+	});
+};
+K.insertHtml = function(expr, val) {
+	_eachEditor(expr, function() {
+		this.insertHtml(val);
+	});
+};
+K.appendHtml = function(expr, val) {
+	_eachEditor(expr, function() {
+		this.appendHtml(val);
 	});
 };
 if (_IE && _V < 7) {
