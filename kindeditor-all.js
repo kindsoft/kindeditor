@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-09-03)
+* @version 4.1.7 (2013-09-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-09-03)',
+var _VERSION = '4.1.7 (2013-09-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -712,6 +712,9 @@ function _formatUrl(url, mode, host, pathname) {
 	return url;
 }
 function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
+	if (html == null) {
+		html = '';
+	}
 	urlType = urlType || '';
 	wellFormatted = _undef(wellFormatted, false);
 	indentChar = _undef(indentChar, '\t');

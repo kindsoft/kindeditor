@@ -20,6 +20,12 @@ KindEditor.ready(function (K) {
 	});
 
 	test("editor.html", function() {
+		editor.html(undefined);
+		equals(editor.html(), '');
+
+		editor.html(null);
+		equals(editor.html(), '');
+
 		editor.html('<h3>abc</h3>');
 		equals(editor.html(), '<h3>abc</h3>');
 

@@ -118,6 +118,10 @@ function _formatUrl(url, mode, host, pathname) {
 }
 
 function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
+	// null or undefined: object == null
+	if (html == null) {
+		html = '';
+	}
 	urlType = urlType || '';
 	wellFormatted = _undef(wellFormatted, false);
 	indentChar = _undef(indentChar, '\t');

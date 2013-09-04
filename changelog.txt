@@ -10,6 +10,7 @@ ver 4.1.8
 * Bugfix: embed宽高无法用百分比设置。
 * Bugfix: [Firefox] 输入几个文字，切换到源代码模式再切换回来，插入图片报错。
 * Bugfix: 自动高度插件高度只增不减，感谢Github用户wyqbailey贡献。
+* Bugfix: editor.html(val)的val参数为null或undefined时报错。
 
 ver 4.1.7 (2013-04-21)
 * Bugfix: 取消全屏后没有恢复到原来大小，调整窗口大小后宽高变成全屏宽高。
