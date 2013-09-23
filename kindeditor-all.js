@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-09-04)
+* @version 4.1.7 (2013-09-23)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-09-04)',
+var _VERSION = '4.1.7 (2013-09-23)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -1081,7 +1081,7 @@ function _queryAll(expr, root) {
 		for (var i = 0, len = els.length; i < len; i++) {
 			el = els[i];
 			if (cmpTag(tag, el.nodeName) && _contains(root, el)) {
-				if (el.getAttributeNode('name')) {
+				if (el.getAttribute('name') !== null) {
 					arr.push(el);
 				}
 			}

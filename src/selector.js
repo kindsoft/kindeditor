@@ -119,7 +119,7 @@ function _queryAll(expr, root) {
 		for (var i = 0, len = els.length; i < len; i++) {
 			el = els[i];
 			if (cmpTag(tag, el.nodeName) && _contains(root, el)) {
-				if (el.getAttributeNode('name')) {
+				if (el.getAttribute('name') !== null) {
 					arr.push(el);
 				}
 			}
