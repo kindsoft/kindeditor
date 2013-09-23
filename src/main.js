@@ -397,9 +397,12 @@ KEditor.prototype = {
 		self.isLoading = true;
 		_loadScript(self.pluginsPath + name + '/' + name + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
 			self.isLoading = false;
-			if (_plugins[name]) {
-				self.loadPlugin(name, fn);
-			}
+			// Fix bug: https://github.com/kindsoft/kindeditor/issues/105
+			setTimeout(function() {
+				if (_plugins[name]) {
+					self.loadPlugin(name, fn);
+				}
+			}, 0);
 		});
 		return self;
 	},
