@@ -865,9 +865,9 @@
 }
 .ke-upload-area .ke-upload-file {
 	position: absolute;
+	font-size: 60px;
 	top: 0;
 	right: 0;
-	height: 25px;
 	padding: 0;
 	margin: 0;
 	z-index: 811212;
