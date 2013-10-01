@@ -3231,14 +3231,26 @@ _extend(KCmd, {
 			range.selectNode(node[0]);
 			return self.select();
 		}
+		function setAttr(node, url, type) {
+			K(node).attr('href', url).attr('data-ke-src', url);
+			if (type) {
+				K(node).attr('target', type);
+			} else {
+				K(node).removeAttr('target');
+			}
+		}
+		var sc = range.startContainer, so = range.startOffset,
+			ec = range.endContainer, eo = range.endOffset;
+		if (sc.nodeType == 1 && sc === ec && so + 1 === eo) {
+			var child = sc.childNodes[so];
+			if (child.nodeName.toLowerCase() == 'a') {
+				setAttr(child, url, type);
+			}
+			return self;
+		}
 		_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
 		K('a[href="__kindeditor_temp_url__"]', doc).each(function() {
-			K(this).attr('href', url).attr('data-ke-src', url);
-			if (type) {
-				K(this).attr('target', type);
-			} else {
-				K(this).removeAttr('target');
-			}
+			setAttr(this, url, type);
 		});
 		return self;
 	},

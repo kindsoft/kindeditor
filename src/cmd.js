@@ -788,14 +788,28 @@ _extend(KCmd, {
 			range.selectNode(node[0]);
 			return self.select();
 		}
+		function setAttr(node, url, type) {
+			K(node).attr('href', url).attr('data-ke-src', url);
+			if (type) {
+				K(node).attr('target', type);
+			} else {
+				K(node).removeAttr('target');
+			}
+		}
+		// Bugfix: https://github.com/kindsoft/kindeditor/issues/117
+		// [IE] 当两个A标签并排在一起中间没有别的内容，修改后面的链接地址时，前面的链接地址也被改掉。
+		var sc = range.startContainer, so = range.startOffset,
+			ec = range.endContainer, eo = range.endOffset;
+		if (sc.nodeType == 1 && sc === ec && so + 1 === eo) {
+			var child = sc.childNodes[so];
+			if (child.nodeName.toLowerCase() == 'a') {
+				setAttr(child, url, type);
+			}
+			return self;
+		}
 		_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
 		K('a[href="__kindeditor_temp_url__"]', doc).each(function() {
-			K(this).attr('href', url).attr('data-ke-src', url);
-			if (type) {
-				K(this).attr('target', type);
-			} else {
-				K(this).removeAttr('target');
-			}
+			setAttr(this, url, type);
 		});
 		return self;
 	},
