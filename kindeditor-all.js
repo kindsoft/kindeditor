@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-10-01)
+* @version 4.1.7 (2013-10-03)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-10-01)',
+var _VERSION = '4.1.7 (2013-10-03)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -9197,9 +9197,7 @@ KindEditor.plugin('pagebreak', function(K) {
 	self.clickToolbar(name, function() {
 		var cmd = self.cmd, range = cmd.range;
 		self.focus();
-		range.enlarge(true);
-		cmd.split(true);
-		var tail = self.newlineTag == 'br' || K.WEBKIT ? '' : '<p id="__kindeditor_tail_tag__"></p>';
+		var tail = self.newlineTag == 'br' || K.WEBKIT ? '' : '<span id="__kindeditor_tail_tag__"></span>';
 		self.insertHtml(pagebreakHtml + tail);
 		if (tail !== '') {
 			var p = K('#__kindeditor_tail_tag__', self.edit.doc);
