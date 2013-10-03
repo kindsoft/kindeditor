@@ -5040,6 +5040,14 @@ KEditor.prototype = {
 				if (self.initContent === '') {
 					self.initContent = self.html();
 				}
+				if (self._undoStack.length > 0) {
+					var prev = self._undoStack.pop();
+					if (prev.start) {
+						self.html(prev.html);
+						edit.cmd.range.moveToBookmark(prev);
+						self.select();
+					}
+				}
 				self.afterCreate();
 				if (self.options.afterCreate) {
 					self.options.afterCreate.call(self);
@@ -5280,6 +5288,7 @@ KEditor.prototype = {
 	},
 	fullscreen : function(bool) {
 		this.fullscreenMode = (bool === undefined ? !this.fullscreenMode : bool);
+		this.addBookmark(false);
 		return this.remove().create();
 	},
 	readonly : function(isReadonly) {
