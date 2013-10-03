@@ -26,6 +26,7 @@ var _VERSION = '4.1.7 (2013-10-03)',
 	_MOBILE = _ua.indexOf('mobile') > -1,
 	_IOS = /ipad|iphone|ipod/.test(_ua),
 	_QUIRKS = document.compatMode != 'CSS1Compat',
+	_IERANGE = !window.getSelection,
 	_matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua),
 	_V = _matches ? _matches[1] : '0',
 	_TIME = new Date().getTime();
@@ -2058,7 +2059,7 @@ function _toRange(rng) {
 			start.offset = 0;
 		}
 	}
-	if (_IE) {
+	if (_IERANGE) {
 		if (rng.item) {
 			doc = _getDoc(rng.item(0));
 			range = new KRange(doc);
@@ -2170,7 +2171,7 @@ _extend(KRange, {
 	},
 	compareBoundaryPoints : function(how, range) {
 		var rangeA = this.get(), rangeB = range.get();
-		if (_IE) {
+		if (_IERANGE) {
 			var arr = {};
 			arr[_START_TO_START] = 'StartToStart';
 			arr[_START_TO_END] = 'EndToStart';
@@ -2231,7 +2232,7 @@ _extend(KRange, {
 		return new KRange(this.doc).setStart(this.startContainer, this.startOffset).setEnd(this.endContainer, this.endOffset);
 	},
 	toString : function() {
-		var rng = this.get(), str = _IE ? rng.text : rng.toString();
+		var rng = this.get(), str = _IERANGE ? rng.text : rng.toString();
 		return str.replace(/\r\n|\n|\r/g, '');
 	},
 	cloneContents : function() {
@@ -2310,7 +2311,7 @@ _extend(KRange, {
 	},
 	get : function(hasControlRange) {
 		var self = this, doc = self.doc, node, rng;
-		if (!_IE) {
+		if (!_IERANGE) {
 			rng = doc.createRange();
 			try {
 				rng.setStart(self.startContainer, self.startOffset);
@@ -2515,7 +2516,7 @@ function _nativeCommandValue(doc, key) {
 }
 function _getSel(doc) {
 	var win = _getWin(doc);
-	return doc.selection || win.getSelection();
+	return _IERANGE ? doc.selection : win.getSelection();
 }
 function _getRng(doc) {
 	var sel = _getSel(doc), rng;
@@ -2526,7 +2527,7 @@ function _getRng(doc) {
 			rng = sel.createRange();
 		}
 	} catch(e) {}
-	if (_IE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
+	if (_IERANGE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
 		return null;
 	}
 	return rng;
@@ -2719,7 +2720,7 @@ _extend(KCmd, {
 			ec = range.endContainer, eo = range.endOffset,
 			doc = _getDoc(sc), win = self.win, rng, hasU200b = false;
 		if (hasDummy && sc.nodeType == 1 && range.collapsed) {
-			if (_IE) {
+			if (_IERANGE) {
 				var dummy = K('<span>&nbsp;</span>', doc);
 				range.insertNode(dummy[0]);
 				rng = doc.body.createTextRange();
@@ -2740,7 +2741,7 @@ _extend(KCmd, {
 				}
 			}
 		}
-		if (_IE) {
+		if (_IERANGE) {
 			try {
 				rng = range.get(true);
 				rng.select();
@@ -3169,7 +3170,7 @@ _extend(KCmd, {
 			range.collapse(false);
 			self.select(false);
 		}
-		if (_IE && quickMode) {
+		if (_IERANGE && quickMode) {
 			try {
 				pasteHtml(range, val);
 			} catch(e) {
@@ -3282,7 +3283,7 @@ _each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull
 		var self = this;
 		self.select();
 		_nativeCommand(self.doc, name, val);
-		if (!_IE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
+		if (!_IERANGE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
 			self.selection();
 		}
 		return self;

@@ -17,6 +17,7 @@ var _VERSION = '${VERSION}',
 	_MOBILE = _ua.indexOf('mobile') > -1,
 	_IOS = /ipad|iphone|ipod/.test(_ua),
 	_QUIRKS = document.compatMode != 'CSS1Compat',
+	_IERANGE = !window.getSelection,
 	_matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua),
 	_V = _matches ? _matches[1] : '0',
 	_TIME = new Date().getTime();

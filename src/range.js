@@ -297,7 +297,7 @@ function _toRange(rng) {
 		}
 	}
 	// IE
-	if (_IE) {
+	if (_IERANGE) {
 		if (rng.item) {
 			doc = _getDoc(rng.item(0));
 			range = new KRange(doc);
@@ -412,7 +412,7 @@ _extend(KRange, {
 	},
 	compareBoundaryPoints : function(how, range) {
 		var rangeA = this.get(), rangeB = range.get();
-		if (_IE) {
+		if (_IERANGE) {
 			var arr = {};
 			arr[_START_TO_START] = 'StartToStart';
 			arr[_START_TO_END] = 'EndToStart';
@@ -480,7 +480,7 @@ _extend(KRange, {
 	},
 	toString : function() {
 		//TODO
-		var rng = this.get(), str = _IE ? rng.text : rng.toString();
+		var rng = this.get(), str = _IERANGE ? rng.text : rng.toString();
 		return str.replace(/\r\n|\n|\r/g, '');
 	},
 	cloneContents : function() {
@@ -568,7 +568,7 @@ _extend(KRange, {
 	get : function(hasControlRange) {
 		var self = this, doc = self.doc, node, rng;
 		// not IE
-		if (!_IE) {
+		if (!_IERANGE) {
 			rng = doc.createRange();
 			try {
 				rng.setStart(self.startContainer, self.startOffset);

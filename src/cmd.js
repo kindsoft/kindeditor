@@ -19,7 +19,7 @@ function _nativeCommandValue(doc, key) {
 // get current selection of a document
 function _getSel(doc) {
 	var win = _getWin(doc);
-	return doc.selection || win.getSelection();
+	return _IERANGE ? doc.selection : win.getSelection();
 }
 // get range of current selection
 function _getRng(doc) {
@@ -31,7 +31,7 @@ function _getRng(doc) {
 			rng = sel.createRange();
 		}
 	} catch(e) {}
-	if (_IE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
+	if (_IERANGE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
 		return null;
 	}
 	return rng;
@@ -242,7 +242,7 @@ _extend(KCmd, {
 			doc = _getDoc(sc), win = self.win, rng, hasU200b = false;
 		// tag内部无内容时选中tag内部，<tagName>[]</tagName>
 		if (hasDummy && sc.nodeType == 1 && range.collapsed) {
-			if (_IE) {
+			if (_IERANGE) {
 				var dummy = K('<span>&nbsp;</span>', doc);
 				range.insertNode(dummy[0]);
 				rng = doc.body.createTextRange();
@@ -264,7 +264,7 @@ _extend(KCmd, {
 			}
 		}
 		//other case
-		if (_IE) {
+		if (_IERANGE) {
 			try {
 				rng = range.get(true);
 				rng.select();
@@ -726,7 +726,7 @@ _extend(KCmd, {
 			range.collapse(false);
 			self.select(false);
 		}
-		if (_IE && quickMode) {
+		if (_IERANGE && quickMode) {
 			try {
 				pasteHtml(range, val);
 			} catch(e) {
@@ -843,7 +843,7 @@ _each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull
 		self.select();
 		_nativeCommand(self.doc, name, val);
 		// 在webkit和firefox上需要重新选取range，否则有时候会报错
-		if (!_IE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
+		if (!_IERANGE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
 			self.selection();
 		}
 		return self;

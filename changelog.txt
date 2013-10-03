@@ -6,6 +6,7 @@
 ver 4.1.8
 * 新增: kindeditor-all.js包含自动高度插件。
 * 新增: K.html(expr, val)，K.appendHtml(expr, val)，K.insertHtml(expr, val)接口。
+* 改善: IE9+都使用W3C Range。
 * 改善: 页面加载完成后也可以触发KindEditor.ready。
 * 改善: getAttributeNode已不赞成使用，用getAttribute替代。
 * Bugfix: 有些浏览器上点击边缘，可能无法弹出文件选择框。
