@@ -19,6 +19,7 @@ ver 4.1.8
 * Bugfix: 页面同时引入SWFUpload，多图上传会失败。
 * Bugfix: 插入分页符，有时候出现复制HTML代码的现象。
 * Bugfix: 编辑图片后丢失class、id等属性。
+* Bugfix: 在编辑器中输入值，页面提交跳转后，按浏览器的后退按钮，就出现__kindeditor_bookmark_start_0。
 
 ver 4.1.7 (2013-04-21)
 * Bugfix: 取消全屏后没有恢复到原来大小，调整窗口大小后宽高变成全屏宽高。

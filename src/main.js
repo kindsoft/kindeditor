@@ -565,6 +565,8 @@ KEditor.prototype = {
 			cssData : self.cssData,
 			beforeGetHtml : function(html) {
 				html = self.beforeGetHtml(html);
+				// Bugfix: 浏览器后退产生__kindeditor_bookmark_start_0__
+				html = _removeBookmarkTag(_removeTempTag(html));
 				return _formatHtml(html, self.filterMode ? self.htmlTags : null, self.urlType, self.wellFormatMode, self.indentChar);
 			},
 			beforeSetHtml : function(html) {
@@ -771,13 +773,15 @@ KEditor.prototype = {
 		return _trim(this.initContent.replace(/\r\n|\n|\r|t/g, '')) !== _trim(this.html().replace(/\r\n|\n|\r|t/g, ''));
 	},
 	selectedHtml : function() {
-		return this.isCreated ? this.cmd.range.html() : '';
+		var val = this.isCreated ? this.cmd.range.html() : '';
+		val = _removeBookmarkTag(_removeTempTag(val));
+		return val;
 	},
 	count : function(mode) {
 		var self = this;
 		mode = (mode || 'html').toLowerCase();
 		if (mode === 'html') {
-			return _removeBookmarkTag(_removeTempTag(self.html())).length;
+			return self.html().length;
 		}
 		if (mode === 'text') {
 			return self.text().replace(/<(?:img|embed).*?>/ig, 'K').replace(/\r\n|\n|\r/g, '').length;
