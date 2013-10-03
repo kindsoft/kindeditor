@@ -296,7 +296,17 @@ KindEditor.plugin('image', function(K) {
 				showLocal : allowImageUpload,
 				tabIndex: img ? 0 : imageTabIndex,
 				clickFn : function(url, title, width, height, border, align) {
-					self.exec('insertimage', url, title, width, height, border, align);
+					if (img) {
+						img.attr('src', url);
+						img.attr('data-ke-src', url);
+						img.attr('width', width);
+						img.attr('height', height);
+						img.attr('title', title);
+						img.attr('align', align);
+						img.attr('alt', title);
+					} else {
+						self.exec('insertimage', url, title, width, height, border, align);
+					}
 					// Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
 					setTimeout(function() {
 						self.hideDialog().focus();
