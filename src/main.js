@@ -355,13 +355,11 @@ function KEditor(options) {
 	self.initContent = '';
 	self.plugin = {};
 	self.isCreated = false;
-	self.isLoading = false;
 	// private properties
 	self._handlers = {};
 	self._contextmenus = [];
 	self._undoStack = [];
 	self._redoStack = [];
-	self._calledPlugins = {};
 	self._firstAddBookmark = true;
 	self.menu = self.contextmenu = null;
 	self.dialogs = [];
@@ -374,29 +372,18 @@ KEditor.prototype = {
 	loadPlugin : function(name, fn) {
 		var self = this;
 		if (_plugins[name]) {
-			// 防止重复执行
-			if (self._calledPlugins[name]) {
-				if (fn) {
-					fn.call(self);
-				}
+			if (_plugins[name] == 'loading') {
 				return self;
 			}
-			// 第一次加载时执行一次
 			_plugins[name].call(self, KindEditor);
 			if (fn) {
 				fn.call(self);
 			}
-			self._calledPlugins[name] = true;
 			return self;
 		}
 		// 还没加载相关plugin，动态加载
-		// 防止重复加载
-		if (self.isLoading) {
-			return self;
-		}
-		self.isLoading = true;
+		_plugins[name] = 'loading';
 		_loadScript(self.pluginsPath + name + '/' + name + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
-			self.isLoading = false;
 			// Fix bug: https://github.com/kindsoft/kindeditor/issues/105
 			setTimeout(function() {
 				if (_plugins[name]) {

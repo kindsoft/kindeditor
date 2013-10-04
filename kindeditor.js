@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.7 (2013-10-03)
+* @version 4.1.7 (2013-10-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.7 (2013-10-03)',
+var _VERSION = '4.1.7 (2013-10-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4797,12 +4797,10 @@ function KEditor(options) {
 	self.initContent = '';
 	self.plugin = {};
 	self.isCreated = false;
-	self.isLoading = false;
 	self._handlers = {};
 	self._contextmenus = [];
 	self._undoStack = [];
 	self._redoStack = [];
-	self._calledPlugins = {};
 	self._firstAddBookmark = true;
 	self.menu = self.contextmenu = null;
 	self.dialogs = [];
@@ -4814,25 +4812,17 @@ KEditor.prototype = {
 	loadPlugin : function(name, fn) {
 		var self = this;
 		if (_plugins[name]) {
-			if (self._calledPlugins[name]) {
-				if (fn) {
-					fn.call(self);
-				}
+			if (_plugins[name] == 'loading') {
 				return self;
 			}
 			_plugins[name].call(self, KindEditor);
 			if (fn) {
 				fn.call(self);
 			}
-			self._calledPlugins[name] = true;
 			return self;
 		}
-		if (self.isLoading) {
-			return self;
-		}
-		self.isLoading = true;
+		_plugins[name] = 'loading';
 		_loadScript(self.pluginsPath + name + '/' + name + '.js?ver=' + encodeURIComponent(K.DEBUG ? _TIME : _VERSION), function() {
-			self.isLoading = false;
 			setTimeout(function() {
 				if (_plugins[name]) {
 					self.loadPlugin(name, fn);
