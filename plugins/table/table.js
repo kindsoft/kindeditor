@@ -231,6 +231,7 @@ KindEditor.plugin('table', function(K) {
 							self.hideDialog().focus();
 							self.cmd.range.moveToBookmark(bookmark);
 							self.cmd.select();
+							self.addBookmark();
 							return;
 						}
 						//insert new table
@@ -385,6 +386,7 @@ KindEditor.plugin('table', function(K) {
 				'</div>',
 				'</div>'
 			].join('');
+			var bookmark = self.cmd.range.createBookmark();
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
@@ -433,6 +435,8 @@ KindEditor.plugin('table', function(K) {
 							'border-color' : borderColor
 						});
 						self.hideDialog().focus();
+						self.cmd.range.moveToBookmark(bookmark);
+						self.cmd.select();
 						self.addBookmark();
 					}
 				}
