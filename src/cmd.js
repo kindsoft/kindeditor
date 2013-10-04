@@ -842,6 +842,10 @@ _each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull
 		var self = this;
 		self.select();
 		_nativeCommand(self.doc, name, val);
+		// Bugfix: [IE] 先选中图片后居中，再左对齐，光标跳到顶部
+		if (_IERANGE && _inArray(name, 'justifyleft,justifycenter,justifyright,justifyfull'.split(',')) >= 0) {
+			self.selection();
+		}
 		// 在webkit和firefox上需要重新选取range，否则有时候会报错
 		if (!_IERANGE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
 			self.selection();

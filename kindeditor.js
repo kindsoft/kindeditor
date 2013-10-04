@@ -3283,6 +3283,9 @@ _each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull
 		var self = this;
 		self.select();
 		_nativeCommand(self.doc, name, val);
+		if (_IERANGE && _inArray(name, 'justifyleft,justifycenter,justifyright,justifyfull'.split(',')) >= 0) {
+			self.selection();
+		}
 		if (!_IERANGE || _inArray(name, 'formatblock,selectall,insertorderedlist,insertunorderedlist'.split(',')) >= 0) {
 			self.selection();
 		}
