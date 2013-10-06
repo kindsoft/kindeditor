@@ -70,7 +70,7 @@ K.remove(expr)
 
 K.sync(expr)
 --------------------------------------------------------
-同步多个编辑器。
+将多个编辑器的内容设置到原来的textarea控件里。。
 
 * 参数:
 	* mixed expr: element或选择器
@@ -89,6 +89,75 @@ K.sync(expr)
 .. note ::
 
 	4.1.2版本开始支持。
+
+.. index:: html
+
+.. _K.html:
+
+K.html(expr, val)
+--------------------------------------------------------
+设置多个编辑器的HTML内容。
+
+* 参数:
+	* mixed expr: element或选择器
+	* string val: HTML内容
+* 返回: undefined
+
+示例:
+
+.. sourcecode:: js
+
+	K.html('#editor_id', '<div>HTML</div>');
+
+.. note ::
+
+	4.1.8版本开始支持。
+
+.. index:: appendHtml
+
+.. _K.appendHtml:
+
+K.appendHtml(expr, val)
+--------------------------------------------------------
+将指定的HTML内容添加到多个编辑器的最后位置。
+
+* 参数:
+	* mixed expr: element或选择器
+	* string val: 内容
+* 返回: undefined
+
+示例:
+
+.. sourcecode:: js
+
+	K.appendHtml('#editor_id', '<div>HTML</div>');
+
+.. note ::
+
+	4.1.8版本开始支持。
+
+.. index:: insertHtml
+
+.. _K.insertHtml:
+
+K.insertHtml(expr, val)
+--------------------------------------------------------
+将指定的HTML内容插入到多个编辑器的光标处。
+
+* 参数:
+	* mixed expr: element或选择器
+	* string val: 内容
+* 返回: undefined
+
+示例:
+
+.. sourcecode:: js
+
+	K.insertHtml('#editor_id', '<strong>HTML</strong>');
+
+.. note ::
+
+	4.1.8版本开始支持。
 
 .. index:: remove
 

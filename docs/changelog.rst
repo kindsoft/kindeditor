@@ -4,6 +4,30 @@
 .. contents::
 	:depth: 2
 
+ver 4.1.8 (2013-10-06)
+-----------------------------------------------------------------
+* 新增: kindeditor-all.js包含自动高度插件。
+* 新增: K.html(expr, val)，K.appendHtml(expr, val)，K.insertHtml(expr, val)接口。
+* 改善: IE9+都使用W3C Range。
+* 改善: 页面加载完成后也可以触发KindEditor.ready。
+* 改善: getAttributeNode已不赞成使用，用getAttribute替代。
+* Bugfix: 有些浏览器上点击边缘，可能无法弹出文件选择框。
+* Bugfix: embed宽高无法用百分比设置。
+* Bugfix: [Firefox] 输入几个文字，切换到源代码模式再切换回来，插入图片报错。
+* Bugfix: 自动高度插件高度只增不减，感谢Github用户wyqbailey贡献。
+* Bugfix: editor.html(val)的val参数为null或undefined时报错。
+* Bugfix: [IE10] 单独调用组件-上传图片弹出框，需要点击两次选择图片按钮才能弹出窗体。
+* Bugfix: 代码模式下输入带连续多个空格的标签，有些浏览器无响应。
+* Bugfix: [IE] 当两个A标签并排在一起中间没有别的内容，修改后面的链接地址时，前面的链接地址也被改掉。
+* Bugfix: 页面同时引入SWFUpload，多图上传会失败。
+* Bugfix: 插入分页符，有时候出现复制HTML代码的现象。
+* Bugfix: 编辑图片后丢失class、id等属性。
+* Bugfix: 在编辑器中输入值，页面提交跳转后，按浏览器的后退按钮，就出现__kindeditor_bookmark_start_0。
+* Bugfix: 全屏后和还原后光标没有选中之前光标的位置。
+* Bugfix: 特定环境下有时候出现两个弹出框。
+* Bugfix: [IE] 编辑表格后焦点跳到顶部。
+* Bugfix: [IE] 先选中图片后居中，再左对齐，光标跳到顶部。
+
 ver 4.1.7 (2013-04-21)
 -----------------------------------------------------------------
 * Bugfix: 取消全屏后没有恢复到原来大小，调整窗口大小后宽高变成全屏宽高。
