@@ -841,3 +841,18 @@ true时显示网络图片标签，false时不显示。
 .. note::
 
 	4.1.6版本开始支持。
+
+.. index:: autoHeightMode
+
+.. _autoHeightMode:
+
+autoHeightMode
+--------------------------------------------------------
+值为true，并引入autoheight.js插件时自动调整高度。
+
+* 数据类型: Boolean
+* 默认值: false
+
+.. note::
+
+	4.1.8版本开始支持。
