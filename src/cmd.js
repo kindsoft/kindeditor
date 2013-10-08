@@ -804,8 +804,8 @@ _extend(KCmd, {
 			var child = sc.childNodes[so];
 			if (child.nodeName.toLowerCase() == 'a') {
 				setAttr(child, url, type);
+				return self;
 			}
-			return self;
 		}
 		_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
 		K('a[href="__kindeditor_temp_url__"]', doc).each(function() {

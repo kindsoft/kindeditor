@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.8 (2013-10-06)
+* @version 4.1.8 (2013-10-08)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.8 (2013-10-06)',
+var _VERSION = '4.1.8 (2013-10-08)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -3246,8 +3246,8 @@ _extend(KCmd, {
 			var child = sc.childNodes[so];
 			if (child.nodeName.toLowerCase() == 'a') {
 				setAttr(child, url, type);
+				return self;
 			}
-			return self;
 		}
 		_nativeCommand(doc, 'createlink', '__kindeditor_temp_url__');
 		K('a[href="__kindeditor_temp_url__"]', doc).each(function() {

@@ -3,6 +3,10 @@
 # KindEditor 变更记录
 #
 #######################################################################
+
+ver 4.1.9
+* Bugfix: 选中后无法添加超级链接。
+
 ver 4.1.8 (2013-10-06)
 * 新增: kindeditor-all.js包含自动高度插件。
 * 新增: K.html(expr, val)，K.appendHtml(expr, val)，K.insertHtml(expr, val)接口。
