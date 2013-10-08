@@ -372,9 +372,14 @@ KEditor.prototype = {
 	loadPlugin : function(name, fn) {
 		var self = this;
 		if (_plugins[name]) {
-			if (_plugins[name] == 'loading') {
+			// JS加载中，等待JS加载完成
+			if (!_isFunction(_plugins[name])) {
+				setTimeout(function() {
+					self.loadPlugin(name, fn);
+				}, 100);
 				return self;
 			}
+			// JS加载完成
 			_plugins[name].call(self, KindEditor);
 			if (fn) {
 				fn.call(self);
@@ -1015,7 +1020,9 @@ function _create(expr, options) {
 	}
 	function create(editor) {
 		_each(_plugins, function(name, fn) {
-			fn.call(editor, KindEditor);
+			if (_isFunction(fn)) {
+				fn.call(editor, KindEditor);
+			}
 		});
 		return editor.create();
 	}

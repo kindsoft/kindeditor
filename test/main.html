@@ -58,7 +58,7 @@
 		<tr>
 		<td align="center">
 		<form method="post" action="../php/demo.php">
-			<textarea name="content1" cols="100" rows="20" style="width:100%;height:500px;"><div>
+			<textarea name="content1" cols="100" rows="20" style="width:100%;height:200px;"><div>
     <img alt="" src="/kindeditor/plugins/emoticons/images/0.gif" /> 
     <div>
         123
@@ -207,6 +207,7 @@
 		<script>
 			KindEditor.DEBUG = true;
 			KindEditor.options.filterMode = false;
+			KindEditor.options.autoHeightMode = true;
 			//document.domain = 'domain.com';
 			KindEditor.basePath = '../';
 			KindEditor.ready(function(K) {
@@ -245,6 +246,9 @@
 					afterSelectFile : function(url) {
 						var select = K('#uploadFile')[0];
 						select.options.add(new Option(url, url));
+					},
+					afterCreate : function() {
+						this.loadPlugin('autoheight');
 					}
 				});
 				K('#create1').click(function(e) {
@@ -316,6 +320,9 @@
 					formatUploadUrl : false,
 					afterTab : function() {
 						K('#uploadFile')[0].focus();
+					},
+					afterCreate : function() {
+						this.loadPlugin('autoheight');
 					}
 				});
 				K('#create2').click(function(e) {

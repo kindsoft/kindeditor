@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.8 (2013-10-08)
+* @version 4.1.9 (2013-10-08)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -17,7 +17,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.8 (2013-10-08)',
+var _VERSION = '4.1.9 (2013-10-08)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
@@ -4815,7 +4815,10 @@ KEditor.prototype = {
 	loadPlugin : function(name, fn) {
 		var self = this;
 		if (_plugins[name]) {
-			if (_plugins[name] == 'loading') {
+			if (!_isFunction(_plugins[name])) {
+				setTimeout(function() {
+					self.loadPlugin(name, fn);
+				}, 100);
 				return self;
 			}
 			_plugins[name].call(self, KindEditor);
@@ -5414,7 +5417,9 @@ function _create(expr, options) {
 	}
 	function create(editor) {
 		_each(_plugins, function(name, fn) {
-			fn.call(editor, KindEditor);
+			if (_isFunction(fn)) {
+				fn.call(editor, KindEditor);
+			}
 		});
 		return editor.create();
 	}

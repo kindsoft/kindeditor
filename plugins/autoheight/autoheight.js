@@ -21,6 +21,11 @@ KindEditor.plugin('autoheight', function(K) {
 	edit.iframe[0].scroll = 'no';
 	body.style.overflowY = 'hidden';
 
+	function resetHeight() {
+		edit.iframe.height(minHeight);
+		self.resize(null, Math.max((K.IE ? body.scrollHeight : body.offsetHeight) + 76, minHeight));
+	}
+
 	/*
 	* 如何实现真正的自动高度？
 	* 修改编辑器高度之后，再次获取body内容高度时，最小值只会是当前iframe的设置高度，这样就导致高度只增不减。
@@ -29,8 +34,11 @@ KindEditor.plugin('autoheight', function(K) {
 	* 测试：chrome、firefox、IE9、IE8
 	* */
 
-	edit.afterChange(function() {
-		edit.iframe.height(minHeight);
-		self.resize(null, Math.max((K.IE ? body.scrollHeight : body.offsetHeight) + 62, minHeight));
-	});
+	edit.afterChange(resetHeight);
+
+	if (self.isCreated) {
+		resetHeight();
+	} else {
+		self.afterCreate(resetHeight);
+	}
 });
