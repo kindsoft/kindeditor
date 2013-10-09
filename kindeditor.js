@@ -3724,12 +3724,16 @@ _extend(KEdit, KWidget, {
 		!isDocumentDomain && ready();
 	},
 	setWidth : function(val) {
-		this.div.css('width', _addUnit(val));
-		return this;
+		var self = this;
+		val = _addUnit(val);
+		self.width = val;
+		self.div.css('width', val);
+		return self;
 	},
 	setHeight : function(val) {
 		var self = this;
 		val = _addUnit(val);
+		self.height = val;
 		self.div.css('height', val);
 		self.iframe.css('height', val);
 		if ((_IE && _V < 8) || _QUIRKS) {
