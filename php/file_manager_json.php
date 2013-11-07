@@ -45,7 +45,7 @@ if (empty($_GET['path'])) {
 	$current_dir_path = $_GET['path'];
 	$moveup_dir_path = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
 }
-echo realpath($root_path);
+//echo realpath($root_path);
 //排序形式，name or size or type
 $order = empty($_GET['order']) ? 'name' : strtolower($_GET['order']);
 
