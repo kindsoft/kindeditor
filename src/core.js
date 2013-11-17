@@ -11,6 +11,7 @@ if (!console.log) {
 var _VERSION = '${VERSION}',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
+	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
 	_WEBKIT = _ua.indexOf('applewebkit') > -1,
 	_OPERA = _ua.indexOf('opera') > -1,

@@ -20,6 +20,7 @@ if (!console.log) {
 var _VERSION = '4.1.9 (2013-11-17)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
+	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
 	_GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
 	_WEBKIT = _ua.indexOf('applewebkit') > -1,
 	_OPERA = _ua.indexOf('opera') > -1,
@@ -1274,7 +1275,7 @@ function _docWidth(doc) {
 function _getScrollPos(doc) {
 	doc = doc || document;
 	var x, y;
-	if (_IE || _OPERA) {
+	if (_IE || _NEWIE || _OPERA) {
 		x = _docElement(doc).scrollLeft;
 		y = _docElement(doc).scrollTop;
 	} else {

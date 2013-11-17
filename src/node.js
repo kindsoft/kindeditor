@@ -95,7 +95,7 @@ function _docWidth(doc) {
 function _getScrollPos(doc) {
 	doc = doc || document;
 	var x, y;
-	if (_IE || _OPERA) {
+	if (_IE || _NEWIE || _OPERA) {
 		x = _docElement(doc).scrollLeft;
 		y = _docElement(doc).scrollTop;
 	} else {
