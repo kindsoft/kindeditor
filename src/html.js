@@ -134,9 +134,12 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
 	// <p></p> to <p><br /></p>
 	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
+	// empty char
 	html = html.replace(/\u200B/g, '');
 	// &copy;
 	html = html.replace(/\u00A9/g, '&copy;');
+	// &reg;
+	html = html.replace(/\u00AE/g, '&reg;');
 	// Bugfix: https://github.com/kindsoft/kindeditor/issues/116
 	html = html.replace(/<[^>]+>/g, function($0) {
 		return $0.replace(/\s+/g, ' ');

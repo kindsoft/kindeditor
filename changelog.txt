@@ -7,6 +7,7 @@
 ver 4.1.10
 * Bugfix: [IE6-7] 上传按钮界面错乱。
 * Bugfix: 引入kindeditor-all.js后开启自动高度插件会报错。
+* Bugfix: &reg;来回切换代码模式后变成(R)。
 
 ver 4.1.9 (2013-10-08)
 * Bugfix: 选中后无法添加超级链接。
