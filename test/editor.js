@@ -38,8 +38,8 @@ KindEditor.ready(function (K) {
 		editor.html('<div class="aaa bbb ccc">abc</div>');
 		equals(editor.html(), '<div class="aaa bbb ccc">abc</div>');
 
-		editor.html('<p>　abc</p>');
-		equals(editor.html(), '<p>　abc</p>');
+		editor.html('<p>abc</p>');
+		equals(editor.html(), '<p>abc</p>');
 
 		editor.html('<br /><noscript><img src="" /></noscript>');
 		equals(editor.html(), '<br /><noscript><img src="" /></noscript>');

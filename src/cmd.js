@@ -654,30 +654,34 @@ _extend(KCmd, {
 		});
 	},
 	forecolor : function(val) {
-		return this.toggle('<span style="color:' + val + ';"></span>', {
-			span : '.color=' + val,
-			font : 'color'
-		});
+		return this.wrap('<span style="color:' + val + ';"></span>').select();
+		// return this.toggle('<span style="color:' + val + ';"></span>', {
+		// 	span : '.color=' + val,
+		// 	font : 'color'
+		// });
 	},
 	hilitecolor : function(val) {
-		return this.toggle('<span style="background-color:' + val + ';"></span>', {
-			span : '.background-color=' + val
-		});
+		return this.wrap('<span style="background-color:' + val + ';"></span>').select();
+		// return this.toggle('<span style="background-color:' + val + ';"></span>', {
+		// 	span : '.background-color=' + val
+		// });
 	},
 	fontsize : function(val) {
-		return this.toggle('<span style="font-size:' + val + ';"></span>', {
-			span : '.font-size=' + val,
-			font : 'size'
-		});
+		return this.wrap('<span style="font-size:' + val + ';"></span>').select();
+		// return this.toggle('<span style="font-size:' + val + ';"></span>', {
+		// 	span : '.font-size=' + val,
+		// 	font : 'size'
+		// });
 	},
 	fontname : function(val) {
 		return this.fontfamily(val);
 	},
 	fontfamily : function(val) {
-		return this.toggle('<span style="font-family:' + val + ';"></span>', {
-			span : '.font-family=' + val,
-			font : 'face'
-		});
+		return this.wrap('<span style="font-family:' + val + ';"></span>').select();
+		// return this.toggle('<span style="font-family:' + val + ';"></span>', {
+		// 	span : '.font-family=' + val,
+		// 	font : 'face'
+		// });
 	},
 	removeformat : function() {
 		var map = {
