@@ -11,6 +11,7 @@ ver 4.1.10
 * Bugfix: &reg;来回切换代码模式后变成(R)。
 * Bugfix: 字体、文字大小、颜色等操作有toogle效果。
 * Bugfix: 非IE设置returnValue和cancelBubble。
+* Bugfix: 特定的字符导致浏览器死循环。
 
 ver 4.1.9 (2013-10-08)
 * Bugfix: 选中后无法添加超级链接。

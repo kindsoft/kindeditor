@@ -140,8 +140,10 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\u00A9/g, '&copy;');
 	// &reg;
 	html = html.replace(/\u00AE/g, '&reg;');
-	// Bugfix: https://github.com/kindsoft/kindeditor/issues/116
-	html = html.replace(/<[^>]+>/g, function($0) {
+	// Bugfix:
+	// https://github.com/kindsoft/kindeditor/issues/116
+	// https://github.com/kindsoft/kindeditor/issues/145
+	html = html.replace(/<[^>]+/g, function($0) {
 		return $0.replace(/\s+/g, ' ');
 	});
 

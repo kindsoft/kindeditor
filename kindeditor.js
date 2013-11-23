@@ -731,7 +731,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\u200B/g, '');
 	html = html.replace(/\u00A9/g, '&copy;');
 	html = html.replace(/\u00AE/g, '&reg;');
-	html = html.replace(/<[^>]+>/g, function($0) {
+	html = html.replace(/<[^>]+/g, function($0) {
 		return $0.replace(/\s+/g, ' ');
 	});
 	var htmlTagMap = {};
