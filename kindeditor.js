@@ -400,7 +400,9 @@ _extend(KEvent, {
 		if (ev.preventDefault) {
 			ev.preventDefault();
 		}
-		ev.returnValue = false;
+		else {
+			ev.returnValue = false;
+		}
 	},
 	stopPropagation : function() {
 		var ev = this.event;
