@@ -163,15 +163,17 @@ _extend(KEvent, {
 		var ev = this.event;
 		if (ev.preventDefault) {
 			ev.preventDefault();
+		} else {
+			ev.returnValue = false;
 		}
-		ev.returnValue = false;
 	},
 	stopPropagation : function() {
 		var ev = this.event;
 		if (ev.stopPropagation) {
 			ev.stopPropagation();
+		} else {
+			ev.cancelBubble = true;
 		}
-		ev.cancelBubble = true;
 	},
 	stop : function() {
 		this.preventDefault();
