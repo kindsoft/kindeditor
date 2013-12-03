@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Newline Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
+		<script src="../static/kindeditor/kindeditor.js"></script>
+		<script src="../static/kindeditor/lang/en.js"></script>
+		<script>
+			KindEditor.ready(function(K) {
+				var editor;
+				K('select[name=newlineTag]').change(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+					editor = K.create('textarea[name="content"]', {
+						langType : 'en',
+						newlineTag : this.value
+					});
+				});
+				K('select[name=newlineTag]').change();
+			});
+		</script>
+	</head>
+	<body>
+		<script type="text/javascript"><!--
+		google_ad_client = "ca-pub-7116729301372758";
+		/* 更多演示（728x90） */
+		google_ad_slot = "5052271949";
+		google_ad_width = 728;
+		google_ad_height = 90;
+		//-->
+		</script>
+		<script type="text/javascript"
+		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+		<h3>回车换行设置</h3>
+		<form>
+			<p>
+				<select name="newlineTag">
+					<option value="br">BR换行</option>
+					<option value="p">P换行</option>
+				</select>
+			</p>
+			<textarea name="content" style="width:800px;height:200px;"></textarea>
+		</form>
+	</body>
+</html>

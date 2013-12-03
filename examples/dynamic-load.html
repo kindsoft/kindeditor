@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Dynamic load example</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<script src="../static/jquery/jquery.min.js"></script>
+		<script>
+			$(function() {
+				$('input[name=load]').click(function() {
+					$.getScript('../static/kindeditor/kindeditor-min.js', function() {
+						KindEditor.basePath = '../static/kindeditor/';
+						KindEditor.create('textarea[name="content"]', {
+							langType : 'en'
+						});
+					});
+				});
+				$('input[name=remove]').click(function() {
+					KindEditor.remove('textarea[name="content"]');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<script type="text/javascript"><!--
+		google_ad_client = "ca-pub-7116729301372758";
+		/* 更多演示（728x90） */
+		google_ad_slot = "5052271949";
+		google_ad_width = 728;
+		google_ad_height = 90;
+		//-->
+		</script>
+		<script type="text/javascript"
+		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+		<h3>Dynamic load example</h3>
+		<form>
+			<textarea name="content" style="width:800px;height:200px;"></textarea>
+			<p>
+				<input type="button" name="load" value="Load JS and create editor" />
+				<input type="button" name="remove" value="Remove editor" />
+			</p>
+		</form>
+	</body>
+</html>

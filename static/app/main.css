@@ -143,10 +143,12 @@ a:hover {
 	margin-bottom: 30px;
 }
 .header h3 {
-	color: #999;
-	font-size: 24px;
 	margin: 0;
 	padding-bottom: 20px;
+}
+.header h3 a {
+	color: #999;
+	font-size: 24px;
 }
 .header li {
 	float: left;
@@ -203,14 +205,26 @@ a:hover {
 	background-color: #47a447;
 	border-color: #398439;
 }
-.marketing {
-	margin-bottom: 40px;
-}
 .marketing h4 {
 	margin-top: 28px;
 }
 .footer {
+	margin-top: 40px;
 	border-top: 1px solid #e5e5e5;
 	padding-top: 20px;
 	text-align: center;
+}
+.module {
+	margin: 20px 0;
+	padding: 0;
+}
+.module h3 {
+	border-bottom: 1px solid #ddd;
+	padding: 5px;
+	margin: 5px 0 15px 0;
+	font-size: 14px;
+	font-weight:bold;
+}
+.module ul {
+	margin: 15px;
 }

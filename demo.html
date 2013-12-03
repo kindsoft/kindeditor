@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>KindEditor - WYSIWYG HTML editor</title>
+		<link rel="shortcut icon" type="image/x-icon" href="static/app/favicon.ico" />
+		<link rel="stylesheet" href="static/app/main.css" />
+		<link rel="stylesheet" href="static/kindeditor/themes/default/default.css" />
+		<script src="static/kindeditor/kindeditor-min.js"></script>
+		<script src="static/kindeditor/lang/en.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header fix">
+				<ul class="fix right">
+					<li><a href="index">Home</a></li>
+					<li class="active"><a href="demo">Demo</a></li>
+					<li><a href="download">Download</a></li>
+					<li><a href="documentation">Documentation</a></li>
+					<li><a href="http://kindeditor.net/">中文站</a></li>
+				</ul>
+				<h3><a href="index">KindEditor</a></h3>
+			</div>
+
+			<div class="module">
+				<script type="text/javascript"><!--
+				google_ad_client = "ca-pub-7116729301372758";
+				/* 演示页 */
+				google_ad_slot = "8255125061";
+				google_ad_width = 728;
+				google_ad_height = 90;
+				//-->
+				</script>
+				<script type="text/javascript"
+				src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+				</script>
+			</div>
+
+			<div class="demo">
+				<textarea id="editor" name="content" rows="20" cols="100" style="width:988px;height:200px;visibility:hidden;">
+&lt;p&gt;Think Defferent&lt;/p&gt;
+&lt;p&gt;Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. About the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do.&nbsp;&lt;/p&gt;
+&lt;p&gt;- Apple Inc.&lt;/p&gt;
+				</textarea>
+			</div>
+
+			<div class="module">
+				<h3>Editor examples</h3>
+				<ul>
+					<li><a href="examples/default.html" target="_blank">default.html</a> (Default example)</li>
+					<li><a href="examples/simple.html" target="_blank">simple.html</a> (Simple example)</li>
+					<li><a href="examples/dynamic-load.html" target="_blank">dynamic-load.html</a> (Dynamic load)</li>
+					<li><a href="examples/multi-language.html" target="_blank">multi-language.html</a> (Multi-language)</li>
+					<li><a href="examples/readonly.html" target="_blank">readonly.html</a> (Readonly)</li>
+					<li><a href="examples/newline.html" target="_blank">newline.html</a> (Newline tag)</li>
+					<li><a href="examples/word-count.html" target="_blank">word-count.html</a> (Word count)</li>
+					<li><a href="examples/filter-mode.html" target="_blank">filter-mode.html</a> (Diable HTML filter)</li>
+					<li><a href="examples/url-type.html" target="_blank">url-type.html</a> (URL control)</li>
+					<li><a href="examples/paste-type.html" target="_blank">paste-type.html</a> (Paste mode)</li>
+					<li><a href="examples/auto-height.html" target="_blank">auto-height.html</a> (Auto change height)</li>
+					<li><a href="examples/custom-theme.html" target="_blank">custom-theme.html</a> (Create a theme)</li>
+					<li><a href="examples/custom-plugin.html" target="_blank">custom-plugin.html</a> (Create a plugin)</li>
+				</ul>
+			</div>
+			<div class="module">
+				<h3>With other library</h3>
+				<ul>
+					<li><a href="examples/jquery.html" target="_blank">jquery.html</a> (jQuery)</li>
+					<li><a href="examples/jquery-ui.html" target="_blank">jquery-ui.html</a> (jQuery UI)</li>
+				</ul>
+			</div>
+			<div class="module">
+				<h3>Other examples</h3>
+				<ul>
+					<li><a href="examples/node.html" target="_blank">node.html</a> (Node Wrapper)</li>
+					<li><a href="examples/uploadbutton.html" target="_blank">uploadbutton.html</a> (Upload button)</li>
+					<li><a href="examples/dialog.html" target="_blank">dialog.html</a> (Dialog)</li>
+					<li><a href="examples/colorpicker.html" target="_blank">colorpicker.html</a> (Color picker)</li>
+				</ul>
+			</div>
+
+			<div class="footer">
+				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
+			</div>
+
+			<script>
+				KindEditor.ready(function(K) {
+					K.create('#editor', {
+						langType : 'en'
+					});
+				});
+			</script>
+
+		</div>
+	</body>
+</html>

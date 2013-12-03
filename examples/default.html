@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Default example</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
+		<script src="../static/kindeditor/kindeditor.js"></script>
+		<script src="../static/kindeditor/lang/en.js"></script>
+		<script>
+			var editor;
+			KindEditor.ready(function(K) {
+				editor = K.create('textarea[name="content"]', {
+					allowFileManager : true,
+					langType : 'en'
+				});
+				K('input[name=getHtml]').click(function(e) {
+					alert(editor.html());
+				});
+				K('input[name=isEmpty]').click(function(e) {
+					alert(editor.isEmpty());
+				});
+				K('input[name=getText]').click(function(e) {
+					alert(editor.text());
+				});
+				K('input[name=selectedHtml]').click(function(e) {
+					alert(editor.selectedHtml());
+				});
+				K('input[name=setHtml]').click(function(e) {
+					editor.html('<h3>Hello KindEditor</h3>');
+				});
+				K('input[name=setText]').click(function(e) {
+					editor.text('<h3>Hello KindEditor</h3>');
+				});
+				K('input[name=insertHtml]').click(function(e) {
+					editor.insertHtml('<strong>插入HTML</strong>');
+				});
+				K('input[name=appendHtml]').click(function(e) {
+					editor.appendHtml('<strong>添加HTML</strong>');
+				});
+				K('input[name=clear]').click(function(e) {
+					editor.html('');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<script type="text/javascript"><!--
+		google_ad_client = "ca-pub-7116729301372758";
+		google_ad_slot = "5052271949";
+		google_ad_width = 728;
+		google_ad_height = 90;
+		//-->
+		</script>
+		<script type="text/javascript"
+		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+		<h3>Default example</h3>
+		<form>
+			<textarea name="content" style="width:800px;height:400px;visibility:hidden;">KindEditor</textarea>
+			<p>
+				<input type="button" name="getHtml" value="Get HTML" />
+				<input type="button" name="isEmpty" value="Is Empty" />
+				<input type="button" name="getText" value="Get text(includes img and embed)" />
+				<input type="button" name="selectedHtml" value="Get selected HTML" />
+				<br />
+				<br />
+				<input type="button" name="setHtml" value="Set HTML" />
+				<input type="button" name="setText" value="Set text" />
+				<input type="button" name="insertHtml" value="Insert HTML" />
+				<input type="button" name="appendHtml" value="Append HTML" />
+				<input type="button" name="clear" value="Clear" />
+				<input type="reset" name="reset" value="Reset" />
+			</p>
+		</form>
+	</body>
+</html>
