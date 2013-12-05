@@ -114,28 +114,34 @@ function main() {
 
 	pathList.forEach(function(path) {
 		var relativePath = Path.relative('./src/', path);
-		var page = relativePath.split(Path.sep)[0].replace(/\.\w+$/, '');
+		var pathParts = relativePath.split(Path.sep);
+		var pageName = pathParts[0].replace(/\.\w+$/, '');
+		var depth = pathParts.length - 1;
 
-		var env = {};
+		var appUrl = '.';
+		for (var i = 0; i < depth; i++) {
+			appUrl += '/..';
+		}
 
-		env[page] = true;
-		env.test = 'test';
+		var page = {};
+		page[pageName] = true;
+
+		var data = {
+			appUrl : appUrl,
+			page : page
+		};
 
 		var content = readFileSync(path, 'utf-8');
 
 		var contentTemplate = Handlebars.compile(content);
-		content = contentTemplate({
-			env : env
-		});
+		content = contentTemplate(data);
 
 		if (/\.md$/.test(path)) {
 			content = markdown.makeHtml(content);
 		}
 
-		var html = layoutTemplate({
-			env : env,
-			content : content
-		});
+		data.content = content;
+		var html = layoutTemplate(data);
 
 		var filePath = Path.resolve(relativePath).replace(/\.md$/, '.html');
 		writeFileSync(filePath, html);

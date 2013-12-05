@@ -1,0 +1,8 @@
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^www.kindeditor.org [NC]
+RewriteRule ^(.*)$ http://kindeditor.org/$1 [L,NE,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ $1.html [QSA,PT,L]

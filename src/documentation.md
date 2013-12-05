@@ -21,7 +21,7 @@
 	<textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
 	```
 
-4. Fetch HTML data. {{env.test}}
+4. Fetch HTML data.
 
 	```javascript
 	html = editor.html();
