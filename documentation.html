@@ -5,6 +5,9 @@
 		<title>KindEditor - WYSIWYG HTML editor</title>
 		<link rel="shortcut icon" type="image/x-icon" href="static/app/favicon.ico" />
 		<link rel="stylesheet" href="static/app/main.css" />
+		<link rel="stylesheet" href="static/kindeditor/themes/default/default.css" />
+		<script src="static/kindeditor/kindeditor-min.js"></script>
+		<script src="static/kindeditor/lang/en.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -19,9 +22,46 @@
 				<h3><a href="./">KindEditor</a></h3>
 			</div>
 
-			<div>
-				Coming Soon
-			</div>
+			<h2 id="installation">Installation</h2>
+
+<ol>
+<li><p>Download the latest version of the editor.</p></li>
+<li><p>Extract the downloaded archive to a directory called kindeditor in the root of your website.</p></li>
+<li><p>Insert the following code fragment into your page.</p>
+
+<p>```html
+<link href="/kindeditor/themes/default/default.css" rel="stylesheet" /></p>
+
+<script charset="utf-8" src="/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/kindeditor/lang/en.js"></script>
+<script>
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#editor_id', {
+            langType : 'en'
+        });
+    });
+</script>
+
+<p><textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
+```</p></li>
+<li><p>Fetch HTML data. test</p>
+
+<p><code>javascript
+html = editor.html();
+</code></p></li>
+<li><p>Synchronize HTML data to the textarea
+```javascript
+editor.sync();</p>
+
+<p>html = document.getElementById('editor<em>id').value; // Native API
+html = K('#editor</em>id').val(); // KindEditor Node API
+html = $('#editor_id').val(); // jQuery API
+```</p></li>
+<li><p>Set HTML data to KindEditor
+<code>javascript
+editor.html('HTML code');
+</code></p></li>
+</ol>
 
 			<div class="footer">
 				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>

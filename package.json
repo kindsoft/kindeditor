@@ -1,0 +1,7 @@
+{
+	"devDependencies" : {
+		"iconv-lite": "~0.2.5",
+		"handlebars": "~1.1.2",
+		"showdown": "~0.3.1"
+	}
+}

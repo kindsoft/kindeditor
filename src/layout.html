@@ -13,18 +13,16 @@
 		<div class="container">
 			<div class="header fix">
 				<ul class="fix right">
-					<li><a href="./">Home</a></li>
-					<li><a href="demo">Demo</a></li>
-					<li class="active"><a href="download">Download</a></li>
-					<li><a href="documentation">Documentation</a></li>
+					<li{{#if env.index}} class="active"{{/if}}><a href="./">Home</a></li>
+					<li{{#if env.demo}} class="active"{{/if}}><a href="demo">Demo</a></li>
+					<li{{#if env.download}} class="active"{{/if}}><a href="download">Download</a></li>
+					<li{{#if env.documentation}} class="active"{{/if}}><a href="documentation">Documentation</a></li>
 					<li><a href="http://kindeditor.net/">中文站</a></li>
 				</ul>
 				<h3><a href="./">KindEditor</a></h3>
 			</div>
 
-			<h2 id="downloads">Downloads</h2>
-
-<p>http://code.google.com/p/kindeditor/downloads/list</p>
+			{{{content}}}
 
 			<div class="footer">
 				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
