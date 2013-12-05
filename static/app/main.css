@@ -2,7 +2,7 @@
 body, td, button, input, select, textarea {
 	font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-body, form, p, ul, dl, input, textarea {
+body, form, p, ul, dl, textarea {
 	margin: 0;
 	padding: 0;
 }
@@ -24,7 +24,7 @@ h4 {font-size: 18px;}
 h5 {font-size: 14px;}
 h6 {font-size: 12px;}
 p {
-	margin: 0 0 10px;
+	margin: 10px 0;
 }
 
 /* grid */

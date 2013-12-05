@@ -123,6 +123,10 @@ function main() {
 			appUrl += '/..';
 		}
 
+		if (pageName == 'examples') {
+			pageName = 'demo';
+		}
+
 		var page = {};
 		page[pageName] = true;
 

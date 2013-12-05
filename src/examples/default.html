@@ -1,4 +1,3 @@
-
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7116729301372758";
 google_ad_slot = "5052271949";
@@ -10,24 +9,26 @@ google_ad_height = 90;
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
-<h3>Default example</h3>
-<form>
-	<textarea name="content" style="width:800px;height:400px;visibility:hidden;">KindEditor</textarea>
-	<p>
-		<input type="button" name="getHtml" value="Get HTML" />
-		<input type="button" name="isEmpty" value="Is Empty" />
-		<input type="button" name="getText" value="Get text(includes img and embed)" />
-		<input type="button" name="selectedHtml" value="Get selected HTML" />
-		<br />
-		<br />
-		<input type="button" name="setHtml" value="Set HTML" />
-		<input type="button" name="setText" value="Set text" />
-		<input type="button" name="insertHtml" value="Insert HTML" />
-		<input type="button" name="appendHtml" value="Append HTML" />
-		<input type="button" name="clear" value="Clear" />
-		<input type="reset" name="reset" value="Reset" />
-	</p>
-</form>
+<div class="module">
+	<h3>Default example</h3>
+	<form>
+		<textarea name="content" style="width:988px;height:200px;visibility:hidden;"></textarea>
+		<p>
+			<input type="button" name="getHtml" value="Get HTML" />
+			<input type="button" name="isEmpty" value="Is Empty" />
+			<input type="button" name="getText" value="Get text(includes img and embed)" />
+			<input type="button" name="selectedHtml" value="Get selected HTML" />
+		</p>
+		<p>
+			<input type="button" name="setHtml" value="Set HTML" />
+			<input type="button" name="setText" value="Set text" />
+			<input type="button" name="insertHtml" value="Insert HTML" />
+			<input type="button" name="appendHtml" value="Append HTML" />
+			<input type="button" name="clear" value="Clear" />
+			<input type="reset" name="reset" value="Reset" />
+		</p>
+	</form>
+</div>
 
 <script>
 	var editor;
@@ -55,10 +56,10 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 			editor.text('<h3>Hello KindEditor</h3>');
 		});
 		K('input[name=insertHtml]').click(function(e) {
-			editor.insertHtml('<strong>插入HTML</strong>');
+			editor.insertHtml('<strong>Insert HTML</strong>');
 		});
 		K('input[name=appendHtml]').click(function(e) {
-			editor.appendHtml('<strong>添加HTML</strong>');
+			editor.appendHtml('<strong>Append HTML</strong>');
 		});
 		K('input[name=clear]').click(function(e) {
 			editor.html('');

@@ -1,49 +1,33 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Simple example</title>
-		<style>
-			form {
-				margin: 0;
-			}
-			textarea {
-				display: block;
-			}
-		</style>
-		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
-		<script src="../static/kindeditor/kindeditor.js"></script>
-		<script src="../static/kindeditor/lang/en.js"></script>
-		<script>
-			var editor;
-			KindEditor.ready(function(K) {
-				editor = K.create('textarea[name="content"]', {
-					resizeType : 1,
-					allowPreviewEmoticons : false,
-					allowImageUpload : false,
-					langType : 'en',
-					items : [
-						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
-						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-						'insertunorderedlist', '|', 'emoticons', 'image', 'link']
-				});
-			});
-		</script>
-	</head>
-	<body>
-		<script type="text/javascript"><!--
-		google_ad_client = "ca-pub-7116729301372758";
-		google_ad_slot = "5052271949";
-		google_ad_width = 728;
-		google_ad_height = 90;
-		//-->
-		</script>
-		<script type="text/javascript"
-		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-		</script>
-		<h3>Simple example</h3>
-		<form>
-			<textarea name="content" style="width:700px;height:200px;visibility:hidden;">KindEditor</textarea>
-		</form>
-	</body>
-</html>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-7116729301372758";
+google_ad_slot = "5052271949";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+<div class="module">
+	<h3>Simple example</h3>
+	<form>
+		<textarea name="content" style="width:988px;height:200px;visibility:hidden;">KindEditor</textarea>
+	</form>
+</div>
+
+<script>
+var editor;
+KindEditor.ready(function(K) {
+	editor = K.create('textarea[name="content"]', {
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : false,
+		langType : 'en',
+		items : [
+			'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+			'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+			'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+	});
+});
+</script>
