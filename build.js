@@ -40,7 +40,7 @@ function mkdir(dirPath, mode) {
 	list.reverse().forEach(function(path) {
 		Fs.mkdirSync(path, mode);
 
-		info('Directory "' + path + '" created.' + linefeed);
+		info('Directory "' + path + '" created.');
 	});
 }
 
@@ -66,7 +66,7 @@ function writeFileSync(filePath, content) {
 	mkdir(Path.dirname(filePath), '0777');
 	Fs.writeFileSync(filePath, content);
 
-	info('File "' + filePath + '" created.' + linefeed);
+	info('File "' + filePath + '" created.');
 }
 
 function grepPaths(rootDirPath, checkFn) {
@@ -102,17 +102,15 @@ function grepPaths(rootDirPath, checkFn) {
 function main() {
 	var markdown = new Showdown.converter();
 
-	var layoutHtml = readFileSync('./src/layout.html', 'utf-8');
-	var layoutTemplate = Handlebars.compile(layoutHtml);
-
 	var pathList =  grepPaths('./src', function(path) {
-		if (/layout\.html$/.test(path)) {
+		if (/\.inc\.html$/.test(path)) {
 			return;
 		}
 		return /\.(html|md)$/.test(path);
 	});
 
 	pathList.forEach(function(path) {
+		var dirPath = Path.dirname(path);
 		var relativePath = Path.relative('./src/', path);
 		var pathParts = relativePath.split(Path.sep);
 		var pageName = pathParts[0].replace(/\.\w+$/, '');
@@ -132,23 +130,31 @@ function main() {
 
 		var data = {
 			appUrl : appUrl,
-			page : page
+			page : page,
+			pageTitle : pageName
 		};
 
 		var content = readFileSync(path, 'utf-8');
 
-		var contentTemplate = Handlebars.compile(content);
-		content = contentTemplate(data);
+		content = content.replace(/<title>(.*?)<\/title>/i, function(full, title) {
+			data.pageTitle = title;
+			return '';
+		});
 
 		if (/\.md$/.test(path)) {
 			content = markdown.makeHtml(content);
 		}
 
-		data.content = content;
-		var html = layoutTemplate(data);
+		content = content.replace(/\{\{include (.*?)\}\}/ig, function(full, subPath) {
+			subPath = Path.resolve(dirPath + '/' + subPath + '.inc.html');
+			return readFileSync(subPath, 'utf-8');
+		});
+
+		var contentTemplate = Handlebars.compile(content);
+		content = contentTemplate(data);
 
 		var filePath = Path.resolve(relativePath).replace(/\.md$/, '.html');
-		writeFileSync(filePath, html);
+		writeFileSync(filePath, content);
 	});
 }
 

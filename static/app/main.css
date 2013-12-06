@@ -26,6 +26,9 @@ h6 {font-size: 12px;}
 p {
 	margin: 10px 0;
 }
+textarea {
+	display: block;
+}
 
 /* grid */
 .container {

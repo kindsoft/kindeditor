@@ -1,3 +1,6 @@
+{{include header}}
+
+<title>KindEditor - WYSIWYG HTML editor</title>
 
 ## Installation
 
@@ -40,3 +43,5 @@
 	```javascript
 	editor.html('HTML code');
 	```
+
+{{include footer}}
