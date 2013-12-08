@@ -2,12 +2,12 @@
 
 {{include google-ad}}
 
-<title>Dynamic load example</title>
+<title>Dynamic load</title>
 
 <div class="module">
-	<h3>Dynamic load example</h3>
+	<h3>Dynamic load</h3>
 	<form>
-		<textarea name="content" style="width:800px;height:200px;"></textarea>
+		<textarea name="content" style="width:988px;height:200px;"></textarea>
 		<p>
 			<input type="button" name="load" value="Load JS and create editor" />
 			<input type="button" name="remove" value="Remove editor" />
@@ -21,9 +21,7 @@
 		$('input[name=load]').click(function() {
 			$.getScript('../static/kindeditor/kindeditor-min.js', function() {
 				KindEditor.basePath = '../static/kindeditor/';
-				KindEditor.create('textarea[name="content"]', {
-					langType : 'en'
-				});
+				KindEditor.create('textarea[name="content"]');
 			});
 		});
 		$('input[name=remove]').click(function() {

@@ -2,41 +2,82 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		
-		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
-		<script src="../static/kindeditor/kindeditor.js"></script>
-		<script src="../static/kindeditor/lang/en.js"></script>
+		<title>Dialog</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./../static/app/favicon.ico" />
+		<link rel="stylesheet" href="./../static/app/main.css" />
+		<link rel="stylesheet" href="./../static/kindeditor/themes/default/default.css" />
+		<script src="./../static/kindeditor/kindeditor-min.js"></script>
+		<script src="./../static/kindeditor/lang/en.js"></script>
 		<script>
-			KindEditor.ready(function(K) {
-				K('#create1').click(function() {
-					var dialog = K.dialog({
-						width : 500,
-						title : '测试窗口',
-						body : '<div style="margin:10px;"><strong>内容</strong></div>',
-						closeBtn : {
-							name : '关闭',
-							click : function(e) {
-								dialog.remove();
-							}
-						},
-						yesBtn : {
-							name : '确定',
-							click : function(e) {
-								alert(this.value);
-							}
-						},
-						noBtn : {
-							name : '取消',
-							click : function(e) {
-								dialog.remove();
-							}
-						}
-					});
-				});
-			});
+			KindEditor.options.langType = 'en';
 		</script>
 	</head>
 	<body>
-		<input type="button" id="create1" value="打开弹出框" />
+		<div class="container">
+			<div class="header fix">
+				<ul class="fix right">
+					<li><a href="./../">Home</a></li>
+					<li class="active"><a href="./../demo">Demo</a></li>
+					<li><a href="./../download">Download</a></li>
+					<li><a href="./../documentation">Documentation</a></li>
+					<li><a href="http://kindeditor.net/">中文站</a></li>
+				</ul>
+				<h3><a href="./../">KindEditor</a></h3>
+			</div>
+
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-7116729301372758";
+google_ad_slot = "5052271949";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+
+
+<div class="module">
+	<h3>Dialog</h3>
+	<input type="button" id="create1" value="Open Dialog" />
+</div>
+
+<script>
+	KindEditor.ready(function(K) {
+		K('#create1').click(function() {
+			var dialog = K.dialog({
+				width : 500,
+				title : 'My Window',
+				body : '<div style="margin:10px;"><strong>dialog content</strong></div>',
+				closeBtn : {
+					name : 'Close',
+					click : function(e) {
+						dialog.remove();
+					}
+				},
+				yesBtn : {
+					name : 'Confirm',
+					click : function(e) {
+						alert(this.value);
+					}
+				},
+				noBtn : {
+					name : 'Cancel',
+					click : function(e) {
+						dialog.remove();
+					}
+				}
+			});
+		});
+	});
+</script>
+
+			<div class="footer">
+				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
+			</div>
+
+		</div>
 	</body>
 </html>
+

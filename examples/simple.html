@@ -8,6 +8,9 @@
 		<link rel="stylesheet" href="./../static/kindeditor/themes/default/default.css" />
 		<script src="./../static/kindeditor/kindeditor-min.js"></script>
 		<script src="./../static/kindeditor/lang/en.js"></script>
+		<script>
+			KindEditor.options.langType = 'en';
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -38,7 +41,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <div class="module">
 	<h3>Simple example</h3>
 	<form>
-		<textarea name="content" style="width:988px;height:200px;visibility:hidden;">KindEditor</textarea>
+		<textarea name="content" style="width:988px;height:200px;visibility:hidden;"></textarea>
 	</form>
 </div>
 
@@ -49,7 +52,6 @@ KindEditor.ready(function(K) {
 		resizeType : 1,
 		allowPreviewEmoticons : false,
 		allowImageUpload : false,
-		langType : 'en',
 		items : [
 			'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
 			'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',

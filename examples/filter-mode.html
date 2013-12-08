@@ -2,45 +2,65 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		
-		<style>
-			form {
-				margin: 0;
-			}
-			textarea {
-				display: block;
-			}
-		</style>
-		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
-		<script src="../static/kindeditor/kindeditor.js"></script>
-		<script src="../static/kindeditor/lang/en.js"></script>
+		<title>Disable HTML filtering</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./../static/app/favicon.ico" />
+		<link rel="stylesheet" href="./../static/app/main.css" />
+		<link rel="stylesheet" href="./../static/kindeditor/themes/default/default.css" />
+		<script src="./../static/kindeditor/kindeditor-min.js"></script>
+		<script src="./../static/kindeditor/lang/en.js"></script>
 		<script>
-			KindEditor.ready(function(K) {
-				K.create('textarea[name="content"]', {
-					langType : 'en',
-					filterMode : false
-				});
-			});
+			KindEditor.options.langType = 'en';
 		</script>
 	</head>
 	<body>
-		<script type="text/javascript"><!--
-		google_ad_client = "ca-pub-7116729301372758";
-		/* 更多演示（728x90） */
-		google_ad_slot = "5052271949";
-		google_ad_width = 728;
-		google_ad_height = 90;
-		//-->
-		</script>
-		<script type="text/javascript"
-		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-		</script>
-		<h3>关闭HTML过滤</h3>
-		<form>
-			<textarea name="content" style="width:800px;height:200px;"></textarea>
-			<p>
-				KindEditor 默认采用白名单过滤方式，可用 htmlTags 参数定义要保留的标签和属性。当然也可以用 filterMode 参数关闭过滤模式，保留所有标签。
-			</p>
-		</form>
+		<div class="container">
+			<div class="header fix">
+				<ul class="fix right">
+					<li><a href="./../">Home</a></li>
+					<li class="active"><a href="./../demo">Demo</a></li>
+					<li><a href="./../download">Download</a></li>
+					<li><a href="./../documentation">Documentation</a></li>
+					<li><a href="http://kindeditor.net/">中文站</a></li>
+				</ul>
+				<h3><a href="./../">KindEditor</a></h3>
+			</div>
+
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-7116729301372758";
+google_ad_slot = "5052271949";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+
+
+<div class="module">
+	<h3>Disable HTML filtering</h3>
+	<form>
+		<textarea name="content" style="width:988px;height:200px;"></textarea>
+		<p>
+			KindEditor enabled by default the whitelist filtering, You can set htmlTags option allowed any tags and attributes. Of course, You can also set filterMode option to disable the filtering.
+		</p>
+	</form>
+</div>
+
+<script>
+	KindEditor.ready(function(K) {
+		K.create('textarea[name="content"]', {
+			filterMode : false
+		});
+	});
+</script>
+
+			<div class="footer">
+				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
+			</div>
+
+		</div>
 	</body>
 </html>
+

@@ -29,8 +29,7 @@
 	var editor;
 	KindEditor.ready(function(K) {
 		editor = K.create('textarea[name="content"]', {
-			allowFileManager : true,
-			langType : 'en'
+			allowFileManager : true
 		});
 		K('input[name=getHtml]').click(function(e) {
 			alert(editor.html());

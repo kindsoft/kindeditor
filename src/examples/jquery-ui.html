@@ -1,63 +1,44 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>With jQuery UI</title>
-		<style>
-			body {
-				font-size: 12px;
-			}
-			form {
-				margin: 0;
-			}
-			textarea {
-				display: block;
-			}
-			#J_editorDialog {
-				display: none;
-			}
-		</style>
-		<link rel="stylesheet" href="../static/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
-		<script src="../static/jquery/jquery.min.js"></script>
-		<script src="../static/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-		<script src="../static/kindeditor/kindeditor.js"></script>
-		<script src="../static/kindeditor/lang/en.js"></script>
-		<script>
-			$(function() {
-				$('#J_openDialog').click(function() {
-					$('#J_editorDialog').dialog({
-						title : 'KindEditor',
-						width : 700,
-						open : function(event, ui) {
-							KindEditor.create('textarea[name="content"]', {
-								resizeType : 1,
-								langType : 'en'
-							});
-						},
-						beforeClose : function(event, ui) {
-							KindEditor.remove('textarea[name="content"]');
-						}
+{{include ../header}}
+
+{{include google-ad}}
+
+<title>With jQuery UI</title>
+
+<link rel="stylesheet" href="{{appUrl}}/static/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
+
+<style>
+	#J_editorDialog {
+		display: none;
+	}
+</style>
+
+<div class="module">
+	<h3>Editor in the jQuery UI Dialog</h3>
+	<div id="J_editorDialog">
+		<textarea name="content" style="width:100%;height:200px;"></textarea>
+	</div>
+	<button type="button" id="J_openDialog">Open Dialog</button>
+</div>
+
+<script src="{{appUrl}}/static/jquery/jquery.min.js"></script>
+<script src="{{appUrl}}/static/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script>
+	$(function() {
+		$('#J_openDialog').click(function() {
+			$('#J_editorDialog').dialog({
+				title : 'KindEditor',
+				width : 700,
+				open : function(event, ui) {
+					KindEditor.create('textarea[name="content"]', {
+						resizeType : 1
 					});
-				});
+				},
+				beforeClose : function(event, ui) {
+					KindEditor.remove('textarea[name="content"]');
+				}
 			});
-		</script>
-	</head>
-	<body>
-		<script type="text/javascript"><!--
-		google_ad_client = "ca-pub-7116729301372758";
-		google_ad_slot = "5052271949";
-		google_ad_width = 728;
-		google_ad_height = 90;
-		//-->
-		</script>
-		<script type="text/javascript"
-		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-		</script>
-		<h3>Editor in the jQuery UI Dialog</h3>
-		<div id="J_editorDialog">
-			<textarea name="content" style="width:100%;height:200px;"></textarea>
-		</div>
-		<button type="button" id="J_openDialog">Open Dialog</button>
-	</body>
-</html>
+		});
+	});
+</script>
+
+{{include ../footer}}

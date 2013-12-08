@@ -138,20 +138,17 @@ a {
 	text-decoration: none;
 }
 a:hover {
-	color: #4c33e5;
+	color: #1870a9;
 	text-decoration: none;
 }
 .header {
 	border-bottom: 1px solid #e5e5e5;
 	margin-bottom: 30px;
+	padding-bottom: 20px;
 }
 .header h3 {
 	margin: 0;
-	padding-bottom: 20px;
-}
-.header h3 a {
-	color: #999;
-	font-size: 24px;
+	font-size: 28px;
 }
 .header li {
 	float: left;

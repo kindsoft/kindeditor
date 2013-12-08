@@ -8,6 +8,9 @@
 		<link rel="stylesheet" href="./../static/kindeditor/themes/default/default.css" />
 		<script src="./../static/kindeditor/kindeditor-min.js"></script>
 		<script src="./../static/kindeditor/lang/en.js"></script>
+		<script>
+			KindEditor.options.langType = 'en';
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -60,8 +63,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	var editor;
 	KindEditor.ready(function(K) {
 		editor = K.create('textarea[name="content"]', {
-			allowFileManager : true,
-			langType : 'en'
+			allowFileManager : true
 		});
 		K('input[name=getHtml]').click(function(e) {
 			alert(editor.html());

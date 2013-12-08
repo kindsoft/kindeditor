@@ -1,53 +1,30 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Paste Type Examples</title>
-		<style>
-			form {
-				margin: 0;
-			}
-			textarea {
-				display: block;
-			}
-		</style>
-		<link rel="stylesheet" href="../static/kindeditor/themes/default/default.css" />
-		<script src="../static/kindeditor/kindeditor.js"></script>
-		<script src="../static/kindeditor/lang/en.js"></script>
-		<script>
-			KindEditor.ready(function(K) {
-				K.create('#content1', {
-					langType : 'en',
-					pasteType : 0
-				});
-				K.create('#content2', {
-					langType : 'en',
-					pasteType : 1
-				});
-				K.create('#content3', {
-					langType : 'en',
-					pasteType : 2
-				});
-			});
-		</script>
-	</head>
-	<body>
-		<script type="text/javascript"><!--
-		google_ad_client = "ca-pub-7116729301372758";
-		/* 更多演示（728x90） */
-		google_ad_slot = "5052271949";
-		google_ad_width = 728;
-		google_ad_height = 90;
-		//-->
-		</script>
-		<script type="text/javascript"
-		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-		</script>
-		<h3>禁止粘贴</h3>
-		<textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
-		<h3>纯文本粘贴</h3>
-		<textarea id="content2" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
-		<h3>HTML粘贴</h3>
-		<textarea id="content3" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
-	</body>
-</html>
+{{include ../header}}
+
+{{include google-ad}}
+
+<title>Pasting mode</title>
+
+<div class="module">
+	<h3>Disable pasting</h3>
+	<textarea id="content1" name="content" style="width:988px;height:200px;visibility:hidden;"></textarea>
+	<h3>Only allowed plain text pasting</h3>
+	<textarea id="content2" name="content" style="width:988px;height:200px;visibility:hidden;"></textarea>
+	<h3>HTML pasting</h3>
+	<textarea id="content3" name="content" style="width:988px;height:200px;visibility:hidden;"></textarea>
+</div>
+
+<script>
+	KindEditor.ready(function(K) {
+		K.create('#content1', {
+			pasteType : 0
+		});
+		K.create('#content2', {
+			pasteType : 1
+		});
+		K.create('#content3', {
+			pasteType : 2
+		});
+	});
+</script>
+
+{{include ../footer}}
