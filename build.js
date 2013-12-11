@@ -99,9 +99,13 @@ function grepPaths(rootDirPath, checkFn) {
 	return paths;
 }
 
-function main() {
+function md2html(content) {
 	var markdown = new Showdown.converter();
+	content = '{{include /header}}<div class="md-content">\n' + markdown.makeHtml(content) + '\n</div>{{include /footer}}';
+	return content;
+}
 
+function main() {
 	var pathList =  grepPaths('./src', function(path) {
 		if (/\.inc\.html$/.test(path)) {
 			return;
@@ -140,13 +144,21 @@ function main() {
 			data.pageTitle = title;
 			return '';
 		});
+		content = content.replace(/^\s*#([^#].*)/, function(full, title) {
+			data.pageTitle = title;
+			return '';
+		});
 
 		if (/\.md$/.test(path)) {
-			content = markdown.makeHtml(content);
+			content = md2html(content);
 		}
 
 		content = content.replace(/\{\{include (.*?)\}\}/ig, function(full, subPath) {
-			subPath = Path.resolve(dirPath + '/' + subPath + '.inc.html');
+			if (subPath.charAt(0) == '/') {
+				subPath = Path.resolve('./src' + subPath + '.inc.html');
+			} else {
+				subPath = Path.resolve(dirPath + '/' + subPath + '.inc.html');
+			}
 			return readFileSync(subPath, 'utf-8');
 		});
 

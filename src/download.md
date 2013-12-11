@@ -1,9 +1,5 @@
-{{include header}}
+# KindEditor - WYSIWYG HTML editor
 
-<title>KindEditor - WYSIWYG HTML editor</title>
+## Download
 
-## Downloads
-
-http://code.google.com/p/kindeditor/downloads/list
-
-{{include footer}}
+[KindEditor 4.1.10 (2013-11-23)](http://kindeditor.googlecode.com/files/kindeditor-4.1.10.zip)

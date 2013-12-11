@@ -204,6 +204,7 @@ a:hover {
 .jumbotron .btn:hover {
 	background-color: #47a447;
 	border-color: #398439;
+	color: #ffffff;
 }
 .marketing h4 {
 	margin-top: 28px;
