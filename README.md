@@ -4,7 +4,7 @@ KindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG
 
 ## Official site
 
-http://kindeditor.org
+http://kindeditor.org/
 
 ## Contributors
 
