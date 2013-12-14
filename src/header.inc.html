@@ -12,6 +12,9 @@
 		<script src="{{appUrl}}/static/kindeditor/lang/en.js"></script>
 		<script>
 			KindEditor.options.langType = 'en';
+			KindEditor.ready(function() {
+				prettyPrint();
+			});
 		</script>
 	</head>
 	<body>

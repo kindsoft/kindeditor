@@ -229,3 +229,11 @@ a:hover {
 .module ul {
 	margin: 15px;
 }
+.md-content {
+	margin: 20px 0;
+	padding: 0;
+}
+.md-content ul,
+.md-content ol {
+	margin-left: 20px;
+}

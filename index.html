@@ -5,11 +5,16 @@
 		<title>KindEditor - WYSIWYG HTML editor</title>
 		<link rel="shortcut icon" type="image/x-icon" href="./static/app/favicon.ico" />
 		<link rel="stylesheet" href="./static/app/main.css" />
+		<link rel="stylesheet" href="./static/kindeditor/plugins/code/prettify.css" />
 		<link rel="stylesheet" href="./static/kindeditor/themes/default/default.css" />
+		<script src="./static/kindeditor/plugins/code/prettify.js"></script>
 		<script src="./static/kindeditor/kindeditor-min.js"></script>
 		<script src="./static/kindeditor/lang/en.js"></script>
 		<script>
 			KindEditor.options.langType = 'en';
+			KindEditor.ready(function() {
+				prettyPrint();
+			});
 		</script>
 	</head>
 	<body>

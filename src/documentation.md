@@ -1,43 +1,34 @@
 # KindEditor - WYSIWYG HTML editor
 
-## Installation
+````
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7116729301372758"
+     data-ad-slot="6563401767"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+````
 
-1. Download the latest version of the editor.
+### Documentation
 
-2. Extract the downloaded archive to a directory called kindeditor in the root of your website.
-
-3. Insert the following code fragment into your page.
-
-	```html
-	<link href="/kindeditor/themes/default/default.css" rel="stylesheet" />
-	<script charset="utf-8" src="/kindeditor/kindeditor-min.js"></script>
-	<script charset="utf-8" src="/kindeditor/lang/en.js"></script>
-	<script>
-		KindEditor.ready(function(K) {
-			window.editor = K.create('#editor_id', {
-				langType : 'en'
-			});
-		});
-	</script>
-	<textarea id="editor_id" name="content" cols="100" rows="8"></textarea>
-	```
-
-4. Fetch HTML data.
-
-	```javascript
-	html = editor.html();
-	```
-
-5. Synchronize HTML data to the textarea
-	```javascript
-	editor.sync();
-
-	html = document.getElementById('editor_id').value; // Native API
-	html = K('#editor_id').val(); // KindEditor Node API
-	html = $('#editor_id').val(); // jQuery API
-	```
-
-6. Set HTML data to KindEditor
-	```javascript
-	editor.html('HTML code');
-	```
+* Installation
+* Configuration
+* Theme customization
+* Plugin customization
+* Upload file
+* Base API
+* Event API
+* Selector API
+* Node API
+* Range API
+* Command API
+* Ajax API
+* Widget API
+* Menu API
+* ColorPicker API
+* Dialog API
+* Tabs API
+* UploadButton API
+* Editor API

@@ -5,11 +5,16 @@
 		<title> KindEditor - WYSIWYG HTML editor</title>
 		<link rel="shortcut icon" type="image/x-icon" href="./static/app/favicon.ico" />
 		<link rel="stylesheet" href="./static/app/main.css" />
+		<link rel="stylesheet" href="./static/kindeditor/plugins/code/prettify.css" />
 		<link rel="stylesheet" href="./static/kindeditor/themes/default/default.css" />
+		<script src="./static/kindeditor/plugins/code/prettify.js"></script>
 		<script src="./static/kindeditor/kindeditor-min.js"></script>
 		<script src="./static/kindeditor/lang/en.js"></script>
 		<script>
 			KindEditor.options.langType = 'en';
+			KindEditor.ready(function() {
+				prettyPrint();
+			});
 		</script>
 	</head>
 	<body>
@@ -24,9 +29,35 @@
 				</ul>
 				<h3><a href="./">KindEditor</a></h3>
 			</div><div class="md-content">
-<h2 id="download">Download</h2>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7116729301372758"
+     data-ad-slot="0602567003"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
-<p><a href="http://kindeditor.googlecode.com/files/kindeditor-4.1.10.zip">KindEditor 4.1.10 (2013-11-23)</a></p>
+<h3 id="production">Production</h3>
+
+<ul>
+<li><a href="http://kindeditor.googlecode.com/files/kindeditor-4.1.10.zip">Download KindEditor 4.1.10 (2013-11-23)</a></li>
+</ul>
+
+<h3 id="development">Development</h3>
+
+<ul>
+<li><a href="https://github.com/kindsoft/kindeditor">Fork me on Github</a></li>
+</ul>
+
+<h3 id="thirdpartyextension">Third-party extension</h3>
+
+<ul>
+<li><a href="https://github.com/Macrow/rails_kindeditor">KindEditor for Ruby on Rails (by Macrow)</a></li>
+<li><a href="https://github.com/panxianhai/kindeditor-for-wordpress">KindEditor for WordPress (by panxianhai)</a></li>
+<li><a href="http://www.yiiframework.com/extension/kindeditor">KindEditor for Yii Framework (by Joe Chu)</a></li>
+<li><a href="http://www.yiiframework.com/extension/yii-kindeditor">KindEditor for Yii Framework (by jinmmd)</a></li>
+</ul>
 </div>			<div class="footer">
 				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
 			</div>

@@ -99,8 +99,35 @@ function grepPaths(rootDirPath, checkFn) {
 	return paths;
 }
 
+function escape(val) {
+	return val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showdownHtml() {
+	return [{
+		type : 'lang',
+		regex   : '````([\\s\\S]*?)````',
+		replace : function(match, content) {
+			return content;
+		}
+	}];
+}
+
+function showdownCode() {
+	return [{
+		type : 'lang',
+		regex   : '```([\\w\\-]*)([\\s\\S]*?)```',
+		replace : function(match, lang, content) {
+			content = escape(content);
+			return '<pre class="prettyprint' + (lang ? (' lang-' + lang) : '') + '">' + content + '</pre>';
+		}
+	}];
+}
+
 function md2html(content) {
-	var markdown = new Showdown.converter();
+	var markdown = new Showdown.converter({
+		extensions : [showdownHtml, showdownCode]
+	});
 	content = '{{include /header}}<div class="md-content">\n' + markdown.makeHtml(content) + '\n</div>{{include /footer}}';
 	return content;
 }

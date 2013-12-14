@@ -1,5 +1,27 @@
 # KindEditor - WYSIWYG HTML editor
 
-## Download
+````
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7116729301372758"
+     data-ad-slot="0602567003"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+````
 
-[KindEditor 4.1.10 (2013-11-23)](http://kindeditor.googlecode.com/files/kindeditor-4.1.10.zip)
+### Production
+
+* [Download KindEditor 4.1.10 (2013-11-23)](http://kindeditor.googlecode.com/files/kindeditor-4.1.10.zip)
+
+### Development
+
+* [Fork me on Github](https://github.com/kindsoft/kindeditor)
+
+### Third-party extension
+
+* [KindEditor for Ruby on Rails (by Macrow)](https://github.com/Macrow/rails_kindeditor)
+* [KindEditor for WordPress (by panxianhai)](https://github.com/panxianhai/kindeditor-for-wordpress)
+* [KindEditor for Yii Framework (by Joe Chu)](http://www.yiiframework.com/extension/kindeditor)
+* [KindEditor for Yii Framework (by jinmmd)](http://www.yiiframework.com/extension/yii-kindeditor)
