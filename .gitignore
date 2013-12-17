@@ -10,5 +10,6 @@ Thumbs.db
 .svn/
 *.swp
 dist/
+node_modules/
 _build/
 attached/*

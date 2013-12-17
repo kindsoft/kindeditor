@@ -1,72 +1,119 @@
 
 module.exports = function(grunt) {
 
-var BANNER = '/* <%= pkg.name %> <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>), Copyright (C) kindsoft.net, Licence: http://www.kindsoft.net/license.php */\n';
+var BANNER = '/* <%= pkg.name %> <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>), Copyright (C) kindsoft.net, Licence: http://kindeditor.net/license.php */\r\n';
+
+var SRC_FILES = [
+	'src/header.js',
+	'src/core.js',
+	'src/config.js',
+	'src/event.js',
+	'src/html.js',
+	'src/selector.js',
+	'src/node.js',
+	'src/range.js',
+	'src/cmd.js',
+	'src/widget.js',
+	'src/edit.js',
+	'src/toolbar.js',
+	'src/menu.js',
+	'src/colorpicker.js',
+	'src/uploadbutton.js',
+	'src/dialog.js',
+	'src/tabs.js',
+	'src/ajax.js',
+	'src/main.js',
+	'src/footer.js',
+];
+
+var PLUGIN_FILES = [
+	'plugins/anchor/anchor.js',
+	'plugins/autoheight/autoheight.js',
+	'plugins/baidumap/baidumap.js',
+	'plugins/map/map.js',
+	'plugins/clearhtml/clearhtml.js',
+	'plugins/code/code.js',
+	'plugins/emoticons/emoticons.js',
+	'plugins/filemanager/filemanager.js',
+	'plugins/flash/flash.js',
+	'plugins/image/image.js',
+	'plugins/insertfile/insertfile.js',
+	'plugins/lineheight/lineheight.js',
+	'plugins/link/link.js',
+	'plugins/map/map.js',
+	'plugins/media/media.js',
+	'plugins/multiimage/multiimage.js',
+	'plugins/pagebreak/pagebreak.js',
+	'plugins/plainpaste/plainpaste.js',
+	'plugins/preview/preview.js',
+	'plugins/quickformat/quickformat.js',
+	'plugins/table/table.js',
+	'plugins/template/template.js',
+	'plugins/wordpaste/wordpaste.js',
+];
+
+var pkg = grunt.file.readJSON('package.json');
 
 grunt.initConfig({
-	pkg : grunt.file.readJSON('package.json'),
+	pkg : pkg,
 	concat : {
 		options : {
-			banner : BANNER,
-			stripBanners : true,
-			block : true,
-			line : true
+			process : function(src, filepath) {
+				src = src.replace(/\$\{VERSION\}/g, pkg.version + ' (' + grunt.template.today('yyyy-mm-dd') + ')');
+				src = src.replace(/\$\{THISYEAR\}/g, grunt.template.today('yyyy'));
+				src = src.replace(/\/\*\*(\r\n|\n)[\s\S]*?\*\//g, '');
+				src = src.replace(/(^|\s)\/\/.*$/mg, '');
+				src = src.replace(/(\r\n|\n)\/\*\*\/.*(\r\n|\n)/g, '');
+				src = src.replace(/[ \t]+$/mg, '');
+				src = src.replace(/(\r\n|\n){2,}/g, '$1');
+				return src;
+			},
 		},
-		dist : {
-			src : [
-				'src/header.js',
-				'src/core.js',
-				'src/config.js',
-				'src/event.js',
-				'src/html.js',
-				'src/selector.js',
-				'src/node.js',
-				'src/range.js',
-				'src/cmd.js',
-				'src/widget.js',
-				'src/edit.js',
-				'src/toolbar.js',
-				'src/menu.js',
-				'src/colorpicker.js',
-				'src/uploadbutton.js',
-				'src/dialog.js',
-				'src/tabs.js',
-				'src/ajax.js',
-				'src/main.js',
-				'src/footer.js'
-			],
-			dest : 'kindeditor.js'
+		zh_CN : {
+			src : SRC_FILES.concat('lang/zh_CN.js').concat(PLUGIN_FILES),
+			dest : 'kindeditor-all.js',
+		},
+		en : {
+			src : SRC_FILES.concat('lang/en.js').concat(PLUGIN_FILES),
+			dest : 'kindeditor-all.js',
 		}
 	},
 	uglify : {
 		options : {
-			banner : BANNER
+			banner : BANNER,
 		},
 		build : {
-			src : 'src/<%= pkg.name %>.js',
-			dest : 'build/<%= pkg.name %>.min.js'
+			src : '<%= pkg.filename %>-all.js',
+			dest : '<%= pkg.filename %>-all-min.js',
 		}
 	},
-	compress: {
-		main: {
+	compress : {
+		main : {
 			options: {
-				archive: 'dist/<%= pkg.filename %>-<%= pkg.version %>.zip'
+				archive: 'dist/<%= pkg.filename %>-<%= pkg.version %>.zip',
 			},
 			files: [
-				{src: ['path/*'], dest: 'internal_folder/', filter: 'isFile'}, // includes files in path
-				{src: ['path/**'], dest: 'internal_folder2/'}, // includes files in path and its subdirs
-				{expand: true, cwd: 'path/', src: ['**'], dest: 'internal_folder3/'}, // makes all src relative to cwd
-				{flatten: true, src: ['path/**'], dest: 'internal_folder4/', filter: 'isFile'} // flattens results to a single level
+				{src: ['asp/**'], dest: 'kindeditor/'},
+				{src: ['asp.net/**'], dest: 'kindeditor/'},
+				{src: ['attached'], dest: 'kindeditor/'},
+				{src: ['jsp/**'], dest: 'kindeditor/'},
+				{src: ['php/**'], dest: 'kindeditor/'},
+				{src: ['plugins/**'], dest: 'kindeditor/'},
+				{src: ['themes/**'], dest: 'kindeditor/'},
+				{src: ['themes/**'], dest: 'kindeditor/'},
+				{src: ['kindeditor*.js'], dest: 'kindeditor/'},
+				{src: ['license.txt'], dest: 'kindeditor/'},
 			]
 		}
 	}
 });
 
-grunt.loadNpmTasks('grunt-contrib-jshint');
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-compress');
 
-grunt.registerTask('default', ['concat', 'embed', 'uglify']);
+grunt.registerTask('zh_CN', ['concat:zh_CN', 'uglify']);
+grunt.registerTask('en', ['concat:en', 'uglify']);
+grunt.registerTask('zip', ['compress']);
 
 };
