@@ -244,7 +244,7 @@ _extend(KEdit, KWidget, {
 		// remove elements
 		_elementVal(self.srcElement, self.html());
 		self.srcElement.show();
-		doc.write('');
+		// doc.write('');
 		self.iframe.unbind();
 		self.textarea.unbind();
 		KEdit.parent.remove.call(self);
