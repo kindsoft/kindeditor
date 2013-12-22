@@ -13,7 +13,7 @@
 
 ### Production
 
-* [Download KindEditor 4.1.10 (2013-11-23)](http://kindeditor.googlecode.com/files/kindeditor-4.1.10.zip)
+* [Download KindEditor 4.1.10 (2013-12-22)](dist/kindeditor-4.1.10-en.zip)
 
 ### Development
 
