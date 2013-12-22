@@ -234,3 +234,5 @@ KindEditor.lang({
 		'3.html' : '项目编号'
 	}
 }, 'zh_CN');
+
+KindEditor.options.langType = 'zh_CN';

@@ -233,3 +233,10 @@ KindEditor.lang({
 		'3.html' : '项目清單'
 	}
 }, 'zh_TW');
+
+KindEditor.each(KindEditor.options.items, function(i, name) {
+	if (name == 'baidumap') {
+		KindEditor.options.items[i] = 'map';
+	}
+});
+KindEditor.options.langType = 'zh_TW';

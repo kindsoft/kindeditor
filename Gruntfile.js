@@ -54,6 +54,8 @@ var PLUGIN_FILES = [
 
 var pkg = grunt.file.readJSON('package.json');
 
+var lang = grunt.option('lang') || 'en';
+
 grunt.initConfig({
 	pkg : pkg,
 	concat : {
@@ -67,15 +69,11 @@ grunt.initConfig({
 				src = src.replace(/[ \t]+$/mg, '');
 				src = src.replace(/(\r\n|\n){2,}/g, '$1');
 				return src;
-			},
+			}
 		},
-		zh_CN : {
-			src : SRC_FILES.concat('lang/zh_CN.js').concat(PLUGIN_FILES),
-			dest : 'kindeditor-all.js',
-		},
-		en : {
-			src : SRC_FILES.concat('lang/en.js').concat(PLUGIN_FILES),
-			dest : 'kindeditor-all.js',
+		build : {
+			src : SRC_FILES.concat('lang/' + lang + '.js').concat(PLUGIN_FILES),
+			dest : 'kindeditor-all.js'
 		}
 	},
 	uglify : {
@@ -84,22 +82,22 @@ grunt.initConfig({
 		},
 		build : {
 			src : '<%= pkg.filename %>-all.js',
-			dest : '<%= pkg.filename %>-all-min.js',
+			dest : '<%= pkg.filename %>-all-min.js'
 		}
 	},
 	compress : {
 		main : {
 			options: {
-				archive: 'dist/<%= pkg.filename %>-<%= pkg.version %>.zip',
+				archive: 'dist/<%= pkg.filename %>-<%= pkg.version %>-' + lang + '.zip',
 			},
 			files: [
 				{src: ['asp/**'], dest: 'kindeditor/'},
 				{src: ['asp.net/**'], dest: 'kindeditor/'},
 				{src: ['attached'], dest: 'kindeditor/'},
 				{src: ['jsp/**'], dest: 'kindeditor/'},
+				{src: ['lang/**'], dest: 'kindeditor/'},
 				{src: ['php/**'], dest: 'kindeditor/'},
 				{src: ['plugins/**'], dest: 'kindeditor/'},
-				{src: ['themes/**'], dest: 'kindeditor/'},
 				{src: ['themes/**'], dest: 'kindeditor/'},
 				{src: ['kindeditor*.js'], dest: 'kindeditor/'},
 				{src: ['license.txt'], dest: 'kindeditor/'},
@@ -112,8 +110,9 @@ grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-compress');
 
-grunt.registerTask('zh_CN', ['concat:zh_CN', 'uglify']);
-grunt.registerTask('en', ['concat:en', 'uglify']);
-grunt.registerTask('zip', ['compress']);
+grunt.registerTask('build', ['concat', 'uglify']);
+grunt.registerTask('zip', ['build', 'compress']);
+
+grunt.registerTask('default', 'build');
 
 };

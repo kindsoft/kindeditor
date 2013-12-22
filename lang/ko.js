@@ -235,3 +235,10 @@ KindEditor.lang({
 		'3.html' : '목록'
 	}
 }, 'ko');
+
+KindEditor.each(KindEditor.options.items, function(i, name) {
+	if (name == 'baidumap') {
+		KindEditor.options.items[i] = 'map';
+	}
+});
+KindEditor.options.langType = 'ko';
