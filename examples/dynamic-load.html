@@ -54,7 +54,7 @@
 <script>
 	$(function() {
 		$('input[name=load]').click(function() {
-			$.getScript('../static/kindeditor/kindeditor-min.js', function() {
+			$.getScript('../static/kindeditor/kindeditor-all-min.js', function() {
 				KindEditor.basePath = '../static/kindeditor/';
 				KindEditor.create('textarea[name="content"]');
 			});
