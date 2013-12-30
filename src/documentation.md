@@ -13,8 +13,8 @@
 
 ### Documentation
 
-* Installation
-* Configuration
+* [Installation](docs/install)
+* [Configuration](docs/config)
 * Theme customization
 * Plugin customization
 * Upload file

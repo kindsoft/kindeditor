@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title> KindEditor - WYSIWYG HTML editor</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./../static/app/favicon.ico" />
+		<link rel="stylesheet" href="./../static/app/main.css" />
+		<link rel="stylesheet" href="./../static/kindeditor/plugins/code/prettify.css" />
+		<link rel="stylesheet" href="./../static/kindeditor/themes/default/default.css" />
+		<script src="./../static/kindeditor/plugins/code/prettify.js"></script>
+		<script src="./../static/kindeditor/kindeditor-all-min.js"></script>
+		<script>
+			KindEditor.ready(function() {
+				prettyPrint();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header fix">
+				<ul class="fix right">
+					<li><a href="./../">Home</a></li>
+					<li><a href="./../demo">Demo</a></li>
+					<li><a href="./../download">Download</a></li>
+					<li><a href="./../documentation">Documentation</a></li>
+					<li><a href="http://kindeditor.net/">中文站</a></li>
+				</ul>
+				<h3><a href="./../">KindEditor</a></h3>
+			</div><div class="md-content">
+<h3 id="installation">Installation</h3>
+
+<ol>
+<li><p>Download the latest version of the editor.</p></li>
+<li><p>Extract the downloaded archive to a directory called kindeditor in the root of your website.</p></li>
+<li><p>Insert the following code fragment into your page.</p>
+
+<pre class="prettyprint lang-html">
+&lt;!-- Place inside the &lt;head&gt; of your HTML --&gt;
+&lt;link href=&quot;/kindeditor/themes/default/default.css&quot; rel=&quot;stylesheet&quot; /&gt;
+&lt;script src=&quot;/kindeditor/kindeditor-all-min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#editor_id');
+    });
+&lt;/script&gt;
+
+
+&lt;!-- Place this in the body of the page content --&gt;
+&lt;textarea id=&quot;editor_id&quot; name=&quot;content&quot; cols=&quot;100&quot; rows=&quot;8&quot;&gt;&lt;/textarea&gt;
+</pre></li>
+</ol>
+</div>			<div class="footer">
+				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
+			</div>
+
+		</div>
+	</body>
+</html>

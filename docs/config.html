@@ -1,0 +1,1011 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title> KindEditor - WYSIWYG HTML editor</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./../static/app/favicon.ico" />
+		<link rel="stylesheet" href="./../static/app/main.css" />
+		<link rel="stylesheet" href="./../static/kindeditor/plugins/code/prettify.css" />
+		<link rel="stylesheet" href="./../static/kindeditor/themes/default/default.css" />
+		<script src="./../static/kindeditor/plugins/code/prettify.js"></script>
+		<script src="./../static/kindeditor/kindeditor-all-min.js"></script>
+		<script>
+			KindEditor.ready(function() {
+				prettyPrint();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header fix">
+				<ul class="fix right">
+					<li><a href="./../">Home</a></li>
+					<li><a href="./../demo">Demo</a></li>
+					<li><a href="./../download">Download</a></li>
+					<li><a href="./../documentation">Documentation</a></li>
+					<li><a href="http://kindeditor.net/">中文站</a></li>
+				</ul>
+				<h3><a href="./../">KindEditor</a></h3>
+			</div><div class="md-content">
+<h3 id="configuration">Configuration</h3>
+
+<h4 id="width">width</h4>
+
+<p>Set the width of the editor.</p>
+
+<ul>
+<li>Data type: String</li>
+<li>Default value: the width of the textarea</li>
+</ul>
+
+<p>Example:</p>
+
+<pre class="prettyprint lang-js">
+K.create('#id', {
+    width : '700px'
+});
+</pre>
+
+<h4 id="height">height</h4>
+
+<p>Set the height of the editor.</p>
+
+<ul>
+<li>Data type: String</li>
+<li>Default value: the height of the textarea</li>
+</ul>
+
+<p>Example:</p>
+
+<pre class="prettyprint lang-js">
+K.create('#id', {
+    height : '300px'
+});
+</pre>
+
+<h4 id="minwidth">minWidth</h4>
+
+<p>Set the minimal width of the editor.</p>
+
+<ul>
+<li>Data type: Int</li>
+<li>Default value: 650</li>
+</ul>
+
+<h4 id="minheight">minHeight</h4>
+
+<p>Set the minimal height of the editor.</p>
+
+<ul>
+<li>Data type: Int</li>
+<li>Default value: 100</li>
+</ul>
+
+<h4 id="items">items</h4>
+
+<p>Set the toolbar of editor.</p>
+
+<ul>
+<li>Data type: Array</li>
+<li>Default value:</li>
+</ul>
+
+<pre class="prettyprint lang-js">
+[
+    'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+    'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+    'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+    'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+    'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+    'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+    'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+    'anchor', 'link', 'unlink', '|', 'about'
+]
+</pre>
+
+<p>==========================    =====================
+source                        HTML代码
+preview                        预览
+undo                        后退
+redo                        前进
+cut                            剪切
+copy                        复制
+paste                        粘贴
+plainpaste                    粘贴为无格式文本
+wordpaste                    从Word粘贴
+selectall                    全选
+justifyleft                    左对齐
+justifycenter                居中
+justifyright                右对齐
+justifyfull                    两端对齐
+insertorderedlist            编号
+insertunorderedlist            项目符号
+indent                        增加缩进
+outdent                        减少缩进
+subscript                    下标
+superscript                    上标
+formatblock                    段落
+fontname                    字体
+fontsize                    文字大小
+forecolor                    文字颜色
+hilitecolor                    文字背景
+bold                        粗体
+italic                        斜体
+underline                    下划线
+strikethrough                删除线
+removeformat                删除格式
+image                        图片
+flash                        Flash
+media                        视音频
+table                        表格
+hr                            插入横线
+emoticons                    插入表情
+link                        超级链接
+unlink                        取消超级链接
+fullscreen                    全屏显示
+about                        关于
+print                        打印
+code                        插入程序代码
+map                            Google地图
+baidumap                    百度地图
+lineheight                    行距
+clearhtml                    清理HTML代码
+pagebreak                    插入分页符
+quickformat                    一键排版
+insertfile                    插入文件
+template                    插入模板
+anchor                        插入锚点
+==========================    =====================</p>
+
+<p>.. index:: noDisableItems</p>
+
+<p>.. _noDisableItems:</p>
+
+<h2 id="nodisableitems">noDisableItems</h2>
+
+<p>:ref:<code>designMode</code> 为false时，要保留的工具栏图标。</p>
+
+<ul>
+<li>数据类型: Array</li>
+<li>默认值: ['source', 'fullscreen']</li>
+</ul>
+
+<p>.. index:: filterMode</p>
+
+<p>.. _filterMode:</p>
+
+<h2 id="filtermode">filterMode</h2>
+
+<p>true时根据 :ref:<code>htmlTags</code> 过滤HTML代码，false时允许输入任何代码。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.1版本开始默认值为true。
+</code></pre>
+
+<p>.. index:: htmlTags</p>
+
+<p>.. _htmlTags:</p>
+
+<h2 id="htmltags">htmlTags</h2>
+
+<p>指定要保留的HTML标记和属性。Object的key为HTML标签名，value为HTML属性数组，"."开始的属性表示style属性。</p>
+
+<ul>
+<li>数据类型: Object</li>
+<li>默认值:</li>
+</ul>
+
+<p>.. sourcecode:: js</p>
+
+<pre><code>{
+    font : ['color', 'size', 'face', '.background-color'],
+    span : [
+        '.color', '.background-color', '.font-size', '.font-family', '.background',
+        '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
+    ],
+    div : [
+        'align', '.border', '.margin', '.padding', '.text-align', '.color',
+        '.background-color', '.font-size', '.font-family', '.font-weight', '.background',
+        '.font-style', '.text-decoration', '.vertical-align', '.margin-left'
+    ],
+    table: [
+        'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+        '.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
+        '.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
+        '.width', '.height', '.border-collapse'
+    ],
+    'td,th': [
+        'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+        '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
+        '.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
+    ],
+    a : ['href', 'target', 'name'],
+    embed : ['src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+    img : ['src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
+    'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
+        'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+        '.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
+    ],
+    pre : ['class'],
+    hr : ['class', '.page-break-after'],
+    'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
+}
+</code></pre>
+
+<p>.. index:: wellFormatMode</p>
+
+<p>.. _wellFormatMode:</p>
+
+<h2 id="wellformatmode">wellFormatMode</h2>
+
+<p>true时美化HTML数据。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: resizeType</p>
+
+<p>.. _resizeType:</p>
+
+<h2 id="resizetype">resizeType</h2>
+
+<p>2或1或0，2时可以拖动改变宽度和高度，1时只能改变高度，0时不能拖动。</p>
+
+<ul>
+<li>数据类型: Int</li>
+<li>默认值: 2</li>
+</ul>
+
+<p>.. index:: themeType</p>
+
+<p>.. _themeType:</p>
+
+<h2 id="themetype">themeType</h2>
+
+<p>指定主题风格，可设置"default"、"simple"，指定simple时需要引入simple.css。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "default"</li>
+</ul>
+
+<p>示例:</p>
+
+<p>.. sourcecode:: html</p>
+
+<pre><code>&lt;link rel="stylesheet" href="../themes/default/default.css" /&gt;
+&lt;link rel="stylesheet" href="../themes/simple/simple.css" /&gt;
+&lt;script charset="utf-8" src="../kindeditor.js"&gt;&lt;/script&gt;
+&lt;script charset="utf-8" src="../lang/zh_CN.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('#editor_id', {
+            themeType : 'simple'
+        });
+    });
+&lt;/script&gt;
+</code></pre>
+
+<p>.. index:: langType</p>
+
+<p>.. _langType:</p>
+
+<h2 id="langtype">langType</h2>
+
+<p>指定语言，可设置"en"、"zh_CN"，需要引入lang/[langType].js。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "zh_CN"</li>
+</ul>
+
+<p>示例:</p>
+
+<p>.. sourcecode:: html</p>
+
+<pre><code>&lt;link rel="stylesheet" href="../themes/default/default.css" /&gt;
+&lt;script charset="utf-8" src="../kindeditor.js"&gt;&lt;/script&gt;
+&lt;script charset="utf-8" src="../lang/en.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('#editor_id', {
+            langType : 'en'
+        });
+    });
+&lt;/script&gt;
+</code></pre>
+
+<p>.. index:: designMode</p>
+
+<p>.. _designMode:</p>
+
+<h2 id="designmode">designMode</h2>
+
+<p>可视化模式或代码模式</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: fullscreenMode</p>
+
+<p>.. _fullscreenMode:</p>
+
+<h2 id="fullscreenmode">fullscreenMode</h2>
+
+<p>true时加载编辑器后变成全屏模式。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: false</li>
+</ul>
+
+<p>.. index:: basePath</p>
+
+<p>.. _basePath:</p>
+
+<h2 id="basepath">basePath</h2>
+
+<p>指定编辑器的根目录路径。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: 根据kindeditor.js文件名自动获取</li>
+</ul>
+
+<p>.. index:: themesPath</p>
+
+<p>.. _themesPath:</p>
+
+<h2 id="themespath">themesPath</h2>
+
+<p>指定编辑器的themes目录路径。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: basePath + 'themes/'</li>
+</ul>
+
+<p>.. index:: pluginsPath</p>
+
+<p>.. _pluginsPath:</p>
+
+<h2 id="pluginspath">pluginsPath</h2>
+
+<p>指定编辑器的plugins目录路径。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: basePath + 'plugins/'</li>
+</ul>
+
+<p>.. index:: langPath</p>
+
+<p>.. _langPath:</p>
+
+<h2 id="langpath">langPath</h2>
+
+<p>指定编辑器的lang目录路径。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: basePath + 'lang/'</li>
+</ul>
+
+<p>.. index:: minChangeSize</p>
+
+<p>.. _minChangeSize:</p>
+
+<h2 id="minchangesize">minChangeSize</h2>
+
+<p>undo/redo文字输入最小变化长度，当输入的文字变化小于这个长度时不会添加到undo记录里。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: 5</li>
+</ul>
+
+<p>.. index:: urlType</p>
+
+<p>.. _urlType:</p>
+
+<h2 id="urltype">urlType</h2>
+
+<p>改变站内本地URL，可设置""、"relative"、"absolute"、"domain"。空为不修改URL，relative为相对路径，absolute为绝对路径，domain为带域名的绝对路径。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: ""</li>
+</ul>
+
+<p>.. index:: newlineTag</p>
+
+<p>.. _newlineTag:</p>
+
+<h2 id="newlinetag">newlineTag</h2>
+
+<p>设置回车换行标签，可设置"p"、"br"。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "p"</li>
+</ul>
+
+<p>.. index:: pasteType</p>
+
+<p>.. _pasteType:</p>
+
+<h2 id="pastetype">pasteType</h2>
+
+<p>设置粘贴类型，0:禁止粘贴, 1:纯文本粘贴, 2:HTML粘贴</p>
+
+<ul>
+<li>数据类型: Int</li>
+<li>默认值: 2</li>
+</ul>
+
+<p>.. index:: dialogAlignType</p>
+
+<p>.. _dialogAlignType:</p>
+
+<h2 id="dialogaligntype">dialogAlignType</h2>
+
+<p>设置弹出框(dialog)的对齐类型，可设置""、"page"，指定page时按当前页面居中，指定空时按编辑器居中。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "page"</li>
+</ul>
+
+<p>.. index:: shadowMode</p>
+
+<p>.. _shadowMode:</p>
+
+<h2 id="shadowmode">shadowMode</h2>
+
+<p>true时弹出层(dialog)显示阴影。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: zIndex</p>
+
+<p>.. _zIndex:</p>
+
+<h2 id="zindex">zIndex</h2>
+
+<p>指定弹出层的基准z-index。</p>
+
+<ul>
+<li>数据类型: Int</li>
+<li>默认值: 811213</li>
+</ul>
+
+<p>.. index:: useContextmenu</p>
+
+<p>.. _useContextmenu:</p>
+
+<h2 id="usecontextmenu">useContextmenu</h2>
+
+<p>true时使用右键菜单，false时屏蔽右键菜单。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: syncType</p>
+
+<p>.. _syncType:</p>
+
+<h2 id="synctype">syncType</h2>
+
+<p>同步数据的方式，可设置""、"form"，值为form时提交form时自动同步，空时不会自动同步。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "form"</li>
+</ul>
+
+<p>.. index:: indentChar</p>
+
+<p>.. _indentChar:</p>
+
+<h2 id="indentchar">indentChar</h2>
+
+<p>:ref:<code>wellFormatMode</code> 为true时，HTML代码缩进字符。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "\t"</li>
+</ul>
+
+<p>.. index:: cssPath</p>
+
+<p>.. _cssPath:</p>
+
+<h2 id="csspath">cssPath</h2>
+
+<p>指定编辑器iframe document的CSS文件，用于设置可视化区域的样式。</p>
+
+<ul>
+<li>数据类型: String或Array</li>
+<li>默认值: 空</li>
+</ul>
+
+<p>.. index:: cssData</p>
+
+<p>.. _cssData:</p>
+
+<h2 id="cssdata">cssData</h2>
+
+<p>指定编辑器iframe document的CSS数据，用于设置可视化区域的样式。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: 空</li>
+</ul>
+
+<p>.. index:: bodyClass</p>
+
+<p>.. _bodyClass:</p>
+
+<h2 id="bodyclass">bodyClass</h2>
+
+<p>指定编辑器iframe document body的className。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: "ke-content"</li>
+</ul>
+
+<p>.. index:: colorTable</p>
+
+<p>.. _colorTable:</p>
+
+<h2 id="colortable">colorTable</h2>
+
+<p>指定取色器里的颜色。</p>
+
+<ul>
+<li>数据类型: Array</li>
+<li>默认值:</li>
+</ul>
+
+<p>.. sourcecode:: js</p>
+
+<pre><code>[
+    ['#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500'],
+    ['#009900', '#006600', '#99BB00', '#B8D100', '#60D978', '#00D5FF'],
+    ['#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE'],
+    ['#FFFFFF', '#CCCCCC', '#999999', '#666666', '#333333', '#000000']
+]
+</code></pre>
+
+<p>.. index:: afterCreate</p>
+
+<p>.. _afterCreate:</p>
+
+<h2 id="aftercreate">afterCreate</h2>
+
+<p>设置编辑器创建后执行的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 无</li>
+</ul>
+
+<p>.. index:: afterChange</p>
+
+<p>.. _afterChange:</p>
+
+<h2 id="afterchange">afterChange</h2>
+
+<p>编辑器内容发生变化后执行的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 无</li>
+</ul>
+
+<p>.. index:: afterTab</p>
+
+<p>.. _afterTab:</p>
+
+<h2 id="aftertab">afterTab</h2>
+
+<p>按下TAB键后执行的的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 插入4个空格的函数</li>
+</ul>
+
+<p>.. index:: afterFocus</p>
+
+<p>.. _afterFocus:</p>
+
+<h2 id="afterfocus">afterFocus</h2>
+
+<p>编辑器聚焦(focus)时执行的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 无</li>
+</ul>
+
+<p>.. index:: afterBlur</p>
+
+<p>.. _afterBlur:</p>
+
+<h2 id="afterblur">afterBlur</h2>
+
+<p>编辑器失去焦点(blur)时执行的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 无</li>
+</ul>
+
+<p>.. index:: afterUpload</p>
+
+<p>.. _afterUpload:</p>
+
+<h2 id="afterupload">afterUpload</h2>
+
+<p>上传文件后执行的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 无</li>
+</ul>
+
+<p>.. sourcecode:: js</p>
+
+<pre><code>KindEditor.ready(function(K) {
+    K.create('#id', {
+        afterUpload : function(url) {
+            alert(url);
+        }
+    });
+});
+</code></pre>
+
+<p>.. index:: uploadJson</p>
+
+<p>.. _uploadJson:</p>
+
+<h2 id="uploadjson">uploadJson</h2>
+
+<p>指定上传文件的服务器端程序。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: basePath + 'php/upload_json.php'</li>
+</ul>
+
+<p>.. index:: fileManagerJson</p>
+
+<p>.. _fileManagerJson:</p>
+
+<h2 id="filemanagerjson">fileManagerJson</h2>
+
+<p>指定浏览远程图片的服务器端程序。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: basePath + 'php/file<em>manager</em>json.php'</li>
+</ul>
+
+<p>.. index:: allowPreviewEmoticons</p>
+
+<p>.. _allowPreviewEmoticons:</p>
+
+<h2 id="allowpreviewemoticons">allowPreviewEmoticons</h2>
+
+<p>true时鼠标放在表情上可以预览表情。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: allowImageUpload</p>
+
+<p>.. _allowImageUpload:</p>
+
+<h2 id="allowimageupload">allowImageUpload</h2>
+
+<p>true时显示图片上传按钮。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: allowFlashUpload</p>
+
+<p>.. _allowFlashUpload:</p>
+
+<h2 id="allowflashupload">allowFlashUpload</h2>
+
+<p>true时显示Flash上传按钮。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: allowMediaUpload</p>
+
+<p>.. _allowMediaUpload:</p>
+
+<h2 id="allowmediaupload">allowMediaUpload</h2>
+
+<p>true时显示视音频上传按钮。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. index:: allowFileUpload</p>
+
+<p>.. _allowFileUpload:</p>
+
+<h2 id="allowfileupload">allowFileUpload</h2>
+
+<p>true时显示文件上传按钮。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.0.6版本开始支持。
+</code></pre>
+
+<p>.. index:: allowFileManager</p>
+
+<p>.. _allowFileManager:</p>
+
+<h2 id="allowfilemanager">allowFileManager</h2>
+
+<p>true时显示浏览远程服务器按钮。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: false</li>
+</ul>
+
+<p>.. index:: fontSizeTable</p>
+
+<p>.. _fontSizeTable:</p>
+
+<h2 id="fontsizetable">fontSizeTable</h2>
+
+<p>指定文字大小。</p>
+
+<ul>
+<li>数据类型: Array</li>
+<li>默认值:</li>
+</ul>
+
+<p>.. sourcecode:: js</p>
+
+<pre><code>['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px']
+</code></pre>
+
+<p>.. index:: imageTabIndex</p>
+
+<p>.. _imageTabIndex:</p>
+
+<h2 id="imagetabindex">imageTabIndex</h2>
+
+<p>图片弹出层的默认显示标签索引。</p>
+
+<ul>
+<li>数据类型: Int</li>
+<li>默认值: 0</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.0.6版本开始支持。
+</code></pre>
+
+<p>.. index:: formatUploadUrl</p>
+
+<p>.. _formatUploadUrl:</p>
+
+<h2 id="formatuploadurl">formatUploadUrl</h2>
+
+<p>false时不会自动格式化上传后的URL。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1版本开始支持。
+</code></pre>
+
+<p>.. index:: fullscreenShortcut</p>
+
+<p>.. _fullscreenShortcut:</p>
+
+<h2 id="fullscreenshortcut">fullscreenShortcut</h2>
+
+<p>false时禁用ESC全屏快捷键。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: false</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1版本开始支持，从4.1.2版本开始默认值为false。
+</code></pre>
+
+<p>.. index:: extraFileUploadParams</p>
+
+<p>.. _extraFileUploadParams:</p>
+
+<h2 id="extrafileuploadparams">extraFileUploadParams</h2>
+
+<p>上传图片、Flash、视音频、文件时，支持添加别的参数一并传到服务器。</p>
+
+<ul>
+<li>数据类型: Array</li>
+<li>默认值: {}</li>
+</ul>
+
+<p>.. sourcecode:: js</p>
+
+<pre><code>KindEditor.ready(function(K) {
+    K.create('#id', {
+        extraFileUploadParams : {
+            item_id : 1000,
+            category_id : 1
+        }
+    });
+});
+</code></pre>
+
+<p>.. note::</p>
+
+<pre><code>4.1.1版本开始支持。
+</code></pre>
+
+<p>.. index:: filePostName</p>
+
+<p>.. _filePostName:</p>
+
+<h2 id="filepostname">filePostName</h2>
+
+<p>指定上传文件form名称。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: imgFile</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.2版本开始支持。
+</code></pre>
+
+<p>.. index:: fillDescAfterUploadImage</p>
+
+<p>.. _fillDescAfterUploadImage:</p>
+
+<h2 id="filldescafteruploadimage">fillDescAfterUploadImage</h2>
+
+<p>true时图片上传成功后切换到图片编辑标签，false时插入图片后关闭弹出框。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: false</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.2版本开始支持。
+</code></pre>
+
+<p>.. index:: afterSelectFile</p>
+
+<p>.. _afterSelectFile:</p>
+
+<h2 id="afterselectfile">afterSelectFile</h2>
+
+<p>从图片空间选择文件后执行的回调函数。</p>
+
+<ul>
+<li>数据类型: Function</li>
+<li>默认值: 无</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.2版本开始支持。
+</code></pre>
+
+<p>.. index:: pagebreakHtml</p>
+
+<p>.. _pagebreakHtml:</p>
+
+<h2 id="pagebreakhtml">pagebreakHtml</h2>
+
+<p>可指定分页符HTML。</p>
+
+<ul>
+<li>数据类型: String</li>
+<li>默认值: <code>&lt;hr style="page-break-after: always;" class="ke-pagebreak" /&gt;</code></li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.3版本开始支持。
+</code></pre>
+
+<p>.. index:: allowImageRemote</p>
+
+<p>.. _allowImageRemote:</p>
+
+<h2 id="allowimageremote">allowImageRemote</h2>
+
+<p>true时显示网络图片标签，false时不显示。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: true</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.6版本开始支持。
+</code></pre>
+
+<p>.. index:: autoHeightMode</p>
+
+<p>.. _autoHeightMode:</p>
+
+<h2 id="autoheightmode">autoHeightMode</h2>
+
+<p>值为true，并引入autoheight.js插件时自动调整高度。</p>
+
+<ul>
+<li>数据类型: Boolean</li>
+<li>默认值: false</li>
+</ul>
+
+<p>.. note::</p>
+
+<pre><code>4.1.8版本开始支持。
+</code></pre>
+</div>			<div class="footer">
+				<p><a href="http://kindsoft.net/">Copyright 2013 kindsoft.net</a></p>
+			</div>
+
+		</div>
+	</body>
+</html>
