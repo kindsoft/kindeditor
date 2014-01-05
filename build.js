@@ -156,6 +156,10 @@ function main() {
 			pageName = 'demo';
 		}
 
+		if (pageName == 'docs') {
+			pageName = 'documentation';
+		}
+
 		var page = {};
 		page[pageName] = true;
 
