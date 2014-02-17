@@ -141,6 +141,10 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	// &reg;
 	html = html.replace(/\u00AE/g, '&reg;');
 	// Bugfix:
+	// https://github.com/kindsoft/kindeditor/issues/147
+	html = html.replace(/\u2003/g, '&emsp;');
+	html = html.replace(/\u3000/g, '&emsp;');
+	// Bugfix:
 	// https://github.com/kindsoft/kindeditor/issues/116
 	// https://github.com/kindsoft/kindeditor/issues/145
 	html = html.replace(/<[^>]+/g, function($0) {
