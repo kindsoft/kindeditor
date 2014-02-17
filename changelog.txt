@@ -6,6 +6,7 @@
 
 ver 4.2
 * Bugfix: [IE6] 当前页面设置了document.domain，销毁编辑器会报错。
+* Bugfix: 行首全角空格被过滤。
 
 ver 4.1.10 (2013-11-23)
 * Bugfix: 兼容IE11。
