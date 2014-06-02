@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.10 (2014-02-17)
+* @version 4.1.10 (2014-06-02)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.10 (2014-02-17)',
+var _VERSION = '4.1.10 (2014-06-02)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -6087,6 +6087,8 @@ KindEditor.lang({
 	deleteMedia : 'Delete media',
 	editLink : 'Link properties',
 	deleteLink : 'Unlink',
+	editAnchor : 'Anchor properties',
+	deleteAnchor : 'Delete Anchor',
 	tableprop : 'Table properties',
 	tablecellprop : 'Cell properties',
 	tableinsert : 'Insert table',

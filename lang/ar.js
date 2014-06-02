@@ -74,6 +74,8 @@ KindEditor.lang({
 	deleteMedia : 'حذف الوسائط',
 	editLink : 'خصائص الرابط',
 	deleteLink : 'إزالة الرابط',
+	editAnchor : 'Anchor properties',
+	deleteAnchor : 'Delete Anchor',
 	tableprop : 'خصائص الجدول',
 	tablecellprop : 'خصائص الخلية',
 	tableinsert : 'إدراج جدول',

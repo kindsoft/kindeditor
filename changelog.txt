@@ -5,8 +5,10 @@
 #######################################################################
 
 ver 4.2
+* 新增: 俄语语言包，感谢Valery Votintsev (http://codersclub.org/)。
 * Bugfix: [IE6] 当前页面设置了document.domain，销毁编辑器会报错。
 * Bugfix: 行首全角空格被过滤。
+* Bugfix: 修复多语言包的一些小错误。
 
 ver 4.1.10 (2013-11-23)
 * Bugfix: 兼容IE11。
