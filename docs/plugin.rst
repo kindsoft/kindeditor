@@ -62,7 +62,7 @@
 			</style>
 			<link rel="stylesheet" href="../themes/default/default.css" />
 			<script charset="utf-8" src="../kindeditor.js"></script>
-			<script charset="utf-8" src="../lang/zh_CN.js"></script>
+			<script charset="utf-8" src="../lang/zh-CN.js"></script>
 			<script>
 				KindEditor.lang({
 					hello : '你好'

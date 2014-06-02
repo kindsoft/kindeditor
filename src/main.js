@@ -30,7 +30,7 @@ function _parseLangKey(key) {
 	K.lang({
 		core.about : '关于',
 		about.version : '4.0'
-	}, 'zh_CN'); //add language
+	}, 'zh-CN'); //add language
 */
 function _lang(mixed, langType) {
 	langType = langType === undefined ? K.options.langType : langType;

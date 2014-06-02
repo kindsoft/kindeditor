@@ -233,11 +233,11 @@ KindEditor.lang({
 		'2.html' : '表格',
 		'3.html' : '项目清單'
 	}
-}, 'zh_TW');
+}, 'zh-TW');
 
 KindEditor.each(KindEditor.options.items, function(i, name) {
 	if (name == 'baidumap') {
 		KindEditor.options.items[i] = 'map';
 	}
 });
-KindEditor.options.langType = 'zh_TW';
+KindEditor.options.langType = 'zh-TW';

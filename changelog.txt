@@ -653,7 +653,7 @@ ver 3.0 beta (2008-12-09)
 * 修改了IE下没有指定DOCTYPE时显示有问题。
 * 代码统一用4个空格缩进。
 * 增加了几个demo。
-* plugin-all.js里的中文提取到zh_CN.js。
+* plugin-all.js里的中文提取到zh-CN.js。
 
 ver 3.0 alpha (2008-11-30)
 * 初期完成。

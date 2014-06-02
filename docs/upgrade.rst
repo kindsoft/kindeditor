@@ -14,7 +14,7 @@
 .. sourcecode:: html
 
 	<script charset="utf-8" src="/ke4/kindeditor.js"></script>
-	<script charset="utf-8" src="/ke4/lang/zh_CN.js"></script>
+	<script charset="utf-8" src="/ke4/lang/zh-CN.js"></script>
 
 2. 替换javascript代码
 -----------------------------------------------------------------

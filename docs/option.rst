@@ -247,7 +247,7 @@ themeType
 	<link rel="stylesheet" href="../themes/default/default.css" />
 	<link rel="stylesheet" href="../themes/simple/simple.css" />
 	<script charset="utf-8" src="../kindeditor.js"></script>
-	<script charset="utf-8" src="../lang/zh_CN.js"></script>
+	<script charset="utf-8" src="../lang/zh-CN.js"></script>
 	<script>
 		var editor;
 		KindEditor.ready(function(K) {
@@ -263,10 +263,10 @@ themeType
 
 langType
 --------------------------------------------------------
-指定语言，可设置"en"、"zh_CN"，需要引入lang/[langType].js。
+指定语言，可设置"en"、"zh-CN"，需要引入lang/[langType].js。
 
 * 数据类型: String
-* 默认值: "zh_CN"
+* 默认值: "zh-CN"
 
 示例:
 

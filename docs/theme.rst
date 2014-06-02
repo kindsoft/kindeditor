@@ -29,7 +29,7 @@
 	<link rel="stylesheet" href="/editor/themes/default/default.css" />
 	<link rel="stylesheet" href="/editor/themes/example1/example1.css" />
 	<script charset="utf-8" src="/editor/kindeditor.js"></script>
-	<script charset="utf-8" src="/editor/lang/zh_CN.js"></script>
+	<script charset="utf-8" src="/editor/lang/zh-CN.js"></script>
 	<script>
 		var editor;
 		KindEditor.ready(function(K) {

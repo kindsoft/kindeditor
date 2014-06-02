@@ -24,7 +24,7 @@ K.options = {
 	langPath : K.basePath + 'lang/',
 	pluginsPath : K.basePath + 'plugins/',
 	themeType : 'default', // default, simple
-	langType : 'zh_CN',
+	langType : 'zh-CN',
 	urlType : '', // "", relative, absolute, domain
 	newlineTag : 'p', // p, br
 	resizeType : 2, // 0, 1, 2

@@ -44,7 +44,7 @@
 .. sourcecode:: html
 
 	<script charset="utf-8" src="/editor/kindeditor.js"></script>
-	<script charset="utf-8" src="/editor/lang/zh_CN.js"></script>
+	<script charset="utf-8" src="/editor/lang/zh-CN.js"></script>
 	<script>
 		KindEditor.ready(function(K) {
 			window.editor = K.create('#editor_id');

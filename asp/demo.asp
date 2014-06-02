@@ -24,7 +24,7 @@ End Function
 	<link rel="stylesheet" href="../themes/default/default.css" />
 	<link rel="stylesheet" href="../plugins/code/prettify.css" />
 	<script charset="utf-8" src="../kindeditor.js"></script>
-	<script charset="utf-8" src="../lang/zh_CN.js"></script>
+	<script charset="utf-8" src="../lang/zh-CN.js"></script>
 	<script charset="utf-8" src="../plugins/code/prettify.js"></script>
 	<script>
 		KindEditor.ready(function(K) {
