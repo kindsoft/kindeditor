@@ -375,7 +375,7 @@ function _ready(fn) {
 	http://isaacschlueter.com/2006/10/msie-memory-leaks/
 	http://msdn.microsoft.com/en-us/library/bb250448.aspx
 */
-if (_IE) {
+if (window.attachEvent) {
 	window.attachEvent('onunload', function() {
 		_each(_eventData, function(key, events) {
 			if (events.el) {

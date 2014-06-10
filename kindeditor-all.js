@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.10 (2014-06-03)
+* @version 4.1.10 (2014-06-10)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.10 (2014-06-03)',
+var _VERSION = '4.1.10 (2014-06-10)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -602,7 +602,7 @@ function _ready(fn) {
 	}
 	_bind(window, 'load', readyFunc);
 }
-if (_IE) {
+if (window.attachEvent) {
 	window.attachEvent('onunload', function() {
 		_each(_eventData, function(key, events) {
 			if (events.el) {
