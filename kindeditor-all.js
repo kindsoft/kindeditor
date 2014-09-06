@@ -156,7 +156,8 @@ function _extend(child, parent, proto) {
 	child.prototype = childProto;
 	child.parent = parent ? parent.prototype : null;
 }
-
+
+
 function _json(text) {
 	var match;
 	if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
@@ -316,9 +317,12 @@ K.options = {
 
 
 var _useCapture = false;
-
-var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
-var _CURSORMOVE_KEY_MAP = _toMap('33..40');
+
+
+var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
+
+var _CURSORMOVE_KEY_MAP = _toMap('33..40');
+
 var _CHANGE_KEY_MAP = {};
 _each(_INPUT_KEY_MAP, function(key, val) {
 	_CHANGE_KEY_MAP[key] = val;
@@ -326,14 +330,16 @@ _each(_INPUT_KEY_MAP, function(key, val) {
 _each(_CURSORMOVE_KEY_MAP, function(key, val) {
 	_CHANGE_KEY_MAP[key] = val;
 });
-
+
+
 function _bindEvent(el, type, fn) {
 	if (el.addEventListener){
 		el.addEventListener(type, fn, _useCapture);
 	} else if (el.attachEvent){
 		el.attachEvent('on' + type, fn);
 	}
-}
+}
+
 function _unbindEvent(el, type, fn) {
 	if (el.removeEventListener){
 		el.removeEventListener(type, fn, _useCapture);
@@ -344,7 +350,8 @@ function _unbindEvent(el, type, fn) {
 var _EVENT_PROPS = ('altKey,attrChange,attrName,bubbles,button,cancelable,charCode,clientX,clientY,ctrlKey,currentTarget,' +
 	'data,detail,eventPhase,fromElement,handler,keyCode,metaKey,newValue,offsetX,offsetY,originalTarget,pageX,' +
 	'pageY,prevValue,relatedNode,relatedTarget,screenX,screenY,shiftKey,srcElement,target,toElement,view,wheelDelta,which').split(',');
-
+
+
 function KEvent(el, event) {
 	this.init(el, event);
 }
@@ -901,7 +908,8 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\n\s*\n/g, '\n');
 	html = html.replace(/<span id="__kindeditor_pre_newline__">\n/g, '\n');
 	return _trim(html);
-}
+}
+
 function _clearMsWord(html, htmlTags) {
 	html = html.replace(/<meta[\s\S]*?>/ig, '')
 		.replace(/<![\s\S]*?>/ig, '')
@@ -914,7 +922,8 @@ function _clearMsWord(html, htmlTags) {
 			return full.replace(/border-bottom:([#\w\s]+)/ig, 'border:$1');
 		});
 	return _formatHtml(html, htmlTags);
-}
+}
+
 function _mediaType(src) {
 	if (/\.(rm|rmvb)(\?|$)/i.test(src)) {
 		return 'audio/x-pn-realaudio-plugin';
@@ -923,7 +932,8 @@ function _mediaType(src) {
 		return 'application/x-shockwave-flash';
 	}
 	return 'video/x-ms-asf-plugin';
-}
+}
+
 function _mediaClass(type) {
 	if (/realaudio/i.test(type)) {
 		return 'ke-rm';
@@ -967,7 +977,10 @@ function _mediaImg(blankPath, attrs) {
 	html += 'data-ke-tag="' + escape(srcTag) + '" alt="" />';
 	return html;
 }
-
+
+
+
+
 function _tmpl(str, data) {
 	var fn = new Function("obj",
 		"var p=[],print=function(){p.push.apply(p,arguments);};" +
@@ -1304,7 +1317,8 @@ function _getScrollPos(doc) {
 	}
 	return {x : x, y : y};
 }
-
+
+
 function KNode(node) {
 	this.init(node);
 }
@@ -1940,7 +1954,8 @@ function _copyAndDelete(range, isCopy, isDelete) {
 		}
 	}
 	return isCopy ? frag : range;
-}
+}
+
 function _moveToElementText(range, el) {
 	var node = el;
 	while (node) {
@@ -1953,7 +1968,8 @@ function _moveToElementText(range, el) {
 	try {
 		range.moveToElementText(el);
 	} catch(e) {}
-}
+}
+
 function _getStartEnd(rng, isStart) {
 	var doc = rng.parentElement().ownerDocument,
 		pointRange = rng.duplicate();
@@ -2018,7 +2034,8 @@ function _getStartEnd(rng, isStart) {
 		}
 	}
 	return {node: startNode, offset: startPos};
-}
+}
+
 function _getEndRange(node, offset) {
 	var doc = node.ownerDocument || node,
 		range = doc.body.createTextRange();
@@ -2075,7 +2092,8 @@ function _getEndRange(node, offset) {
 	range.moveStart('character', offset);
 	K(dummy).remove();
 	return range;
-}
+}
+
 function _toRange(rng) {
 	var doc, range;
 	function tr2td(start) {
@@ -2108,7 +2126,8 @@ function _toRange(rng) {
 	range.setEnd(rng.endContainer, rng.endOffset);
 	return range;
 }
-
+
+
 function KRange(doc) {
 	this.init(doc);
 }
@@ -2526,12 +2545,14 @@ K.START_TO_END = _START_TO_END;
 K.END_TO_END = _END_TO_END;
 K.END_TO_START = _END_TO_START;
 
-
+
+
 function _nativeCommand(doc, key, val) {
 	try {
 		doc.execCommand(key, false, val);
 	} catch(e) {}
-}
+}
+
 function _nativeCommandValue(doc, key) {
 	var val = '';
 	try {
@@ -2541,11 +2562,13 @@ function _nativeCommandValue(doc, key) {
 		val = '';
 	}
 	return val;
-}
+}
+
 function _getSel(doc) {
 	var win = _getWin(doc);
 	return _IERANGE ? doc.selection : win.getSelection();
-}
+}
+
 function _getRng(doc) {
 	var sel = _getSel(doc), rng;
 	try {
@@ -2559,7 +2582,8 @@ function _getRng(doc) {
 		return null;
 	}
 	return rng;
-}
+}
+
 function _singleKeyMap(map) {
 	var newMap = {}, arr, v;
 	_each(map, function(key, val) {
@@ -2570,7 +2594,8 @@ function _singleKeyMap(map) {
 		}
 	});
 	return newMap;
-}
+}
+
 function _hasAttrOrCss(knode, map) {
 	return _hasAttrOrCssByKey(knode, map, '*') || _hasAttrOrCssByKey(knode, map);
 }
@@ -2601,7 +2626,8 @@ function _hasAttrOrCssByKey(knode, map, mapKey) {
 		}
 	}
 	return false;
-}
+}
+
 function _removeAttrOrCss(knode, map) {
 	if (knode.type != 1) {
 		return;
@@ -2639,20 +2665,26 @@ function _removeAttrOrCssByKey(knode, map, mapKey) {
 	if (allFlag) {
 		knode.remove(true);
 	}
-}
+}
+
 function _getInnerNode(knode) {
 	var inner = knode;
 	while (inner.first()) {
 		inner = inner.first();
 	}
 	return inner;
-}
+}
+
 function _isEmptyNode(knode) {
 	if (knode.type != 1 || knode.isSingle()) {
 		return false;
 	}
 	return knode.html().replace(/<[^>]+>/g, '') === '';
-}
+}
+
+
+
+
 function _mergeWrapper(a, b) {
 	a = a.clone(true);
 	var lastA = _getInnerNode(a), childA = a, merged = false;
@@ -2671,7 +2703,8 @@ function _mergeWrapper(a, b) {
 		b = b.first();
 	}
 	return a;
-}
+}
+
 function _wrapNode(knode, wrapper) {
 	wrapper = wrapper.clone(true);
 	if (knode.type == 3) {
@@ -2695,7 +2728,8 @@ function _wrapNode(knode, wrapper) {
 	}
 	nodeWrapper.replaceWith(wrapper);
 	return wrapper;
-}
+}
+
 function _mergeAttrs(knode, attrs, styles) {
 	_each(attrs, function(key, val) {
 		if (key !== 'style') {
@@ -2705,7 +2739,8 @@ function _mergeAttrs(knode, attrs, styles) {
 	_each(styles, function(key, val) {
 		knode.css(key, val);
 	});
-}
+}
+
 function _inPreElement(knode) {
 	while (knode && knode.name != 'body') {
 		if (_PRE_TAG_MAP[knode.name] || knode.name == 'div' && knode.hasClass('ke-script')) {
@@ -2714,7 +2749,8 @@ function _inPreElement(knode) {
 		knode = knode.parent();
 	}
 	return false;
-}
+}
+
 function KCmd(range) {
 	this.init(range);
 }
@@ -3395,7 +3431,8 @@ function _drag(options) {
 		}
 	});
 }
-
+
+
 function KWidget(options) {
 	this.init(options);
 }
@@ -3635,7 +3672,8 @@ function _elementVal(knode, val) {
 	}
 	return knode.html(val);
 }
-
+
+
 function KEdit(options) {
 	this.init(options);
 }
@@ -3890,7 +3928,8 @@ function _selectToolbar(name, fn) {
 		fn(knode);
 	}
 }
-
+
+
 function KToolbar(options) {
 	this.init(options);
 }
@@ -4010,7 +4049,8 @@ function _toolbar(options) {
 K.ToolbarClass = KToolbar;
 K.toolbar = _toolbar;
 
-
+
+
 function KMenu(options) {
 	this.init(options);
 }
@@ -4093,7 +4133,8 @@ function _menu(options) {
 K.MenuClass = KMenu;
 K.menu = _menu;
 
-
+
+
 function KColorPicker(options) {
 	this.init(options);
 }
@@ -4275,7 +4316,8 @@ function _createButton(arg) {
 	span.append(btn);
 	return span;
 }
-
+
+
 function KDialog(options) {
 	this.init(options);
 }
@@ -4474,7 +4516,8 @@ function _loadScript(url, fn) {
 		}
 	};
 }
-
+
+
 function _chopQuery(url) {
 	var index = url.indexOf('?');
 	return index > 0 ? url.substr(0, index) : url;
@@ -4570,7 +4613,8 @@ function _lang(mixed, langType) {
 		_language[langType][obj.ns][obj.key] = val;
 	});
 }
-
+
+
 function _getImageFromRange(range, fn) {
 	if (range.collapsed) {
 		return;
@@ -4781,7 +4825,9 @@ function _addBookmarkToStack(stack, bookmark) {
 		stack.push(bookmark);
 	}
 }
-
+
+
+
 function _undoToRedo(fromStack, toStack) {
 	var self = this, edit = self.edit,
 		body = edit.doc.body,
@@ -4969,12 +5015,13 @@ KEditor.prototype = {
 			editDiv = K('.edit', container),
 			statusbar = self.statusbar = K('.statusbar', container);
 		container.removeClass('container')
-			.addClass('ke-container ke-container-' + self.themeType).css('width', width);
+			.addClass('ke-container ke-container-' + self.themeType);
 		if (fullscreenMode) {
 			container.css({
 				position : 'absolute',
 				left : 0,
 				top : 0,
+				'width' : width,
 				'z-index' : 811211
 			});
 			if (!_GECKO) {
@@ -5529,7 +5576,8 @@ K.appendHtml = function(expr, val) {
 		this.appendHtml(val);
 	});
 };
-
+
+
 if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);
 }
@@ -5539,7 +5587,8 @@ K.create = _create;
 K.instances = _instances;
 K.plugin = _plugin;
 K.lang = _lang;
-
+
+
 _plugin('core', function(K) {
 	var self = this,
 		shortcutKeys = {
@@ -6349,7 +6398,8 @@ KindEditor.plugin('autoheight', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-
+
+
 KindEditor.plugin('baidumap', function(K) {
 	var self = this, name = 'baidumap', lang = self.lang(name + '.');
 	var mapWidth = K.undef(self.mapWidth, 558);
@@ -6438,7 +6488,8 @@ KindEditor.plugin('baidumap', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-
+
+
 KindEditor.plugin('map', function(K) {
 	var self = this, name = 'map', lang = self.lang(name + '.');
 	self.clickToolbar(name, function() {
@@ -6598,7 +6649,9 @@ KindEditor.plugin('clearhtml', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-
+
+
+
 KindEditor.plugin('code', function(K) {
 	var self = this, name = 'code';
 	self.clickToolbar(name, function() {
@@ -8164,7 +8217,9 @@ SWFUpload.WINDOW_MODE = {
 	TRANSPARENT : "transparent",
 	OPAQUE : "opaque"
 };
-
+
+
+
 SWFUpload.completeURL = function(url) {
 	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
 		return url;
@@ -8181,7 +8236,9 @@ SWFUpload.completeURL = function(url) {
 /* ******************** */
 /* Instance Members  */
 /* ******************** */
-
+
+
+
 SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault = function (settingName, defaultValue) {
 		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
@@ -8239,7 +8296,8 @@ SWFUpload.prototype.initSettings = function () {
 	}
 	delete this.ensureDefault;
 };
-
+
+
 SWFUpload.prototype.loadFlash = function () {
 	var targetElement, tempParent;
 	if (document.getElementById(this.movieName) !== null) {
@@ -8256,7 +8314,8 @@ SWFUpload.prototype.loadFlash = function () {
 		window[this.movieName] = this.getMovieElement();
 	}
 };
-
+
+
 SWFUpload.prototype.getFlashHTML = function () {
 	var classid = '';
 	if (KindEditor.IE && KindEditor.V > 8) {
@@ -8271,7 +8330,9 @@ SWFUpload.prototype.getFlashHTML = function () {
 				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
 				'</object>'].join("");
 };
-
+
+
+
 SWFUpload.prototype.getFlashVars = function () {
 	var paramString = this.buildParamString();
 	var httpSuccessString = this.settings.http_success.join(",");
@@ -8301,7 +8362,9 @@ SWFUpload.prototype.getFlashVars = function () {
 			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
 		].join("");
 };
-
+
+
+
 SWFUpload.prototype.getMovieElement = function () {
 	if (this.movieElement == undefined) {
 		this.movieElement = document.getElementById(this.movieName);
@@ -8311,7 +8374,9 @@ SWFUpload.prototype.getMovieElement = function () {
 	}
 	return this.movieElement;
 };
-
+
+
+
 SWFUpload.prototype.buildParamString = function () {
 	var postParams = this.settings.post_params;
 	var paramStringPairs = [];
@@ -8324,7 +8389,11 @@ SWFUpload.prototype.buildParamString = function () {
 	}
 	return paramStringPairs.join("&amp;");
 };
-
+
+
+
+
+
 SWFUpload.prototype.destroy = function () {
 	try {
 		this.cancelUpload(null, false);
@@ -8355,7 +8424,11 @@ SWFUpload.prototype.destroy = function () {
 		return false;
 	}
 };
-
+
+
+
+
+
 SWFUpload.prototype.displayDebugInfo = function () {
 	this.debug(
 		[
@@ -8406,7 +8479,8 @@ SWFUpload.prototype.displayDebugInfo = function () {
 };
 /* Note: addSetting and getSetting are no longer used by SWFUpload but are included
 	the maintain v2 API compatibility
-*/
+*/
+
 SWFUpload.prototype.addSetting = function (name, value, default_value) {
     if (value == undefined) {
         return (this.settings[name] = default_value);
@@ -8414,14 +8488,18 @@ SWFUpload.prototype.addSetting = function (name, value, default_value) {
         return (this.settings[name] = value);
 	}
 };
-
+
+
 SWFUpload.prototype.getSetting = function (name) {
     if (this.settings[name] != undefined) {
         return this.settings[name];
 	}
     return "";
 };
-
+
+
+
+
 SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	argumentArray = argumentArray || [];
 	var movieElement = this.getMovieElement();
@@ -8442,26 +8520,42 @@ SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	Your UI should use these
 	to operate SWFUpload
    ***************************** */
-
+
+
+
+
 SWFUpload.prototype.selectFile = function () {
 	this.callFlash("SelectFile");
 };
-
+
+
+
+
+
+
+
 SWFUpload.prototype.selectFiles = function () {
 	this.callFlash("SelectFiles");
 };
-
+
+
+
 SWFUpload.prototype.startUpload = function (fileID) {
 	this.callFlash("StartUpload", [fileID]);
 };
-
+
+
+
+
 SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
 	if (triggerErrorEvent !== false) {
 		triggerErrorEvent = true;
 	}
 	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
 };
-
+
+
+
 SWFUpload.prototype.stopUpload = function () {
 	this.callFlash("StopUpload");
 };
@@ -8472,15 +8566,22 @@ SWFUpload.prototype.stopUpload = function () {
  *   since many of the settings need to be passed to Flash in order to take
  *   effect.
  * *********************** */
-
+
+
 SWFUpload.prototype.getStats = function () {
 	return this.callFlash("GetStats");
 };
-
+
+
+
+
+
 SWFUpload.prototype.setStats = function (statsObject) {
 	this.callFlash("SetStats", [statsObject]);
 };
-
+
+
+
 SWFUpload.prototype.getFile = function (fileID) {
 	if (typeof(fileID) === "number") {
 		return this.callFlash("GetFileByIndex", [fileID]);
@@ -8488,71 +8589,88 @@ SWFUpload.prototype.getFile = function (fileID) {
 		return this.callFlash("GetFile", [fileID]);
 	}
 };
-
+
+
+
+
 SWFUpload.prototype.addFileParam = function (fileID, name, value) {
 	return this.callFlash("AddFileParam", [fileID, name, value]);
 };
-
+
+
+
 SWFUpload.prototype.removeFileParam = function (fileID, name) {
 	this.callFlash("RemoveFileParam", [fileID, name]);
 };
-
+
+
 SWFUpload.prototype.setUploadURL = function (url) {
 	this.settings.upload_url = url.toString();
 	this.callFlash("SetUploadURL", [url]);
 };
-
+
+
 SWFUpload.prototype.setPostParams = function (paramsObject) {
 	this.settings.post_params = paramsObject;
 	this.callFlash("SetPostParams", [paramsObject]);
 };
-
+
+
 SWFUpload.prototype.addPostParam = function (name, value) {
 	this.settings.post_params[name] = value;
 	this.callFlash("SetPostParams", [this.settings.post_params]);
 };
-
+
+
 SWFUpload.prototype.removePostParam = function (name) {
 	delete this.settings.post_params[name];
 	this.callFlash("SetPostParams", [this.settings.post_params]);
 };
-
+
+
 SWFUpload.prototype.setFileTypes = function (types, description) {
 	this.settings.file_types = types;
 	this.settings.file_types_description = description;
 	this.callFlash("SetFileTypes", [types, description]);
 };
-
+
+
 SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
 	this.settings.file_size_limit = fileSizeLimit;
 	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
 };
-
+
+
 SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
 	this.settings.file_upload_limit = fileUploadLimit;
 	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
 };
-
+
+
 SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
 	this.settings.file_queue_limit = fileQueueLimit;
 	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
 };
-
+
+
 SWFUpload.prototype.setFilePostName = function (filePostName) {
 	this.settings.file_post_name = filePostName;
 	this.callFlash("SetFilePostName", [filePostName]);
 };
-
+
+
 SWFUpload.prototype.setUseQueryString = function (useQueryString) {
 	this.settings.use_query_string = useQueryString;
 	this.callFlash("SetUseQueryString", [useQueryString]);
 };
-
+
+
 SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
 	this.settings.requeue_on_error = requeueOnError;
 	this.callFlash("SetRequeueOnError", [requeueOnError]);
 };
-
+
+
 SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	if (typeof http_status_codes === "string") {
 		http_status_codes = http_status_codes.replace(" ", "").split(",");
@@ -8560,17 +8678,20 @@ SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	this.settings.http_success = http_status_codes;
 	this.callFlash("SetHTTPSuccess", [http_status_codes]);
 };
-
+
+
 SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
 	this.settings.assume_success_timeout = timeout_seconds;
 	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
 };
-
+
+
 SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
 	this.settings.debug_enabled = debugEnabled;
 	this.callFlash("SetDebugEnabled", [debugEnabled]);
 };
-
+
+
 SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	if (buttonImageURL == undefined) {
 		buttonImageURL = "";
@@ -8578,7 +8699,8 @@ SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	this.settings.button_image_url = buttonImageURL;
 	this.callFlash("SetButtonImageURL", [buttonImageURL]);
 };
-
+
+
 SWFUpload.prototype.setButtonDimensions = function (width, height) {
 	this.settings.button_width = width;
 	this.settings.button_height = height;
@@ -8588,30 +8710,36 @@ SWFUpload.prototype.setButtonDimensions = function (width, height) {
 		movie.style.height = height + "px";
 	}
 	this.callFlash("SetButtonDimensions", [width, height]);
-};
+};
+
 SWFUpload.prototype.setButtonText = function (html) {
 	this.settings.button_text = html;
 	this.callFlash("SetButtonText", [html]);
-};
+};
+
 SWFUpload.prototype.setButtonTextPadding = function (left, top) {
 	this.settings.button_text_top_padding = top;
 	this.settings.button_text_left_padding = left;
 	this.callFlash("SetButtonTextPadding", [left, top]);
 };
-
+
+
 SWFUpload.prototype.setButtonTextStyle = function (css) {
 	this.settings.button_text_style = css;
 	this.callFlash("SetButtonTextStyle", [css]);
-};
+};
+
 SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
 	this.settings.button_disabled = isDisabled;
 	this.callFlash("SetButtonDisabled", [isDisabled]);
-};
+};
+
 SWFUpload.prototype.setButtonAction = function (buttonAction) {
 	this.settings.button_action = buttonAction;
 	this.callFlash("SetButtonAction", [buttonAction]);
 };
-
+
+
 SWFUpload.prototype.setButtonCursor = function (cursor) {
 	this.settings.button_cursor = cursor;
 	this.callFlash("SetButtonCursor", [cursor]);
@@ -8644,14 +8772,19 @@ SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
 		throw "Event handler " + handlerName + " is unknown or is not a function";
 	}
 };
-
+
+
+
 SWFUpload.prototype.executeNextEvent = function () {
 	var  f = this.eventQueue ? this.eventQueue.shift() : null;
 	if (typeof(f) === "function") {
 		f.apply(this);
 	}
 };
-
+
+
+
+
 SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	var reg = /[$]([0-9a-f]{4})/i;
 	var unescapedPost = {};
@@ -8671,7 +8804,8 @@ SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	}
 	return file;
 };
-
+
+
 SWFUpload.prototype.testExternalInterface = function () {
 	try {
 		return this.callFlash("TestExternalInterface");
@@ -8679,7 +8813,9 @@ SWFUpload.prototype.testExternalInterface = function () {
 		return false;
 	}
 };
-
+
+
+
 SWFUpload.prototype.flashReady = function () {
 	var movieElement = this.getMovieElement();
 	if (!movieElement) {
@@ -8689,7 +8825,9 @@ SWFUpload.prototype.flashReady = function () {
 	this.cleanUp(movieElement);
 	this.queueEvent("swfupload_loaded_handler");
 };
-
+
+
+
 SWFUpload.prototype.cleanUp = function (movieElement) {
 	try {
 		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") {
@@ -8782,7 +8920,10 @@ SWFUpload.prototype.debug = function (message) {
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
-
+
+
+
+
 SWFUpload.prototype.debugMessage = function (message) {
 	if (this.settings.debug) {
 		var exceptionMessage, exceptionValues = [];
