@@ -9815,7 +9815,6 @@ KindEditor.plugin('fixtoolbar', function (K) {
                     toolbar.css('position', 'static');
                     toolbar.css('top', 'auto');
                 }
-                console.log();
             } else {
                 if (toolbar.pos().y - document.body.scrollTop < 0) {
                     toolbar.css('position', 'fixed');
