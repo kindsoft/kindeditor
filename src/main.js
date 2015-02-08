@@ -379,8 +379,7 @@ KEditor.prototype = {
 				}, 100);
 				return self;
 			}
-			// JS加载完成
-			_plugins[name].call(self, KindEditor);
+
 			if (fn) {
 				fn.call(self);
 			}
@@ -392,6 +391,9 @@ KEditor.prototype = {
 			// Fix bug: https://github.com/kindsoft/kindeditor/issues/105
 			setTimeout(function() {
 				if (_plugins[name]) {
+					// JS加载完成，避免初始化多次
+					_plugins[name].call(self, KindEditor);
+
 					self.loadPlugin(name, fn);
 				}
 			}, 0);
