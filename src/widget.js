@@ -29,6 +29,11 @@ function _drag(options) {
 	}
 
 	clickEl.mousedown(function(e) {
+		// 不响应右键，否则可能导致点选右键菜单时无法取消拖拽
+		if(e.button !== 0 && e.button !== 1) {
+			return;
+		}
+
 		e.stopPropagation();
 
 		var self = clickEl.get(),
