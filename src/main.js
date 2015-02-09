@@ -371,6 +371,11 @@ KEditor.prototype = {
 	},
 	loadPlugin : function(name, fn) {
 		var self = this;
+		var _pluginStatus = this._pluginStatus;
+		if (!_pluginStatus) {
+			_pluginStatus = this._pluginStatus = {};
+		}
+
 		if (_plugins[name]) {
 			// JS加载中，等待JS加载完成
 			if (!_isFunction(_plugins[name])) {
@@ -378,6 +383,12 @@ KEditor.prototype = {
 					self.loadPlugin(name, fn);
 				}, 100);
 				return self;
+			}
+
+			// JS加载完成，避免初始化多次
+			if(!_pluginStatus[name]) {
+				_plugins[name].call(self, KindEditor);
+				_pluginStatus[name] = 'inited';
 			}
 
 			if (fn) {
@@ -391,9 +402,6 @@ KEditor.prototype = {
 			// Fix bug: https://github.com/kindsoft/kindeditor/issues/105
 			setTimeout(function() {
 				if (_plugins[name]) {
-					// JS加载完成，避免初始化多次
-					_plugins[name].call(self, KindEditor);
-
 					self.loadPlugin(name, fn);
 				}
 			}, 0);
