@@ -371,6 +371,11 @@ KEditor.prototype = {
 	},
 	loadPlugin : function(name, fn) {
 		var self = this;
+		var _pluginStatus = this._pluginStatus;
+		if (!_pluginStatus) {
+			_pluginStatus = this._pluginStatus = {};
+		}
+
 		if (_plugins[name]) {
 			// JS加载中，等待JS加载完成
 			if (!_isFunction(_plugins[name])) {
@@ -379,8 +384,13 @@ KEditor.prototype = {
 				}, 100);
 				return self;
 			}
-			// JS加载完成
-			_plugins[name].call(self, KindEditor);
+
+			// JS加载完成，避免初始化多次
+			if(!_pluginStatus[name]) {
+				_plugins[name].call(self, KindEditor);
+				_pluginStatus[name] = 'inited';
+			}
+
 			if (fn) {
 				fn.call(self);
 			}
