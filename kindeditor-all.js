@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.10 (2014-06-10)
+* @version 4.1.10 (2014-12-04)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.10 (2014-06-10)',
+var _VERSION = '4.1.10 (2014-12-04)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -300,7 +300,7 @@ K.options = {
 			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
 		a : ['id', 'class', 'href', 'target', 'name'],
-		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode'],
 		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -6349,7 +6349,6 @@ KindEditor.plugin('autoheight', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-
 KindEditor.plugin('baidumap', function(K) {
 	var self = this, name = 'baidumap', lang = self.lang(name + '.');
 	var mapWidth = K.undef(self.mapWidth, 558);
@@ -8164,7 +8163,6 @@ SWFUpload.WINDOW_MODE = {
 	TRANSPARENT : "transparent",
 	OPAQUE : "opaque"
 };
-
 SWFUpload.completeURL = function(url) {
 	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
 		return url;
@@ -8181,7 +8179,6 @@ SWFUpload.completeURL = function(url) {
 /* ******************** */
 /* Instance Members  */
 /* ******************** */
-
 SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault = function (settingName, defaultValue) {
 		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
@@ -8239,7 +8236,6 @@ SWFUpload.prototype.initSettings = function () {
 	}
 	delete this.ensureDefault;
 };
-
 SWFUpload.prototype.loadFlash = function () {
 	var targetElement, tempParent;
 	if (document.getElementById(this.movieName) !== null) {
@@ -8256,7 +8252,6 @@ SWFUpload.prototype.loadFlash = function () {
 		window[this.movieName] = this.getMovieElement();
 	}
 };
-
 SWFUpload.prototype.getFlashHTML = function () {
 	var classid = '';
 	if (KindEditor.IE && KindEditor.V > 8) {
@@ -8271,7 +8266,6 @@ SWFUpload.prototype.getFlashHTML = function () {
 				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
 				'</object>'].join("");
 };
-
 SWFUpload.prototype.getFlashVars = function () {
 	var paramString = this.buildParamString();
 	var httpSuccessString = this.settings.http_success.join(",");
@@ -8301,7 +8295,6 @@ SWFUpload.prototype.getFlashVars = function () {
 			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
 		].join("");
 };
-
 SWFUpload.prototype.getMovieElement = function () {
 	if (this.movieElement == undefined) {
 		this.movieElement = document.getElementById(this.movieName);
@@ -8311,7 +8304,6 @@ SWFUpload.prototype.getMovieElement = function () {
 	}
 	return this.movieElement;
 };
-
 SWFUpload.prototype.buildParamString = function () {
 	var postParams = this.settings.post_params;
 	var paramStringPairs = [];
@@ -8324,7 +8316,6 @@ SWFUpload.prototype.buildParamString = function () {
 	}
 	return paramStringPairs.join("&amp;");
 };
-
 SWFUpload.prototype.destroy = function () {
 	try {
 		this.cancelUpload(null, false);
@@ -8355,7 +8346,6 @@ SWFUpload.prototype.destroy = function () {
 		return false;
 	}
 };
-
 SWFUpload.prototype.displayDebugInfo = function () {
 	this.debug(
 		[
@@ -8406,7 +8396,7 @@ SWFUpload.prototype.displayDebugInfo = function () {
 };
 /* Note: addSetting and getSetting are no longer used by SWFUpload but are included
 	the maintain v2 API compatibility
-*/
+*/
 SWFUpload.prototype.addSetting = function (name, value, default_value) {
     if (value == undefined) {
         return (this.settings[name] = default_value);
@@ -8414,14 +8404,12 @@ SWFUpload.prototype.addSetting = function (name, value, default_value) {
         return (this.settings[name] = value);
 	}
 };
-
 SWFUpload.prototype.getSetting = function (name) {
     if (this.settings[name] != undefined) {
         return this.settings[name];
 	}
     return "";
 };
-
 SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	argumentArray = argumentArray || [];
 	var movieElement = this.getMovieElement();
@@ -8442,26 +8430,21 @@ SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	Your UI should use these
 	to operate SWFUpload
    ***************************** */
-
 SWFUpload.prototype.selectFile = function () {
 	this.callFlash("SelectFile");
 };
-
 SWFUpload.prototype.selectFiles = function () {
 	this.callFlash("SelectFiles");
 };
-
 SWFUpload.prototype.startUpload = function (fileID) {
 	this.callFlash("StartUpload", [fileID]);
 };
-
 SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
 	if (triggerErrorEvent !== false) {
 		triggerErrorEvent = true;
 	}
 	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
 };
-
 SWFUpload.prototype.stopUpload = function () {
 	this.callFlash("StopUpload");
 };
@@ -8472,15 +8455,12 @@ SWFUpload.prototype.stopUpload = function () {
  *   since many of the settings need to be passed to Flash in order to take
  *   effect.
  * *********************** */
-
 SWFUpload.prototype.getStats = function () {
 	return this.callFlash("GetStats");
 };
-
 SWFUpload.prototype.setStats = function (statsObject) {
 	this.callFlash("SetStats", [statsObject]);
 };
-
 SWFUpload.prototype.getFile = function (fileID) {
 	if (typeof(fileID) === "number") {
 		return this.callFlash("GetFileByIndex", [fileID]);
@@ -8488,71 +8468,57 @@ SWFUpload.prototype.getFile = function (fileID) {
 		return this.callFlash("GetFile", [fileID]);
 	}
 };
-
 SWFUpload.prototype.addFileParam = function (fileID, name, value) {
 	return this.callFlash("AddFileParam", [fileID, name, value]);
 };
-
 SWFUpload.prototype.removeFileParam = function (fileID, name) {
 	this.callFlash("RemoveFileParam", [fileID, name]);
 };
-
 SWFUpload.prototype.setUploadURL = function (url) {
 	this.settings.upload_url = url.toString();
 	this.callFlash("SetUploadURL", [url]);
 };
-
 SWFUpload.prototype.setPostParams = function (paramsObject) {
 	this.settings.post_params = paramsObject;
 	this.callFlash("SetPostParams", [paramsObject]);
 };
-
 SWFUpload.prototype.addPostParam = function (name, value) {
 	this.settings.post_params[name] = value;
 	this.callFlash("SetPostParams", [this.settings.post_params]);
 };
-
 SWFUpload.prototype.removePostParam = function (name) {
 	delete this.settings.post_params[name];
 	this.callFlash("SetPostParams", [this.settings.post_params]);
 };
-
 SWFUpload.prototype.setFileTypes = function (types, description) {
 	this.settings.file_types = types;
 	this.settings.file_types_description = description;
 	this.callFlash("SetFileTypes", [types, description]);
 };
-
 SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
 	this.settings.file_size_limit = fileSizeLimit;
 	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
 };
-
 SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
 	this.settings.file_upload_limit = fileUploadLimit;
 	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
 };
-
 SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
 	this.settings.file_queue_limit = fileQueueLimit;
 	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
 };
-
 SWFUpload.prototype.setFilePostName = function (filePostName) {
 	this.settings.file_post_name = filePostName;
 	this.callFlash("SetFilePostName", [filePostName]);
 };
-
 SWFUpload.prototype.setUseQueryString = function (useQueryString) {
 	this.settings.use_query_string = useQueryString;
 	this.callFlash("SetUseQueryString", [useQueryString]);
 };
-
 SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
 	this.settings.requeue_on_error = requeueOnError;
 	this.callFlash("SetRequeueOnError", [requeueOnError]);
 };
-
 SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	if (typeof http_status_codes === "string") {
 		http_status_codes = http_status_codes.replace(" ", "").split(",");
@@ -8560,17 +8526,14 @@ SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	this.settings.http_success = http_status_codes;
 	this.callFlash("SetHTTPSuccess", [http_status_codes]);
 };
-
 SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
 	this.settings.assume_success_timeout = timeout_seconds;
 	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
 };
-
 SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
 	this.settings.debug_enabled = debugEnabled;
 	this.callFlash("SetDebugEnabled", [debugEnabled]);
 };
-
 SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	if (buttonImageURL == undefined) {
 		buttonImageURL = "";
@@ -8578,7 +8541,6 @@ SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	this.settings.button_image_url = buttonImageURL;
 	this.callFlash("SetButtonImageURL", [buttonImageURL]);
 };
-
 SWFUpload.prototype.setButtonDimensions = function (width, height) {
 	this.settings.button_width = width;
 	this.settings.button_height = height;
@@ -8588,30 +8550,28 @@ SWFUpload.prototype.setButtonDimensions = function (width, height) {
 		movie.style.height = height + "px";
 	}
 	this.callFlash("SetButtonDimensions", [width, height]);
-};
+};
 SWFUpload.prototype.setButtonText = function (html) {
 	this.settings.button_text = html;
 	this.callFlash("SetButtonText", [html]);
-};
+};
 SWFUpload.prototype.setButtonTextPadding = function (left, top) {
 	this.settings.button_text_top_padding = top;
 	this.settings.button_text_left_padding = left;
 	this.callFlash("SetButtonTextPadding", [left, top]);
 };
-
 SWFUpload.prototype.setButtonTextStyle = function (css) {
 	this.settings.button_text_style = css;
 	this.callFlash("SetButtonTextStyle", [css]);
-};
+};
 SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
 	this.settings.button_disabled = isDisabled;
 	this.callFlash("SetButtonDisabled", [isDisabled]);
-};
+};
 SWFUpload.prototype.setButtonAction = function (buttonAction) {
 	this.settings.button_action = buttonAction;
 	this.callFlash("SetButtonAction", [buttonAction]);
 };
-
 SWFUpload.prototype.setButtonCursor = function (cursor) {
 	this.settings.button_cursor = cursor;
 	this.callFlash("SetButtonCursor", [cursor]);
@@ -8644,14 +8604,12 @@ SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
 		throw "Event handler " + handlerName + " is unknown or is not a function";
 	}
 };
-
 SWFUpload.prototype.executeNextEvent = function () {
 	var  f = this.eventQueue ? this.eventQueue.shift() : null;
 	if (typeof(f) === "function") {
 		f.apply(this);
 	}
 };
-
 SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	var reg = /[$]([0-9a-f]{4})/i;
 	var unescapedPost = {};
@@ -8671,7 +8629,6 @@ SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	}
 	return file;
 };
-
 SWFUpload.prototype.testExternalInterface = function () {
 	try {
 		return this.callFlash("TestExternalInterface");
@@ -8679,7 +8636,6 @@ SWFUpload.prototype.testExternalInterface = function () {
 		return false;
 	}
 };
-
 SWFUpload.prototype.flashReady = function () {
 	var movieElement = this.getMovieElement();
 	if (!movieElement) {
@@ -8689,7 +8645,6 @@ SWFUpload.prototype.flashReady = function () {
 	this.cleanUp(movieElement);
 	this.queueEvent("swfupload_loaded_handler");
 };
-
 SWFUpload.prototype.cleanUp = function (movieElement) {
 	try {
 		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") {
@@ -8782,7 +8737,6 @@ SWFUpload.prototype.debug = function (message) {
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
-
 SWFUpload.prototype.debugMessage = function (message) {
 	if (this.settings.debug) {
 		var exceptionMessage, exceptionValues = [];
@@ -9840,4 +9794,34 @@ KindEditor.plugin('wordpaste', function(K) {
 		}
 		iframe[0].contentWindow.focus();
 	});
+});
+
+
+KindEditor.plugin('fixtoolbar', function (K) {
+    var self = this;
+    if (!self.fixToolBar) {
+        return;
+    }
+    function init() {
+        var toolbar = K('.ke-toolbar');
+        var originY = toolbar.pos().y;
+        K(window).bind('scroll', function () {
+            if (toolbar.css('position') == 'fixed') {
+                if(document.body.scrollTop - originY < 0){
+                    toolbar.css('position', 'static');
+                    toolbar.css('top', 'auto');
+                }
+            } else {
+                if (toolbar.pos().y - document.body.scrollTop < 0) {
+                    toolbar.css('position', 'fixed');
+                    toolbar.css('top', 0);
+                }
+            }
+        });
+    }
+    if (self.isCreated) {
+        init();
+    } else {
+        self.afterCreate(init);
+    }
 });

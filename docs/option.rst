@@ -856,3 +856,11 @@ autoHeightMode
 .. note::
 
 	4.1.8版本开始支持。
+
+fixToolBar
+--------------------------------------------------------
+值为true，并引入fixtoolbar.js插件时固定工具栏位置。
+
+* 数据类型: Boolean
+* 默认值: false
+
