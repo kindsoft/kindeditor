@@ -1,11 +1,11 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2014 kindsoft.net
+* Copyright (C) 2006-2015 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.10 (2014-12-04)
+* @version 4.1.11 (2015-02-28)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.10 (2014-12-04)',
+var _VERSION = '4.1.11 (2015-02-28)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -3357,6 +3357,9 @@ function _drag(options) {
 		});
 	}
 	clickEl.mousedown(function(e) {
+		if(e.button !== 0 && e.button !== 1) {
+			return;
+		}
 		e.stopPropagation();
 		var self = clickEl.get(),
 			x = _removeUnit(moveEl.css('left')),
@@ -4863,6 +4866,10 @@ KEditor.prototype = {
 	},
 	loadPlugin : function(name, fn) {
 		var self = this;
+		var _pluginStatus = this._pluginStatus;
+		if (!_pluginStatus) {
+			_pluginStatus = this._pluginStatus = {};
+		}
 		if (_plugins[name]) {
 			if (!_isFunction(_plugins[name])) {
 				setTimeout(function() {
@@ -4870,7 +4877,10 @@ KEditor.prototype = {
 				}, 100);
 				return self;
 			}
-			_plugins[name].call(self, KindEditor);
+			if(!_pluginStatus[name]) {
+				_plugins[name].call(self, KindEditor);
+				_pluginStatus[name] = 'inited';
+			}
 			if (fn) {
 				fn.call(self);
 			}

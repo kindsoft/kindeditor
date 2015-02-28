@@ -1,6 +1,6 @@
 {
 	"name" : "KindEditor",
-	"version" : "4.1.10",
+	"version" : "4.1.11",
 	"filename" : "kindeditor",
 	"devDependencies" : {
 		"grunt": "~0.4.1",

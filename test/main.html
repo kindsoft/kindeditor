@@ -51,6 +51,8 @@
 		<script src="../plugins/lineheight/lineheight.js"></script>
 		<script src="../plugins/clearhtml/clearhtml.js"></script>
 		<script src="../plugins/table/table.js"></script>
+		<script src="../plugins/fixtoolbar/fixtoolbar.js"></script>
+		<script src="../plugins/autoheight/autoheight.js"></script>
 	</head>
 	<body>
 		<h1 id="type">KindEditor Main Test</h1>
@@ -208,6 +210,7 @@
 			KindEditor.DEBUG = true;
 			KindEditor.options.filterMode = false;
 			KindEditor.options.autoHeightMode = true;
+			KindEditor.options.fixToolBar = true;
 			//document.domain = 'domain.com';
 			KindEditor.basePath = '../';
 			KindEditor.ready(function(K) {

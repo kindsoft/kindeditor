@@ -857,6 +857,10 @@ autoHeightMode
 
 	4.1.8版本开始支持。
 
+.. index:: fixToolBar
+
+.. _fixToolBar:
+
 fixToolBar
 --------------------------------------------------------
 值为true，并引入fixtoolbar.js插件时固定工具栏位置。
