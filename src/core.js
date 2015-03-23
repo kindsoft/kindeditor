@@ -76,7 +76,7 @@ function _inString(val, str, delimiter) {
 
 function _addUnit(val, unit) {
 	unit = unit || 'px';
-	return val && /^\d+$/.test(val) ? val + unit : val;
+	return val && /^-?\d+(?:\.\d+)?$/.test(val) ? val + unit : val;
 }
 
 function _removeUnit(val) {
