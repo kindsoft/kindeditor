@@ -535,7 +535,7 @@ KEditor.prototype = {
 				htmlList.push('<div class="ke-hr"></div>');
 			} else {
 				htmlList.push('<span class="ke-outline" data-name="' + name + '" title="' + self.lang(name) + '" unselectable="on">');
-				htmlList.push('<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-' + name + '" unselectable="on"></span></span>');
+				htmlList.push('<span class="ke-toolbar-icon ke-icon-' + name + '" unselectable="on">&#x' + self.fonts[name] + ';</span></span>');
 			}
 		});
 		var toolbar = self.toolbar = _toolbar({

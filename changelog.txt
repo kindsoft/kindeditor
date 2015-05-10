@@ -4,7 +4,8 @@
 #
 #######################################################################
 
-ver 4.1.11
+ver 4.2
+* 各种图标改成字体格式（iconfont）。
 * 新增: 俄语语言包，感谢Valery Votintsev (http://codersclub.org/)。
 * 改善: 语言包文件名标准化，zh_CN -> zh-CN, zh_TW -> zh-TW。
 * Bugfix: [IE6] 当前页面设置了document.domain，销毁编辑器会报错。
