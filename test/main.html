@@ -60,7 +60,7 @@
 		<tr>
 		<td align="center">
 		<form method="post" action="../php/demo.php">
-			<textarea name="content1" cols="100" rows="20" style="width:700px;height:200px;"><div>
+			<textarea name="content1" cols="100" rows="20" style="width:100%;height:200px;"><div>
     <img alt="" src="/kindeditor/plugins/emoticons/images/0.gif" />
     <div>
         123
@@ -209,8 +209,8 @@
 		<script>
 			KindEditor.DEBUG = true;
 			KindEditor.options.filterMode = false;
-			//KindEditor.options.autoHeightMode = true;
-			//KindEditor.options.fixToolBar = true;
+			KindEditor.options.autoHeightMode = true;
+			KindEditor.options.fixToolBar = true;
 			//document.domain = 'domain.com';
 			KindEditor.basePath = '../';
 			KindEditor.ready(function(K) {
@@ -218,11 +218,7 @@
 					basePath : '../',
 					pluginsPath : '../plugins/',
 					urlType : 'absolute',
-					//themeType : 'simple',
-					items : [
-						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
-						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-						'insertunorderedlist', '|', 'emoticons', 'image', 'link'],
+					themeType : 'simple',
 					allowImageUpload : true,
 					allowImageRemote : true,
 					allowFileUpload : true,
