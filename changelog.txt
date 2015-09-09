@@ -11,6 +11,7 @@ ver 4.1.11
 * Bugfix: 行首全角空格被过滤。
 * Bugfix: 修复多语言包的一些小错误。
 * Bugfix: [IE11] 有些设备报错不能显示，对象不支持attachEvent属性或方法。
+* Bugfix: retina屏幕上按钮裂开。
 
 ver 4.1.10 (2013-11-23)
 * Bugfix: 兼容IE11。
