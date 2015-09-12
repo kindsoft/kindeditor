@@ -12,6 +12,7 @@ ver 4.1.11
 * Bugfix: 修复多语言包的一些小错误。
 * Bugfix: [IE11] 有些设备报错不能显示，对象不支持attachEvent属性或方法。
 * Bugfix: retina屏幕上按钮裂开。
+* Bugfix: 编辑图片后点击插入图片，弹出两个dialog。
 
 ver 4.1.10 (2013-11-23)
 * Bugfix: 兼容IE11。

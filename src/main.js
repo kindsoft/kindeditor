@@ -1032,6 +1032,10 @@ function _create(expr, options) {
 		_each(_plugins, function(name, fn) {
 			if (_isFunction(fn)) {
 				fn.call(editor, KindEditor);
+				if (!editor._pluginStatus) {
+					editor._pluginStatus = {};
+				}
+				editor._pluginStatus[name] = 'inited';
 			}
 		});
 		return editor.create();

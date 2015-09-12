@@ -5,7 +5,7 @@
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.11 (2015-02-28)
+* @version 4.1.11 (2015-09-12)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.11 (2015-02-28)',
+var _VERSION = '4.1.11 (2015-09-12)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -79,7 +79,7 @@ function _inString(val, str, delimiter) {
 }
 function _addUnit(val, unit) {
 	unit = unit || 'px';
-	return val && /^\d+$/.test(val) ? val + unit : val;
+	return val && /^-?\d+(?:\.\d+)?$/.test(val) ? val + unit : val;
 }
 function _removeUnit(val) {
 	var match;
@@ -5478,6 +5478,10 @@ function _create(expr, options) {
 		_each(_plugins, function(name, fn) {
 			if (_isFunction(fn)) {
 				fn.call(editor, KindEditor);
+				if (!editor._pluginStatus) {
+					editor._pluginStatus = {};
+				}
+				editor._pluginStatus[name] = 'inited';
 			}
 		});
 		return editor.create();
