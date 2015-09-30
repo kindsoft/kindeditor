@@ -296,10 +296,23 @@ _extend(KEdit, KWidget, {
 		if (bool === undefined ? !self.designMode : bool) {
 			if (!self.designMode) {
 				val = self.html();
+
 				self.designMode = true;
-				self.html(val);
 				self.textarea.hide();
-				self.iframe.show();
+
+				self.html(val);
+
+				// cache
+				var iframe = self.iframe;
+				var height = _removeUnit(self.height);
+
+				iframe.height(height - 2);
+				iframe.show();
+
+				// safari iframe scrollbar hack
+				setTimeout(function() {
+					iframe.height(height);
+				}, 0);
 			}
 		} else {
 			if (self.designMode) {
