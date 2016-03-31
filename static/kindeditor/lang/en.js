@@ -73,6 +73,8 @@ KindEditor.lang({
 	deleteMedia : 'Delete media',
 	editLink : 'Link properties',
 	deleteLink : 'Unlink',
+	editAnchor : 'Anchor properties',
+	deleteAnchor : 'Delete Anchor',
 	tableprop : 'Table properties',
 	tablecellprop : 'Cell properties',
 	tableinsert : 'Insert table',
