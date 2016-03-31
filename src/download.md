@@ -13,7 +13,7 @@
 
 ### Production
 
-* [Download KindEditor 4.1.10 (2013-12-22)](https://github.com/kindsoft/kindeditor/releases/download/v4.1.10/kindeditor-4.1.10-en.zip)
+* [Download KindEditor 4.1.11 (2016-03-31)](https://github.com/kindsoft/kindeditor/releases/download/v4.1.11/kindeditor-4.1.11-en.zip)
 
 ### Development
 
