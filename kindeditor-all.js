@@ -1,11 +1,11 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2015 kindsoft.net
+* Copyright (C) 2006-2016 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.11 (2015-09-12)
+* @version 4.1.11 (2016-03-31)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.11 (2015-09-12)',
+var _VERSION = '4.1.11 (2016-03-31)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -3824,9 +3824,15 @@ _extend(KEdit, KWidget, {
 			if (!self.designMode) {
 				val = self.html();
 				self.designMode = true;
-				self.html(val);
 				self.textarea.hide();
-				self.iframe.show();
+				self.html(val);
+				var iframe = self.iframe;
+				var height = _removeUnit(self.height);
+				iframe.height(height - 2);
+				iframe.show();
+				setTimeout(function() {
+					iframe.height(height);
+				}, 0);
 			}
 		} else {
 			if (self.designMode) {
@@ -5915,6 +5921,8 @@ _plugin('core', function(K) {
 			} else {
 				cmd.range.selectNodeContents(div[0]);
 				cmd.select();
+				div[0].tabIndex = -1;
+				div[0].focus();
 			}
 			setTimeout(function() {
 				movePastedData();
