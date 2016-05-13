@@ -1008,7 +1008,7 @@ function _editor(options) {
 	return new KEditor(options);
 }
 
-_instances = [];
+var _instances = [];
 
 /**
 	@example
