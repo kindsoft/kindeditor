@@ -169,7 +169,7 @@ _extend(KWidget, {
 		return self;
 	},
 	autoPos : function(width, height) {
-		var self = this,
+		var x, y, self = this,
 			w = _removeUnit(width) || 0,
 			h = _removeUnit(height) || 0,
 			scrollPos = _getScrollPos();
