@@ -49,11 +49,11 @@ POST参数
 
 	//成功时
 	{
-		"error" : 0,
+		"error" : 1,
 		"url" : "http://www.example.com/path/to/file.ext"
 	}
 	//失败时
 	{
-		"error" : 1,
+		"error" : 0,
 		"message" : "错误信息"
 	}
