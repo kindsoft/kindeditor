@@ -741,7 +741,7 @@ KEditor.prototype = {
 		}
 		if (height) {
 			height = _removeUnit(height);
-			editHeight = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
+			var editHeight = _removeUnit(height) - self.toolbar.div.height() - self.statusbar.height();
 			editHeight = editHeight < self.minHeight ? self.minHeight : editHeight;
 			self.edit.setHeight(editHeight);
 			if (updateProp) {

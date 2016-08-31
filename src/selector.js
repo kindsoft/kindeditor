@@ -30,7 +30,7 @@ function _getAttr(el, key) {
 			val = list[key];
 		}
 	} else {
-		// IE8ÉèÖÃ<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />£¬Å×³öÒì³£
+		// IE8è®¾ç½®<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />ï¼ŒæŠ›å‡ºå¼‚å¸¸
 		try {
 			val = el.getAttribute(key, 2);
 		} catch(e) {
