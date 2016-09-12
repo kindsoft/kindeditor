@@ -1,0 +1,47 @@
+﻿@Layout = null;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/kindeditor/themes/default/default.css" rel="stylesheet" />
+    <title>asp.net mvc demo -- kindeditor</title>
+</head>
+<body>
+    <div class="container body-content">
+        <div class="row">
+            @using (Html.BeginForm())
+            {
+                <textarea name="content" id="content1"></textarea>
+                <button type="submit">Submit</button>
+            }
+        </div>
+    </div>
+    <script src="~/kindeditor/kindeditor-all-min.js"></script>
+    <script src="~/kindeditor/lang/zh-CN.js"></script>
+    <script>
+        var editor1;
+        KindEditor.ready(function (K) {
+            editor1 = K.create('#content1', {
+                themeType: 'default',
+                langType: 'zh-CN',
+                uploadJson: '/Home/UploadFile',
+                fileManagerJson: '/Home/FileManager',
+                allowFileManager: true,
+                afterCreate: function () {
+                    var self = this;
+                    K.ctrl(document, 13, function () {
+                        self.sync();
+                        K('form')[0].submit();
+                    });
+                    K.ctrl(self.edit.doc, 13, function () {
+                        self.sync();
+                        K('form')[0].submit();
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
