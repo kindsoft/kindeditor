@@ -322,6 +322,13 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\n\s*\n/g, '\n');
 	// 删除临时标签
 	html = html.replace(/<span id="__kindeditor_pre_newline__">\n/g, '\n');
+	// clear none border for IE
+	html = html.replace(/<(?:td)[^>]*>/ig, function(full) {
+		if (/<td[^>]*>/ig.test(full)) {
+			full = full.replace(/border:\s*0px black;/ig, '');
+		}
+		return full;
+	});
 	return _trim(html);
 }
 // 清理MS Word专用标签
@@ -334,6 +341,9 @@ function _clearMsWord(html, htmlTags) {
 		.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '')
 		.replace(/<xml>[\s\S]*?<\/xml>/ig, '')
 		.replace(/<(?:table|td)[^>]*>/ig, function(full) {
+			if (/<table[^>]*>/ig.test(full)) {
+				full = full.replace(/border=['"]?\d?['"]?/ig, 'border="1"');
+			}
 			return full.replace(/border-bottom:([#\w\s]+)/ig, 'border:$1');
 		});
 	return _formatHtml(html, htmlTags);
