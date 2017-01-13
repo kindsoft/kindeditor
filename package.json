@@ -2,10 +2,12 @@
 	"name" : "KindEditor",
 	"version" : "4.1.11",
 	"filename" : "kindeditor",
+	"repository" : "kindsoft/kindeditor",
 	"devDependencies" : {
 		"grunt": "~0.4.1",
 		"grunt-contrib-concat": "~0.3.0",
 		"grunt-contrib-uglify": "~0.2.7",
 		"grunt-contrib-compress": "~0.5.3"
-	}
+	},
+	"license" : "LGPL-2.1"
 }
