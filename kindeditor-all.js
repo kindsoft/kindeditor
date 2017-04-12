@@ -1,11 +1,11 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2016 kindsoft.net
+* Copyright (C) 2006-2017 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.11 (2016-05-26)
+* @version 4.1.12 (2017-04-12)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.11 (2016-05-26)',
+var _VERSION = '4.1.12 (2017-04-12)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -615,6 +615,7 @@ K.ctrl = _ctrl;
 K.ready = _ready;
 
 function _getCssList(css) {
+	css = css.replace(/&quot;/g, '"');
 	var list = {},
 		reg = /\s*([\w\-]+)\s*:([^;]*)(;|$)/g,
 		match;
@@ -6338,6 +6339,9 @@ KindEditor.plugin('autoheight', function(K) {
 		body.style.overflowY = 'hidden';
 	}
 	function resetHeight() {
+		if(self.fullscreenMode){
+			return;
+		}
 		var edit = self.edit;
 		var body = edit.doc.body;
 		edit.iframe.height(minHeight);
@@ -6346,7 +6350,9 @@ KindEditor.plugin('autoheight', function(K) {
 	function init() {
 		minHeight = K.removeUnit(self.height);
 		self.edit.afterChange(resetHeight);
-		hideScroll();
+		if(!self.fullscreenMode){
+			hideScroll();
+		}
 		resetHeight();
 	}
 	if (self.isCreated) {
