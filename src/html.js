@@ -1,4 +1,6 @@
 function _getCssList(css) {
+	css = css.replace(/&quot;/g, '"');
+	
 	var list = {},
 		reg = /\s*([\w\-]+)\s*:([^;]*)(;|$)/g,
 		match;
