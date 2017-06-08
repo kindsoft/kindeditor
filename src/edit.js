@@ -119,32 +119,29 @@ _extend(KEdit, KWidget, {
 				(isDocumentDomain ? 'document.domain="' + document.domain + '";' : '') +
 				'document.close();'),
 			iframeSrc = _IE ? ' src="javascript:void(function(){' + encodeURIComponent(srcScript) + '}())"' : '';
-		self.iframe = K('<iframe class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + '></iframe>').css('width', '100%');
-		self.textarea = K('<textarea class="ke-edit-textarea" hidefocus="true"></textarea>').css('width', '100%');
+		self.htmlIframe = K('<iframe class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + '></iframe>').css('width', '100%');
+		self.textIframe = K('<iframe class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + '></iframe>').css('width', '100%');
+		self.textarea = K('<textarea class="ke-edit-textarea" hidefocus="true"></textarea>').css('width', '100%').css('height', '100%');
 		self.tabIndex = isNaN(parseInt(options.tabIndex, 10)) ? self.srcElement.attr('tabindex') : parseInt(options.tabIndex, 10);
-		self.iframe.attr('tabindex', self.tabIndex);
+		self.htmlIframe.attr('tabindex', self.tabIndex);
+		self.textIframe.attr('tabindex', self.tabIndex);
 		self.textarea.attr('tabindex', self.tabIndex);
 
-		if (self.width) {
-			self.setWidth(self.width);
-		}
-		if (self.height) {
-			self.setHeight(self.height);
-		}
 		if (self.designMode) {
-			self.textarea.hide();
+			self.textIframe.hide();
 		} else {
-			self.iframe.hide();
+			self.htmlIframe.hide();
 		}
-		function ready() {
-			var doc = _iframeDoc(self.iframe);
+
+		function initHtmlIframe() {
+			var doc = _iframeDoc(self.htmlIframe);
 			doc.open();
 			if (isDocumentDomain) {
 				doc.domain = document.domain;
 			}
 			doc.write(_getInitHtml(themesPath, bodyClass, cssPath, cssData));
 			doc.close();
-			self.win = self.iframe[0].contentWindow;
+			self.win = self.htmlIframe[0].contentWindow;
 			self.doc = doc;
 			var cmd = _cmd(doc);
 			// add events
@@ -197,20 +194,52 @@ _extend(KEdit, KWidget, {
 				options.afterCreate.call(self);
 			}
 		}
+
+		function initTextIframe() {
+			var doc = _iframeDoc(self.textIframe);
+			doc.open();
+			if (isDocumentDomain) {
+				doc.domain = document.domain;
+			}
+			doc.write(_getInitHtml(themesPath, bodyClass, cssPath, cssData));
+			doc.close();
+
+			K(doc.body).css('padding', 0);
+			K(doc.body).append(self.textarea);
+		}
+
 		if (isDocumentDomain) {
-			self.iframe.bind('load', function(e) {
-				self.iframe.unbind('load');
+			self.htmlIframe.bind('load', function(e) {
+				self.htmlIframe.unbind('load');
 				if (_IE) {
-					ready();
+					initHtmlIframe();
 				} else {
-					setTimeout(ready, 0);
+					setTimeout(initHtmlIframe, 0);
+				}
+			});
+
+			self.textIframe.bind('load', function(e) {
+				self.textIframe.unbind('load');
+				if (_IE) {
+					initTextIframe();
+				} else {
+					setTimeout(initTextIframe, 0);
 				}
 			});
 		}
-		self.div.append(self.iframe);
-		self.div.append(self.textarea);
+		self.div.append(self.htmlIframe);
+		self.div.append(self.textIframe);
 		self.srcElement.hide();
-		!isDocumentDomain && ready();
+		!isDocumentDomain && initHtmlIframe();
+		!isDocumentDomain && initTextIframe();
+
+		if (self.width) {
+			self.setWidth(self.width);
+		}
+
+		if (self.height) {
+			self.setHeight(self.height);
+		}
 	},
 	setWidth : function(val) {
 		var self = this;
@@ -224,12 +253,23 @@ _extend(KEdit, KWidget, {
 		val = _addUnit(val);
 		self.height = val;
 		self.div.css('height', val);
-		self.iframe.css('height', val);
+		self.htmlIframe.css('height', val);
+		self.textIframe.css('height', val);
 		// 校正IE6和IE7的textarea高度
 		if ((_IE && _V < 8) || _QUIRKS) {
 			val = _addUnit(_removeUnit(val) - 2);
 		}
-		self.textarea.css('height', val);
+
+		// set width and height of body and textarea
+		var height = parseInt(val, 10);
+		K(K.iframeDoc(self.htmlIframe).body).css('height', height);
+		K(K.iframeDoc(self.textIframe).body).css('height', height);
+		self.textarea.css('height', height);
+
+		if (K(self.textIframe).width() > 0) {
+			self.textarea.css('width', K(self.textIframe).width());
+		}
+
 		return self;
 	},
 	remove : function() {
@@ -245,7 +285,8 @@ _extend(KEdit, KWidget, {
 		_elementVal(self.srcElement, self.html());
 		self.srcElement.show();
 		// doc.write('');
-		self.iframe.unbind();
+		self.htmlIframe.unbind();
+		self.textIframe.unbind();
 		self.textarea.unbind();
 		KEdit.parent.remove.call(self);
 	},
@@ -298,20 +339,20 @@ _extend(KEdit, KWidget, {
 				val = self.html();
 
 				self.designMode = true;
-				self.textarea.hide();
+				self.textIframe.hide();
 
 				self.html(val);
 
 				// cache
-				var iframe = self.iframe;
+				var htmlIframe = self.htmlIframe;
 				var height = _removeUnit(self.height);
 
-				iframe.height(height - 2);
-				iframe.show();
+				htmlIframe.height(height - 2);
+				htmlIframe.show();
 
 				// safari iframe scrollbar hack
 				setTimeout(function() {
-					iframe.height(height);
+					htmlIframe.height(height);
 				}, 0);
 			}
 		} else {
@@ -319,8 +360,8 @@ _extend(KEdit, KWidget, {
 				val = self.html();
 				self.designMode = false;
 				self.html(val);
-				self.iframe.hide();
-				self.textarea.show();
+				self.htmlIframe.hide();
+				self.textIframe.show();
 			}
 		}
 		return self.focus();

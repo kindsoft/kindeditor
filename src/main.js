@@ -117,7 +117,7 @@ function _bindContextmenuEvent() {
 		});
 		if (items.length > 0) {
 			e.preventDefault();
-			var pos = K(self.edit.iframe).pos(),
+			var pos = K(self.edit.htmlIframe).pos(),
 				menu = _menu({
 					x : pos.x + e.clientX,
 					y : pos.y + e.clientY,
@@ -1001,6 +1001,9 @@ KEditor.prototype = {
 		K(doc.body).css('background-color', '#FFF');
 		iframe[0].contentWindow.focus();
 		return self;
+	},
+	getTextarea : function() {
+		return this.edit.textarea[0];
 	}
 };
 
