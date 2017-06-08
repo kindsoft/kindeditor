@@ -160,9 +160,10 @@ function _mergeWrapper(a, b) {
 //wrap and merge a node
 function _wrapNode(knode, wrapper) {
 	wrapper = wrapper.clone(true);
-	//node为text node时
-	if (knode.type == 3) {
-		_getInnerNode(wrapper).append(knode.clone(false));
+	// wrap node when it is a text node or an anchor element
+	if (knode.type == 3 || knode.name === 'a') {
+		// clone all children with event when the node is an anchor element
+		_getInnerNode(wrapper).append(knode.clone(knode.name === 'a'));
 		knode.replaceWith(wrapper);
 		return wrapper;
 	}
@@ -326,6 +327,11 @@ _extend(KCmd, {
 					var parent;
 					while ((parent = knode.parent()) && parent.isStyle() && parent.children().length == 1) {
 						knode = parent;
+					}
+					// replace whole anchor elements when the node is wrapped by an `a` tag
+					while (parent.name === 'a') {
+						knode = parent;
+						parent = knode.parent();
 					}
 					_wrapNode(knode, wrapper);
 				}
