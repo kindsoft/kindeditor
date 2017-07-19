@@ -173,6 +173,11 @@ function _getStartEnd(rng, isStart) {
 		var node = nodes[i];
 		cmp = testRange.compareEndPoints('StartToStart', pointRange);
 		if (cmp === 0) {
+			// if cmp is zero, and the node is an anchor element, then set start to their first child
+			var nodeName = node.nodeName.toLowerCase();
+			if (nodeName === 'a') {
+				return {node: node.childNodes[0], offset: 0};
+			}
 			return {node: node.parentNode, offset: i};
 		}
 		if (node.nodeType == 1) {

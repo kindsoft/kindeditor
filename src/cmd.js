@@ -34,6 +34,54 @@ function _getRng(doc) {
 	if (_IERANGE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
 		return null;
 	}
+	if (!_IERANGE && rng && (((_IE || _NEWIE) && _V <= 11) || _GECKO)) {
+		// when selecting an anchor element, the method `getRangeAt(0)` won't act like Chrome under IE or Firefox
+		// IE9 ~ IE11:
+		//
+		//     When the cursor start from the beginning of an anchor element, or end at the end of it, startContainer
+		//     and endContainer will choose elements nearby it.
+		//
+		// Firefox:
+		//
+		//     Selection won't act wrong when the cursor was set inside the anchor before, reversely. In contrast, if
+		//     the cursor was not set within the anchor, it will act like IE
+		var startContainer = rng.startContainer;
+		var endContainer = rng.endContainer;
+		var nextTarget = startContainer.nextSibling;
+		var previousTarget = endContainer.previousSibling;
+		var DOCUMENT_POSITION_FOLLOWING = 4;
+		var DOCUMENT_POSITION_CONTAINED_BY = 16;
+		var containChild = function (parent, child) {
+			return (parent.compareDocumentPosition(child) & (DOCUMENT_POSITION_FOLLOWING | DOCUMENT_POSITION_CONTAINED_BY)) > 0;
+		};
+		var checkContaner = function (container, isStart) {
+			if (container.parentNode.nodeName.toLowerCase() === 'a' || (container.querySelector && container.querySelector('a'))) {
+				var target = isStart ? previousTarget : nextTarget;
+				var isContainerAnchor = container.parentNode.nodeName.toLowerCase() === 'a';
+				container = isContainerAnchor ? container : container.querySelector('a').childNodes[0];
+
+				if (target && containChild(target, container)) {
+					isStart ? rng.setEnd(container, container.data.length) : rng.setStart(container, 0);
+
+					if (!isContainerAnchor) {
+						isStart ? rng.setStart(container, 0) : rng.setEnd(container, container.data.length);
+					}
+				}
+			}
+		};
+		if (startContainer.data) {
+			if (rng.startOffset === startContainer.data.length && rng.endOffset === 0 && (nextTarget.nodeName.toLowerCase() === 'a' || nextTarget.querySelector('a'))) {
+				nextTarget = nextTarget.nodeName.toLowerCase() === 'a' ? nextTarget : nextTarget.querySelector('a');
+				var nextTargetText = nextTarget.childNodes[0];
+				rng.setStart(nextTargetText, 0);
+				rng.setEnd(nextTargetText, nextTargetText.data.length);
+			} else if (rng.startOffset === startContainer.data.length) {
+				checkContaner(endContainer, false);
+			} else if (rng.endOffset === 0) {
+				checkContaner(startContainer, true);
+			}
+		}
+	}
 	return rng;
 }
 //将map的复合key转换成单一key
