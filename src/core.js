@@ -19,8 +19,8 @@ var _VERSION = '${VERSION}',
 	_IOS = /ipad|iphone|ipod/.test(_ua),
 	_QUIRKS = document.compatMode != 'CSS1Compat',
 	_IERANGE = !window.getSelection,
-	_matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)/.exec(_ua),
-	_V = _matches ? _matches[1] : '0',
+	_matches = /(?:msie|firefox|webkit|opera)[\/:\s](\d+)|trident\/.*rv:([0-9]+)/.exec(_ua),
+	_V = _matches ? (_matches[1] ? _matches[1] : _matches[2]) : '0',
 	_TIME = new Date().getTime();
 
 function _isArray(val) {
