@@ -164,6 +164,10 @@ function _getStartEnd(rng, isStart) {
 	var parent = pointRange.parentElement(),
 		nodes = parent.childNodes;
 	if (nodes.length === 0) {
+		// under IE8, if a paragraph is empty, it still exist
+		if (parent.nodeName.toLowerCase() === 'p' && (parent.innerHTML === '' || parent.innerHTML === '&nbsp;')) {
+			return {node: parent, offset: 0};
+		}
 		return {node: parent.parentNode, offset: K(parent).index()};
 	}
 	var startNode = doc, startPos = 0, cmp = -1;
@@ -223,11 +227,14 @@ function _getStartEnd(rng, isStart) {
 	testRange.setEndPoint('StartToEnd', pointRange);
 	startPos -= testRange.text.replace(/\r\n|\n|\r/g, '').length;
 	// [textNode1][textNode2]ab|cd
-	if (cmp > 0 && startNode.nodeType == 3) {
-		var prevNode = startNode.previousSibling;
-		while (prevNode && prevNode.nodeType == 3) {
-			startPos -= prevNode.nodeValue.length;
-			prevNode = prevNode.previousSibling;
+	if (startNode.nodeType == 3) {
+		// when the startPos is bigger than current startNode value length, it should calculate the position again
+		if (cmp > 0 || (cmp < 0 && startPos > startNode.nodeValue.length)) {
+			var prevNode = startNode.previousSibling;
+			while (prevNode && prevNode.nodeType == 3) {
+				startPos -= prevNode.nodeValue.length;
+				prevNode = prevNode.previousSibling;
+			}
 		}
 	}
 	return {node: startNode, offset: startPos};

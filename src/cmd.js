@@ -760,15 +760,37 @@ _extend(KCmd, {
 		function pasteHtml(range, val) {
 			val = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + val;
 			var rng = range.get();
+			var isEmptyParagraph = false;
 			if (rng.item) {
 				rng.item(0).outerHTML = val;
 			} else {
-				rng.pasteHTML(val);
+				// cannot paste into a paragraph when the content of this paragraph is empty
+				var startContainer = range.startContainer;
+				var nodeName = startContainer.nodeName.toLowerCase();
+				if ((nodeName === 'p' || nodeName === 'span') && startContainer.innerText === '') {
+					startContainer.innerHTML = val;
+					isEmptyParagraph = true;
+				} else {
+					rng.pasteHTML(val);
+				}
 			}
 			var temp = range.doc.getElementById('__kindeditor_temp_tag__');
 			temp.parentNode.removeChild(temp);
-			var newRange = _toRange(rng);
-			range.setEnd(newRange.endContainer, newRange.endOffset);
+			if (isEmptyParagraph) {
+				var childNode = startContainer.childNodes[0];
+
+				while (childNode.childNodes[0] && childNode.nodeType != 3) {
+					// find the first text node of children
+					childNode = childNode.childNodes[0];
+				}
+
+				if (childNode.nodeType == 3) {
+					range.setEnd(childNode, childNode.nodeValue.length);
+				}
+			} else {
+				var newRange = _toRange(rng);
+				range.setEnd(newRange.endContainer, newRange.endOffset);
+			}
 			range.collapse(false);
 			self.select(false);
 		}

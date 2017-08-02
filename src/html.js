@@ -134,8 +134,22 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	});
 	// <br/></p> to </p>
 	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
-	// <p></p> to <p><br /></p>
-	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
+	// IE8 get selection will work wrong when pointing to `p` elements, while they are followed by `br` elements
+	if (_IERANGE) {
+		// ^<br /> to <p></p>
+		// </p><br /> to </p><p></p>
+		var regex = /((?:<\/p>)|^\s*)<(?:br|br\s[^>]*)\s*\/?>/ig;
+		while (regex.test(html)) {
+			// IE8 need &nbsp; to occupy a position
+			html = html.replace(regex, '$1<p>&nbsp;</p>');
+			// reset regex
+			regex.lastIndex = 0;
+		}
+	} else {
+		// under IE8, <p><br /></p> will create two single lines
+		// <p></p> to <p><br /></p>
+		html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
+	}
 	// empty char
 	html = html.replace(/\u200B/g, '');
 	// &copy;
