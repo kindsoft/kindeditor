@@ -381,6 +381,11 @@ _extend(KCmd, {
 						knode = parent;
 						parent = knode.parent();
 					}
+					// set inherited color for anchor elements when they are set with forecolor
+					if (wrapper.attr('class') === 'ke-content-forecolor' && knode.name == 'a') {
+						// IE8 can not set 'inherit' for the color attribute
+						knode.css('color', wrapper[0].style.color);
+					}
 					_wrapNode(knode, wrapper);
 				}
 			}
@@ -708,7 +713,8 @@ _extend(KCmd, {
 		});
 	},
 	forecolor : function(val) {
-		return this.wrap('<span style="color:' + val + ';"></span>').select();
+		// add className for anchor elements
+		return this.wrap('<span class="ke-content-forecolor" style="color:' + val + ';"></span>').select();
 		// return this.toggle('<span style="color:' + val + ';"></span>', {
 		// 	span : '.color=' + val,
 		// 	font : 'color'
