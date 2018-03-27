@@ -219,7 +219,12 @@
 	height: 16px;
 }
 .ke-icon-emoticons {
-	background-position: 0px -608px;
+	background-position: 0px -609px;
+	width: 16px;
+	height: 16px;
+}
+.ke-icon-symbol {
+	background-position: 0px -1216px;
 	width: 16px;
 	height: 16px;
 }
@@ -1060,6 +1065,7 @@
 	padding: 0;
 	border: 0;
 }
+
 .ke-plugin-emoticons .ke-page {
 	text-align: right;
 	margin: 5px;
@@ -1069,6 +1075,22 @@
 	color: #333;
 	text-decoration: none;
 }
+
+.ke-plugin-symbol{
+	padding:20px;
+}
+.ke-plugin-symbol .ke-cell{
+	display:inline-block;width:30px;height:30px;
+	text-align: center;
+	line-height: 30px;
+	border: 1px solid white;
+	cursor: pointer;
+}
+.ke-plugin-symbol .ke-cell:hover{
+	border: 1px solid #5690D2;
+	background-color: #E9EFF6;
+}
+
 .ke-plugin-plainpaste-textarea,
 .ke-plugin-wordpaste-iframe {
 	display: block;
