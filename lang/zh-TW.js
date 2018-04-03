@@ -50,6 +50,7 @@ KindEditor.lang({
 	unlink : '移除超連結',
 	fullscreen : '最大化',
 	about : '關於',
+	symbol : '特殊字符',
 	print : '列印(Ctrl+P)',
 	filemanager : '瀏覽伺服器',
 	code : '插入程式代碼',
