@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div>
+<textarea id="editor_id" name="content" style="width:700px;height:300px;">
+&lt;strong&gt;HTML内容&lt;/strong&gt;
+</textarea>
+</div>
+
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="~/kindeditor/themes/default/default.css" />
+
+<link rel="stylesheet" href="~/kindeditor/plugins/code/prettify.css" />
+
+<script charset="utf-8" src="~/kindeditor/kindeditor-all-min.js"></script>
+
+<script charset="utf-8" src="~/kindeditor/lang/zh-CN.js"></script>
+
+<script charset="utf-8" src="~/kindeditor/plugins/code/prettify.js"></script>
+
+<script>
+
+    KindEditor.ready(function (K) {
+        K.create('#editor_id', {
+            uploadJson: '/Home/KindEditorUploadFiles',          @***********@
+            fileManagerJson: '/Home/KindEditorManageFiles',     @***********@
+            allowFileManager: true,
+        });
+        prettyPrint();
+    });
+
+</script>

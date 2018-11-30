@@ -1,0 +1,328 @@
+﻿
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+/*
+ * 此篇修改自:   file_manager_json.ashx.txt 和 upload_json.ashx.txt
+ * 笔者在就读大学，如果你愿意支持笔者，还希望能够给笔者捐款(每一笔捐款都是对笔者的巨大帮助，感激不尽)，
+ * 如果你喜欢.NET Core或在.NET Core项目中遇到困难，都可以和笔者交流 https://github.com/linghuchong123
+ */
+public class HomeController{
+
+    private readonly IHostingEnvironment _hostingEnv;
+    private readonly IStringLocalizer<Program> _localizer;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly IEmailSender _emailSender;
+    private readonly ApplicationDbContext _context;
+
+    public HomeController(
+       IEmailSender emailSender,
+       UserManager<IdentityUser> userManager,
+       ApplicationDbContext context,
+       IHostingEnvironment hostingEnv,
+       IStringLocalizer<Program> localizer)
+    {
+        _hostingEnv = hostingEnv;
+        _localizer = localizer;
+        _context = context;
+        _userManager = userManager;
+        _emailSender = emailSender;
+    }
+    /// <summary>
+    /// the Action of KindEditor file upload, the directory is like:
+    /// wwwroot
+    /// |-  kindeditor
+    ///     |-  upload
+    ///         |-  UserId_0
+    ///         |    |-  image
+    ///         |    |-  flash
+    ///         |    |-  media
+    ///         |    |-  file
+    ///         |-  UserId_1
+    ///         ...
+    /// </summary>
+    /// <returns></returns>
+    [Authorize]
+    public async Task<IActionResult> KindEditorUploadFiles()
+    {
+        var dirName = HttpContext.Request.Query["dir"].ToString();
+        dirName = string.IsNullOrEmpty(dirName) ? "image" : dirName;
+        var file = HttpContext.Request.Form.Files["imgFile"];
+        var maxSize = 4 * 1024 * 1024;  // the maxsize of file from form, in byte
+        var _UserId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+        var fileExt = Path.GetExtension(file.FileName).ToLower();
+        var IsExtAllowed = false;
+        var ext = Path.GetExtension(file.FileName);
+
+
+        var extDictionary = new Dictionary<string, string[]>
+            {
+                { "image", new string[] { "gif", "jpg", "jpeg", "png", "bmp" } },
+                #region
+                /*{ "flash",new string[]{ "swf", "flv" } },   
+                 * we will stop updating and distributing the Flash Player at the end of 2020 and encourage content creators to migrate any existing
+                 * Flash content to these new open formats(View >> https://theblog.adobe.com/adobe-flash-update/)
+                 */
+                #endregion
+                { "media",new string[]{ "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg", "asf", "rm", "rmvb"} },
+                { "file",new string[]{ "doc", "docx", "xls", "xlsx", "ppt", "txt", "zip", "rar", "gz", "bz2 "} }
+            };
+
+        if (file == null)
+            return Json(new { error = 1, message = "请选择文件" });
+
+        else if (file.OpenReadStream() == null || file.OpenReadStream().Length > maxSize)
+            return Json(new { error = 1, message = "上传文件大小超过限制" });
+
+        if (!extDictionary.ContainsKey(dirName))
+            return Json(new { error = 1, message = "目录名不正确" });
+
+        foreach (var i in extDictionary.Values)
+            if (i.Contains(ext.Substring(1))) IsExtAllowed = true;
+
+        if (string.IsNullOrEmpty(fileExt) || !IsExtAllowed)
+            return Json(new { error = 1, message = "扩展名错误" });
+
+
+        var KindEditorUserDir = _hostingEnv.WebRootPath + $"\\kindeditor\\upload\\{_UserId}\\";
+
+        foreach (var i in extDictionary.Keys)
+        {
+            if (!Directory.Exists(KindEditorUserDir + i)) Directory.CreateDirectory(KindEditorUserDir + i);
+        }
+
+        var KindEditorFileName = KindEditorUserDir + $"\\{dirName}\\{Guid.NewGuid().ToString()}{ext}";
+        using (var fileStream = new FileStream(KindEditorFileName, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+        //  imgFile.SaveAs(filePath);
+
+        var fileUrl = $"{HttpContext.Request.PathBase}/kindeditor/upload/{_UserId}/{dirName}/{Path.GetFileName(KindEditorFileName)}";
+        return Json(new { error = 0, url = fileUrl });
+    }
+
+    /// <summary>
+    /// the Action of KindEditor file manage, the directory is like:
+    /// wwwroot
+    /// |-  kindeditor
+    ///     |-  upload
+    ///         |-  UserId_0
+    ///         |    |-  image
+    ///         |    |-  flash
+    ///         |    |-  media
+    ///         |    |-  file
+    ///         |-  UserId_1
+    ///         ...
+    /// </summary>
+    /// <returns></returns>
+    [Authorize]
+    public async Task<IActionResult> KindEditorManageFiles()
+    {
+        var _UserId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+
+        var order = HttpContext.Request.Query["order"].ToString();
+        order = string.IsNullOrEmpty(order) ? "" : order.ToLower();
+
+        var path = HttpContext.Request.Query["path"].ToString();
+        path = string.IsNullOrEmpty(path) ? "" : path;
+
+        var dirName = HttpContext.Request.Query["dir"].ToString();
+
+
+        var KindEditorUserRoot = $"{HttpContext.Request.PathBase}/kindeditor/upload/{_UserId}/";
+
+        var aspxUrl = HttpContext.Request.Path.ToString().Substring(0, HttpContext.Request.Path.ToString().LastIndexOf("/") + 1);
+
+        //根目录路径，相对路径
+        //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
+        var rootUrl = KindEditorUserRoot;
+
+
+        var currentPath = "";
+        var currentUrl = "";
+        var currentDirPath = "";
+        var moveupDirPath = "";
+
+        var dirPath = _hostingEnv.WebRootPath + $"\\kindeditor\\upload\\{_UserId}\\";    // context.Server.MapPath(rootPath);
+
+
+        var extDictionary = new Dictionary<string, string[]>
+            {
+                { "image", new string[] { "gif", "jpg", "jpeg", "png", "bmp","ico" } },
+                #region
+                /*{ "flash",new string[]{ "swf", "flv" } },   
+                 * we will stop updating and distributing the Flash Player at the end of 2020 and encourage content creators to migrate any existing
+                 * Flash content to these new open formats(View >> https://theblog.adobe.com/adobe-flash-update/)
+                 */
+                #endregion
+                { "media",new string[]{ "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg", "asf", "rm", "rmvb"} },
+                { "file",new string[]{ "doc", "docx", "xls", "xlsx", "ppt", "txt", "zip", "rar", "gz", "bz2 "} }
+            };
+        if (!string.IsNullOrEmpty(dirName))
+        {
+            if (!extDictionary.Keys.Contains(dirName))
+            {
+                return Content("Invalid Directory name");
+                #region
+                /*
+                context.Response.Write("Invalid Directory name.");
+                context.Response.End();
+                */
+                #endregion
+            }
+            dirPath += dirName + "\\";
+            rootUrl += dirName + "/";
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+        }
+
+        //根据path参数，设置各路径和URL
+        if (path == "")
+        {
+            currentPath = dirPath;
+            currentUrl = rootUrl;
+            currentDirPath = "";
+            moveupDirPath = "";
+        }
+        else
+        {
+            currentPath = dirPath + path;
+            currentUrl = rootUrl + path;
+            currentDirPath = path;
+            moveupDirPath = "";  // Regex.Replace(currentDirPath, @"(.*?)[^\/]+\/$", "$1");
+        }
+
+        //排序形式，name or size or type
+
+        //不允许使用..移动到上一级目录
+        if (Regex.IsMatch(path, @"\.\."))
+            return Content("Access is not allowed");
+
+        //最后一个字符不是/
+        if (path != "" && !path.EndsWith("/"))
+            return Content("Parameter is not valid");
+
+        //目录不存在或不是目录
+        if (!Directory.Exists(currentPath))
+            return Content("Directory does not exist");
+
+
+        //遍历目录取得文件信息
+        string[] dirList = Directory.GetDirectories(currentPath);
+        string[] fileList = Directory.GetFiles(currentPath);
+
+        switch (order)
+        {
+            case "size":
+                Array.Sort(dirList, new KindEditorSorter("size"));
+                Array.Sort(fileList, new KindEditorSorter("size"));
+                break;
+            case "type":
+                Array.Sort(dirList, new KindEditorSorter("type"));
+                Array.Sort(fileList, new KindEditorSorter("type"));
+                break;
+            case "name":
+            default:
+                Array.Sort(dirList, new KindEditorSorter("name"));
+                Array.Sort(fileList, new KindEditorSorter("name"));
+                break;
+        }
+        List<DirFile> dirFileList = new List<DirFile>();
+        for (int i = 0; i < dirList.Length; i++)
+        {
+
+            DirectoryInfo dir = new DirectoryInfo(dirList[i]);
+            DirFile hash = new DirFile
+            {
+                is_dir = true,
+                has_file = dir.GetFiles().Length > 0,   //  (dir.GetFileSystemInfos().Length > 0),
+                filesize = 0,
+                is_photo = false,
+                filetype = "",
+                filename = dir.Name,
+                datetime = dir.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+            dirFileList.Add(hash);
+        }
+        for (int i = 0; i < fileList.Length; i++)
+        {
+            FileInfo file = new FileInfo(fileList[i]);
+            DirFile hash = new DirFile
+            {
+                is_dir = false,
+                has_file = false,
+                filesize = file.Length,
+                is_photo = extDictionary.GetValueOrDefault("image").Contains(file.Extension.Substring(1)),
+                filetype = file.Extension.Substring(1),
+                filename = file.Name,
+                datetime = file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+            dirFileList.Add(hash);
+        }
+        var file_list = dirFileList;
+        return Json(new
+        {
+            file_list,
+            moveup_dir_path = moveupDirPath,
+            current_dir_path = currentDirPath,
+            current_url = currentUrl,
+            total_count = dirList.Length + fileList.Length
+        });
+    }
+    #region
+    public class KindEditorSorter : IComparer
+    {
+        string ComparerTo = "";
+        public KindEditorSorter(string _ComparerTo) { ComparerTo = _ComparerTo; }
+        public int Compare(object x, object y)
+        {
+            if (x == null && y == null) return 0;
+            if (x == null) return -1;
+            if (y == null) return 1;
+            var xInfo = new FileInfo(x.ToString());
+            var yInfo = new FileInfo(y.ToString());
+            switch (ComparerTo)
+            {
+                case "name":
+
+                    return xInfo.FullName.CompareTo(yInfo.FullName);
+                case "size":
+                    return xInfo.Length.CompareTo(yInfo.Length);
+                default:
+                    return xInfo.Extension.CompareTo(yInfo.Extension);
+            }
+            //  throw new NotImplementedException();
+        }
+    }
+    public class DirFile
+    {
+        public bool is_dir { get; set; }
+        public bool has_file { get; set; }
+        public long filesize { get; set; } = 0;
+
+        public bool is_photo { get; set; }
+        public string filetype { get; set; } = "";
+
+        public string filename { get; set; }
+        public string datetime { get; set; }
+    }
+    #endregion
+}
