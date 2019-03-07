@@ -1,11 +1,11 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2017 kindsoft.net
+* Copyright (C) 2006-2019 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.12 (2017-04-12)
+* @version 4.1.12 (2019-03-07)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -19,7 +19,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.12 (2017-04-12)',
+var _VERSION = '4.1.12 (2019-03-07)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -4727,20 +4727,6 @@ function _bindNewlineEvent() {
 		}
 		if (!pSkipTagMap[tagName]) {
 			_nativeCommand(doc, 'formatblock', '<p>');
-		}
-		var div = self.cmd.commonAncestor('div');
-		if (div) {
-			var p = K('<p></p>'),
-				child = div[0].firstChild;
-			while (child) {
-				var next = child.nextSibling;
-				p.append(child);
-				child = next;
-			}
-			div.before(p);
-			div.remove();
-			self.cmd.range.selectNodeContents(p[0]);
-			self.cmd.select();
 		}
 	});
 }

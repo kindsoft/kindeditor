@@ -211,21 +211,6 @@ function _bindNewlineEvent() {
 		if (!pSkipTagMap[tagName]) {
 			_nativeCommand(doc, 'formatblock', '<p>');
 		}
-		// [WEBKIT] 将DIV改成P
-		var div = self.cmd.commonAncestor('div');
-		if (div) {
-			var p = K('<p></p>'),
-				child = div[0].firstChild;
-			while (child) {
-				var next = child.nextSibling;
-				p.append(child);
-				child = next;
-			}
-			div.before(p);
-			div.remove();
-			self.cmd.range.selectNodeContents(p[0]);
-			self.cmd.select();
-		}
 	});
 }
 
