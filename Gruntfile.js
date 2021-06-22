@@ -1,7 +1,7 @@
 
 module.exports = function(grunt) {
 
-var BANNER = '/* <%= pkg.name %> <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>), Copyright (C) kindsoft.net, Licence: http://kindeditor.net/license.php */\r\n';
+var BANNER = '/* <%= pkg.name %> <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>), Copyright (C) kindeditor.net, Licence: http://kindeditor.net/license.php */\r\n';
 
 var SRC_FILES = [
 	'src/header.js',
