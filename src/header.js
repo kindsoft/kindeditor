@@ -1,10 +1,9 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-${THISYEAR} kindsoft.net
+* Copyright (C) 2006-${THISYEAR} kindeditor.net
 *
 * @author Roddy <luolonghao@gmail.com>
-* @website http://www.kindsoft.net/
-* @licence http://www.kindsoft.net/license.php
+* @website http://kindeditor.net/
 * @version ${VERSION}
 *******************************************************************************/
 
