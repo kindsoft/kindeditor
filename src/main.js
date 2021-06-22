@@ -117,7 +117,7 @@ function _bindContextmenuEvent() {
 		});
 		if (items.length > 0) {
 			e.preventDefault();
-			var pos = K(self.edit.iframe).pos(),
+			var pos = K(self.edit.htmlIframe).pos(),
 				menu = _menu({
 					x : pos.x + e.clientX,
 					y : pos.y + e.clientY,
@@ -986,6 +986,9 @@ KEditor.prototype = {
 		K(doc.body).css('background-color', '#FFF');
 		iframe[0].contentWindow.focus();
 		return self;
+	},
+	getTextarea : function() {
+		return this.edit.textarea[0];
 	}
 };
 
@@ -1404,6 +1407,10 @@ _plugin('core', function(K) {
 		var doc = self.edit.doc, cmd, bookmark, div,
 			cls = '__kindeditor_paste__', pasting = false;
 		function movePastedData() {
+			if (_IERANGE && /^<p>(.*)?<\/p>$/gi.test(div[0].innerHTML)) {
+				// IE8: if copy a paragraph, the html content should be programatically converted into a span element
+				div[0].innerHTML = div[0].innerHTML.replace(/^<p>(.*)?<\/p>$/gi, '<span style="white-space:normal">$1</span>');
+			}
 			cmd.range.moveToBookmark(bookmark);
 			cmd.select();
 			if (_WEBKIT) {
@@ -1482,15 +1489,18 @@ _plugin('core', function(K) {
 			});
 			K(doc.body).append(div);
 			if (_IE) {
-				var rng = cmd.range.get(true);
-				rng.moveToElementText(div[0]);
-				rng.select();
-				rng.execCommand('paste');
-				e.preventDefault();
+				try {
+					var rng = cmd.range.get(true);
+					rng.moveToElementText(div[0]);
+					rng.select();
+					rng.execCommand('paste');
+					e.preventDefault();
+				} catch (e) {
+					return false;
+				}
 			} else {
 				cmd.range.selectNodeContents(div[0]);
 				cmd.select();
-
 				div[0].tabIndex = -1;
 				div[0].focus();
 			}

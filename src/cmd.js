@@ -34,6 +34,54 @@ function _getRng(doc) {
 	if (_IERANGE && (!rng || (!rng.item && rng.parentElement().ownerDocument !== doc))) {
 		return null;
 	}
+	if (!_IERANGE && rng && (((_IE || _NEWIE) && _V <= 11) || _GECKO)) {
+		// when selecting an anchor element, the method `getRangeAt(0)` won't act like Chrome under IE or Firefox
+		// IE9 ~ IE11:
+		//
+		//     When the cursor start from the beginning of an anchor element, or end at the end of it, startContainer
+		//     and endContainer will choose elements nearby it.
+		//
+		// Firefox:
+		//
+		//     Selection won't act wrong when the cursor was set inside the anchor before, reversely. In contrast, if
+		//     the cursor was not set within the anchor, it will act like IE
+		var startContainer = rng.startContainer;
+		var endContainer = rng.endContainer;
+		var nextTarget = startContainer.nextSibling;
+		var previousTarget = endContainer.previousSibling;
+		var DOCUMENT_POSITION_FOLLOWING = 4;
+		var DOCUMENT_POSITION_CONTAINED_BY = 16;
+		var containChild = function (parent, child) {
+			return (parent.compareDocumentPosition(child) & (DOCUMENT_POSITION_FOLLOWING | DOCUMENT_POSITION_CONTAINED_BY)) > 0;
+		};
+		var checkContaner = function (container, isStart) {
+			if (container.parentNode.nodeName.toLowerCase() === 'a' || (container.querySelector && container.querySelector('a'))) {
+				var target = isStart ? previousTarget : nextTarget;
+				var isContainerAnchor = container.parentNode.nodeName.toLowerCase() === 'a';
+				container = isContainerAnchor ? container : container.querySelector('a').childNodes[0];
+
+				if (target && containChild(target, container)) {
+					isStart ? rng.setEnd(container, container.data.length) : rng.setStart(container, 0);
+
+					if (!isContainerAnchor) {
+						isStart ? rng.setStart(container, 0) : rng.setEnd(container, container.data.length);
+					}
+				}
+			}
+		};
+		if (startContainer.data) {
+			if (rng.startOffset === startContainer.data.length && rng.endOffset === 0 && (nextTarget.nodeName.toLowerCase() === 'a' || nextTarget.querySelector('a'))) {
+				nextTarget = nextTarget.nodeName.toLowerCase() === 'a' ? nextTarget : nextTarget.querySelector('a');
+				var nextTargetText = nextTarget.childNodes[0];
+				rng.setStart(nextTargetText, 0);
+				rng.setEnd(nextTargetText, nextTargetText.data.length);
+			} else if (rng.startOffset === startContainer.data.length) {
+				checkContaner(endContainer, false);
+			} else if (rng.endOffset === 0) {
+				checkContaner(startContainer, true);
+			}
+		}
+	}
 	return rng;
 }
 //将map的复合key转换成单一key
@@ -160,9 +208,10 @@ function _mergeWrapper(a, b) {
 //wrap and merge a node
 function _wrapNode(knode, wrapper) {
 	wrapper = wrapper.clone(true);
-	//node为text node时
-	if (knode.type == 3) {
-		_getInnerNode(wrapper).append(knode.clone(false));
+	// wrap node when it is a text node or an anchor element
+	if (knode.type == 3 || knode.name === 'a') {
+		// clone all children with event when the node is an anchor element
+		_getInnerNode(wrapper).append(knode.clone(knode.name === 'a'));
 		knode.replaceWith(wrapper);
 		return wrapper;
 	}
@@ -277,10 +326,10 @@ _extend(KCmd, {
 			sel.removeAllRanges();
 			sel.addRange(rng);
 			// Bugfix: https://github.com/kindsoft/kindeditor/issues/54
-			if (doc !== document) {
+			/*if (doc !== document) {
 				var pos = K(rng.endContainer).pos();
 				win.scrollTo(pos.x, pos.y);
-			}
+			}*/
 		}
 		win.focus();
 		return self;
@@ -326,6 +375,16 @@ _extend(KCmd, {
 					var parent;
 					while ((parent = knode.parent()) && parent.isStyle() && parent.children().length == 1) {
 						knode = parent;
+					}
+					// replace whole anchor elements when the node is wrapped by an `a` tag
+					while (parent.name === 'a') {
+						knode = parent;
+						parent = knode.parent();
+					}
+					// set inherited color for anchor elements when they are set with forecolor
+					if (wrapper.attr('class') === 'ke-content-forecolor' && knode.name == 'a') {
+						// IE8 can not set 'inherit' for the color attribute
+						knode.css('color', wrapper[0].style.color);
 					}
 					_wrapNode(knode, wrapper);
 				}
@@ -654,7 +713,8 @@ _extend(KCmd, {
 		});
 	},
 	forecolor : function(val) {
-		return this.wrap('<span style="color:' + val + ';"></span>').select();
+		// add className for anchor elements
+		return this.wrap('<span class="ke-content-forecolor" style="color:' + val + ';"></span>').select();
 		// return this.toggle('<span style="color:' + val + ';"></span>', {
 		// 	span : '.color=' + val,
 		// 	font : 'color'
@@ -706,15 +766,37 @@ _extend(KCmd, {
 		function pasteHtml(range, val) {
 			val = '<img id="__kindeditor_temp_tag__" width="0" height="0" style="display:none;" />' + val;
 			var rng = range.get();
+			var isEmptyParagraph = false;
 			if (rng.item) {
 				rng.item(0).outerHTML = val;
 			} else {
-				rng.pasteHTML(val);
+				// cannot paste into a paragraph when the content of this paragraph is empty
+				var startContainer = range.startContainer;
+				var nodeName = startContainer.nodeName.toLowerCase();
+				if ((nodeName === 'p' || nodeName === 'span') && startContainer.innerText === '') {
+					startContainer.innerHTML = val;
+					isEmptyParagraph = true;
+				} else {
+					rng.pasteHTML(val);
+				}
 			}
 			var temp = range.doc.getElementById('__kindeditor_temp_tag__');
 			temp.parentNode.removeChild(temp);
-			var newRange = _toRange(rng);
-			range.setEnd(newRange.endContainer, newRange.endOffset);
+			if (isEmptyParagraph) {
+				var childNode = startContainer.childNodes[0];
+
+				while (childNode.childNodes[0] && childNode.nodeType != 3) {
+					// find the first text node of children
+					childNode = childNode.childNodes[0];
+				}
+
+				if (childNode.nodeType == 3) {
+					range.setEnd(childNode, childNode.nodeValue.length);
+				}
+			} else {
+				var newRange = _toRange(rng);
+				range.setEnd(newRange.endContainer, newRange.endOffset);
+			}
 			range.collapse(false);
 			self.select(false);
 		}

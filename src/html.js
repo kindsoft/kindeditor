@@ -134,8 +134,22 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	});
 	// <br/></p> to </p>
 	html = html.replace(/<(?:br|br\s[^>]*)\s*\/?>\s*<\/p>/ig, '</p>');
-	// <p></p> to <p><br /></p>
-	html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
+	// IE8 get selection will work wrong when pointing to `p` elements, while they are followed by `br` elements
+	if (_IERANGE) {
+		// ^<br /> to <p></p>
+		// </p><br /> to </p><p></p>
+		var regex = /((?:<\/p>)|^\s*)<(?:br|br\s[^>]*)\s*\/?>/ig;
+		while (regex.test(html)) {
+			// IE8 need &nbsp; to occupy a position
+			html = html.replace(regex, '$1<p>&nbsp;</p>');
+			// reset regex
+			regex.lastIndex = 0;
+		}
+	} else {
+		// under IE8, <p><br /></p> will create two single lines
+		// <p></p> to <p><br /></p>
+		html = html.replace(/(<(?:p|p\s[^>]*)>)\s*(<\/p>)/ig, '$1<br />$2');
+	}
 	// empty char
 	html = html.replace(/\u200B/g, '');
 	// &copy;
@@ -170,7 +184,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 			html = html.replace(/(<(?:style|style\s[^>]*)>)([\s\S]*?)(<\/style>)/ig, '');
 		}
 	}
-	var re = /(\s*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:"]+="[^"]*")|(?:\s+[\w\-:"]+='[^']*'))*)(\/)?>(\s*)/g;
+	var re = /([ \f\n\r\t\v]*)<(\/)?([\w\-:]+)((?:[ \f\n\r\t\v]+|(?:[ \f\n\r\t\v]+[\w\-:]+)|(?:[ \f\n\r\t\v]+[\w\-:]+=[^ \f\n\r\t\v"'<>]+)|(?:[ \f\n\r\t\v]+[\w\-:"]+="[^"]*")|(?:[ \f\n\r\t\v]+[\w\-:"]+='[^']*'))*)(\/)?>([ \f\n\r\t\v]*)/g;
 	var tagStack = [];
 	html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
 		var full = $0,
@@ -322,6 +336,13 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\n\s*\n/g, '\n');
 	// 删除临时标签
 	html = html.replace(/<span id="__kindeditor_pre_newline__">\n/g, '\n');
+	// clear none border for IE
+	html = html.replace(/<(?:td)[^>]*>/ig, function(full) {
+		if (/<td[^>]*>/ig.test(full)) {
+			full = full.replace(/border:\s*0px black;/ig, '');
+		}
+		return full;
+	});
 	return _trim(html);
 }
 // 清理MS Word专用标签
@@ -334,6 +355,9 @@ function _clearMsWord(html, htmlTags) {
 		.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '')
 		.replace(/<xml>[\s\S]*?<\/xml>/ig, '')
 		.replace(/<(?:table|td)[^>]*>/ig, function(full) {
+			if (/<table[^>]*>/ig.test(full)) {
+				full = full.replace(/border=['"]?\d?['"]?/ig, 'border="1"');
+			}
 			return full.replace(/border-bottom:([#\w\s]+)/ig, 'border:$1');
 		});
 	return _formatHtml(html, htmlTags);

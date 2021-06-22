@@ -19,7 +19,7 @@ KindEditor.plugin('autoheight', function(K) {
 	function hideScroll() {
 		var edit = self.edit;
 		var body = edit.doc.body;
-		edit.iframe[0].scroll = 'no';
+		edit.htmlIframe[0].scroll = 'no';
 		body.style.overflowY = 'hidden';
 	}
 
@@ -29,7 +29,7 @@ KindEditor.plugin('autoheight', function(K) {
 		}
 		var edit = self.edit;
 		var body = edit.doc.body;
-		edit.iframe.height(minHeight);
+		edit.htmlIframe.height(minHeight);
 		self.resize(null, Math.max((K.IE ? body.scrollHeight : body.offsetHeight) + 76, minHeight));
 	}
 
