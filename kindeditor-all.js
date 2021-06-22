@@ -1,6 +1,6 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2019 kindsoft.net
+* Copyright (C) 2006-2019 kindeditor.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://kindeditor.net/
