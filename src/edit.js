@@ -1,8 +1,8 @@
-
-function _iframeDoc(iframe) {
-	iframe = _get(iframe);
-	return iframe.contentDocument || iframe.contentWindow.document;
-}
+import K from './node.js';
+import {_addUnit, _each, _extend, _GECKO, _IE, _isArray, _QUIRKS, _removeUnit, _undef, _V, _WEBKIT} from './core.js';
+import {_iframeDoc, KWidget} from './widget.js';
+import {_cmd} from './cmd.js';
+import {_CHANGE_KEY_MAP} from './event.js';
 
 var html, _direction = '';
 if ((html = document.getElementsByTagName('html'))) {
@@ -80,7 +80,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	return arr.join('\n');
 }
 
-function _elementVal(knode, val) {
+export function _elementVal(knode, val) {
 	if (knode.hasVal()) {
 		if (val === undefined) {
 			var html = knode.val();
@@ -148,7 +148,7 @@ _extend(KEdit, KWidget, {
 			self.doc = doc;
 			var cmd = _cmd(doc);
 			// add events
-			self.afterChange(function(e) {
+			self.afterChange(function() {
 				cmd.selection();
 			});
 			// [WEBKIT] select an image after click the image
@@ -198,7 +198,7 @@ _extend(KEdit, KWidget, {
 			}
 		}
 		if (isDocumentDomain) {
-			self.iframe.bind('load', function(e) {
+			self.iframe.bind('load', function() {
 				self.iframe.unbind('load');
 				if (_IE) {
 					ready();
@@ -362,7 +362,7 @@ _extend(KEdit, KWidget, {
 	}
 });
 
-function _edit(options) {
+export function _edit(options) {
 	return new KEdit(options);
 }
 

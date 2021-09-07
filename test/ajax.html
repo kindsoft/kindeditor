@@ -7,21 +7,18 @@
 		<script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script>
 		<script src="../lib/qunit/qunit.js"></script>
 		<link rel="stylesheet" href="../themes/default/default.css" />
-		<script src="../src/core.js"></script>
-		<script src="../src/ajax.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
 	</head>
 	<body>
 		<h1>KindEditor Unittest</h1>
 		<input type="button" id="load" value="Load widget.js" />
-		<script>
+		<script type="module">
+			import '../src/ajax.js';
+			import K from '../src/node.js';
+
+			console.log(K.isFunction(K.ajax)); // -> false
 			K('#load').click(function() {
-				K.loadScript('../src/widget.js', function() {
-					console.log(K.isFunction(K.widget));
+				K.loadScript('../plugins/ajax.js', function() {
+					console.log(K.isFunction(K.ajax)); // -> true
 				});
 			});
 		</script>

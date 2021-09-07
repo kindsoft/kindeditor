@@ -1,3 +1,6 @@
+import K from './node.js';
+import {_each, _extend} from './core.js';
+import {KWidget} from './widget.js';
 
 // create KColorPicker class
 function KColorPicker(options) {
@@ -43,10 +46,10 @@ _extend(KColorPicker, KWidget, {
 			cell.addClass('ke-colorpicker-cell-selected');
 		}
 		cell.attr('title', color || self.options.noColor);
-		cell.mouseover(function(e) {
+		cell.mouseover(function() {
 			K(this).addClass('ke-colorpicker-cell-on');
 		});
-		cell.mouseout(function(e) {
+		cell.mouseout(function() {
 			K(this).removeClass('ke-colorpicker-cell-on');
 		});
 		cell.click(function(e) {
@@ -71,7 +74,7 @@ _extend(KColorPicker, KWidget, {
 	}
 });
 
-function _colorpicker(options) {
+export function _colorpicker(options) {
 	return new KColorPicker(options);
 }
 

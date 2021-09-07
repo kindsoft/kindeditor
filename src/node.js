@@ -1,16 +1,45 @@
+import {
+	_addUnit,
+	_BLOCK_TAG_MAP,
+	_CONTROL_TAG_MAP,
+	_each,
+	_extend,
+	_IE,
+	_INLINE_TAG_MAP,
+	_inString,
+	_isArray,
+	_K,
+	_NEWIE,
+	_OPERA,
+	_QUIRKS,
+	_round,
+	_SINGLE_TAG_MAP,
+	_STYLE_TAG_MAP,
+	_toArray,
+	_toCamel,
+	_trim,
+	_V,
+	_VALUE_TAG_MAP
+} from './core.js';
+import './config.js';
+import {_bind, _fire, _unbind} from './event.js';
+import {_formatHtml, _getAttrList, _getCssList} from './html.js';
+import {_contains, _getAttr, _queryAll} from './selector.js';
 
-function _get(val) {
+// 以上所有往 _K 上写入了额外属性的模块, 必须在 node 之前载入
+
+export function _get(val) {
 	return K(val)[0];
 }
 
-function _getDoc(node) {
+export function _getDoc(node) {
 	if (!node) {
 		return document;
 	}
 	return node.ownerDocument || node.document || node;
 }
 
-function _getWin(node) {
+export function _getWin(node) {
 	if (!node) {
 		return window;
 	}
@@ -63,7 +92,7 @@ function _getNodeName(node) {
 }
 
 function _computedCss(el, key) {
-	var self = this, win = _getWin(el), camelKey = _toCamel(key), val = '';
+	var win = _getWin(el), camelKey = _toCamel(key), val = '';
 	if (win.getComputedStyle) {
 		var style = win.getComputedStyle(el, null);
 		val = style[camelKey] || style.getPropertyValue(key) || el.style[camelKey];
@@ -77,22 +106,12 @@ function _hasVal(node) {
 	return !!_VALUE_TAG_MAP[_getNodeName(node)];
 }
 
-function _docElement(doc) {
+export function _docElement(doc) {
 	doc = doc || document;
 	return _QUIRKS ? doc.body : doc.documentElement;
 }
 
-function _docHeight(doc) {
-	var el = _docElement(doc);
-	return Math.max(el.scrollHeight, el.clientHeight);
-}
-
-function _docWidth(doc) {
-	var el = _docElement(doc);
-	return Math.max(el.scrollWidth, el.clientWidth);
-}
-
-function _getScrollPos(doc) {
+export function _getScrollPos(doc) {
 	doc = doc || document;
 	var x, y;
 	if (_IE || _NEWIE || _OPERA) {
@@ -564,10 +583,8 @@ _each(('blur,focus,focusin,focusout,load,resize,scroll,unload,click,dblclick,' +
 	};
 });
 
-var _K = K;
-
-K = function(expr, root) {
-	if (expr === undefined || expr === null) {
+export default function K(expr, root) {
+	if (expr == null) {
 		return;
 	}
 	function newNode(node) {
@@ -617,7 +634,7 @@ K = function(expr, root) {
 	}
 	// Native Node
 	return newNode(_toArray(arguments));
-};
+}
 
 _each(_K, function(key, val) {
 	K[key] = val;

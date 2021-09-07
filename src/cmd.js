@@ -1,6 +1,23 @@
+import K, {_getDoc, _getWin} from './node.js';
+import {
+	_each,
+	_escape,
+	_extend,
+	_IERANGE,
+	_inArray,
+	_NOSPLIT_TAG_MAP,
+	_PRE_TAG_MAP,
+	_STYLE_TAG_MAP,
+	_toCamel,
+	_toHex,
+	_trim,
+	_undef,
+	_WEBKIT,
+} from './core.js';
+import {_range, _toRange} from './range.js';
 
 // original execCommand
-function _nativeCommand(doc, key, val) {
+export function _nativeCommand(doc, key, val) {
 	try {
 		doc.execCommand(key, false, val);
 	} catch(e) {}
@@ -238,7 +255,6 @@ _extend(KCmd, {
 		hasDummy = _undef(hasDummy, true);
 		var self = this, sel = self.sel, range = self.range.cloneRange().shrink(),
 			sc = range.startContainer, so = range.startOffset,
-			ec = range.endContainer, eo = range.endOffset,
 			doc = _getDoc(sc), win = self.win, rng, hasU200b = false;
 		// tag内部无内容时选中tag内部，<tagName>[]</tagName>
 		if (hasDummy && sc.nodeType == 1 && range.collapsed) {
@@ -563,7 +579,7 @@ _extend(KCmd, {
 	},
 	// Reference: document.queryCommandValue
 	val : function(key) {
-		var self = this, doc = self.doc, range = self.range;
+		var self = this, doc = self.doc;
 		function lc(val) {
 			return val.toLowerCase();
 		}
@@ -688,7 +704,7 @@ _extend(KCmd, {
 			'*' : '.font-weight,.font-style,.text-decoration,.color,.background-color,.font-size,.font-family,.text-indent'
 		},
 		tags = _STYLE_TAG_MAP;
-		_each(tags, function(key, val) {
+		_each(tags, function(key) {
 			map[key] = '*';
 		});
 		this.remove(map);
@@ -870,7 +886,7 @@ _each('cut,copy,paste'.split(','), function(i, name) {
 	};
 });
 
-function _cmd(mixed) {
+export function _cmd(mixed) {
 	// mixed is a node
 	if (mixed.nodeName) {
 		var doc = _getDoc(mixed);

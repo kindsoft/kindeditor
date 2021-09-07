@@ -1,3 +1,6 @@
+import {_K as K} from '../src/core.js';
+import '../src/selector.js';
+
 module('selector');
 
 test('query', function() {

@@ -1,13 +1,18 @@
 {
-	"name" : "KindEditor",
+	"name" : "kindeditor",
 	"version" : "4.1.12",
 	"filename" : "kindeditor",
 	"repository" : "kindsoft/kindeditor",
+	"scripts": {
+		"prod": "npm exec eslint . && node build.js",
+		"prepublishOnly": "npm run prod"
+	},
 	"devDependencies" : {
-		"grunt": "~0.4.1",
-		"grunt-contrib-concat": "~0.3.0",
-		"grunt-contrib-uglify": "~0.2.7",
-		"grunt-contrib-compress": "~0.5.3"
+		"eslint": "7.32.0",
+		"webpack": "5.52.0",
+		"webpack-cli": "4.8.0",
+		"terser": "5.7.2",
+		"adm-zip": "0.5.5"
 	},
 	"license" : "LGPL-2.1"
 }

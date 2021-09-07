@@ -3,21 +3,16 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>KindEditor Memory Leak Test</title>
-		<script src="../lib/jquery.js"></script>
+		<script src="../lib/jquery.min.js"></script>
 		<!-- include src files -->
-		<script src="../src/core.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/main.js"></script>
+		<script type="module" src="../src/main.js"></script>
 	</head>
 	<body>
 		<input type="button" id="create" name="create" value="Create" />
 		<input type="button" id="remove" name="remove" value="Remove" />
 		<a href="leak.html?id=123">刷新</a>
 		<a href="javascript:history.back(-1);">返回上一步</a>
-		<script>
+		<script type="module">
 			var knode, jnode, node;
 			$('#create').bind('click', function(e) {
 				//knode = K.node('<div>abc</div>');

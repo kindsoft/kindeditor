@@ -1,3 +1,5 @@
+import {_K as K} from '../src/core.js';
+
 module('core');
 
 test('V', function() {
@@ -64,7 +66,7 @@ test('isArray', function() {
 });
 
 test('inArray', function() {
-	arr = [null, 0, '', 10, '11', true];
+	var arr = [null, 0, '', 10, '11', true];
 	ok(K.inArray(null, arr) === 0);
 	ok(K.inArray(0, arr) === 1);
 	ok(K.inArray('', arr) === 2);

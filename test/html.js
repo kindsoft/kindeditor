@@ -1,3 +1,6 @@
+import {_K as K} from '../src/core.js';
+import '../src/selector.js';
+
 module('html');
 
 test("formatUrl", function() {
@@ -37,7 +40,7 @@ test("formatUrl", function() {
 	equals(K.formatUrl(K.query("#test07").value), 'mailto:test@test.com');
 
 	equals(K.formatUrl('http://static.domain.com/img//123.png'), 'http://static.domain.com/img/123.png');
-	
+
 	equals(K.formatUrl('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='), 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
 });
 

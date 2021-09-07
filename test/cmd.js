@@ -1,10 +1,14 @@
+import K from '../src/node.js';
+import '../src/cmd.js';
+
 module('cmd');
 
+var range, cmd;
 test('cmd.wrap', function() {
 	var p = K.query('#test-data-01 p'),
-		cloneP, div, strong, range, cmd;
+		cloneP, div, strong;
 
-	var div = K('<div></div>');
+	div = K('<div></div>');
 	document.body.appendChild(div.get());
 	//1
 	cloneP = p.cloneNode(true);

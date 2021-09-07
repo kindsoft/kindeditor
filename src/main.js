@@ -1,3 +1,48 @@
+import KindEditor, {_docElement, _getScrollPos, default as K} from './node.js';
+import {
+	_addUnit,
+	_each,
+	_escape,
+	_GECKO,
+	_IE,
+	_inArray,
+	_IOS,
+	_isFunction,
+	_MOBILE,
+	_OPERA,
+	_QUIRKS,
+	_removeUnit,
+	_TIME,
+	_toArray,
+	_toMap,
+	_trim,
+	_undef,
+	_unescape,
+	_V,
+	_VERSION,
+	_WEBKIT
+} from './core.js';
+import {_ctrl, _INPUT_KEY_MAP} from './event.js';
+import {
+	_addClassToTag,
+	_clearMsWord,
+	_formatHtml,
+	_getAttrList,
+	_getCssList,
+	_mediaAttrs,
+	_mediaEmbed,
+	_mediaImg
+} from './html.js';
+import {_nativeCommand} from './cmd.js';
+import {_edit, _elementVal} from './edit.js';
+import {_toolbar} from './toolbar.js';
+import {_menu} from './menu.js';
+import {_colorpicker} from './colorpicker.js';
+import {_dialog} from './dialog.js';
+import {_loadScript, _loadStyle} from './ajax.js';
+import {_drag} from './widget.js';
+
+export {default} from './node.js';
 
 var _plugins = {};
 
@@ -313,7 +358,7 @@ function KEditor(options) {
 		self.options[key] = val;
 	}
 	// set options from param
-	_each(options, function(key, val) {
+	_each(options, function(key) {
 		setOption(key, options[key]);
 	});
 	// set options from default setting
@@ -568,7 +613,7 @@ KEditor.prototype = {
 				self.edit = edit = this;
 				self.cmd = edit.cmd;
 				// hide menu when click document
-				self._docMousedownFn = function(e) {
+				self._docMousedownFn = function() {
 					if (self.menu) {
 						self.hideMenu();
 					}
@@ -579,7 +624,7 @@ KEditor.prototype = {
 				_bindTabEvent.call(self);
 				_bindFocusEvent.call(self);
 				// afterChange event
-				edit.afterChange(function(e) {
+				edit.afterChange(function() {
 					if (!edit.designMode) {
 						return;
 					}
@@ -641,7 +686,7 @@ KEditor.prototype = {
 		initResize();
 		// fullscreen mode
 		if (fullscreenMode) {
-			self._fullscreenResizeHandler = function(e) {
+			self._fullscreenResizeHandler = function() {
 				if (self.isCreated) {
 					self.resize(_docElement().clientWidth, _docElement().clientHeight, false);
 				}
@@ -652,7 +697,7 @@ KEditor.prototype = {
 			statusbar.last().css('visibility', 'hidden');
 		} else {
 			if (_GECKO) {
-				K(window).bind('scroll', function(e) {
+				K(window).bind('scroll', function() {
 					self._scrollPos = _getScrollPos();
 				});
 			}
@@ -917,12 +962,12 @@ KEditor.prototype = {
 		return this;
 	},
 	createDialog : function(options) {
-		var self = this, name = options.name;
+		var self = this;
 		options.z = self.options.zIndex;
 		options.shadowMode = _undef(options.shadowMode, self.shadowMode);
 		options.closeBtn = _undef(options.closeBtn, {
 			name : self.lang('close'),
-			click : function(e) {
+			click : function() {
 				self.hideDialog();
 				// IE bugfix: 关闭dialog后，跳转到top
 				if (_IE && self.cmd) {
@@ -932,7 +977,7 @@ KEditor.prototype = {
 		});
 		options.noBtn = _undef(options.noBtn, {
 			name : self.lang(options.yesBtn ? 'no' : 'close'),
-			click : function(e) {
+			click : function() {
 				self.hideDialog();
 				// IE bugfix: 关闭dialog后，跳转到top
 				if (_IE && self.cmd) {
@@ -1128,7 +1173,7 @@ _plugin('core', function(K) {
 			}
 		}
 		if (hasForm) {
-			el.bind('submit', function(e) {
+			el.bind('submit', function() {
 				self.sync();
 				// Bugfix: 	Firefox下后退，编辑器数据不保存
 				K(window).bind('unload', function() {
@@ -1544,7 +1589,7 @@ _plugin('core', function(K) {
 		.replace(/<div\s+[^>]*data-ke-noscript-attr="([^"]*)"[^>]*>([\s\S]*?)<\/div>/ig, function(full, attr, code) {
 			return '<noscript' + unescape(attr) + '>' + unescape(code) + '</noscript>';
 		})
-		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src, end) {
+		.replace(/(<[^>]*)data-ke-src="([^"]*)"([^>]*>)/ig, function(full, start, src) {
 			full = full.replace(/(\s+(?:href|src)=")[^"]*(")/i, function($0, $1, $2) {
 				return $1 + _unescape(src) + $2;
 			});
