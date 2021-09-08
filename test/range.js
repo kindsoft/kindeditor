@@ -1,10 +1,14 @@
+import K from '../src/node.js';
+import '../src/range.js';
+
 module('range');
 
+var range, newRange;
 test('range', function() {
 	var p = K.query('#test-data-01 p');
 	var strong = K.query('#test-data-01 strong');
 
-	var range, nativeRange;
+	var nativeRange;
 	range = K.range(document);
 	ok(range.startContainer === document);
 	ok(range.startOffset === 0);
@@ -16,7 +20,7 @@ test('range', function() {
 	range = K.range(document);
 	range.selectNodeContents(strong);
 	nativeRange = range.get();
-	var newRange = K.range(nativeRange);
+	newRange = K.range(nativeRange);
 	same(range.toString(), newRange.toString());
 });
 

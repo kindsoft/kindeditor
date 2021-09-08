@@ -1,3 +1,4 @@
+import {_K as K} from './core.js';
 
 function _getBasePath() {
 	var els = document.getElementsByTagName('script'), src;

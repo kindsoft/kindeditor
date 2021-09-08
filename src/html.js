@@ -1,6 +1,21 @@
-function _getCssList(css) {
+import {
+	_BLOCK_TAG_MAP,
+	_each,
+	_FILL_ATTR_MAP,
+	_inArray,
+	_INLINE_TAG_MAP,
+	_K as K,
+	_PRE_TAG_MAP,
+	_SINGLE_TAG_MAP,
+	_toHex,
+	_toMap,
+	_trim,
+	_undef,
+} from './core.js';
+
+export function _getCssList(css) {
 	css = css.replace(/&quot;/g, '"');
-	
+
 	var list = {},
 		reg = /\s*([\w\-]+)\s*:([^;]*)(;|$)/g,
 		match;
@@ -12,7 +27,7 @@ function _getCssList(css) {
 	return list;
 }
 
-function _getAttrList(tag) {
+export function _getAttrList(tag) {
 	var list = {},
 		reg = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([^\s"'<>]+))|(?:([\w\-:"]+)="([^"]*)")|(?:([\w\-:"]+)='([^']*)'))(?=(?:\s|\/|>)+)/g,
 		match;
@@ -24,7 +39,7 @@ function _getAttrList(tag) {
 	return list;
 }
 
-function _addClassToTag(tag, className) {
+export function _addClassToTag(tag, className) {
 	if (/\s+class\s*=/.test(tag)) {
 		tag = tag.replace(/(\s+class=["']?)([^"']*)(["']?[\s>])/, function($0, $1, $2, $3) {
 			if ((' ' + $2 + ' ').indexOf(' ' + className + ' ') < 0) {
@@ -39,7 +54,7 @@ function _addClassToTag(tag, className) {
 	return tag;
 }
 
-function _formatCss(css) {
+export function _formatCss(css) {
 	var str = '';
 	_each(_getCssList(css), function(key, val) {
 		str += key + ':' + val + ';';
@@ -47,7 +62,7 @@ function _formatCss(css) {
 	return str;
 }
 
-function _formatUrl(url, mode, host, pathname) {
+export function _formatUrl(url, mode, host, pathname) {
 	mode = _undef(mode, '').toLowerCase();
 	// 移除连续斜线，比如，http://localhost/upload/file/201205//maincus.swf
 	// base64 data 除外
@@ -119,7 +134,7 @@ function _formatUrl(url, mode, host, pathname) {
 	return url;
 }
 
-function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
+export function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	// null or undefined: object == null
 	if (html == null) {
 		html = '';
@@ -288,7 +303,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 				}
 				if (key === 'style' && val !== '') {
 					var styleMap = _getCssList(val);
-					_each(styleMap, function(k, v) {
+					_each(styleMap, function(k) {
 						// 过滤样式
 						if (htmlTags && !htmlTagMap[tagName].style && !htmlTagMap[tagName]['.' + k]) {
 							delete styleMap[k];
@@ -325,7 +340,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	return _trim(html);
 }
 // 清理MS Word专用标签
-function _clearMsWord(html, htmlTags) {
+export function _clearMsWord(html, htmlTags) {
 	html = html.replace(/<meta[\s\S]*?>/ig, '')
 		.replace(/<![\s\S]*?>/ig, '')
 		.replace(/<style[^>]*>[\s\S]*?<\/style>/ig, '')
@@ -359,11 +374,11 @@ function _mediaClass(type) {
 	return 'ke-media';
 }
 
-function _mediaAttrs(srcTag) {
+export function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 
-function _mediaEmbed(attrs) {
+export function _mediaEmbed(attrs) {
 	var html = '<embed ';
 	_each(attrs, function(key, val) {
 		html += key + '="' + val + '" ';
@@ -372,7 +387,7 @@ function _mediaEmbed(attrs) {
 	return html;
 }
 
-function _mediaImg(blankPath, attrs) {
+export function _mediaImg(blankPath, attrs) {
 	var width = attrs.width,
 		height = attrs.height,
 		type = attrs.type || _mediaType(attrs.src),

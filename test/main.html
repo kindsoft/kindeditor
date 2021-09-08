@@ -17,42 +17,28 @@
 				margin: 10px;
 			}
 		</style>
-		<script src="../src/core.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/range.js"></script>
-		<script src="../src/cmd.js"></script>
-		<script src="../src/widget.js"></script>
-		<script src="../src/edit.js"></script>
-		<script src="../src/toolbar.js"></script>
-		<script src="../src/menu.js"></script>
-		<script src="../src/colorpicker.js"></script>
-		<script src="../src/uploadbutton.js"></script>
-		<script src="../src/dialog.js"></script>
-		<script src="../src/tabs.js"></script>
-		<script src="../src/ajax.js"></script>
-		<script src="../src/main.js"></script>
-		<script src="../lang/zh-CN.js"></script>
-		<script src="../lang/en.js"></script>
-		<script src="../plugins/emoticons/emoticons.js"></script>
-		<script src="../plugins/flash/flash.js"></script>
-		<script src="../plugins/link/link.js"></script>
-		<script src="../plugins/media/media.js"></script>
-		<script src="../plugins/plainpaste/plainpaste.js"></script>
-		<script src="../plugins/table/table.js"></script>
-		<script src="../plugins/wordpaste/wordpaste.js"></script>
-		<script src="../plugins/filemanager/filemanager.js"></script>
-		<script src="../plugins/preview/preview.js"></script>
-		<script src="../plugins/code/code.js"></script>
-		<script src="../plugins/map/map.js"></script>
-		<script src="../plugins/lineheight/lineheight.js"></script>
-		<script src="../plugins/clearhtml/clearhtml.js"></script>
-		<script src="../plugins/table/table.js"></script>
-		<script src="../plugins/fixtoolbar/fixtoolbar.js"></script>
-		<script src="../plugins/autoheight/autoheight.js"></script>
+		<script type="module">
+			import '../src/index.js';
+			import '../lang/zh-CN.js';
+			import '../lang/en.js';
+			import '../plugins/emoticons/emoticons.js';
+			import '../plugins/flash/flash.js';
+			import '../plugins/link/link.js';
+			import '../plugins/media/media.js';
+			import '../plugins/plainpaste/plainpaste.js';
+			import '../plugins/table/table.js';
+			import '../plugins/wordpaste/wordpaste.js';
+			import '../plugins/ajax.js';
+			import '../plugins/filemanager/filemanager.js';
+			import '../plugins/preview/preview.js';
+			import '../plugins/code/code.js';
+			import '../plugins/map/map.js';
+			import '../plugins/lineheight/lineheight.js';
+			import '../plugins/clearhtml/clearhtml.js';
+			import '../plugins/table/table.js';
+			import '../plugins/fixtoolbar/fixtoolbar.js';
+			import '../plugins/autoheight/autoheight.js';
+		</script>
 	</head>
 	<body>
 		<h1 id="type">KindEditor Main Test</h1>
@@ -206,7 +192,7 @@
 			<input type="reset" name="button" value="Reset" />
 			<input type="text" id="url" value="" /> <input type="button" id="image" value="选择图片" />
 		</form>
-		<script>
+		<script type="module">
 			KindEditor.DEBUG = true;
 			KindEditor.options.filterMode = false;
 			KindEditor.options.autoHeightMode = true;

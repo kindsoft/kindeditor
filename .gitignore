@@ -13,3 +13,6 @@ dist/
 node_modules/
 _build/
 attached/*
+
+/.idea
+/kindeditor*

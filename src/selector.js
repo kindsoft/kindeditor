@@ -1,5 +1,7 @@
+import {_formatCss, _getAttrList} from './html.js';
+import {_each, _inArray, _K as K, _unescape} from './core.js';
 
-function _contains(nodeA, nodeB) {
+export function _contains(nodeA, nodeB) {
 	// Bypass comparison on document node since
 	// we don't deal with cross frame,
 	// e.g. document.body.parentNode.parentNode == document (false for IE).
@@ -18,7 +20,7 @@ var _getSetAttrDiv = document.createElement('div');
 _getSetAttrDiv.setAttribute('className', 't');
 var _GET_SET_ATTRIBUTE = _getSetAttrDiv.className !== 't';
 
-function _getAttr(el, key) {
+export function _getAttr(el, key) {
 	key = key.toLowerCase();
 	var val = null;
 	// IE6,IE7,IE=EmulateIE7
@@ -43,7 +45,7 @@ function _getAttr(el, key) {
 	return val;
 }
 
-function _queryAll(expr, root) {
+export function _queryAll(expr, root) {
 	var exprList = expr.split(',');
 	if (exprList.length > 1) {
 		var mergedResults = [];
@@ -187,7 +189,7 @@ function _queryAll(expr, root) {
 		return select(parts[0], root);
 	}
 	var isChild = false, part, els, subResults, val, v, i, j, k, length, len, l;
-	for (i = 0, lenth = parts.length; i < lenth; i++) {
+	for (i = 0, length = parts.length; i < length; i++) {
 		part = parts[i];
 		if (part === '>') {
 			isChild = true;

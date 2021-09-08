@@ -1,6 +1,4 @@
 
-/**/ var undefined;
-
 if (!window.console) {
 	window.console = {};
 }
@@ -8,7 +6,8 @@ if (!console.log) {
 	console.log = function () {};
 }
 
-var _VERSION = '${VERSION}',
+export var
+	_VERSION = '${VERSION}',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -23,21 +22,21 @@ var _VERSION = '${VERSION}',
 	_V = _matches ? _matches[1] : '0',
 	_TIME = new Date().getTime();
 
-function _isArray(val) {
+export function _isArray(val) {
 	if (!val) {
 		return false;
 	}
 	return Object.prototype.toString.call(val) === '[object Array]';
 }
 
-function _isFunction(val) {
+export function _isFunction(val) {
 	if (!val) {
 		return false;
 	}
 	return Object.prototype.toString.call(val) === '[object Function]';
 }
 
-function _inArray(val, arr) {
+export function _inArray(val, arr) {
 	for (var i = 0, len = arr.length; i < len; i++) {
 		if (val === arr[i]) {
 			return i;
@@ -46,7 +45,7 @@ function _inArray(val, arr) {
 	return -1;
 }
 
-function _each(obj, fn) {
+export function _each(obj, fn) {
 	if (_isArray(obj)) {
 		for (var i = 0, len = obj.length; i < len; i++) {
 			if (fn.call(obj[i], i, obj[i]) === false) {
@@ -64,35 +63,35 @@ function _each(obj, fn) {
 	}
 }
 
-function _trim(str) {
+export function _trim(str) {
 	// Forgive various special whitespaces, e.g. &nbsp;(\xa0).
 	return str.replace(/(?:^[ \t\n\r]+)|(?:[ \t\n\r]+$)/g, '');
 }
 
-function _inString(val, str, delimiter) {
+export function _inString(val, str, delimiter) {
 	delimiter = delimiter === undefined ? ',' : delimiter;
 	return (delimiter + str + delimiter).indexOf(delimiter + val + delimiter) >= 0;
 }
 
-function _addUnit(val, unit) {
+export function _addUnit(val, unit) {
 	unit = unit || 'px';
 	return val && /^-?\d+(?:\.\d+)?$/.test(val) ? val + unit : val;
 }
 
-function _removeUnit(val) {
+export function _removeUnit(val) {
 	var match;
 	return val && (match = /(\d+)/.exec(val)) ? parseInt(match[1], 10) : 0;
 }
 
-function _escape(val) {
+export function _escape(val) {
 	return val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function _unescape(val) {
+export function _unescape(val) {
 	return val.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
 }
 
-function _toCamel(str) {
+export function _toCamel(str) {
 	var arr = str.split('-');
 	str = '';
 	_each(arr, function(key, val) {
@@ -101,7 +100,7 @@ function _toCamel(str) {
 	return str;
 }
 
-function _toHex(val) {
+export function _toHex(val) {
 	function hex(d) {
 		var s = parseInt(d, 10).toString(16).toUpperCase();
 		return s.length > 1 ? s : '0' + s;
@@ -113,7 +112,7 @@ function _toHex(val) {
 	);
 }
 
-function _toMap(val, delimiter) {
+export function _toMap(val, delimiter) {
 	delimiter = delimiter === undefined ? ',' : delimiter;
 	var map = {}, arr = _isArray(val) ? val : val.split(delimiter), match;
 	_each(arr, function(key, val) {
@@ -128,11 +127,11 @@ function _toMap(val, delimiter) {
 	return map;
 }
 
-function _toArray(obj, offset) {
+export function _toArray(obj, offset) {
 	return Array.prototype.slice.call(obj, offset || 0);
 }
 
-function _undef(val, defaultVal) {
+export function _undef(val, defaultVal) {
 	return val === undefined ? defaultVal : val;
 }
 
@@ -144,7 +143,7 @@ function _addParam(url, param) {
 	return url.indexOf('?') >= 0 ? url + '&' + param : url + '?' + param;
 }
 
-function _extend(child, parent, proto) {
+export function _extend(child, parent, proto) {
 	if (!proto) {
 		proto = parent;
 		parent = null;
@@ -165,31 +164,9 @@ function _extend(child, parent, proto) {
 	child.parent = parent ? parent.prototype : null;
 }
 
-//From http://www.json.org/json2.js
-function _json(text) {
-	var match;
-	if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
-		text = match[0];
-	}
-	var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	cx.lastIndex = 0;
-	if (cx.test(text)) {
-		text = text.replace(cx, function (a) {
-			return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-		});
-	}
-	if (/^[\],:{}\s]*$/.
-	test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
-	replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-	replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-		return eval('(' + text + ')');
-	}
-	throw 'JSON parse error';
-}
+export var _round = Math.round;
 
-var _round = Math.round;
-
-var K = {
+export var _K = {
 	DEBUG : false,
 	VERSION : _VERSION,
 	IE : _IE,
@@ -216,10 +193,11 @@ var K = {
 	invalidUrl : _invalidUrl,
 	addParam : _addParam,
 	extend : _extend,
-	json : _json
+	json : JSON.parse
 };
 
-var _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,img,input,ins,kbd,label,map,q,s,samp,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'),
+export var
+	_INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,img,input,ins,kbd,label,map,q,s,samp,select,small,span,strike,strong,sub,sup,textarea,tt,u,var'),
 	_BLOCK_TAG_MAP = _toMap('address,applet,blockquote,body,center,dd,dir,div,dl,dt,fieldset,form,frameset,h1,h2,h3,h4,h5,h6,head,hr,html,iframe,ins,isindex,li,map,menu,meta,noframes,noscript,object,ol,p,pre,script,style,table,tbody,td,tfoot,th,thead,title,tr,ul'),
 	_SINGLE_TAG_MAP = _toMap('area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed'),
 	_STYLE_TAG_MAP = _toMap('b,basefont,big,del,em,font,i,s,small,span,strike,strong,sub,sup,u'),

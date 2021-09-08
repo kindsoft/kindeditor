@@ -1,3 +1,6 @@
+import K from './node.js';
+import {_addUnit, _extend, _undef} from './core.js';
+import {KWidget} from './widget.js';
 
 // create KMenu class
 function KMenu(options) {
@@ -36,13 +39,13 @@ _extend(KMenu, KWidget, {
 				centerDiv.css('height', height);
 			}
 		}
-		itemDiv.mouseover(function(e) {
+		itemDiv.mouseover(function() {
 			K(this).addClass('ke-menu-item-on');
 			if (centerDiv) {
 				centerDiv.addClass('ke-menu-item-center-on');
 			}
 		})
-		.mouseout(function(e) {
+		.mouseout(function() {
 			K(this).removeClass('ke-menu-item-on');
 			if (centerDiv) {
 				centerDiv.removeClass('ke-menu-item-center-on');
@@ -77,7 +80,7 @@ _extend(KMenu, KWidget, {
 	}
 });
 
-function _menu(options) {
+export function _menu(options) {
 	return new KMenu(options);
 }
 

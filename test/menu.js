@@ -1,3 +1,6 @@
+import K from '../src/node.js';
+import '../src/menu.js';
+import '../src/colorpicker.js';
 
 var menu = null;
 K('#menu').bind('click', function(e) {

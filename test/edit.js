@@ -1,3 +1,5 @@
+import K from '../src/node.js';
+import '../src/edit.js';
 
 var edit = null;
 

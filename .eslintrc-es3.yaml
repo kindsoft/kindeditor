@@ -1,0 +1,9 @@
+
+root: true
+
+parserOptions:
+    ecmaVersion: 3
+
+rules:
+    quote-props: [ error, 'as-needed', { keywords: true, unnecessary: false } ]
+    dot-notation: [ error, { allowKeywords: false, allowPattern: '.*' } ]

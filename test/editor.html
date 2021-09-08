@@ -8,39 +8,24 @@
 		<!-- <script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script> -->
 		<script src="../lib/qunit/qunit.js"></script>
 		<!-- include src files -->
-		<script src="../src/core.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/ajax.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/range.js"></script>
-		<script src="../src/cmd.js"></script>
-		<script src="../src/widget.js"></script>
-		<script src="../src/edit.js"></script>
-		<script src="../src/toolbar.js"></script>
-		<script src="../src/menu.js"></script>
-		<script src="../src/colorpicker.js"></script>
-		<script src="../src/uploadbutton.js"></script>
-		<script src="../src/dialog.js"></script>
-		<script src="../src/tabs.js"></script>
-		<script src="../src/main.js"></script>
-		<script src="../lang/zh-CN.js"></script>
-		<script src="../lang/en.js"></script>
-		<script src="../plugins/emoticons/emoticons.js"></script>
-		<script src="../plugins/flash/flash.js"></script>
-		<script src="../plugins/image/image.js"></script>
-		<script src="../plugins/link/link.js"></script>
-		<script src="../plugins/media/media.js"></script>
-		<script src="../plugins/plainpaste/plainpaste.js"></script>
-		<script src="../plugins/table/table.js"></script>
-		<script src="../plugins/wordpaste/wordpaste.js"></script>
-		<script src="../plugins/filemanager/filemanager.js"></script>
-		<script src="../plugins/preview/preview.js"></script>
-		<script src="../plugins/code/code.js"></script>
-		<script src="../plugins/map/map.js"></script>
-		<script src="../plugins/lineheight/lineheight.js"></script>
+		<script type="module">
+			import '../src/index.js';
+			import '../lang/zh-CN.js';
+			import '../plugins/emoticons/emoticons.js';
+			import '../plugins/flash/flash.js';
+			import '../plugins/image/image.js';
+			import '../plugins/link/link.js';
+			import '../plugins/media/media.js';
+			import '../plugins/plainpaste/plainpaste.js';
+			import '../plugins/table/table.js';
+			import '../plugins/wordpaste/wordpaste.js';
+			import '../plugins/ajax.js';
+			import '../plugins/filemanager/filemanager.js';
+			import '../plugins/preview/preview.js';
+			import '../plugins/code/code.js';
+			import '../plugins/map/map.js';
+			import '../plugins/lineheight/lineheight.js';
+		</script>
 	</head>
 	<body>
 		<h1>KindEditor Unittest</h1>
@@ -54,6 +39,6 @@
 		<textarea id="content2" name="content2" style="width:90%;height:250px;visibility:hidden;"></textarea>
 		<br />
 		<!-- include test files -->
-		<script src="editor.js"></script>
+		<script type="module" src="editor.js"></script>
 	</body>
 </html>

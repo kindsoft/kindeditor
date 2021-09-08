@@ -7,16 +7,6 @@
 		<script src="../lib/firebug-lite/build/firebug-lite.js#startOpened"></script>
 		<script src="../lib/qunit/qunit.js"></script>
 		<link rel="stylesheet" href="../themes/default/default.css" />
-		<script src="../src/core.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/range.js"></script>
-		<script src="../src/cmd.js"></script>
-		<script src="../src/widget.js"></script>
-		<script src="../src/tabs.js"></script>
 	</head>
 	<body>
 		<h1>KindEditor Tabs Test</h1>
@@ -24,7 +14,10 @@
 		<div id="tab1">内容1</div>
 		<div id="tab2">内容2</div>
 		<div id="tab3">内容3</div>
-		<script>
+		<script type="module">
+			import K from '../src/node.js';
+			import '../src/tabs.js';
+
 			var tabs = K.tabs({
 				src : '#tabs',
 				afterSelect : function(i) {

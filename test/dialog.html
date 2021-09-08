@@ -8,27 +8,16 @@
 		<script src="../lib/qunit/qunit.js"></script>
 		<script src="../lib/jquery.min.js"></script>
 		<link rel="stylesheet" href="../themes/default/default.css" />
-		<script src="../src/core.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/range.js"></script>
-		<script src="../src/cmd.js"></script>
-		<script src="../src/widget.js"></script>
-		<script src="../src/edit.js"></script>
-		<script src="../src/toolbar.js"></script>
-		<script src="../src/dialog.js"></script>
-		<script src="../src/main.js"></script>
-		<script src="../lang/zh-CN.js"></script>
 	</head>
 	<body>
 		<h1>KindEditor Dialog Test</h1>
 		<input type="button" id="create1" value="Create" />
 		<input type="button" id="create2" value="Create(no shadow)" />
 		<div style="height:2000px;"></div>
-		<script>
+		<script type="module">
+			import K from '../src/main.js';
+			import '../lang/zh-CN.js';
+
 			K('#create1').click(function() {
 				var dialog = K.dialog({
 					width : 500,

@@ -1,3 +1,7 @@
+import KindEditor from './node.js';
+import {_each, _extend, _inArray, _K as K, _TIME, _toMap} from './core.js';
+
+export {_INPUT_KEY_MAP, _CHANGE_KEY_MAP};
 
 var _useCapture = false;
 
@@ -202,7 +206,7 @@ function _removeId(el) {
 	}
 }
 
-function _bind(el, type, fn) {
+export function _bind(el, type, fn) {
 	if (type.indexOf(',') >= 0) {
 		_each(type.split(','), function() {
 			_bind(el, this, fn);
@@ -240,7 +244,7 @@ function _bind(el, type, fn) {
 	_bindEvent(el, type, events[0]);
 }
 
-function _unbind(el, type, fn) {
+export function _unbind(el, type, fn) {
 	if (type && type.indexOf(',') >= 0) {
 		_each(type.split(','), function() {
 			_unbind(el, this, fn);
@@ -293,7 +297,7 @@ function _unbind(el, type, fn) {
 	}
 }
 
-function _fire(el, type) {
+export function _fire(el, type) {
 	if (type.indexOf(',') >= 0) {
 		_each(type.split(','), function() {
 			_fire(el, this);
@@ -310,8 +314,7 @@ function _fire(el, type) {
 	}
 }
 
-function _ctrl(el, key, fn) {
-	var self = this;
+export function _ctrl(el, key, fn) {
 	key = /^\d{2,}$/.test(key) ? key : key.toUpperCase().charCodeAt(0);
 	_bind(el, 'keydown', function(e) {
 		if (e.ctrlKey && e.which == key && !e.shiftKey && !e.altKey) {

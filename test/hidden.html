@@ -12,26 +12,10 @@
 		</div>
 		<input type="button" id="J_show" value="Show" />
 		<input type="button" id="J_hide" value="Hide" />
-		<script src="../src/core.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/range.js"></script>
-		<script src="../src/cmd.js"></script>
-		<script src="../src/widget.js"></script>
-		<script src="../src/edit.js"></script>
-		<script src="../src/toolbar.js"></script>
-		<script src="../src/menu.js"></script>
-		<script src="../src/colorpicker.js"></script>
-		<script src="../src/uploadbutton.js"></script>
-		<script src="../src/dialog.js"></script>
-		<script src="../src/tabs.js"></script>
-		<script src="../src/ajax.js"></script>
-		<script src="../src/main.js"></script>
-		<script src="../lang/zh-CN.js"></script>
-		<script>
+		<script type="module">
+			import '../src/main.js';
+			import '../lang/zh-CN.js';
+
 			KindEditor.ready(function(K) {
 				K.create('textarea', {
 					loadStyleMode : false

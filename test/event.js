@@ -1,3 +1,5 @@
+import K from '../src/node.js';
+
 module('event');
 
 test('bind/unbind/fire', function() {

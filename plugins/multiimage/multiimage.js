@@ -7,6 +7,7 @@
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
 
+/* global SWFUpload, __flash__argumentsToXML */
 
 (function(K) {
 

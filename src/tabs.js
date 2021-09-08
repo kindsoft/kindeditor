@@ -1,3 +1,6 @@
+import K from './node.js';
+import {_each} from './core.js';
+import {_widget} from './widget.js';
 
 function _tabs(options) {
 	var self = _widget(options),
