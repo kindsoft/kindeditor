@@ -1147,7 +1147,7 @@ _plugin('core', function(K) {
 		}
 	});
 	// source
-	self.clickToolbar('source', function() {
+	self.clickToolbar('source', function() {		
 		if (self.edit.designMode) {
 			self.toolbar.disableAll(true);
 			self.edit.design(false);
@@ -1532,6 +1532,9 @@ _plugin('core', function(K) {
 			}
 			attrs.width = _undef(imgAttrs.width, width);
 			attrs.height = _undef(imgAttrs.height, height);
+			if(attrs.type=='video/mp4'){
+				return _mediaVideo(attrs);
+			}
 			return _mediaEmbed(attrs);
 		})
 		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {
