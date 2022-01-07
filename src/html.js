@@ -376,11 +376,11 @@ function _mediaEmbed(attrs) {
 }
 
 function _mediaVideo(attrs) {
-	var html = '<video ';
+	var html = '<br><video ';
 	_each(attrs, function(key, val) {
 		html += key + '="' + val + '" ';
 	});
-	html += 'controls />';
+	html += 'controls></video><br>';
 	return html;
 }
 
