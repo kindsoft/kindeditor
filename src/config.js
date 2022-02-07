@@ -60,6 +60,7 @@ K.options = {
 	],
 	fontSizeTable : ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'],
 	htmlTags : {
+		video: ['id', 'class', 'src', 'controls', 'width', 'height'],
 		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
 		span : [
 			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
