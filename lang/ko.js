@@ -50,6 +50,7 @@ KindEditor.lang({
 	unlink : '링크 제거',
 	fullscreen : '전체 화면 모드',
 	about : '이 에디터는...',
+	symbol : '특수 문자',
 	print : '인쇄',
 	filemanager : '파일 관리자',
 	code : '코드 추가',
