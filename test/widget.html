@@ -20,15 +20,6 @@
 		<script src="../lib/qunit/qunit.js"></script>
 		<script src="../lib/jquery.min.js"></script>
 		<link rel="stylesheet" href="../themes/default/default.css" />
-		<script src="../src/core.js"></script>
-		<script src="../src/config.js"></script>
-		<script src="../src/event.js"></script>
-		<script src="../src/html.js"></script>
-		<script src="../src/selector.js"></script>
-		<script src="../src/node.js"></script>
-		<script src="../src/range.js"></script>
-		<script src="../src/cmd.js"></script>
-		<script src="../src/widget.js"></script>
 	</head>
 	<body>
 		<h1>KindEditor Widget Test</h1>
@@ -37,7 +28,10 @@
 		<br />
 		<br />
 		<iframe></iframe>
-		<script>
+		<script type="module">
+			import K from '../src/node.js';
+			import '../src/widget.js';
+
 			var widget = null;
 			K('#create').click(function() {
 				if (!widget) {

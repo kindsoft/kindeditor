@@ -1,0 +1,16 @@
+
+root: true
+
+parserOptions:
+    ecmaVersion: 2017
+    sourceType: module
+
+globals:
+    KindEditor: readonly
+
+env:
+    browser: true
+    node: true
+
+rules:
+    no-undef: error

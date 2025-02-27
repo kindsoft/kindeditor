@@ -1,3 +1,6 @@
+import K from './node.js';
+import {_extend, _toMap, _undef} from './core.js';
+import {KWidget} from './widget.js';
 
 function _selectToolbar(name, fn) {
 	var self = this,
@@ -99,7 +102,7 @@ _extend(KToolbar, KWidget, {
 		return self;
 	},
 	disableAll : function(bool, noDisableItems) {
-		var self = this, map = self.noDisableItemMap, item;
+		var self = this, map = self.noDisableItemMap;
 		if (noDisableItems) {
 			map = _toMap(noDisableItems);
 		}
@@ -128,7 +131,7 @@ _extend(KToolbar, KWidget, {
 	}
 });
 
-function _toolbar(options) {
+export function _toolbar(options) {
 	return new KToolbar(options);
 }
 

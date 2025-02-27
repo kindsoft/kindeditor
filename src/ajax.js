@@ -1,5 +1,8 @@
+import K from './node.js';
+import {_QUIRKS} from './core.js';
+import {_formatUrl} from './html.js';
 
-function _loadScript(url, fn) {
+export function _loadScript(url, fn) {
 	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
 		script = document.createElement('script');
 	head.appendChild(script);
@@ -22,7 +25,7 @@ function _chopQuery(url) {
 	return index > 0 ? url.substr(0, index) : url;
 }
 
-function _loadStyle(url) {
+export function _loadStyle(url) {
 	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
 		link = document.createElement('link'),
 		absoluteUrl = _chopQuery(_formatUrl(url, 'absolute'));
@@ -37,36 +40,5 @@ function _loadStyle(url) {
 	link.rel = 'stylesheet';
 }
 
-function _ajax(url, fn, method, param, dataType) {
-	method = method || 'GET'; //POST or GET
-	dataType = dataType || 'json'; //json or html
-	var xhr = window.XMLHttpRequest ? new window.XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-	xhr.open(method, url, true);
-	xhr.onreadystatechange = function () {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			if (fn) {
-				var data = _trim(xhr.responseText);
-				if (dataType == 'json') {
-					data = _json(data);
-				}
-				fn(data);
-			}
-		}
-	};
-	if (method == 'POST') {
-		var params = [];
-		_each(param, function(key, val) {
-			params.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
-		});
-		try {
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		} catch (e) {}
-		xhr.send(params.join('&'));
-	} else {
-		xhr.send(null);
-	}
-}
-
 K.loadScript = _loadScript;
 K.loadStyle = _loadStyle;
-K.ajax = _ajax;

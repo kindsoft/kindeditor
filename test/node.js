@@ -1,3 +1,5 @@
+import K from '../src/node.js';
+
 module('node');
 
 test('K(html)', function(){
@@ -148,7 +150,7 @@ test("remove",function(){
 	var node = K('<div></div><p>123</p>').addClass('abc').html('test');
 	node.remove();
 	equals(node.length, 0);
-	// Test preserve child nodes. 
+	// Test preserve child nodes.
 	var node = K('<div><p><span>123</span><span>456</span>789</p></div>');
 	K('p', node).remove(true);
 	equals(node.html(), '<span>123</span><span>456</span>789');

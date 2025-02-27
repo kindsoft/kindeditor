@@ -23,7 +23,7 @@ KindEditor.plugin('template', function(K) {
 			K.each(lang.fileList, function(key, val) {
 				arr.push('<option value="' + key + '">' + val + '</option>');
 			});
-			html = [arr.join(''),
+		var html = [arr.join(''),
 				'</select></div>',
 				// right start
 				'<div class="ke-right">',

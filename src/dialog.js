@@ -1,3 +1,6 @@
+import K, {_docElement} from './node.js';
+import {_each, _extend, _IE, _removeUnit, _undef, _V} from './core.js';
+import {_widget, KWidget} from './widget.js';
 
 function _createButton(arg) {
 	arg = arg || {};
@@ -134,7 +137,7 @@ _extend(KDialog, KWidget, {
 	}
 });
 
-function _dialog(options) {
+export function _dialog(options) {
 	return new KDialog(options);
 }
 

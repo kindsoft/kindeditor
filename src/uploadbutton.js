@@ -1,3 +1,5 @@
+import K from './node.js';
+import {_extend, _unescape} from './core.js';
 
 function KUploadButton(options) {
 	this.init(options);

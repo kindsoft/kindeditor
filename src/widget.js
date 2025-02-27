@@ -1,5 +1,13 @@
+import K, {_docElement, _get, _getDoc, _getScrollPos, _getWin} from './node.js';
+import {_addUnit, _each, _extend, _IE, _QUIRKS, _removeUnit, _round, _undef, _V} from './core.js';
+import {_formatUrl} from './html.js';
 
-function _drag(options) {
+export function _iframeDoc(iframe) {
+	iframe = _get(iframe);
+	return iframe.contentDocument || iframe.contentWindow.document;
+}
+
+export function _drag(options) {
 	var moveEl = options.moveEl,
 		moveFn = options.moveFn,
 		clickEl = options.clickEl || moveEl,
@@ -82,7 +90,7 @@ function _drag(options) {
 }
 
 // create KWidget class
-function KWidget(options) {
+export function KWidget(options) {
 	this.init(options);
 }
 _extend(KWidget, {
@@ -138,7 +146,7 @@ _extend(KWidget, {
 		if (options.autoScroll) {
 			if (_IE && _V < 7 || _QUIRKS) {
 				var scrollPos = _getScrollPos();
-				K(self.win).bind('scroll', function(e) {
+				K(self.win).bind('scroll', function() {
 					var pos = _getScrollPos(),
 						diffX = pos.x - scrollPos.x,
 						diffY = pos.y - scrollPos.y;
@@ -229,7 +237,7 @@ _extend(KWidget, {
 	}
 });
 
-function _widget(options) {
+export function _widget(options) {
 	return new KWidget(options);
 }
 

@@ -1,3 +1,5 @@
+import K from '../src/node.js';
+import '../src/toolbar.js';
 
 var items = [
 	'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',

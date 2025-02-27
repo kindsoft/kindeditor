@@ -1,3 +1,5 @@
+import K, {_getDoc} from './node.js';
+import {_extend, _IERANGE, _NOSPLIT_TAG_MAP} from './core.js';
 
 var _START_TO_START = 0,
 	_START_TO_END = 1,
@@ -286,7 +288,7 @@ function _getEndRange(node, offset) {
 	return range;
 }
 // convert native Range to KRange
-function _toRange(rng) {
+export function _toRange(rng) {
 	var doc, range;
 	// <table><tr><td></td>|<td></td></tr></table>
 	// to <table><tr><td></td><td>|</td></tr></table>
@@ -561,12 +563,12 @@ _extend(KRange, {
 	isControl : function() {
 		var self = this,
 			sc = self.startContainer, so = self.startOffset,
-			ec = self.endContainer, eo = self.endOffset, rng;
+			ec = self.endContainer, eo = self.endOffset;
 		return sc.nodeType == 1 && sc === ec && so + 1 === eo && K(sc.childNodes[so]).isControl();
 	},
 	// get original range
 	get : function(hasControlRange) {
-		var self = this, doc = self.doc, node, rng;
+		var self = this, doc = self.doc, rng;
 		// not IE
 		if (!_IERANGE) {
 			rng = doc.createRange();
@@ -765,7 +767,7 @@ _extend(KRange, {
 	}
 });
 
-function _range(mixed) {
+export function _range(mixed) {
 	if (!mixed.nodeName) {
 		return mixed.constructor === KRange ? mixed : _toRange(mixed);
 	}
