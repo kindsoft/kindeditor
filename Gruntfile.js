@@ -50,7 +50,8 @@ var PLUGIN_FILES = [
 	'plugins/table/table.js',
 	'plugins/template/template.js',
 	'plugins/wordpaste/wordpaste.js',
-	'plugins/fixtoolbar/fixtoolbar.js'
+	'plugins/fixtoolbar/fixtoolbar.js',
+	'plugins/symbol/symbol.js'
 ];
 
 var pkg = grunt.file.readJSON('package.json');

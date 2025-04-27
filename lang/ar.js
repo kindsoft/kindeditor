@@ -51,6 +51,7 @@ KindEditor.lang({
 	unlink : 'إزالة الرابط',
 	fullscreen : 'محرر ملئ الشاشة',
 	about : 'حول',
+	symbol:'الأحرف الخاصة',
 	print : 'طباعة',
 	filemanager : 'مدير الملفات',
 	code : 'إدراج نص برمجي',

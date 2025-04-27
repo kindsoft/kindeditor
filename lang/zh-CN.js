@@ -49,6 +49,7 @@ KindEditor.lang({
 	link : '超级链接',
 	unlink : '取消超级链接',
 	fullscreen : '全屏显示',
+	symbol : '特殊字符',
 	about : '关于',
 	print : '打印(Ctrl+P)',
 	filemanager : '文件空间',
