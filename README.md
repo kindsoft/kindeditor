@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> KindEditor has not been maintained for a long time, and there will be no further upgrades in the future. You can try [Lake(https://lakejs.org/)](https://lakejs.org/), the new editor I developed. It is quite different from KindEditor in many aspects, but it might still meet your needs.
+> KindEditor has not been maintained for a long time, and there will be no further upgrades in the future. You can try [Lake(https://lakejs.org/)](https://lakejs.org/), a new editor I developed. It is quite different from KindEditor in many aspects, but it might still meet your needs.
 
 ## What is KindEditor?
 
