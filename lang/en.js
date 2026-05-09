@@ -50,6 +50,7 @@ KindEditor.lang({
 	unlink : 'Unlink',
 	fullscreen : 'Toggle fullscreen mode',
 	about : 'About',
+	symbol : 'Symbol',
 	print : 'Print',
 	filemanager : 'File Manager',
 	code : 'Insert code',
