@@ -346,6 +346,9 @@ function _mediaType(src) {
 	if (/\.(swf|flv)(\?|$)/i.test(src)) {
 		return 'application/x-shockwave-flash';
 	}
+	if(/\.(mp4)(\?|$)/i.test(src)){
+		return 'video/mp4';
+	}
 	return 'video/x-ms-asf-plugin';
 }
 // 根据 media type取得className
@@ -372,12 +375,24 @@ function _mediaEmbed(attrs) {
 	return html;
 }
 
+function _mediaVideo(attrs) {
+	var html = '<br><video ';
+	_each(attrs, function(key, val) {
+		html += key + '="' + val + '" ';
+	});
+	html += 'controls></video><br>';
+	return html;
+}
+
 function _mediaImg(blankPath, attrs) {
 	var width = attrs.width,
 		height = attrs.height,
-		type = attrs.type || _mediaType(attrs.src),
+		type = attrs.type || _mediaType(attrs.src),		
 		srcTag = _mediaEmbed(attrs),
 		style = '';
+	if(type=='video/mp4'){
+		srcTag = _mediaVideo(attrs);
+	}
 	if (/\D/.test(width)) {
 		style += 'width:' + width + ';';
 	} else if (width > 0) {

@@ -1,10 +1,10 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2019 kindeditor.net
+* Copyright (C) 2006-2022 kindeditor.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://kindeditor.net/
-* @version 4.1.12 (2019-03-07)
+* @version 4.1.12 (2022-01-05)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
@@ -18,7 +18,7 @@ if (!window.console) {
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.12 (2019-03-07)',
+var _VERSION = '4.1.12 (2022-01-05)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -155,8 +155,7 @@ function _extend(child, parent, proto) {
 	child.prototype = childProto;
 	child.parent = parent ? parent.prototype : null;
 }
-
-
+
 function _json(text) {
 	var match;
 	if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
@@ -278,6 +277,7 @@ K.options = {
 	],
 	fontSizeTable : ['9px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'],
 	htmlTags : {
+		video: ['id', 'class', 'src', 'controls', 'width', 'height'],
 		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
 		span : [
 			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -316,12 +316,9 @@ K.options = {
 
 
 var _useCapture = false;
-
-
-var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
-
-var _CURSORMOVE_KEY_MAP = _toMap('33..40');
-
+
+var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
+var _CURSORMOVE_KEY_MAP = _toMap('33..40');
 var _CHANGE_KEY_MAP = {};
 _each(_INPUT_KEY_MAP, function(key, val) {
 	_CHANGE_KEY_MAP[key] = val;
@@ -329,16 +326,14 @@ _each(_INPUT_KEY_MAP, function(key, val) {
 _each(_CURSORMOVE_KEY_MAP, function(key, val) {
 	_CHANGE_KEY_MAP[key] = val;
 });
-
-
+
 function _bindEvent(el, type, fn) {
 	if (el.addEventListener){
 		el.addEventListener(type, fn, _useCapture);
 	} else if (el.attachEvent){
 		el.attachEvent('on' + type, fn);
 	}
-}
-
+}
 function _unbindEvent(el, type, fn) {
 	if (el.removeEventListener){
 		el.removeEventListener(type, fn, _useCapture);
@@ -349,8 +344,7 @@ function _unbindEvent(el, type, fn) {
 var _EVENT_PROPS = ('altKey,attrChange,attrName,bubbles,button,cancelable,charCode,clientX,clientY,ctrlKey,currentTarget,' +
 	'data,detail,eventPhase,fromElement,handler,keyCode,metaKey,newValue,offsetX,offsetY,originalTarget,pageX,' +
 	'pageY,prevValue,relatedNode,relatedTarget,screenX,screenY,shiftKey,srcElement,target,toElement,view,wheelDelta,which').split(',');
-
-
+
 function KEvent(el, event) {
 	this.init(el, event);
 }
@@ -908,8 +902,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\n\s*\n/g, '\n');
 	html = html.replace(/<span id="__kindeditor_pre_newline__">\n/g, '\n');
 	return _trim(html);
-}
-
+}
 function _clearMsWord(html, htmlTags) {
 	html = html.replace(/<meta[\s\S]*?>/ig, '')
 		.replace(/<![\s\S]*?>/ig, '')
@@ -922,8 +915,7 @@ function _clearMsWord(html, htmlTags) {
 			return full.replace(/border-bottom:([#\w\s]+)/ig, 'border:$1');
 		});
 	return _formatHtml(html, htmlTags);
-}
-
+}
 function _mediaType(src) {
 	if (/\.(rm|rmvb)(\?|$)/i.test(src)) {
 		return 'audio/x-pn-realaudio-plugin';
@@ -931,9 +923,11 @@ function _mediaType(src) {
 	if (/\.(swf|flv)(\?|$)/i.test(src)) {
 		return 'application/x-shockwave-flash';
 	}
+	if(/\.(mp4)(\?|$)/i.test(src)){
+		return 'video/mp4';
+	}
 	return 'video/x-ms-asf-plugin';
-}
-
+}
 function _mediaClass(type) {
 	if (/realaudio/i.test(type)) {
 		return 'ke-rm';
@@ -954,12 +948,23 @@ function _mediaEmbed(attrs) {
 	html += '/>';
 	return html;
 }
+function _mediaVideo(attrs) {
+	var html = '<video ';
+	_each(attrs, function(key, val) {
+		html += key + '="' + val + '" ';
+	});
+	html += 'controls />';
+	return html;
+}
 function _mediaImg(blankPath, attrs) {
 	var width = attrs.width,
 		height = attrs.height,
 		type = attrs.type || _mediaType(attrs.src),
 		srcTag = _mediaEmbed(attrs),
 		style = '';
+	if(type=='video/mp4'){
+		srcTag = _mediaVideo(attrs);
+	}
 	if (/\D/.test(width)) {
 		style += 'width:' + width + ';';
 	} else if (width > 0) {
@@ -977,10 +982,7 @@ function _mediaImg(blankPath, attrs) {
 	html += 'data-ke-tag="' + escape(srcTag) + '" alt="" />';
 	return html;
 }
-
-
-
-
+
 function _tmpl(str, data) {
 	var fn = new Function("obj",
 		"var p=[],print=function(){p.push.apply(p,arguments);};" +
@@ -1317,8 +1319,7 @@ function _getScrollPos(doc) {
 	}
 	return {x : x, y : y};
 }
-
-
+
 function KNode(node) {
 	this.init(node);
 }
@@ -1954,8 +1955,7 @@ function _copyAndDelete(range, isCopy, isDelete) {
 		}
 	}
 	return isCopy ? frag : range;
-}
-
+}
 function _moveToElementText(range, el) {
 	var node = el;
 	while (node) {
@@ -1968,8 +1968,7 @@ function _moveToElementText(range, el) {
 	try {
 		range.moveToElementText(el);
 	} catch(e) {}
-}
-
+}
 function _getStartEnd(rng, isStart) {
 	var doc = rng.parentElement().ownerDocument,
 		pointRange = rng.duplicate();
@@ -2034,8 +2033,7 @@ function _getStartEnd(rng, isStart) {
 		}
 	}
 	return {node: startNode, offset: startPos};
-}
-
+}
 function _getEndRange(node, offset) {
 	var doc = node.ownerDocument || node,
 		range = doc.body.createTextRange();
@@ -2092,8 +2090,7 @@ function _getEndRange(node, offset) {
 	range.moveStart('character', offset);
 	K(dummy).remove();
 	return range;
-}
-
+}
 function _toRange(rng) {
 	var doc, range;
 	function tr2td(start) {
@@ -2126,8 +2123,7 @@ function _toRange(rng) {
 	range.setEnd(rng.endContainer, rng.endOffset);
 	return range;
 }
-
-
+
 function KRange(doc) {
 	this.init(doc);
 }
@@ -2545,14 +2541,12 @@ K.START_TO_END = _START_TO_END;
 K.END_TO_END = _END_TO_END;
 K.END_TO_START = _END_TO_START;
 
-
-
+
 function _nativeCommand(doc, key, val) {
 	try {
 		doc.execCommand(key, false, val);
 	} catch(e) {}
-}
-
+}
 function _nativeCommandValue(doc, key) {
 	var val = '';
 	try {
@@ -2562,13 +2556,11 @@ function _nativeCommandValue(doc, key) {
 		val = '';
 	}
 	return val;
-}
-
+}
 function _getSel(doc) {
 	var win = _getWin(doc);
 	return _IERANGE ? doc.selection : win.getSelection();
-}
-
+}
 function _getRng(doc) {
 	var sel = _getSel(doc), rng;
 	try {
@@ -2582,8 +2574,7 @@ function _getRng(doc) {
 		return null;
 	}
 	return rng;
-}
-
+}
 function _singleKeyMap(map) {
 	var newMap = {}, arr, v;
 	_each(map, function(key, val) {
@@ -2594,8 +2585,7 @@ function _singleKeyMap(map) {
 		}
 	});
 	return newMap;
-}
-
+}
 function _hasAttrOrCss(knode, map) {
 	return _hasAttrOrCssByKey(knode, map, '*') || _hasAttrOrCssByKey(knode, map);
 }
@@ -2626,8 +2616,7 @@ function _hasAttrOrCssByKey(knode, map, mapKey) {
 		}
 	}
 	return false;
-}
-
+}
 function _removeAttrOrCss(knode, map) {
 	if (knode.type != 1) {
 		return;
@@ -2665,26 +2654,20 @@ function _removeAttrOrCssByKey(knode, map, mapKey) {
 	if (allFlag) {
 		knode.remove(true);
 	}
-}
-
+}
 function _getInnerNode(knode) {
 	var inner = knode;
 	while (inner.first()) {
 		inner = inner.first();
 	}
 	return inner;
-}
-
+}
 function _isEmptyNode(knode) {
 	if (knode.type != 1 || knode.isSingle()) {
 		return false;
 	}
 	return knode.html().replace(/<[^>]+>/g, '') === '';
-}
-
-
-
-
+}
 function _mergeWrapper(a, b) {
 	a = a.clone(true);
 	var lastA = _getInnerNode(a), childA = a, merged = false;
@@ -2703,8 +2686,7 @@ function _mergeWrapper(a, b) {
 		b = b.first();
 	}
 	return a;
-}
-
+}
 function _wrapNode(knode, wrapper) {
 	wrapper = wrapper.clone(true);
 	if (knode.type == 3) {
@@ -2728,8 +2710,7 @@ function _wrapNode(knode, wrapper) {
 	}
 	nodeWrapper.replaceWith(wrapper);
 	return wrapper;
-}
-
+}
 function _mergeAttrs(knode, attrs, styles) {
 	_each(attrs, function(key, val) {
 		if (key !== 'style') {
@@ -2739,8 +2720,7 @@ function _mergeAttrs(knode, attrs, styles) {
 	_each(styles, function(key, val) {
 		knode.css(key, val);
 	});
-}
-
+}
 function _inPreElement(knode) {
 	while (knode && knode.name != 'body') {
 		if (_PRE_TAG_MAP[knode.name] || knode.name == 'div' && knode.hasClass('ke-script')) {
@@ -2749,8 +2729,7 @@ function _inPreElement(knode) {
 		knode = knode.parent();
 	}
 	return false;
-}
-
+}
 function KCmd(range) {
 	this.init(range);
 }
@@ -3434,8 +3413,7 @@ function _drag(options) {
 		}
 	});
 }
-
-
+
 function KWidget(options) {
 	this.init(options);
 }
@@ -3675,8 +3653,7 @@ function _elementVal(knode, val) {
 	}
 	return knode.html(val);
 }
-
-
+
 function KEdit(options) {
 	this.init(options);
 }
@@ -3937,8 +3914,7 @@ function _selectToolbar(name, fn) {
 		fn(knode);
 	}
 }
-
-
+
 function KToolbar(options) {
 	this.init(options);
 }
@@ -4058,8 +4034,7 @@ function _toolbar(options) {
 K.ToolbarClass = KToolbar;
 K.toolbar = _toolbar;
 
-
-
+
 function KMenu(options) {
 	this.init(options);
 }
@@ -4142,8 +4117,7 @@ function _menu(options) {
 K.MenuClass = KMenu;
 K.menu = _menu;
 
-
-
+
 function KColorPicker(options) {
 	this.init(options);
 }
@@ -4325,8 +4299,7 @@ function _createButton(arg) {
 	span.append(btn);
 	return span;
 }
-
-
+
 function KDialog(options) {
 	this.init(options);
 }
@@ -4525,8 +4498,7 @@ function _loadScript(url, fn) {
 		}
 	};
 }
-
-
+
 function _chopQuery(url) {
 	var index = url.indexOf('?');
 	return index > 0 ? url.substr(0, index) : url;
@@ -4622,8 +4594,7 @@ function _lang(mixed, langType) {
 		_language[langType][obj.ns][obj.key] = val;
 	});
 }
-
-
+
 function _getImageFromRange(range, fn) {
 	if (range.collapsed) {
 		return;
@@ -4820,9 +4791,7 @@ function _addBookmarkToStack(stack, bookmark) {
 		stack.push(bookmark);
 	}
 }
-
-
-
+
 function _undoToRedo(fromStack, toStack) {
 	var self = this, edit = self.edit,
 		body = edit.doc.body,
@@ -5581,8 +5550,7 @@ K.appendHtml = function(expr, val) {
 		this.appendHtml(val);
 	});
 };
-
-
+
 if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);
 }
@@ -5592,8 +5560,7 @@ K.create = _create;
 K.instances = _instances;
 K.plugin = _plugin;
 K.lang = _lang;
-
-
+
 _plugin('core', function(K) {
 	var self = this,
 		shortcutKeys = {
@@ -5993,6 +5960,9 @@ _plugin('core', function(K) {
 			}
 			attrs.width = _undef(imgAttrs.width, width);
 			attrs.height = _undef(imgAttrs.height, height);
+			if(attrs.type=='video/mp4'){
+				return _mediaVideo(attrs);
+			}
 			return _mediaEmbed(attrs);
 		})
 		.replace(/<img[^>]*class="?ke-anchor"?[^>]*>/ig, function(full) {
@@ -6078,233 +6048,237 @@ _plugin('core', function(K) {
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
 KindEditor.lang({
-	source : 'HTML代码',
-	preview : '预览',
-	undo : '后退(Ctrl+Z)',
-	redo : '前进(Ctrl+Y)',
-	cut : '剪切(Ctrl+X)',
-	copy : '复制(Ctrl+C)',
-	paste : '粘贴(Ctrl+V)',
-	plainpaste : '粘贴为无格式文本',
-	wordpaste : '从Word粘贴',
-	selectall : '全选(Ctrl+A)',
-	justifyleft : '左对齐',
-	justifycenter : '居中',
-	justifyright : '右对齐',
-	justifyfull : '两端对齐',
-	insertorderedlist : '编号',
-	insertunorderedlist : '项目符号',
-	indent : '增加缩进',
-	outdent : '减少缩进',
-	subscript : '下标',
-	superscript : '上标',
-	formatblock : '段落',
-	fontname : '字体',
-	fontsize : '文字大小',
-	forecolor : '文字颜色',
-	hilitecolor : '文字背景',
-	bold : '粗体(Ctrl+B)',
-	italic : '斜体(Ctrl+I)',
-	underline : '下划线(Ctrl+U)',
-	strikethrough : '删除线',
-	removeformat : '删除格式',
-	image : '图片',
-	multiimage : '批量图片上传',
+	source : 'Source',
+	preview : 'Preview',
+	undo : 'Undo(Ctrl+Z)',
+	redo : 'Redo(Ctrl+Y)',
+	cut : 'Cut(Ctrl+X)',
+	copy : 'Copy(Ctrl+C)',
+	paste : 'Paste(Ctrl+V)',
+	plainpaste : 'Paste as plain text',
+	wordpaste : 'Paste from Word',
+	selectall : 'Select all',
+	justifyleft : 'Align left',
+	justifycenter : 'Align center',
+	justifyright : 'Align right',
+	justifyfull : 'Align full',
+	insertorderedlist : 'Ordered list',
+	insertunorderedlist : 'Unordered list',
+	indent : 'Increase indent',
+	outdent : 'Decrease indent',
+	subscript : 'Subscript',
+	superscript : 'Superscript',
+	formatblock : 'Paragraph format',
+	fontname : 'Font family',
+	fontsize : 'Font size',
+	forecolor : 'Text color',
+	hilitecolor : 'Highlight color',
+	bold : 'Bold(Ctrl+B)',
+	italic : 'Italic(Ctrl+I)',
+	underline : 'Underline(Ctrl+U)',
+	strikethrough : 'Strikethrough',
+	removeformat : 'Remove format',
+	image : 'Image',
+	multiimage : 'Multi image',
 	flash : 'Flash',
-	media : '视音频',
-	table : '表格',
-	tablecell : '单元格',
-	hr : '插入横线',
-	emoticons : '插入表情',
-	link : '超级链接',
-	unlink : '取消超级链接',
-	fullscreen : '全屏显示',
-	about : '关于',
-	print : '打印(Ctrl+P)',
-	filemanager : '文件空间',
-	code : '插入程序代码',
-	map : 'Google地图',
-	baidumap : '百度地图',
-	lineheight : '行距',
-	clearhtml : '清理HTML代码',
-	pagebreak : '插入分页符',
-	quickformat : '一键排版',
-	insertfile : '插入文件',
-	template : '插入模板',
-	anchor : '锚点',
-	yes : '确定',
-	no : '取消',
-	close : '关闭',
-	editImage : '图片属性',
-	deleteImage : '删除图片',
-	editFlash : 'Flash属性',
-	deleteFlash : '删除Flash',
-	editMedia : '视音频属性',
-	deleteMedia : '删除视音频',
-	editLink : '超级链接属性',
-	deleteLink : '取消超级链接',
-	editAnchor : '锚点属性',
-	deleteAnchor : '删除锚点',
-	tableprop : '表格属性',
-	tablecellprop : '单元格属性',
-	tableinsert : '插入表格',
-	tabledelete : '删除表格',
-	tablecolinsertleft : '左侧插入列',
-	tablecolinsertright : '右侧插入列',
-	tablerowinsertabove : '上方插入行',
-	tablerowinsertbelow : '下方插入行',
-	tablerowmerge : '向下合并单元格',
-	tablecolmerge : '向右合并单元格',
-	tablerowsplit : '拆分行',
-	tablecolsplit : '拆分列',
-	tablecoldelete : '删除列',
-	tablerowdelete : '删除行',
-	noColor : '无颜色',
-	pleaseSelectFile : '请选择文件。',
-	invalidImg : "请输入有效的URL地址。\n只允许jpg,gif,bmp,png格式。",
-	invalidMedia : "请输入有效的URL地址。\n只允许swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。",
-	invalidWidth : "宽度必须为数字。",
-	invalidHeight : "高度必须为数字。",
-	invalidBorder : "边框必须为数字。",
-	invalidUrl : "请输入有效的URL地址。",
-	invalidRows : '行数为必选项，只允许输入大于0的数字。',
-	invalidCols : '列数为必选项，只允许输入大于0的数字。',
-	invalidPadding : '边距必须为数字。',
-	invalidSpacing : '间距必须为数字。',
-	invalidJson : '服务器发生故障。',
-	uploadSuccess : '上传成功。',
-	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
-	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
-	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。',
-	ajaxLoading : '加载中，请稍候 ...',
-	uploadLoading : '上传中，请稍候 ...',
-	uploadError : '上传错误',
-	'plainpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
-	'wordpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
-	'code.pleaseInput' : '请输入程序代码。',
+	media : 'Embeded media',
+	table : 'Table',
+	tablecell : 'Cell',
+	hr : 'Insert horizontal line',
+	emoticons : 'Insert emoticon',
+	link : 'Link',
+	unlink : 'Unlink',
+	fullscreen : 'Toggle fullscreen mode',
+	about : 'About',
+	print : 'Print',
+	filemanager : 'File Manager',
+	code : 'Insert code',
+	map : 'Google Maps',
+	baidumap : 'Baidu Maps',
+	lineheight : 'Line height',
+	clearhtml : 'Clear HTML code',
+	pagebreak : 'Insert Page Break',
+	quickformat : 'Quick Format',
+	insertfile : 'Insert file',
+	template : 'Insert Template',
+	anchor : 'Anchor',
+	yes : 'OK',
+	no : 'Cancel',
+	close : 'Close',
+	editImage : 'Image properties',
+	deleteImage : 'Delete image',
+	editFlash : 'Flash properties',
+	deleteFlash : 'Delete flash',
+	editMedia : 'Media properties',
+	deleteMedia : 'Delete media',
+	editLink : 'Link properties',
+	deleteLink : 'Unlink',
+	editAnchor : 'Anchor properties',
+	deleteAnchor : 'Delete Anchor',
+	tableprop : 'Table properties',
+	tablecellprop : 'Cell properties',
+	tableinsert : 'Insert table',
+	tabledelete : 'Delete table',
+	tablecolinsertleft : 'Insert column left',
+	tablecolinsertright : 'Insert column right',
+	tablerowinsertabove : 'Insert row above',
+	tablerowinsertbelow : 'Insert row below',
+	tablerowmerge : 'Merge down',
+	tablecolmerge : 'Merge right',
+	tablerowsplit : 'Split row',
+	tablecolsplit : 'Split column',
+	tablecoldelete : 'Delete column',
+	tablerowdelete : 'Delete row',
+	noColor : 'Default',
+	pleaseSelectFile : 'Please select file.',
+	invalidImg : "Please type valid URL.\nAllowed file extension: jpg,gif,bmp,png",
+	invalidMedia : "Please type valid URL.\nAllowed file extension: swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb",
+	invalidWidth : "The width must be number.",
+	invalidHeight : "The height must be number.",
+	invalidBorder : "The border must be number.",
+	invalidUrl : "Please type valid URL.",
+	invalidRows : 'Invalid rows.',
+	invalidCols : 'Invalid columns.',
+	invalidPadding : 'The padding must be number.',
+	invalidSpacing : 'The spacing must be number.',
+	invalidJson : 'Invalid JSON string.',
+	uploadSuccess : 'Upload success.',
+	cutError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+X) instead.',
+	copyError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+C) instead.',
+	pasteError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+V) instead.',
+	ajaxLoading : 'Loading ...',
+	uploadLoading : 'Uploading ...',
+	uploadError : 'Upload Error',
+	'plainpaste.comment' : 'Use keyboard shortcut(Ctrl+V) to paste the text into the window.',
+	'wordpaste.comment' : 'Use keyboard shortcut(Ctrl+V) to paste the text into the window.',
+	'code.pleaseInput' : 'Please input code.',
 	'link.url' : 'URL',
-	'link.linkType' : '打开类型',
-	'link.newWindow' : '新窗口',
-	'link.selfWindow' : '当前窗口',
+	'link.linkType' : 'Target',
+	'link.newWindow' : 'New window',
+	'link.selfWindow' : 'Same window',
 	'flash.url' : 'URL',
-	'flash.width' : '宽度',
-	'flash.height' : '高度',
-	'flash.upload' : '上传',
-	'flash.viewServer' : '文件空间',
+	'flash.width' : 'Width',
+	'flash.height' : 'Height',
+	'flash.upload' : 'Upload',
+	'flash.viewServer' : 'Browse',
 	'media.url' : 'URL',
-	'media.width' : '宽度',
-	'media.height' : '高度',
-	'media.autostart' : '自动播放',
-	'media.upload' : '上传',
-	'media.viewServer' : '文件空间',
-	'image.remoteImage' : '网络图片',
-	'image.localImage' : '本地上传',
-	'image.remoteUrl' : '图片地址',
-	'image.localUrl' : '上传文件',
-	'image.size' : '图片大小',
-	'image.width' : '宽',
-	'image.height' : '高',
-	'image.resetSize' : '重置大小',
-	'image.align' : '对齐方式',
-	'image.defaultAlign' : '默认方式',
-	'image.leftAlign' : '左对齐',
-	'image.rightAlign' : '右对齐',
-	'image.imgTitle' : '图片说明',
-	'image.upload' : '浏览...',
-	'image.viewServer' : '图片空间',
-	'multiimage.uploadDesc' : '允许用户同时上传<%=uploadLimit%>张图片，单张图片容量不超过<%=sizeLimit%>',
-	'multiimage.startUpload' : '开始上传',
-	'multiimage.clearAll' : '全部清空',
-	'multiimage.insertAll' : '全部插入',
-	'multiimage.queueLimitExceeded' : '文件数量超过限制。',
-	'multiimage.fileExceedsSizeLimit' : '文件大小超过限制。',
-	'multiimage.zeroByteFile' : '无法上传空文件。',
-	'multiimage.invalidFiletype' : '文件类型不正确。',
-	'multiimage.unknownError' : '发生异常，无法上传。',
-	'multiimage.pending' : '等待上传',
-	'multiimage.uploadError' : '上传失败',
-	'filemanager.emptyFolder' : '空文件夹',
-	'filemanager.moveup' : '移到上一级文件夹',
-	'filemanager.viewType' : '显示方式：',
-	'filemanager.viewImage' : '缩略图',
-	'filemanager.listImage' : '详细信息',
-	'filemanager.orderType' : '排序方式：',
-	'filemanager.fileName' : '名称',
-	'filemanager.fileSize' : '大小',
-	'filemanager.fileType' : '类型',
+	'media.width' : 'Width',
+	'media.height' : 'Height',
+	'media.autostart' : 'Auto start',
+	'media.upload' : 'Upload',
+	'media.viewServer' : 'Browse',
+	'image.remoteImage' : 'Insert URL',
+	'image.localImage' : 'Upload',
+	'image.remoteUrl' : 'URL',
+	'image.localUrl' : 'File',
+	'image.size' : 'Size',
+	'image.width' : 'Width',
+	'image.height' : 'Height',
+	'image.resetSize' : 'Reset dimensions',
+	'image.align' : 'Align',
+	'image.defaultAlign' : 'Default',
+	'image.leftAlign' : 'Left',
+	'image.rightAlign' : 'Right',
+	'image.imgTitle' : 'Title',
+	'image.upload' : 'Browse',
+	'image.viewServer' : 'Browse',
+	'multiimage.uploadDesc' : 'Allows users to upload <%=uploadLimit%> images, single image size not exceeding <%=sizeLimit%>',
+	'multiimage.startUpload' : 'Start upload',
+	'multiimage.clearAll' : 'Clear all',
+	'multiimage.insertAll' : 'Insert all',
+	'multiimage.queueLimitExceeded' : 'Queue limit exceeded.',
+	'multiimage.fileExceedsSizeLimit' : 'File exceeds size limit.',
+	'multiimage.zeroByteFile' : 'Zero byte file.',
+	'multiimage.invalidFiletype' : 'Invalid file type.',
+	'multiimage.unknownError' : 'Unknown upload error.',
+	'multiimage.pending' : 'Pending ...',
+	'multiimage.uploadError' : 'Upload error',
+	'filemanager.emptyFolder' : 'Blank',
+	'filemanager.moveup' : 'Parent folder',
+	'filemanager.viewType' : 'Display: ',
+	'filemanager.viewImage' : 'Thumbnails',
+	'filemanager.listImage' : 'List',
+	'filemanager.orderType' : 'Sorting: ',
+	'filemanager.fileName' : 'By name',
+	'filemanager.fileSize' : 'By size',
+	'filemanager.fileType' : 'By type',
 	'insertfile.url' : 'URL',
-	'insertfile.title' : '文件说明',
-	'insertfile.upload' : '上传',
-	'insertfile.viewServer' : '文件空间',
-	'table.cells' : '单元格数',
-	'table.rows' : '行数',
-	'table.cols' : '列数',
-	'table.size' : '大小',
-	'table.width' : '宽度',
-	'table.height' : '高度',
+	'insertfile.title' : 'Title',
+	'insertfile.upload' : 'Upload',
+	'insertfile.viewServer' : 'Browse',
+	'table.cells' : 'Cells',
+	'table.rows' : 'Rows',
+	'table.cols' : 'Columns',
+	'table.size' : 'Dimensions',
+	'table.width' : 'Width',
+	'table.height' : 'Height',
 	'table.percent' : '%',
 	'table.px' : 'px',
-	'table.space' : '边距间距',
-	'table.padding' : '边距',
-	'table.spacing' : '间距',
-	'table.align' : '对齐方式',
-	'table.textAlign' : '水平对齐',
-	'table.verticalAlign' : '垂直对齐',
-	'table.alignDefault' : '默认',
-	'table.alignLeft' : '左对齐',
-	'table.alignCenter' : '居中',
-	'table.alignRight' : '右对齐',
-	'table.alignTop' : '顶部',
-	'table.alignMiddle' : '中部',
-	'table.alignBottom' : '底部',
-	'table.alignBaseline' : '基线',
-	'table.border' : '边框',
-	'table.borderWidth' : '边框',
-	'table.borderColor' : '颜色',
-	'table.backgroundColor' : '背景颜色',
-	'map.address' : '地址: ',
-	'map.search' : '搜索',
-	'baidumap.address' : '地址: ',
-	'baidumap.search' : '搜索',
-	'baidumap.insertDynamicMap' : '插入动态地图',
-	'anchor.name' : '锚点名称',
+	'table.space' : 'Space',
+	'table.padding' : 'Padding',
+	'table.spacing' : 'Spacing',
+	'table.align' : 'Align',
+	'table.textAlign' : 'Horizontal',
+	'table.verticalAlign' : 'Vertical',
+	'table.alignDefault' : 'Default',
+	'table.alignLeft' : 'Left',
+	'table.alignCenter' : 'Center',
+	'table.alignRight' : 'Right',
+	'table.alignTop' : 'Top',
+	'table.alignMiddle' : 'Middle',
+	'table.alignBottom' : 'Bottom',
+	'table.alignBaseline' : 'Baseline',
+	'table.border' : 'Border',
+	'table.borderWidth' : 'Width',
+	'table.borderColor' : 'Color',
+	'table.backgroundColor' : 'Background',
+	'map.address' : 'Address: ',
+	'map.search' : 'Search',
+	'baidumap.address' : 'Address: ',
+	'baidumap.search' : 'Search',
+	'baidumap.insertDynamicMap' : 'Dynamic Map',
+	'anchor.name' : 'Anchor name',
 	'formatblock.formatBlock' : {
-		h1 : '标题 1',
-		h2 : '标题 2',
-		h3 : '标题 3',
-		h4 : '标题 4',
-		p : '正 文'
+		h1 : 'Heading 1',
+		h2 : 'Heading 2',
+		h3 : 'Heading 3',
+		h4 : 'Heading 4',
+		p : 'Normal'
 	},
 	'fontname.fontName' : {
-		'SimSun' : '宋体',
-		'NSimSun' : '新宋体',
-		'FangSong_GB2312' : '仿宋_GB2312',
-		'KaiTi_GB2312' : '楷体_GB2312',
-		'SimHei' : '黑体',
-		'Microsoft YaHei' : '微软雅黑',
 		'Arial' : 'Arial',
 		'Arial Black' : 'Arial Black',
-		'Times New Roman' : 'Times New Roman',
+		'Comic Sans MS' : 'Comic Sans MS',
 		'Courier New' : 'Courier New',
+		'Garamond' : 'Garamond',
+		'Georgia' : 'Georgia',
 		'Tahoma' : 'Tahoma',
+		'Times New Roman' : 'Times New Roman',
+		'Trebuchet MS' : 'Trebuchet MS',
 		'Verdana' : 'Verdana'
 	},
 	'lineheight.lineHeight' : [
-		{'1' : '单倍行距'},
-		{'1.5' : '1.5倍行距'},
-		{'2' : '2倍行距'},
-		{'2.5' : '2.5倍行距'},
-		{'3' : '3倍行距'}
+		{'1' : 'Line height 1'},
+		{'1.5' : 'Line height 1.5'},
+		{'2' : 'Line height 2'},
+		{'2.5' : 'Line height 2.5'},
+		{'3' : 'Line height 3'}
 	],
-	'template.selectTemplate' : '可选模板',
-	'template.replaceContent' : '替换当前内容',
+	'template.selectTemplate' : 'Template',
+	'template.replaceContent' : 'Replace current content',
 	'template.fileList' : {
-		'1.html' : '图片和文字',
-		'2.html' : '表格',
-		'3.html' : '项目编号'
+		'1.html' : 'Image and Text',
+		'2.html' : 'Table',
+		'3.html' : 'List'
 	}
-}, 'zh-CN');
-KindEditor.options.langType = 'zh-CN';
+}, 'en');
+KindEditor.each(KindEditor.options.items, function(i, name) {
+	if (name == 'baidumap') {
+		KindEditor.options.items[i] = 'map';
+	}
+});
+KindEditor.options.langType = 'en';
+
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
 * Copyright (C) 2006-2011 kindsoft.net
@@ -6410,6 +6384,7 @@ KindEditor.plugin('autoheight', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
+
 KindEditor.plugin('baidumap', function(K) {
 	var self = this, name = 'baidumap', lang = self.lang(name + '.');
 	var mapWidth = K.undef(self.mapWidth, 558);
@@ -6498,8 +6473,7 @@ KindEditor.plugin('baidumap', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-
-
+
 KindEditor.plugin('map', function(K) {
 	var self = this, name = 'map', lang = self.lang(name + '.');
 	self.clickToolbar(name, function() {
@@ -6659,9 +6633,7 @@ KindEditor.plugin('clearhtml', function(K) {
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-
-
-
+
 KindEditor.plugin('code', function(K) {
 	var self = this, name = 'code';
 	self.clickToolbar(name, function() {
@@ -8227,6 +8199,7 @@ SWFUpload.WINDOW_MODE = {
 	TRANSPARENT : "transparent",
 	OPAQUE : "opaque"
 };
+
 SWFUpload.completeURL = function(url) {
 	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
 		return url;
@@ -8244,6 +8217,7 @@ SWFUpload.completeURL = function(url) {
 /* ******************** */
 /* Instance Members  */
 /* ******************** */
+
 SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault = function (settingName, defaultValue) {
 		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
@@ -8301,6 +8275,7 @@ SWFUpload.prototype.initSettings = function () {
 	}
 	delete this.ensureDefault;
 };
+
 SWFUpload.prototype.loadFlash = function () {
 	var targetElement, tempParent;
 	if (document.getElementById(this.movieName) !== null) {
@@ -8317,6 +8292,7 @@ SWFUpload.prototype.loadFlash = function () {
 		window[this.movieName] = this.getMovieElement();
 	}
 };
+
 SWFUpload.prototype.getFlashHTML = function () {
 	var classid = '';
 	if (KindEditor.IE && KindEditor.V > 8) {
@@ -8331,6 +8307,7 @@ SWFUpload.prototype.getFlashHTML = function () {
 				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
 				'</object>'].join("");
 };
+
 SWFUpload.prototype.getFlashVars = function () {
 	var paramString = this.buildParamString();
 	var httpSuccessString = this.settings.http_success.join(",");
@@ -8360,6 +8337,7 @@ SWFUpload.prototype.getFlashVars = function () {
 			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
 		].join("");
 };
+
 SWFUpload.prototype.getMovieElement = function () {
 	if (this.movieElement == undefined) {
 		this.movieElement = document.getElementById(this.movieName);
@@ -8369,6 +8347,7 @@ SWFUpload.prototype.getMovieElement = function () {
 	}
 	return this.movieElement;
 };
+
 SWFUpload.prototype.buildParamString = function () {
 	var postParams = this.settings.post_params;
 	var paramStringPairs = [];
@@ -8381,6 +8360,7 @@ SWFUpload.prototype.buildParamString = function () {
 	}
 	return paramStringPairs.join("&amp;");
 };
+
 SWFUpload.prototype.destroy = function () {
 	try {
 		this.cancelUpload(null, false);
@@ -8411,6 +8391,7 @@ SWFUpload.prototype.destroy = function () {
 		return false;
 	}
 };
+
 SWFUpload.prototype.displayDebugInfo = function () {
 	this.debug(
 		[
@@ -8461,7 +8442,7 @@ SWFUpload.prototype.displayDebugInfo = function () {
 };
 /* Note: addSetting and getSetting are no longer used by SWFUpload but are included
 	the maintain v2 API compatibility
-*/
+*/
 SWFUpload.prototype.addSetting = function (name, value, default_value) {
     if (value == undefined) {
         return (this.settings[name] = default_value);
@@ -8469,12 +8450,14 @@ SWFUpload.prototype.addSetting = function (name, value, default_value) {
         return (this.settings[name] = value);
 	}
 };
+
 SWFUpload.prototype.getSetting = function (name) {
     if (this.settings[name] != undefined) {
         return this.settings[name];
 	}
     return "";
 };
+
 SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	argumentArray = argumentArray || [];
 	var movieElement = this.getMovieElement();
@@ -8495,21 +8478,26 @@ SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	Your UI should use these
 	to operate SWFUpload
    ***************************** */
+
 SWFUpload.prototype.selectFile = function () {
 	this.callFlash("SelectFile");
 };
+
 SWFUpload.prototype.selectFiles = function () {
 	this.callFlash("SelectFiles");
 };
+
 SWFUpload.prototype.startUpload = function (fileID) {
 	this.callFlash("StartUpload", [fileID]);
 };
+
 SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
 	if (triggerErrorEvent !== false) {
 		triggerErrorEvent = true;
 	}
 	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
 };
+
 SWFUpload.prototype.stopUpload = function () {
 	this.callFlash("StopUpload");
 };
@@ -8520,12 +8508,15 @@ SWFUpload.prototype.stopUpload = function () {
  *   since many of the settings need to be passed to Flash in order to take
  *   effect.
  * *********************** */
+
 SWFUpload.prototype.getStats = function () {
 	return this.callFlash("GetStats");
 };
+
 SWFUpload.prototype.setStats = function (statsObject) {
 	this.callFlash("SetStats", [statsObject]);
 };
+
 SWFUpload.prototype.getFile = function (fileID) {
 	if (typeof(fileID) === "number") {
 		return this.callFlash("GetFileByIndex", [fileID]);
@@ -8533,57 +8524,71 @@ SWFUpload.prototype.getFile = function (fileID) {
 		return this.callFlash("GetFile", [fileID]);
 	}
 };
+
 SWFUpload.prototype.addFileParam = function (fileID, name, value) {
 	return this.callFlash("AddFileParam", [fileID, name, value]);
 };
+
 SWFUpload.prototype.removeFileParam = function (fileID, name) {
 	this.callFlash("RemoveFileParam", [fileID, name]);
 };
+
 SWFUpload.prototype.setUploadURL = function (url) {
 	this.settings.upload_url = url.toString();
 	this.callFlash("SetUploadURL", [url]);
 };
+
 SWFUpload.prototype.setPostParams = function (paramsObject) {
 	this.settings.post_params = paramsObject;
 	this.callFlash("SetPostParams", [paramsObject]);
 };
+
 SWFUpload.prototype.addPostParam = function (name, value) {
 	this.settings.post_params[name] = value;
 	this.callFlash("SetPostParams", [this.settings.post_params]);
 };
+
 SWFUpload.prototype.removePostParam = function (name) {
 	delete this.settings.post_params[name];
 	this.callFlash("SetPostParams", [this.settings.post_params]);
 };
+
 SWFUpload.prototype.setFileTypes = function (types, description) {
 	this.settings.file_types = types;
 	this.settings.file_types_description = description;
 	this.callFlash("SetFileTypes", [types, description]);
 };
+
 SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
 	this.settings.file_size_limit = fileSizeLimit;
 	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
 };
+
 SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
 	this.settings.file_upload_limit = fileUploadLimit;
 	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
 };
+
 SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
 	this.settings.file_queue_limit = fileQueueLimit;
 	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
 };
+
 SWFUpload.prototype.setFilePostName = function (filePostName) {
 	this.settings.file_post_name = filePostName;
 	this.callFlash("SetFilePostName", [filePostName]);
 };
+
 SWFUpload.prototype.setUseQueryString = function (useQueryString) {
 	this.settings.use_query_string = useQueryString;
 	this.callFlash("SetUseQueryString", [useQueryString]);
 };
+
 SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
 	this.settings.requeue_on_error = requeueOnError;
 	this.callFlash("SetRequeueOnError", [requeueOnError]);
 };
+
 SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	if (typeof http_status_codes === "string") {
 		http_status_codes = http_status_codes.replace(" ", "").split(",");
@@ -8591,14 +8596,17 @@ SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	this.settings.http_success = http_status_codes;
 	this.callFlash("SetHTTPSuccess", [http_status_codes]);
 };
+
 SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
 	this.settings.assume_success_timeout = timeout_seconds;
 	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
 };
+
 SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
 	this.settings.debug_enabled = debugEnabled;
 	this.callFlash("SetDebugEnabled", [debugEnabled]);
 };
+
 SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	if (buttonImageURL == undefined) {
 		buttonImageURL = "";
@@ -8606,6 +8614,7 @@ SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	this.settings.button_image_url = buttonImageURL;
 	this.callFlash("SetButtonImageURL", [buttonImageURL]);
 };
+
 SWFUpload.prototype.setButtonDimensions = function (width, height) {
 	this.settings.button_width = width;
 	this.settings.button_height = height;
@@ -8615,28 +8624,30 @@ SWFUpload.prototype.setButtonDimensions = function (width, height) {
 		movie.style.height = height + "px";
 	}
 	this.callFlash("SetButtonDimensions", [width, height]);
-};
+};
 SWFUpload.prototype.setButtonText = function (html) {
 	this.settings.button_text = html;
 	this.callFlash("SetButtonText", [html]);
-};
+};
 SWFUpload.prototype.setButtonTextPadding = function (left, top) {
 	this.settings.button_text_top_padding = top;
 	this.settings.button_text_left_padding = left;
 	this.callFlash("SetButtonTextPadding", [left, top]);
 };
+
 SWFUpload.prototype.setButtonTextStyle = function (css) {
 	this.settings.button_text_style = css;
 	this.callFlash("SetButtonTextStyle", [css]);
-};
+};
 SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
 	this.settings.button_disabled = isDisabled;
 	this.callFlash("SetButtonDisabled", [isDisabled]);
-};
+};
 SWFUpload.prototype.setButtonAction = function (buttonAction) {
 	this.settings.button_action = buttonAction;
 	this.callFlash("SetButtonAction", [buttonAction]);
 };
+
 SWFUpload.prototype.setButtonCursor = function (cursor) {
 	this.settings.button_cursor = cursor;
 	this.callFlash("SetButtonCursor", [cursor]);
@@ -8669,12 +8680,14 @@ SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
 		throw "Event handler " + handlerName + " is unknown or is not a function";
 	}
 };
+
 SWFUpload.prototype.executeNextEvent = function () {
 	var  f = this.eventQueue ? this.eventQueue.shift() : null;
 	if (typeof(f) === "function") {
 		f.apply(this);
 	}
 };
+
 SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	var reg = /[$]([0-9a-f]{4})/i;
 	var unescapedPost = {};
@@ -8694,6 +8707,7 @@ SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	}
 	return file;
 };
+
 SWFUpload.prototype.testExternalInterface = function () {
 	try {
 		return this.callFlash("TestExternalInterface");
@@ -8701,6 +8715,7 @@ SWFUpload.prototype.testExternalInterface = function () {
 		return false;
 	}
 };
+
 SWFUpload.prototype.flashReady = function () {
 	var movieElement = this.getMovieElement();
 	if (!movieElement) {
@@ -8710,6 +8725,7 @@ SWFUpload.prototype.flashReady = function () {
 	this.cleanUp(movieElement);
 	this.queueEvent("swfupload_loaded_handler");
 };
+
 SWFUpload.prototype.cleanUp = function (movieElement) {
 	try {
 		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") {
@@ -8802,6 +8818,7 @@ SWFUpload.prototype.debug = function (message) {
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
+
 SWFUpload.prototype.debugMessage = function (message) {
 	if (this.settings.debug) {
 		var exceptionMessage, exceptionValues = [];
